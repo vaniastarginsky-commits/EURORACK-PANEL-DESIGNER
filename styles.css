@@ -3559,3 +3559,159 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
     max-height:calc(100dvh - 130px)!important;
   }
 }
+
+/* ux-polish: focus, density, and dialog readability */
+:root {
+  --ux-focus: #f0c36b;
+  --ux-panel-raise: rgba(255, 255, 255, .035);
+  --ux-line: rgba(215, 196, 155, .18);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--ux-focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(240, 195, 107, .14);
+}
+
+.toolbar,
+.top-toolbar,
+.app-toolbar {
+  box-shadow: 0 1px 0 var(--ux-line), 0 8px 28px rgba(0, 0, 0, .18);
+}
+
+.toolbar button,
+.top-toolbar button,
+.app-toolbar button,
+.mobile-dock button {
+  transition: background-color .16s ease, border-color .16s ease, transform .16s ease, box-shadow .16s ease;
+}
+
+.toolbar button:active,
+.top-toolbar button:active,
+.app-toolbar button:active,
+.mobile-dock button:active {
+  transform: translateY(1px);
+}
+
+.left-sidebar,
+.right-sidebar,
+.sidebar,
+.properties-panel {
+  scrollbar-gutter: stable;
+}
+
+.left-sidebar section,
+.right-sidebar section,
+.sidebar-section,
+.panel-section {
+  border-top: 1px solid var(--ux-line);
+}
+
+.left-sidebar section:first-child,
+.right-sidebar section:first-child,
+.sidebar-section:first-child,
+.panel-section:first-child {
+  border-top: 0;
+}
+
+input,
+select,
+textarea {
+  background-color: rgba(12, 14, 17, .72);
+  border-color: rgba(215, 196, 155, .22);
+}
+
+input[type="number"],
+.numeric-input,
+.value-field,
+.measurement-value {
+  font-variant-numeric: tabular-nums;
+}
+
+.modal,
+.dialog,
+.export-dialog-panel,
+.template-manager-panel,
+.mobile-bottom-sheet {
+  border: 1px solid rgba(215, 196, 155, .22);
+  box-shadow: 0 22px 80px rgba(0, 0, 0, .38), inset 0 1px 0 rgba(255, 255, 255, .04);
+}
+
+.modal-header,
+.dialog-header,
+.export-dialog-header,
+.template-manager-header {
+  background: linear-gradient(180deg, var(--ux-panel-raise), rgba(255, 255, 255, 0));
+  border-bottom: 1px solid var(--ux-line);
+}
+
+.modal-backdrop,
+.dialog-backdrop,
+.mobile-sheet-backdrop {
+  backdrop-filter: blur(7px);
+}
+
+.tabs button,
+.tab-button,
+[role="tab"] {
+  position: relative;
+}
+
+.tabs button[aria-selected="true"]::after,
+.tab-button.active::after,
+[role="tab"][aria-selected="true"]::after {
+  position: absolute;
+  right: 10px;
+  bottom: 4px;
+  left: 10px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ux-focus);
+  content: "";
+}
+
+.template-card,
+.export-card,
+.layer-row,
+.component-card {
+  transition: background-color .16s ease, border-color .16s ease, transform .16s ease, box-shadow .16s ease;
+}
+
+.template-card:hover,
+.export-card:hover,
+.component-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .2);
+}
+
+.layer-row:hover {
+  background-color: rgba(255, 255, 255, .045);
+}
+
+.export-preview svg,
+.template-preview svg,
+.panel-preview svg {
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, .28));
+}
+
+@media (max-width: 768px) {
+  .toolbar,
+  .top-toolbar,
+  .app-toolbar,
+  .mobile-dock {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+
+  .toolbar::-webkit-scrollbar,
+  .top-toolbar::-webkit-scrollbar,
+  .app-toolbar::-webkit-scrollbar,
+  .mobile-dock::-webkit-scrollbar {
+    display: none;
+  }
+}
