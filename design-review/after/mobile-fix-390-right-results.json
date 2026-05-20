@@ -1,0 +1,72 @@
+{
+  "classes": {
+    "dock": "mobile-main-dock hidden ",
+    "left": "sidebar-left closed lazy-unmounted",
+    "right": "sidebar-right open sidebar-right-tabs"
+  },
+  "issues": [],
+  "rects": {
+    "dock": {
+      "bottom": 910,
+      "height": 58,
+      "right": 382,
+      "width": 374,
+      "x": 8,
+      "y": 852
+    },
+    "left": {
+      "bottom": 0,
+      "height": 0,
+      "right": 0,
+      "width": 0,
+      "x": 0,
+      "y": 0
+    },
+    "openSidebar": {
+      "bottom": 774,
+      "height": 680,
+      "right": 382,
+      "width": 374,
+      "x": 8,
+      "y": 94
+    },
+    "right": {
+      "bottom": 774,
+      "height": 680,
+      "right": 382,
+      "width": 374,
+      "x": 8,
+      "y": 94
+    },
+    "toolbar": {
+      "bottom": 86,
+      "height": 86,
+      "right": 390,
+      "width": 390,
+      "x": 0,
+      "y": 0
+    }
+  },
+  "runtimeErrors": null,
+  "stateName": "mobile-right-panel-open",
+  "styles": {
+    "dockOpacity": "0",
+    "dockPointerEvents": "none",
+    "dockTransform": "matrix(1, 0, 0, 1, 0, 74)"
+  },
+  "topVisibleText": [
+    "Status",
+    "Inspect",
+    "Prod",
+    "Layers",
+    "Layout",
+    "Warnings",
+    "Checks",
+    "LAYOUT STATUS OK"
+  ],
+  "viewport": {
+    "height": 844,
+    "width": 390
+  },
+  "file": "mobile-390x844--mobile-right-panel-open.png"
+}

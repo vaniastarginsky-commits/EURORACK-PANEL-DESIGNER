@@ -1,0 +1,333 @@
+{
+  "capturedAt": "2026-05-19T10:30:58.365Z",
+  "results": [
+    {
+      "file": "desktop-1440x900--empty-workspace.png",
+      "metrics": {
+        "closedVisible": [],
+        "cols": "292px 836px 312px",
+        "data": {
+          "left": "true",
+          "mobile": "false",
+          "right": "true"
+        },
+        "gutters": [],
+        "horizontalOverflow": 0,
+        "rects": {
+          "canvas": {
+            "h": 858,
+            "w": 836,
+            "x": 292,
+            "y": 42
+          },
+          "left": {
+            "h": 858,
+            "w": 292,
+            "x": 0,
+            "y": 42
+          },
+          "right": {
+            "h": 858,
+            "w": 312,
+            "x": 1128,
+            "y": 42
+          },
+          "workspace": {
+            "h": 858,
+            "w": 1440,
+            "x": 0,
+            "y": 42
+          }
+        },
+        "runtimeErrors": null
+      }
+    },
+    {
+      "file": "desktop-1440x900--left-sidebar-hidden.png",
+      "metrics": {
+        "closedVisible": [],
+        "cols": "0px 1128px 312px",
+        "data": {
+          "left": "false",
+          "mobile": "false",
+          "right": "true"
+        },
+        "gutters": [],
+        "horizontalOverflow": 0,
+        "rects": {
+          "canvas": {
+            "h": 858,
+            "w": 1128,
+            "x": 0,
+            "y": 42
+          },
+          "left": {
+            "h": 858,
+            "w": 0,
+            "x": 0,
+            "y": 42
+          },
+          "right": {
+            "h": 858,
+            "w": 312,
+            "x": 1128,
+            "y": 42
+          },
+          "workspace": {
+            "h": 858,
+            "w": 1440,
+            "x": 0,
+            "y": 42
+          }
+        },
+        "runtimeErrors": null
+      }
+    },
+    {
+      "file": "desktop-1440x900--right-sidebar-hidden.png",
+      "metrics": {
+        "closedVisible": [],
+        "cols": "292px 1148px 0px",
+        "data": {
+          "left": "true",
+          "mobile": "false",
+          "right": "false"
+        },
+        "gutters": [],
+        "horizontalOverflow": 0,
+        "rects": {
+          "canvas": {
+            "h": 858,
+            "w": 1148,
+            "x": 292,
+            "y": 42
+          },
+          "left": {
+            "h": 858,
+            "w": 292,
+            "x": 0,
+            "y": 42
+          },
+          "right": {
+            "h": 858,
+            "w": 0,
+            "x": 1440,
+            "y": 42
+          },
+          "workspace": {
+            "h": 858,
+            "w": 1440,
+            "x": 0,
+            "y": 42
+          }
+        },
+        "runtimeErrors": null
+      }
+    },
+    {
+      "file": "desktop-1440x900--both-sidebars-hidden.png",
+      "metrics": {
+        "closedVisible": [],
+        "cols": "0px 1440px 0px",
+        "data": {
+          "left": "false",
+          "mobile": "false",
+          "right": "false"
+        },
+        "gutters": [],
+        "horizontalOverflow": 0,
+        "rects": {
+          "canvas": {
+            "h": 858,
+            "w": 1440,
+            "x": 0,
+            "y": 42
+          },
+          "left": {
+            "h": 858,
+            "w": 0,
+            "x": 0,
+            "y": 42
+          },
+          "right": {
+            "h": 858,
+            "w": 0,
+            "x": 1440,
+            "y": 42
+          },
+          "workspace": {
+            "h": 858,
+            "w": 1440,
+            "x": 0,
+            "y": 42
+          }
+        },
+        "runtimeErrors": null
+      }
+    },
+    {
+      "file": "desktop-1920x1080--both-sidebars-hidden.png",
+      "metrics": {
+        "closedVisible": [],
+        "cols": "0px 1920px 0px",
+        "data": {
+          "left": "false",
+          "mobile": "false",
+          "right": "false"
+        },
+        "gutters": [],
+        "horizontalOverflow": 0,
+        "rects": {
+          "canvas": {
+            "h": 1038,
+            "w": 1920,
+            "x": 0,
+            "y": 42
+          },
+          "left": {
+            "h": 1038,
+            "w": 0,
+            "x": 0,
+            "y": 42
+          },
+          "right": {
+            "h": 1038,
+            "w": 0,
+            "x": 1920,
+            "y": 42
+          },
+          "workspace": {
+            "h": 1038,
+            "w": 1920,
+            "x": 0,
+            "y": 42
+          }
+        },
+        "runtimeErrors": null
+      }
+    },
+    {
+      "file": "mobile-390x844--mobile-empty-workspace.png",
+      "metrics": {
+        "closedVisible": [],
+        "cols": "390px",
+        "data": {
+          "left": "false",
+          "mobile": "true",
+          "right": "false"
+        },
+        "gutters": [],
+        "horizontalOverflow": 0,
+        "rects": {
+          "canvas": {
+            "h": 758,
+            "w": 390,
+            "x": 0,
+            "y": 86
+          },
+          "left": {
+            "h": 0,
+            "w": 0,
+            "x": 0,
+            "y": 0
+          },
+          "right": {
+            "h": 0,
+            "w": 0,
+            "x": 0,
+            "y": 0
+          },
+          "workspace": {
+            "h": 758,
+            "w": 390,
+            "x": 0,
+            "y": 86
+          }
+        },
+        "runtimeErrors": null
+      }
+    },
+    {
+      "file": "mobile-390x844--mobile-left-panel-open.png",
+      "metrics": {
+        "closedVisible": [],
+        "cols": "390px",
+        "data": {
+          "left": "true",
+          "mobile": "true",
+          "right": "false"
+        },
+        "gutters": [],
+        "horizontalOverflow": 0,
+        "rects": {
+          "canvas": {
+            "h": 758,
+            "w": 390,
+            "x": 0,
+            "y": 86
+          },
+          "left": {
+            "h": 766,
+            "w": 374,
+            "x": 8,
+            "y": 8
+          },
+          "right": {
+            "h": 0,
+            "w": 0,
+            "x": 0,
+            "y": 0
+          },
+          "workspace": {
+            "h": 758,
+            "w": 390,
+            "x": 0,
+            "y": 86
+          }
+        },
+        "runtimeErrors": null
+      }
+    },
+    {
+      "file": "mobile-390x844--mobile-right-panel-open.png",
+      "metrics": {
+        "closedVisible": [],
+        "cols": "390px",
+        "data": {
+          "left": "false",
+          "mobile": "true",
+          "right": "true"
+        },
+        "gutters": [],
+        "horizontalOverflow": 0,
+        "rects": {
+          "canvas": {
+            "h": 758,
+            "w": 390,
+            "x": 0,
+            "y": 86
+          },
+          "left": {
+            "h": 0,
+            "w": 0,
+            "x": 0,
+            "y": 0
+          },
+          "right": {
+            "h": 766,
+            "w": 374,
+            "x": 8,
+            "y": 8
+          },
+          "workspace": {
+            "h": 758,
+            "w": 390,
+            "x": 0,
+            "y": 86
+          }
+        },
+        "runtimeErrors": null
+      }
+    }
+  ]
+}

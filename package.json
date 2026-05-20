@@ -1,0 +1,16 @@
+{
+  "name": "eurorack-panel-designer",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Local development and visual QA tooling for the Eurorack Panel Designer.",
+  "scripts": {
+    "dev": "python3 -m http.server 4173",
+    "screenshot": "node tests/visual-review.spec.js",
+    "screenshots": "npm run screenshot",
+    "test:visual": "node tests/visual-review.spec.js",
+    "screenshot:legacy": "node design-review/capture-visual-review.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.44.0"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "url": "http://localhost:4173/?selected-fix=1779206559908",
+  "title": "Eurorack Panel Designer",
+  "bodyText": "STILL LOADING\nThe app has not started yet. If this stays visible, check your connection to the React CDN or reload the file.",
+  "diagnostics": {
+    "console": [
+      "error: Failed to load resource: net::ERR_ADDRESS_INVALID",
+      "error: ReferenceError: ReactDOM is not defined\n    at http://localhost:4173/src/main.js:3:29"
+    ],
+    "pageErrors": [
+      "Error: React CDN did not load. Check internet/CDN access or host React locally.\n    at http://localhost:4173/src/core.js?v=mobile-selected-fix:2:43"
+    ]
+  },
+  "error": "locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.workspace') to be visible\u001b[22m\n"
+}

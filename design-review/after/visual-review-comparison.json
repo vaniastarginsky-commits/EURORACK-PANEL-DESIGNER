@@ -1,0 +1,429 @@
+{
+  "baselinePreference": "design-review/reference, falling back to design-review/current",
+  "pixelThreshold": 8,
+  "diffPercentReportingThreshold": 0.05,
+  "comparisons": [
+    {
+      "file": "desktop-1024x768--both-sidebars-hidden.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1024x768--canvas-inspector-layers-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1024x768--empty-workspace.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1024x768--export-dialog-package-tab.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1024x768--export-dialog-report-tab.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1024x768--export-dialog-svg-tab.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1024x768--left-sidebar-hidden.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1024x768--rail-grid-snap-menu-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1024x768--rail-view-menu-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1024x768--right-sidebar-hidden.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1024x768--right-sidebar-layer-manager-tab.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1024x768--templates-dialog-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1024x768--topbar-file-menu-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1024x768--topbar-templates-menu-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1024x768--view-contrast-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1440x900--both-sidebars-hidden.png",
+      "baseline": "design-review/current/desktop-1440x900--both-sidebars-hidden.png",
+      "status": "changed",
+      "changedPixels": 161226,
+      "diffPercent": 12.4403,
+      "diffImage": "design-review/after/diffs/desktop-1440x900--both-sidebars-hidden.png"
+    },
+    {
+      "file": "desktop-1440x900--canvas-inspector-layers-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1440x900--empty-workspace.png",
+      "baseline": "design-review/current/desktop-1440x900--empty-workspace.png",
+      "status": "changed",
+      "changedPixels": 239480,
+      "diffPercent": 18.4784,
+      "diffImage": "design-review/after/diffs/desktop-1440x900--empty-workspace.png"
+    },
+    {
+      "file": "desktop-1440x900--export-dialog-package-tab.png",
+      "baseline": "design-review/current/desktop-1440x900--export-dialog-package-tab.png",
+      "status": "changed",
+      "changedPixels": 40094,
+      "diffPercent": 3.0937,
+      "diffImage": "design-review/after/diffs/desktop-1440x900--export-dialog-package-tab.png"
+    },
+    {
+      "file": "desktop-1440x900--export-dialog-report-tab.png",
+      "baseline": "design-review/current/desktop-1440x900--export-dialog-report-tab.png",
+      "status": "changed",
+      "changedPixels": 51669,
+      "diffPercent": 3.9868,
+      "diffImage": "design-review/after/diffs/desktop-1440x900--export-dialog-report-tab.png"
+    },
+    {
+      "file": "desktop-1440x900--export-dialog-svg-tab.png",
+      "baseline": "design-review/current/desktop-1440x900--export-dialog-svg-tab.png",
+      "status": "changed",
+      "changedPixels": 50067,
+      "diffPercent": 3.8632,
+      "diffImage": "design-review/after/diffs/desktop-1440x900--export-dialog-svg-tab.png"
+    },
+    {
+      "file": "desktop-1440x900--left-sidebar-hidden.png",
+      "baseline": "design-review/current/desktop-1440x900--left-sidebar-hidden.png",
+      "status": "changed",
+      "changedPixels": 208845,
+      "diffPercent": 16.1146,
+      "diffImage": "design-review/after/diffs/desktop-1440x900--left-sidebar-hidden.png"
+    },
+    {
+      "file": "desktop-1440x900--rail-grid-snap-menu-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1440x900--rail-more-menu-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1440x900--rail-view-menu-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1440x900--right-sidebar-hidden.png",
+      "baseline": "design-review/current/desktop-1440x900--right-sidebar-hidden.png",
+      "status": "changed",
+      "changedPixels": 175524,
+      "diffPercent": 13.5435,
+      "diffImage": "design-review/after/diffs/desktop-1440x900--right-sidebar-hidden.png"
+    },
+    {
+      "file": "desktop-1440x900--right-sidebar-layer-manager-tab.png",
+      "baseline": "design-review/current/desktop-1440x900--right-sidebar-layer-manager-tab.png",
+      "status": "changed",
+      "changedPixels": 289485,
+      "diffPercent": 22.3368,
+      "diffImage": "design-review/after/diffs/desktop-1440x900--right-sidebar-layer-manager-tab.png"
+    },
+    {
+      "file": "desktop-1440x900--templates-dialog-open.png",
+      "baseline": "design-review/current/desktop-1440x900--templates-dialog-open.png",
+      "status": "changed",
+      "changedPixels": 136010,
+      "diffPercent": 10.4946,
+      "diffImage": "design-review/after/diffs/desktop-1440x900--templates-dialog-open.png"
+    },
+    {
+      "file": "desktop-1440x900--topbar-add-menu-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1440x900--topbar-file-menu-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1440x900--topbar-panel-menu-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1440x900--topbar-project-menu-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1440x900--topbar-templates-menu-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1440x900--topbar-text-menu-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1440x900--view-contrast-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1920x1080--both-sidebars-hidden.png",
+      "baseline": "design-review/current/desktop-1920x1080--both-sidebars-hidden.png",
+      "status": "changed",
+      "changedPixels": 184550,
+      "diffPercent": 8.9,
+      "diffImage": "design-review/after/diffs/desktop-1920x1080--both-sidebars-hidden.png"
+    },
+    {
+      "file": "desktop-1920x1080--canvas-inspector-layers-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1920x1080--empty-workspace.png",
+      "baseline": "design-review/current/desktop-1920x1080--empty-workspace.png",
+      "status": "changed",
+      "changedPixels": 247559,
+      "diffPercent": 11.9386,
+      "diffImage": "design-review/after/diffs/desktop-1920x1080--empty-workspace.png"
+    },
+    {
+      "file": "desktop-1920x1080--export-dialog-package-tab.png",
+      "baseline": "design-review/current/desktop-1920x1080--export-dialog-package-tab.png",
+      "status": "changed",
+      "changedPixels": 63189,
+      "diffPercent": 3.0473,
+      "diffImage": "design-review/after/diffs/desktop-1920x1080--export-dialog-package-tab.png"
+    },
+    {
+      "file": "desktop-1920x1080--export-dialog-report-tab.png",
+      "baseline": "design-review/current/desktop-1920x1080--export-dialog-report-tab.png",
+      "status": "changed",
+      "changedPixels": 74859,
+      "diffPercent": 3.6101,
+      "diffImage": "design-review/after/diffs/desktop-1920x1080--export-dialog-report-tab.png"
+    },
+    {
+      "file": "desktop-1920x1080--export-dialog-svg-tab.png",
+      "baseline": "design-review/current/desktop-1920x1080--export-dialog-svg-tab.png",
+      "status": "changed",
+      "changedPixels": 73258,
+      "diffPercent": 3.5329,
+      "diffImage": "design-review/after/diffs/desktop-1920x1080--export-dialog-svg-tab.png"
+    },
+    {
+      "file": "desktop-1920x1080--left-sidebar-hidden.png",
+      "baseline": "design-review/current/desktop-1920x1080--left-sidebar-hidden.png",
+      "status": "changed",
+      "changedPixels": 210325,
+      "diffPercent": 10.143,
+      "diffImage": "design-review/after/diffs/desktop-1920x1080--left-sidebar-hidden.png"
+    },
+    {
+      "file": "desktop-1920x1080--rail-grid-snap-menu-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1920x1080--rail-view-menu-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1920x1080--right-sidebar-hidden.png",
+      "baseline": "design-review/current/desktop-1920x1080--right-sidebar-hidden.png",
+      "status": "changed",
+      "changedPixels": 154853,
+      "diffPercent": 7.4678,
+      "diffImage": "design-review/after/diffs/desktop-1920x1080--right-sidebar-hidden.png"
+    },
+    {
+      "file": "desktop-1920x1080--right-sidebar-layer-manager-tab.png",
+      "baseline": "design-review/current/desktop-1920x1080--right-sidebar-layer-manager-tab.png",
+      "status": "changed",
+      "changedPixels": 311079,
+      "diffPercent": 15.0019,
+      "diffImage": "design-review/after/diffs/desktop-1920x1080--right-sidebar-layer-manager-tab.png"
+    },
+    {
+      "file": "desktop-1920x1080--templates-dialog-open.png",
+      "baseline": "design-review/current/desktop-1920x1080--templates-dialog-open.png",
+      "status": "changed",
+      "changedPixels": 167638,
+      "diffPercent": 8.0844,
+      "diffImage": "design-review/after/diffs/desktop-1920x1080--templates-dialog-open.png"
+    },
+    {
+      "file": "desktop-1920x1080--topbar-file-menu-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1920x1080--topbar-templates-menu-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "desktop-1920x1080--view-contrast-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "mobile-390x844--grid-snap-separated.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "mobile-390x844--mobile-empty-workspace.png",
+      "baseline": "design-review/current/mobile-390x844--mobile-empty-workspace.png",
+      "status": "changed",
+      "changedPixels": 27228,
+      "diffPercent": 8.272,
+      "diffImage": "design-review/after/diffs/mobile-390x844--mobile-empty-workspace.png"
+    },
+    {
+      "file": "mobile-390x844--mobile-left-panel-open.png",
+      "baseline": "design-review/current/mobile-390x844--mobile-left-panel-open.png",
+      "status": "changed",
+      "changedPixels": 53467,
+      "diffPercent": 16.2435,
+      "diffImage": "design-review/after/diffs/mobile-390x844--mobile-left-panel-open.png"
+    },
+    {
+      "file": "mobile-390x844--mobile-more-sheet-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "mobile-390x844--mobile-right-panel-open.png",
+      "baseline": "design-review/current/mobile-390x844--mobile-right-panel-open.png",
+      "status": "changed",
+      "changedPixels": 30419,
+      "diffPercent": 9.2414,
+      "diffImage": "design-review/after/diffs/mobile-390x844--mobile-right-panel-open.png"
+    },
+    {
+      "file": "mobile-390x844--mobile-selected-bottom.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "mobile-390x844--mobile-selected-component-bottom.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "mobile-390x844--mobile-selected-component-top.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "mobile-390x844--mobile-selected-component.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "mobile-412x915--mobile-empty-workspace.png",
+      "baseline": "design-review/current/mobile-412x915--mobile-empty-workspace.png",
+      "status": "changed",
+      "changedPixels": 26368,
+      "diffPercent": 6.9945,
+      "diffImage": "design-review/after/diffs/mobile-412x915--mobile-empty-workspace.png"
+    },
+    {
+      "file": "mobile-412x915--mobile-left-panel-open.png",
+      "baseline": "design-review/current/mobile-412x915--mobile-left-panel-open.png",
+      "status": "changed",
+      "changedPixels": 59236,
+      "diffPercent": 15.7133,
+      "diffImage": "design-review/after/diffs/mobile-412x915--mobile-left-panel-open.png"
+    },
+    {
+      "file": "mobile-412x915--mobile-more-sheet-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "mobile-412x915--mobile-right-panel-open.png",
+      "baseline": "design-review/current/mobile-412x915--mobile-right-panel-open.png",
+      "status": "changed",
+      "changedPixels": 31465,
+      "diffPercent": 8.3466,
+      "diffImage": "design-review/after/diffs/mobile-412x915--mobile-right-panel-open.png"
+    },
+    {
+      "file": "mobile-412x915--mobile-selected-component-bottom.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "mobile-412x915--mobile-selected-component-top.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "mobile-412x915--mobile-selected-component.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "tablet-820x1180--mobile-empty-workspace.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "tablet-820x1180--mobile-left-panel-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "tablet-820x1180--mobile-more-sheet-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    },
+    {
+      "file": "tablet-820x1180--mobile-right-panel-open.png",
+      "baseline": null,
+      "status": "missing-baseline"
+    }
+  ]
+}

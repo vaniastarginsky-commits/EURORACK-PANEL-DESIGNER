@@ -1,4 +1,4 @@
-// Global header only: brand plus Templates, File and Help menus.
+// Compact header: brand, project setup menus, Templates, File and Help.
 function Topbar({
   onExportSVGClick,
   onRequestProjectFileImport,

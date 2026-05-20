@@ -1,0 +1,405 @@
+{
+  "baseUrl": "http://localhost:4173/",
+  "capturedAt": "2026-05-19T16:06:17.116Z",
+  "results": [
+    {
+      "name": "mobile-390x844--mobile-selected-component",
+      "viewport": "mobile-390x844",
+      "files": [
+        "mobile-390x844--mobile-selected-component.png",
+        "mobile-390x844--mobile-selected-component-top.png",
+        "mobile-390x844--mobile-selected-component-bottom.png"
+      ],
+      "metrics": {
+        "appClass": "app     left-panel-closed right-panel-closed both-panels-closed    has-mobile-selection",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "bodyScrollWidth": 390
+        },
+        "selectedActions": true,
+        "selectedActionsRect": {
+          "x": 8,
+          "y": 778,
+          "width": 374,
+          "height": 58,
+          "right": 382,
+          "bottom": 836
+        },
+        "selectedButtons": [
+          {
+            "text": "×",
+            "rect": {
+              "x": 16,
+              "y": 786,
+              "width": 34,
+              "height": 42,
+              "right": 50,
+              "bottom": 828
+            },
+            "clipped": false
+          },
+          {
+            "text": "Single",
+            "rect": {
+              "x": 54,
+              "y": 786,
+              "width": 42,
+              "height": 42,
+              "right": 96,
+              "bottom": 828
+            },
+            "clipped": false
+          },
+          {
+            "text": "Label",
+            "rect": {
+              "x": 100,
+              "y": 786,
+              "width": 42,
+              "height": 42,
+              "right": 143,
+              "bottom": 828
+            },
+            "clipped": false
+          },
+          {
+            "text": "Nudge",
+            "rect": {
+              "x": 147,
+              "y": 786,
+              "width": 42,
+              "height": 42,
+              "right": 189,
+              "bottom": 828
+            },
+            "clipped": false
+          },
+          {
+            "text": "Dup",
+            "rect": {
+              "x": 193,
+              "y": 786,
+              "width": 42,
+              "height": 42,
+              "right": 235,
+              "bottom": 828
+            },
+            "clipped": false
+          },
+          {
+            "text": "Lock",
+            "rect": {
+              "x": 239,
+              "y": 786,
+              "width": 42,
+              "height": 42,
+              "right": 281,
+              "bottom": 828
+            },
+            "clipped": false
+          },
+          {
+            "text": "Del",
+            "rect": {
+              "x": 285,
+              "y": 786,
+              "width": 42,
+              "height": 42,
+              "right": 328,
+              "bottom": 828
+            },
+            "clipped": false
+          },
+          {
+            "text": "More",
+            "rect": {
+              "x": 332,
+              "y": 786,
+              "width": 42,
+              "height": 42,
+              "right": 374,
+              "bottom": 828
+            },
+            "clipped": false
+          }
+        ],
+        "topButtons": [
+          {
+            "text": "Grid",
+            "title": "Toggle grid visibility",
+            "className": "mobile-toolbar-quick active",
+            "rect": {
+              "x": 271,
+              "y": 7,
+              "width": 54,
+              "height": 34,
+              "right": 324,
+              "bottom": 41
+            },
+            "clipped": false
+          },
+          {
+            "text": "Fit",
+            "title": "Fit panel",
+            "className": "mobile-toolbar-quick",
+            "rect": {
+              "x": 328,
+              "y": 7,
+              "width": 54,
+              "height": 34,
+              "right": 382,
+              "bottom": 41
+            },
+            "clipped": false
+          }
+        ],
+        "dock": {
+          "opacity": "0",
+          "pointerEvents": "none",
+          "transform": "matrix(1, 0, 0, 1, 0, 74)",
+          "rect": {
+            "x": 8,
+            "y": 852,
+            "width": 374,
+            "height": 58,
+            "right": 382,
+            "bottom": 910
+          }
+        }
+      },
+      "issues": []
+    },
+    {
+      "name": "mobile-412x915--mobile-selected-component",
+      "viewport": "mobile-412x915",
+      "files": [
+        "mobile-412x915--mobile-selected-component.png",
+        "mobile-412x915--mobile-selected-component-top.png",
+        "mobile-412x915--mobile-selected-component-bottom.png"
+      ],
+      "metrics": {
+        "appClass": "app     left-panel-closed right-panel-closed both-panels-closed    has-mobile-selection",
+        "viewport": {
+          "width": 412,
+          "height": 915,
+          "scrollWidth": 412,
+          "bodyScrollWidth": 412
+        },
+        "selectedActions": true,
+        "selectedActionsRect": {
+          "x": 8,
+          "y": 849,
+          "width": 396,
+          "height": 58,
+          "right": 404,
+          "bottom": 907
+        },
+        "selectedButtons": [
+          {
+            "text": "×",
+            "rect": {
+              "x": 16,
+              "y": 857,
+              "width": 34,
+              "height": 42,
+              "right": 50,
+              "bottom": 899
+            },
+            "clipped": false
+          },
+          {
+            "text": "Single",
+            "rect": {
+              "x": 54,
+              "y": 857,
+              "width": 45,
+              "height": 42,
+              "right": 99,
+              "bottom": 899
+            },
+            "clipped": false
+          },
+          {
+            "text": "Label",
+            "rect": {
+              "x": 103,
+              "y": 857,
+              "width": 45,
+              "height": 42,
+              "right": 149,
+              "bottom": 899
+            },
+            "clipped": false
+          },
+          {
+            "text": "Nudge",
+            "rect": {
+              "x": 153,
+              "y": 857,
+              "width": 45,
+              "height": 42,
+              "right": 198,
+              "bottom": 899
+            },
+            "clipped": false
+          },
+          {
+            "text": "Dup",
+            "rect": {
+              "x": 202,
+              "y": 857,
+              "width": 45,
+              "height": 42,
+              "right": 248,
+              "bottom": 899
+            },
+            "clipped": false
+          },
+          {
+            "text": "Lock",
+            "rect": {
+              "x": 252,
+              "y": 857,
+              "width": 45,
+              "height": 42,
+              "right": 297,
+              "bottom": 899
+            },
+            "clipped": false
+          },
+          {
+            "text": "Del",
+            "rect": {
+              "x": 301,
+              "y": 857,
+              "width": 45,
+              "height": 42,
+              "right": 347,
+              "bottom": 899
+            },
+            "clipped": false
+          },
+          {
+            "text": "More",
+            "rect": {
+              "x": 351,
+              "y": 857,
+              "width": 45,
+              "height": 42,
+              "right": 396,
+              "bottom": 899
+            },
+            "clipped": false
+          }
+        ],
+        "topButtons": [
+          {
+            "text": "Grid",
+            "title": "Toggle grid visibility",
+            "className": "mobile-toolbar-quick active",
+            "rect": {
+              "x": 285,
+              "y": 7,
+              "width": 57,
+              "height": 34,
+              "right": 343,
+              "bottom": 41
+            },
+            "clipped": false
+          },
+          {
+            "text": "Fit",
+            "title": "Fit panel",
+            "className": "mobile-toolbar-quick",
+            "rect": {
+              "x": 347,
+              "y": 7,
+              "width": 57,
+              "height": 34,
+              "right": 404,
+              "bottom": 41
+            },
+            "clipped": false
+          }
+        ],
+        "dock": {
+          "opacity": "0",
+          "pointerEvents": "none",
+          "transform": "matrix(1, 0, 0, 1, 0, 74)",
+          "rect": {
+            "x": 8,
+            "y": 923,
+            "width": 396,
+            "height": 58,
+            "right": 404,
+            "bottom": 981
+          }
+        }
+      },
+      "issues": []
+    },
+    {
+      "name": "mobile-390x844--grid-snap-separated",
+      "viewport": "mobile-390x844",
+      "files": [
+        "mobile-390x844--grid-snap-separated.png"
+      ],
+      "metrics": {
+        "before": {
+          "gridClass": "mobile-toolbar-quick active",
+          "gridText": "Grid",
+          "gridRect": {
+            "x": 271,
+            "y": 7,
+            "width": 54,
+            "height": 34,
+            "right": 324,
+            "bottom": 41
+          },
+          "gridColor": "rgb(241, 228, 205)",
+          "gridTextFill": "rgb(241, 228, 205)",
+          "gridFontSize": "0px",
+          "hasPopover": false,
+          "popoverText": ""
+        },
+        "afterGrid": {
+          "gridClass": "mobile-toolbar-quick ",
+          "gridText": "Grid",
+          "gridRect": {
+            "x": 271,
+            "y": 7,
+            "width": 54,
+            "height": 34,
+            "right": 324,
+            "bottom": 41
+          },
+          "gridColor": "rgb(221, 213, 198)",
+          "gridTextFill": "rgb(221, 213, 198)",
+          "gridFontSize": "0px",
+          "hasPopover": false,
+          "popoverText": ""
+        },
+        "afterSnap": {
+          "gridClass": "mobile-toolbar-quick ",
+          "gridText": "Grid",
+          "gridRect": {
+            "x": 271,
+            "y": 7,
+            "width": 54,
+            "height": 34,
+            "right": 324,
+            "bottom": 41
+          },
+          "gridColor": "rgb(221, 213, 198)",
+          "gridTextFill": "rgb(221, 213, 198)",
+          "gridFontSize": "0px",
+          "hasPopover": true,
+          "popoverText": "GridSnap priority: panel/PCB edges → centers/rows → grid. If a guide says SNAP, the coordinate is actually locked.0.25 mm0.5 mm1 mm2.5 mm5 mm5 mm major gridSnapGrid snapPanel edges"
+        }
+      },
+      "issues": []
+    }
+  ]
+}
