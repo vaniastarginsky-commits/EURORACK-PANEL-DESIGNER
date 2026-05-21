@@ -21,3 +21,6 @@ dist/
 # Local env
 .env
 .env.local
+
+# Verify-run screenshot scratch (use npm run screenshot to update tracked baselines)
+design-review/verify-tmp/
