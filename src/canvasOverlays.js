@@ -128,8 +128,11 @@ const ScaleLayer = React.memo(function ScaleLayer({
                 Math.max(minorLen, maxOuterR - baseR - 0.25),
               )
             : sc.tickLength * 1.5;
+        const rawFontSize = Number.isFinite(sc.fontSizeMm)
+          ? Math.max(sc.fontSizeMm, 0.4)
+          : 1.05;
         const fontSize =
-          refR > 0 ? Math.min(sc.fontSizeMm, 1.15) : sc.fontSizeMm;
+          refR > 0 ? Math.min(rawFontSize, 1.15) : Math.min(rawFontSize, 3.2);
         for (let i = 0; i < n; i++) {
           const t = i / (n - 1);
           const deg = sc.startAngle + (sc.endAngle - sc.startAngle) * t;

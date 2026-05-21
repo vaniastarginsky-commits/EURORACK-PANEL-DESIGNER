@@ -121,7 +121,7 @@ function PanelSettings() {
       React.createElement("label", null, "Custom HP"),
       React.createElement(
         "div",
-        { style: { display: "flex", gap: 4 } },
+        { className: "panel-custom-hp-row" },
         React.createElement("input", {
           type: "number",
           min: 1,

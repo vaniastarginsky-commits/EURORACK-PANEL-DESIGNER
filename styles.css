@@ -4647,3 +4647,202 @@ input[type="number"],
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
 }
+
+/* Scoped layout repairs after the component split. These override older
+   high-specificity polish rules without changing component behavior. */
+.toolbar-popover.topbar-section-popover {
+  width: min(360px, calc(100vw - 16px)) !important;
+  max-width: min(360px, calc(100vw - 16px)) !important;
+  overflow-x: hidden !important;
+}
+
+.toolbar-popover.topbar-section-popover .section {
+  min-width: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.toolbar-popover.topbar-section-popover .field-row,
+.toolbar-popover.topbar-section-popover .field-pair,
+.toolbar-popover.topbar-section-popover .measurement-row {
+  min-width: 0 !important;
+}
+
+.toolbar-popover.topbar-section-popover .panel-custom-hp-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 84px !important;
+  gap: 8px !important;
+  align-items: end !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.toolbar-popover.topbar-section-popover .panel-custom-hp-row input {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.toolbar-popover.topbar-section-popover .panel-custom-hp-row button {
+  width: auto !important;
+  min-width: 0 !important;
+  text-align: center !important;
+  justify-content: center !important;
+}
+
+.component-library-popover {
+  top: clamp(72px, 12vh, 138px) !important;
+  bottom: auto !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  width: min(1120px, calc(100vw - 192px)) !important;
+  max-height: calc(100vh - 154px) !important;
+  display: grid !important;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto !important;
+  overflow: hidden !important;
+}
+
+.component-library-popover .popover-component-grid {
+  min-height: 0 !important;
+  overflow: auto !important;
+  padding-right: 4px !important;
+  grid-template-columns: repeat(auto-fill, minmax(126px, 1fr)) !important;
+}
+
+.component-library-popover .component-icon-card {
+  display: grid !important;
+  grid-template-rows: 18px 86px auto auto !important;
+  align-items: center !important;
+  justify-items: center !important;
+  min-height: 156px !important;
+  padding: 8px !important;
+}
+
+.component-library-popover .component-icon-preview {
+  width: 86px !important;
+  height: 86px !important;
+  overflow: hidden !important;
+}
+
+.component-library-popover .library-real-preview {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  border-bottom: 0 !important;
+  background: transparent !important;
+  transform: none !important;
+  transform-origin: center !important;
+}
+
+.component-library-popover .component-icon-name,
+.component-library-popover .component-icon-meta {
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.component-library-popover-head button {
+  width: 38px !important;
+  min-width: 38px !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+.command-palette-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483200 !important;
+  display: grid !important;
+  place-items: start center !important;
+  padding: clamp(72px, 12vh, 132px) 16px 16px !important;
+  background: rgba(0, 0, 0, .58) !important;
+  backdrop-filter: blur(6px) saturate(.75) brightness(.72) !important;
+  -webkit-backdrop-filter: blur(6px) saturate(.75) brightness(.72) !important;
+}
+
+.command-palette {
+  width: min(760px, calc(100vw - 32px)) !important;
+  max-height: calc(100vh - 120px) !important;
+  display: grid !important;
+  grid-template-rows: auto auto minmax(0, 1fr) !important;
+  gap: 10px !important;
+  padding: 12px !important;
+  overflow: hidden !important;
+  background: #050505 !important;
+  border: 1px solid rgba(215, 196, 155, .30) !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, .82) !important;
+}
+
+.command-palette-title {
+  color: #f2dfb2 !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  letter-spacing: .18em !important;
+  text-transform: uppercase !important;
+}
+
+.command-palette input {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 38px !important;
+}
+
+.command-palette-list {
+  min-height: 0 !important;
+  overflow: auto !important;
+  display: grid !important;
+  gap: 6px !important;
+}
+
+.command-palette-list button {
+  width: 100% !important;
+  min-height: 42px !important;
+  display: grid !important;
+  grid-template-columns: max-content minmax(0, 1fr) !important;
+  gap: 8px !important;
+  align-items: baseline !important;
+  text-align: left !important;
+}
+
+.command-palette-list button span,
+.command-palette-list button small {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+@media(max-width:900px) {
+  .component-library-popover {
+    left: 8px !important;
+    right: 8px !important;
+    top: 72px !important;
+    bottom: auto !important;
+    transform: none !important;
+    width: auto !important;
+    max-height: calc(100vh - 146px) !important;
+  }
+
+  .component-library-popover .popover-component-grid {
+    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)) !important;
+  }
+
+  .component-library-popover .component-icon-card {
+    grid-template-rows: 18px 64px auto auto !important;
+    min-height: 142px !important;
+    gap: 4px !important;
+  }
+
+  .component-library-popover .component-icon-preview {
+    width: 64px !important;
+    height: 64px !important;
+  }
+
+  .component-library-popover .component-icon-name {
+    font-size: 12px !important;
+  }
+}

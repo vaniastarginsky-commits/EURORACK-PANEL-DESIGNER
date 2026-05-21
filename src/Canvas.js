@@ -1482,7 +1482,10 @@ const TextLayer = React.memo(function TextLayer({
         const p = textDragPreview?.id === t.id ? textDragPreview : null;
         const x = p?.x ?? t.x,
           y = p?.y ?? t.y;
-        const w = Math.max(6, t.text.length * t.fontSizeMm * 0.6);
+        const fontSizeMm = Number.isFinite(t.fontSizeMm)
+          ? Math.min(Math.max(t.fontSizeMm, 0.4), 18)
+          : 3;
+        const w = Math.max(6, t.text.length * fontSizeMm * 0.6);
         return React.createElement(
           "g",
           {
@@ -1496,7 +1499,7 @@ const TextLayer = React.memo(function TextLayer({
             {
               x: x,
               y: y,
-              fontSize: t.fontSizeMm,
+              fontSize: fontSizeMm,
               fontFamily: t.fontFamily || TEXT_FONT_OPTIONS[0].value,
               textAnchor:
                 t.align === "left"
@@ -1512,9 +1515,9 @@ const TextLayer = React.memo(function TextLayer({
           selectedText === t.id &&
             React.createElement("rect", {
               x: x - w / 2,
-              y: y - t.fontSizeMm,
+              y: y - fontSizeMm,
               width: w,
-              height: t.fontSizeMm * 1.25,
+              height: fontSizeMm * 1.25,
               fill: "none",
               stroke: "#c99a4a",
               strokeWidth: 0.42,
@@ -3066,59 +3069,70 @@ function SVGCanvas({
             widthMM: widthMM,
             components: state.components,
           }),
-        snapGuides.map((g, i) =>
-          g.axis === "x"
-            ? React.createElement(
-                "g",
-                { key: `gx-${i}`, style: { pointerEvents: "none" } },
-                React.createElement("line", {
-                  x1: g.pos,
-                  y1: 0,
-                  x2: g.pos,
-                  y2: heightMM,
-                  stroke: "#c99a4a",
-                  strokeWidth: 0.18,
-                  strokeDasharray: "1.2 0.9",
-                  opacity: 0.82,
-                }),
-                React.createElement(
-                  "text",
-                  {
-                    x: g.pos + 0.55,
-                    y: 3 + i * 2.1,
-                    fontSize: 1.08,
-                    fill: "#f3dfb2",
-                    opacity: 0.96,
-                  },
-                  g.label,
-                ),
-              )
-            : React.createElement(
-                "g",
-                { key: `gy-${i}`, style: { pointerEvents: "none" } },
-                React.createElement("line", {
-                  x1: 0,
-                  y1: g.pos,
-                  x2: widthMM,
-                  y2: g.pos,
-                  stroke: "#c99a4a",
-                  strokeWidth: 0.18,
-                  strokeDasharray: "1.2 0.9",
-                  opacity: 0.82,
-                }),
-                React.createElement(
-                  "text",
-                  {
-                    x: 0.8,
-                    y: Math.max(2, g.pos - 0.8),
-                    fontSize: 1.08,
-                    fill: "#f3dfb2",
-                    opacity: 0.96,
-                  },
-                  g.label,
-                ),
+        snapGuides.map((g, i) => {
+          const label = String(g.label || "").replace(/^SNAP:\s*/i, "");
+          const compactLabel =
+            label.length > 28 ? `${label.slice(0, 25)}...` : label;
+          if (g.axis === "x") {
+            const labelW = Math.max(8, compactLabel.length * 0.58);
+            const anchor = g.pos + labelW > widthMM - 0.8 ? "end" : "start";
+            const labelX =
+              anchor === "end"
+                ? Math.max(0.8, Math.min(widthMM - 0.8, g.pos - 0.55))
+                : Math.max(0.8, Math.min(widthMM - 0.8, g.pos + 0.55));
+            return React.createElement(
+              "g",
+              { key: `gx-${i}`, style: { pointerEvents: "none" } },
+              React.createElement("line", {
+                x1: g.pos,
+                y1: 0,
+                x2: g.pos,
+                y2: heightMM,
+                stroke: "#c99a4a",
+                strokeWidth: 0.18,
+                strokeDasharray: "1.2 0.9",
+                opacity: 0.82,
+              }),
+              React.createElement(
+                "text",
+                {
+                  x: labelX,
+                  y: 3 + i * 2.1,
+                  fontSize: 1.08,
+                  fill: "#f3dfb2",
+                  opacity: 0.96,
+                  textAnchor: anchor,
+                },
+                compactLabel,
               ),
-        ),
+            );
+          }
+          return React.createElement(
+            "g",
+            { key: `gy-${i}`, style: { pointerEvents: "none" } },
+            React.createElement("line", {
+              x1: 0,
+              y1: g.pos,
+              x2: widthMM,
+              y2: g.pos,
+              stroke: "#c99a4a",
+              strokeWidth: 0.18,
+              strokeDasharray: "1.2 0.9",
+              opacity: 0.82,
+            }),
+            React.createElement(
+              "text",
+              {
+                x: 0.8,
+                y: Math.max(2, g.pos - 0.8),
+                fontSize: 1.08,
+                fill: "#f3dfb2",
+                opacity: 0.96,
+              },
+              compactLabel,
+            ),
+          );
+        }),
         state.layerVisibility.mountingHoles &&
           React.createElement(
             "g",
