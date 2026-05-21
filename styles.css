@@ -1159,13 +1159,8 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   gap:6px!important;
   margin:0 0 10px!important;
 }
-.inspector-rail-popover button,
-.rail-popover button,
-.layer-panel-body button,
-.rail-segment-grid button,
 .hardware-style-mini button,
 .compact-render-row button,
-.rail-preset-row button,
 .layer-manager-presets button{
   box-sizing:border-box!important;
   width:100%!important;
@@ -1186,13 +1181,8 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   border:1px solid rgba(215,196,155,.16)!important;
   color:#eee7da!important;
 }
-.inspector-rail-popover button.active,
-.rail-popover button.active,
-.layer-panel-body button.active,
-.rail-segment-grid button.active,
 .hardware-style-mini button.active,
 .compact-render-row button.active,
-.rail-preset-row button.active,
 .layer-manager-presets button.active{
   border-color:#c99a4a!important;
   background:#17120a!important;
@@ -1209,9 +1199,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   row-gap:7px!important;
   margin-top:8px!important;
 }
-.inspector-rail-popover label,
-.rail-popover label,
-.layer-panel-body label,
 .layer-toggle,
 .layer-manager-line{
   box-sizing:border-box!important;
