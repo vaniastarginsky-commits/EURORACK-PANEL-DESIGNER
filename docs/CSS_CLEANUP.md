@@ -38,19 +38,21 @@ Tracks dead CSS removal on the `ux-polish` branch. Target file: `styles.css`.
 | `d3549d2` | style: remove shadowed template preview selectors (slic commit 5, 2 entries) |
 | `dbe8e1a` | style: remove shadowed template export selector entries (slic commit 6, 7 entries) |
 | `55b6f68` | style: remove shadowed v422 alias selectors (slic commit 7, 7 entries) |
+| `2ca3f45` | style: remove shadowed S1 non-important CSS (Batch A, 5 substrings) |
+| `3b738fb` | style: remove shadowed S1 var-equivalent CSS (Batch B, 2 rules + ri2 selector shrink) |
 
 ---
 
 ## Current state
 
-**Approximate `!important` count:** 3,084 (unchanged — selector-list surgery does not change !important count)
+**`!important` count:** 3,082 (−2 from Batch B whole-rule deletes)
 
-**Cascade audit (fresh after 55b6f68):**
+**Cascade audit (fresh after 3b738fb):**
 - Total lines: 4,160
-- Raw rules parsed: 906
-- !important count: 3,084
-- Whole-rule deletion candidates: 10 (all on line 2 — S1 surgery only)
-- Selector-list item removal candidates: 7 (all on line 2 — S1/L2 only; all non-line-2 slic surgery complete)
+- Raw rules parsed: 899
+- !important count: 3,082
+- Whole-rule deletion candidates: 3 (all on line 2 — Batch C)
+- Selector-list item removal candidates: 4 (all on line 2 — Batch D)
 - Visual QA coverage: 20/20 screenshots
 
 **All non-line-2 selector-list surgery is complete. Remaining cleanup is line 2 / S1 only.**
@@ -193,6 +195,20 @@ Seven commits, 33 selector entries removed. `!important` count unchanged (select
 - `ri185` L26: stripped `.field-row` from `.row,.field-row,.form-row` — winner: ri228|L72 v423 solo rule
 - `ri186` L27: stripped `.field-row label` from `.field-row label,.form-row label` (sole survivor: `.form-row label`) — winner: ri229|L73 v423 solo rule
 
+### S1 Batch A — non-important whole-rule deletes from line 2 (commit `2ca3f45`)
+5 substrings removed from the minified line 2. 0 `!important` delta (all deleted declarations were non-important). Braces balanced before and after. Verify: 20/20.
+
+Rules removed (all on line 2, section v376-clean-style): `.template-manager-backdrop` (z-index:6500), `.local-projects-panel` (width:min(92vw,620px)), `.inline-modal-card` (5 non-important declarations), `.inline-modal-title` (5 non-important declarations), `.inline-modal-actions` (4 non-important declarations).
+
+### S1 Batch B — var-equivalent important-to-important cleanup (commit `3b738fb`)
+2 whole-rule deletes + 1 selector-list shrink on line 2. −2 `!important`. Braces balanced (172→170 pairs). Verify: 20/20.
+
+- Deleted `.sidebar-left{border-right:1px solid var(--ui-line)!important}` — var resolves to same value as later winner (rgba(215,196,155,.13))
+- Deleted `.sidebar-right{border-left:1px solid var(--ui-line)!important}` — same rationale
+- Shrunk ri2 selector list: `html,body,#root,.app` → `.app` — `html`/`body`/`#root` all shadowed by v423 winner; `var(--ui-bg)` resolves to #020202, `var(--ui-text)` resolves to #eee7da
+
+Post-Batch-B fresh audit: 3 whole-rule candidates, 4 slic candidates (all line 2).
+
 ---
 
 ## Deferred — do not touch without Codex review
@@ -242,22 +258,26 @@ Rules that differ in property values (not just shadow/override) require manual v
 ~~**Selector-list surgery commits 4–5** (8 entries)~~ ✅ Done (`6cba7e9`, `d3549d2`)
 ~~**Selector-list surgery commit 6** (7 entries — v429 templates/export)~~ ✅ Done (`dbe8e1a`)
 ~~**Selector-list surgery commit 7** (7 entries — v422 aliases)~~ ✅ Done (`55b6f68`)
+~~**S1 Batch A** (5 non-important substrings)~~ ✅ Done (`2ca3f45`)
+~~**S1 Batch B** (2 whole-rule deletes + ri2 selector shrink)~~ ✅ Done (`3b738fb`)
 
-**Fresh audit (post-55b6f68) — 10 whole-rule candidates (all L2), 7 slic candidates (all L2):**
+**Fresh audit (post-3b738fb) — 3 whole-rule candidates (all L2), 4 slic candidates (all L2):**
 
 **All non-line-2 cleanup is complete.**
 
-**Whole-rule (10, all line 2 / S1):**
-`.sidebar-left` (border-right), `.sidebar-right` (border-left), `.app-brand`, `.component-hover-card`, `.template-manager-backdrop`, `.local-projects-panel`, `.inline-modal-card`, `.inline-modal-title`, `.inline-modal-actions`, `.inline-modal-actions button.danger`.
+**Whole-rule (3, all line 2 / S1 — Batch C):**
+`.app-brand`, `.component-hover-card`, `.inline-modal-actions button.danger` (ri155 — blocked until danger-state screenshot exists).
 
-**Selector-list item candidates (7, all line 2 / S1):**
+**Selector-list item candidates (4, all line 2 / S1 — Batch D):**
 
 | Group | Count | Area | Key dead selectors |
 |-------|-------|------|--------------------|
-| L2/S1 | 7 | Line 2 | `body`, `#root`, `html`, `.section-title`, `.sidebar-title`, `.sidebar-left .section-title`, `.toolbar-popover button` |
+| L2/S1 | 4 | Line 2 | `.section-title`, `.sidebar-title`, `.sidebar-left .section-title`, `.toolbar-popover button` |
 
 **Remaining cleanup: line 2 / S1 surgery only.**
-All 17 non-L2 whole-rule deletions and all 26 non-L2 selector-list item removals are complete. The remaining 10 whole-rule candidates and 7 slic candidates are all on the large minified line 2 and require a single coordinated S1 operation.
+- Batch C: value-different whole-rule deletes (`.app-brand`, `.component-hover-card`); ri155 (`.inline-modal-actions button.danger`) blocked until danger-state screenshot coverage exists.
+- Batch D: value-different selector-list surgery (4 entries across 3 rules).
+- ri155 blocked: danger button background/color/border-color differ between shadowed and winner values — visual coverage of the delete-confirmation danger state required before removal.
 
 ---
 

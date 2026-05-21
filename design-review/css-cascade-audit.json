@@ -1,78 +1,20 @@
 {
-  "generatedAt": "2026-05-21T23:16:10.202Z",
+  "generatedAt": "2026-05-21T23:42:37.194Z",
   "sourceFile": "styles.css",
   "stats": {
     "totalLines": 4160,
-    "rawRulesParsed": 906,
-    "expandedEntries": 1630,
+    "rawRulesParsed": 899,
+    "expandedEntries": 1620,
     "uniqueSelKeys": 1330,
-    "duplicatedSelKeys": 199,
-    "importantCount": 3084,
-    "shadowedDeclarations": 573,
-    "wholeRuleCandidateCount": 10,
-    "selectorListItemCandidateCount": 7
+    "duplicatedSelKeys": 196,
+    "importantCount": 3082,
+    "shadowedDeclarations": 549,
+    "wholeRuleCandidateCount": 3,
+    "selectorListItemCandidateCount": 4
   },
   "wholeRuleCandidates": [
     {
-      "ruleIndex": 6,
-      "lineStart": 2,
-      "section": "v376-clean-style",
-      "media": null,
-      "fullSelector": ".sidebar-left",
-      "allIndividuals": [
-        ".sidebar-left"
-      ],
-      "shadowedIndividuals": [
-        ".sidebar-left"
-      ],
-      "propsByIndividual": {
-        ".sidebar-left": [
-          {
-            "prop": "border-right",
-            "shadowedValue": "1px solid var(--ui-line)",
-            "shadowedImportant": true,
-            "winner": {
-              "ruleIndex": 208,
-              "lineStart": 53,
-              "value": "1px solid rgba(215,196,155,.13)",
-              "important": true,
-              "section": "v423-targeted-workspace-css-restore"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "ruleIndex": 7,
-      "lineStart": 2,
-      "section": "v376-clean-style",
-      "media": null,
-      "fullSelector": ".sidebar-right",
-      "allIndividuals": [
-        ".sidebar-right"
-      ],
-      "shadowedIndividuals": [
-        ".sidebar-right"
-      ],
-      "propsByIndividual": {
-        ".sidebar-right": [
-          {
-            "prop": "border-left",
-            "shadowedValue": "1px solid var(--ui-line)",
-            "shadowedImportant": true,
-            "winner": {
-              "ruleIndex": 209,
-              "lineStart": 54,
-              "value": "1px solid rgba(215,196,155,.13)",
-              "important": true,
-              "section": "v423-targeted-workspace-css-restore"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "ruleIndex": 47,
+      "ruleIndex": 45,
       "lineStart": 2,
       "section": "v376-clean-style",
       "media": null,
@@ -90,7 +32,7 @@
             "shadowedValue": "inline-flex",
             "shadowedImportant": true,
             "winner": {
-              "ruleIndex": 204,
+              "ruleIndex": 197,
               "lineStart": 49,
               "value": "flex",
               "important": true,
@@ -102,7 +44,7 @@
             "shadowedValue": "center",
             "shadowedImportant": true,
             "winner": {
-              "ruleIndex": 204,
+              "ruleIndex": 197,
               "lineStart": 49,
               "value": "center",
               "important": true,
@@ -114,7 +56,7 @@
             "shadowedValue": "8px",
             "shadowedImportant": true,
             "winner": {
-              "ruleIndex": 204,
+              "ruleIndex": 197,
               "lineStart": 49,
               "value": "8px",
               "important": true,
@@ -125,7 +67,7 @@
       }
     },
     {
-      "ruleIndex": 76,
+      "ruleIndex": 74,
       "lineStart": 2,
       "section": "v376-clean-style",
       "media": null,
@@ -143,7 +85,7 @@
             "shadowedValue": "230px",
             "shadowedImportant": true,
             "winner": {
-              "ruleIndex": 586,
+              "ruleIndex": 579,
               "lineStart": 1649,
               "value": "0",
               "important": true,
@@ -154,284 +96,7 @@
       }
     },
     {
-      "ruleIndex": 95,
-      "lineStart": 2,
-      "section": "v376-clean-style",
-      "media": null,
-      "fullSelector": ".template-manager-backdrop",
-      "allIndividuals": [
-        ".template-manager-backdrop"
-      ],
-      "shadowedIndividuals": [
-        ".template-manager-backdrop"
-      ],
-      "propsByIndividual": {
-        ".template-manager-backdrop": [
-          {
-            "prop": "z-index",
-            "shadowedValue": "6500",
-            "shadowedImportant": false,
-            "winner": {
-              "ruleIndex": 381,
-              "lineStart": 278,
-              "value": "2147483200",
-              "important": true,
-              "section": "v432-templates-export-layout-fix"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "ruleIndex": 97,
-      "lineStart": 2,
-      "section": "v376-clean-style",
-      "media": null,
-      "fullSelector": ".local-projects-panel",
-      "allIndividuals": [
-        ".local-projects-panel"
-      ],
-      "shadowedIndividuals": [
-        ".local-projects-panel"
-      ],
-      "propsByIndividual": {
-        ".local-projects-panel": [
-          {
-            "prop": "width",
-            "shadowedValue": "min(92vw,620px)",
-            "shadowedImportant": false,
-            "winner": {
-              "ruleIndex": 341,
-              "lineStart": 221,
-              "value": "min(1180px,calc(100vw - 44px))",
-              "important": true,
-              "section": "v429-templates-export-modal-css-fix"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "ruleIndex": 119,
-      "lineStart": 2,
-      "section": "v376-clean-style",
-      "media": null,
-      "fullSelector": ".inline-modal-card",
-      "allIndividuals": [
-        ".inline-modal-card"
-      ],
-      "shadowedIndividuals": [
-        ".inline-modal-card"
-      ],
-      "propsByIndividual": {
-        ".inline-modal-card": [
-          {
-            "prop": "width",
-            "shadowedValue": "min(420px,100%)",
-            "shadowedImportant": false,
-            "winner": {
-              "ruleIndex": 654,
-              "lineStart": 2190,
-              "value": "min(440px,calc(100vw - 36px))",
-              "important": true,
-              "section": "v445-center-inline-template-confirm"
-            }
-          },
-          {
-            "prop": "background",
-            "shadowedValue": "linear-gradient(135deg,rgba(12,12,10,.98),rgba(4,4,4,.98))",
-            "shadowedImportant": false,
-            "winner": {
-              "ruleIndex": 654,
-              "lineStart": 2190,
-              "value": "#070706",
-              "important": true,
-              "section": "v445-center-inline-template-confirm"
-            }
-          },
-          {
-            "prop": "border",
-            "shadowedValue": "1px solid rgba(215,196,155,.22)",
-            "shadowedImportant": false,
-            "winner": {
-              "ruleIndex": 654,
-              "lineStart": 2190,
-              "value": "1px solid rgba(215,196,155,.28)",
-              "important": true,
-              "section": "v445-center-inline-template-confirm"
-            }
-          },
-          {
-            "prop": "box-shadow",
-            "shadowedValue": "0 18px 46px rgba(0,0,0,.62)",
-            "shadowedImportant": false,
-            "winner": {
-              "ruleIndex": 654,
-              "lineStart": 2190,
-              "value": "0 28px 90px rgba(0,0,0,.88)",
-              "important": true,
-              "section": "v445-center-inline-template-confirm"
-            }
-          },
-          {
-            "prop": "padding",
-            "shadowedValue": "14px",
-            "shadowedImportant": false,
-            "winner": {
-              "ruleIndex": 654,
-              "lineStart": 2190,
-              "value": "16px",
-              "important": true,
-              "section": "v445-center-inline-template-confirm"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "ruleIndex": 120,
-      "lineStart": 2,
-      "section": "v376-clean-style",
-      "media": null,
-      "fullSelector": ".inline-modal-title",
-      "allIndividuals": [
-        ".inline-modal-title"
-      ],
-      "shadowedIndividuals": [
-        ".inline-modal-title"
-      ],
-      "propsByIndividual": {
-        ".inline-modal-title": [
-          {
-            "prop": "color",
-            "shadowedValue": "#e8ddc9",
-            "shadowedImportant": false,
-            "winner": {
-              "ruleIndex": 655,
-              "lineStart": 2210,
-              "value": "#eee7da",
-              "important": true,
-              "section": "v445-center-inline-template-confirm"
-            }
-          },
-          {
-            "prop": "font-weight",
-            "shadowedValue": "850",
-            "shadowedImportant": false,
-            "winner": {
-              "ruleIndex": 655,
-              "lineStart": 2210,
-              "value": "900",
-              "important": true,
-              "section": "v445-center-inline-template-confirm"
-            }
-          },
-          {
-            "prop": "letter-spacing",
-            "shadowedValue": ".14em",
-            "shadowedImportant": false,
-            "winner": {
-              "ruleIndex": 655,
-              "lineStart": 2210,
-              "value": ".18em",
-              "important": true,
-              "section": "v445-center-inline-template-confirm"
-            }
-          },
-          {
-            "prop": "text-transform",
-            "shadowedValue": "uppercase",
-            "shadowedImportant": false,
-            "winner": {
-              "ruleIndex": 655,
-              "lineStart": 2210,
-              "value": "uppercase",
-              "important": true,
-              "section": "v445-center-inline-template-confirm"
-            }
-          },
-          {
-            "prop": "font-size",
-            "shadowedValue": "12px",
-            "shadowedImportant": false,
-            "winner": {
-              "ruleIndex": 655,
-              "lineStart": 2210,
-              "value": "14px",
-              "important": true,
-              "section": "v445-center-inline-template-confirm"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "ruleIndex": 123,
-      "lineStart": 2,
-      "section": "v376-clean-style",
-      "media": null,
-      "fullSelector": ".inline-modal-actions",
-      "allIndividuals": [
-        ".inline-modal-actions"
-      ],
-      "shadowedIndividuals": [
-        ".inline-modal-actions"
-      ],
-      "propsByIndividual": {
-        ".inline-modal-actions": [
-          {
-            "prop": "display",
-            "shadowedValue": "flex",
-            "shadowedImportant": false,
-            "winner": {
-              "ruleIndex": 658,
-              "lineStart": 2239,
-              "value": "flex",
-              "important": true,
-              "section": "v445-center-inline-template-confirm"
-            }
-          },
-          {
-            "prop": "justify-content",
-            "shadowedValue": "flex-end",
-            "shadowedImportant": false,
-            "winner": {
-              "ruleIndex": 658,
-              "lineStart": 2239,
-              "value": "flex-end",
-              "important": true,
-              "section": "v445-center-inline-template-confirm"
-            }
-          },
-          {
-            "prop": "gap",
-            "shadowedValue": "8px",
-            "shadowedImportant": false,
-            "winner": {
-              "ruleIndex": 658,
-              "lineStart": 2239,
-              "value": "8px",
-              "important": true,
-              "section": "v445-center-inline-template-confirm"
-            }
-          },
-          {
-            "prop": "margin-top",
-            "shadowedValue": "14px",
-            "shadowedImportant": false,
-            "winner": {
-              "ruleIndex": 658,
-              "lineStart": 2239,
-              "value": "14px",
-              "important": true,
-              "section": "v445-center-inline-template-confirm"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "ruleIndex": 155,
+      "ruleIndex": 148,
       "lineStart": 2,
       "section": "v376-clean-style",
       "media": null,
@@ -449,7 +114,7 @@
             "shadowedValue": "#170807",
             "shadowedImportant": true,
             "winner": {
-              "ruleIndex": 661,
+              "ruleIndex": 654,
               "lineStart": 2261,
               "value": "#160504",
               "important": true,
@@ -461,7 +126,7 @@
             "shadowedValue": "#efc2bc",
             "shadowedImportant": true,
             "winner": {
-              "ruleIndex": 661,
+              "ruleIndex": 654,
               "lineStart": 2261,
               "value": "#f1c7c1",
               "important": true,
@@ -473,7 +138,7 @@
             "shadowedValue": "rgba(138,48,42,.66)",
             "shadowedImportant": true,
             "winner": {
-              "ruleIndex": 661,
+              "ruleIndex": 654,
               "lineStart": 2261,
               "value": "rgba(138,48,42,.75)",
               "important": true,
@@ -486,172 +151,7 @@
   ],
   "selectorListItemCandidates": [
     {
-      "ruleIndex": 2,
-      "lineStart": 2,
-      "section": "v376-clean-style",
-      "media": null,
-      "fullSelector": "html,body,#root,.app,.app-shell,.workspace,.canvas-wrap",
-      "allIndividuals": [
-        "html",
-        "body",
-        "#root",
-        ".app",
-        ".app-shell",
-        ".workspace",
-        ".canvas-wrap"
-      ],
-      "shadowedIndividual": "body",
-      "unshadowedSiblings": [
-        "html",
-        "#root",
-        ".app",
-        ".app-shell",
-        ".workspace",
-        ".canvas-wrap"
-      ],
-      "props": [
-        "background",
-        "color"
-      ],
-      "propDetail": [
-        {
-          "prop": "background",
-          "shadowedValue": "var(--ui-bg)",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 200,
-            "lineStart": 45,
-            "value": "#020202",
-            "important": true,
-            "section": "v423-targeted-workspace-css-restore"
-          }
-        },
-        {
-          "prop": "color",
-          "shadowedValue": "var(--ui-text)",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 200,
-            "lineStart": 45,
-            "value": "#eee7da",
-            "important": true,
-            "section": "v423-targeted-workspace-css-restore"
-          }
-        }
-      ]
-    },
-    {
-      "ruleIndex": 2,
-      "lineStart": 2,
-      "section": "v376-clean-style",
-      "media": null,
-      "fullSelector": "html,body,#root,.app,.app-shell,.workspace,.canvas-wrap",
-      "allIndividuals": [
-        "html",
-        "body",
-        "#root",
-        ".app",
-        ".app-shell",
-        ".workspace",
-        ".canvas-wrap"
-      ],
-      "shadowedIndividual": "#root",
-      "unshadowedSiblings": [
-        "html",
-        "body",
-        ".app",
-        ".app-shell",
-        ".workspace",
-        ".canvas-wrap"
-      ],
-      "props": [
-        "background",
-        "color"
-      ],
-      "propDetail": [
-        {
-          "prop": "background",
-          "shadowedValue": "var(--ui-bg)",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 200,
-            "lineStart": 45,
-            "value": "#020202",
-            "important": true,
-            "section": "v423-targeted-workspace-css-restore"
-          }
-        },
-        {
-          "prop": "color",
-          "shadowedValue": "var(--ui-text)",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 200,
-            "lineStart": 45,
-            "value": "#eee7da",
-            "important": true,
-            "section": "v423-targeted-workspace-css-restore"
-          }
-        }
-      ]
-    },
-    {
-      "ruleIndex": 2,
-      "lineStart": 2,
-      "section": "v376-clean-style",
-      "media": null,
-      "fullSelector": "html,body,#root,.app,.app-shell,.workspace,.canvas-wrap",
-      "allIndividuals": [
-        "html",
-        "body",
-        "#root",
-        ".app",
-        ".app-shell",
-        ".workspace",
-        ".canvas-wrap"
-      ],
-      "shadowedIndividual": "html",
-      "unshadowedSiblings": [
-        "body",
-        "#root",
-        ".app",
-        ".app-shell",
-        ".workspace",
-        ".canvas-wrap"
-      ],
-      "props": [
-        "background",
-        "color"
-      ],
-      "propDetail": [
-        {
-          "prop": "background",
-          "shadowedValue": "var(--ui-bg)",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 200,
-            "lineStart": 45,
-            "value": "#020202",
-            "important": true,
-            "section": "v423-targeted-workspace-css-restore"
-          }
-        },
-        {
-          "prop": "color",
-          "shadowedValue": "var(--ui-text)",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 200,
-            "lineStart": 45,
-            "value": "#eee7da",
-            "important": true,
-            "section": "v423-targeted-workspace-css-restore"
-          }
-        }
-      ]
-    },
-    {
-      "ruleIndex": 10,
+      "ruleIndex": 8,
       "lineStart": 2,
       "section": "v376-clean-style",
       "media": null,
@@ -686,7 +186,7 @@
           "shadowedValue": "var(--ui-text-soft)",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 227,
+            "ruleIndex": 220,
             "lineStart": 71,
             "value": "#eee7da",
             "important": true,
@@ -698,7 +198,7 @@
           "shadowedValue": ".16em",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 227,
+            "ruleIndex": 220,
             "lineStart": 71,
             "value": ".22em",
             "important": true,
@@ -710,7 +210,7 @@
           "shadowedValue": "uppercase",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 227,
+            "ruleIndex": 220,
             "lineStart": 71,
             "value": "uppercase",
             "important": true,
@@ -722,7 +222,7 @@
           "shadowedValue": "760",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 184,
+            "ruleIndex": 177,
             "lineStart": 25,
             "value": "900",
             "important": true,
@@ -732,7 +232,7 @@
       ]
     },
     {
-      "ruleIndex": 10,
+      "ruleIndex": 8,
       "lineStart": 2,
       "section": "v376-clean-style",
       "media": null,
@@ -767,7 +267,7 @@
           "shadowedValue": "var(--ui-text-soft)",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 184,
+            "ruleIndex": 177,
             "lineStart": 25,
             "value": "#eee7da",
             "important": true,
@@ -779,7 +279,7 @@
           "shadowedValue": ".16em",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 184,
+            "ruleIndex": 177,
             "lineStart": 25,
             "value": ".22em",
             "important": true,
@@ -791,7 +291,7 @@
           "shadowedValue": "uppercase",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 184,
+            "ruleIndex": 177,
             "lineStart": 25,
             "value": "uppercase",
             "important": true,
@@ -803,7 +303,7 @@
           "shadowedValue": "760",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 184,
+            "ruleIndex": 177,
             "lineStart": 25,
             "value": "900",
             "important": true,
@@ -813,7 +313,7 @@
       ]
     },
     {
-      "ruleIndex": 11,
+      "ruleIndex": 9,
       "lineStart": 2,
       "section": "v376-clean-style",
       "media": null,
@@ -836,7 +336,7 @@
           "shadowedValue": "12px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 667,
+            "ruleIndex": 660,
             "lineStart": 2302,
             "value": "11px",
             "important": true,
@@ -848,7 +348,7 @@
           "shadowedValue": ".18em",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 667,
+            "ruleIndex": 660,
             "lineStart": 2302,
             "value": ".22em",
             "important": true,
@@ -858,7 +358,7 @@
       ]
     },
     {
-      "ruleIndex": 70,
+      "ruleIndex": 68,
       "lineStart": 2,
       "section": "v376-clean-style",
       "media": null,
@@ -886,7 +386,7 @@
           "shadowedValue": "34px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 278,
+            "ruleIndex": 271,
             "lineStart": 143,
             "value": "30px",
             "important": true,
