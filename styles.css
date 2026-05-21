@@ -328,7 +328,7 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .canvas-quick-dock{top:10px!important;z-index:55!important}
 
 /* Rail popovers must be visible/clickable above canvas, near right rail */
-.rail-segment-grid,.rail-preset-row,.rail-layer-grid,.layer-toggle-grid,.layer-manager-presets{
+.layer-manager-presets{
   display:grid!important;
   grid-template-columns:1fr 1fr!important;
   gap:6px!important;
@@ -622,20 +622,11 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   .canvas-quick-dock{display:flex!important}
 }
 
-.rail-segment-grid,
-.rail-preset-row,
 .layer-manager-presets{
   display:grid!important;
   grid-template-columns:1fr 1fr!important;
   gap:5px!important;
   margin:0 0 8px!important;
-}
-.rail-layer-grid,
-.layer-toggle-grid{
-  display:grid!important;
-  grid-template-columns:1fr 1fr!important;
-  gap:4px 10px!important;
-  margin-top:8px!important;
 }
 .layer-toggle,
 .layer-manager-line{
@@ -661,7 +652,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   font-size:11px!important;
   padding:2px 4px!important;
 }
-.hardware-style-mini,
 .compact-render-row{
   display:grid!important;
   grid-template-columns:1fr 1fr!important;
@@ -1149,17 +1139,13 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 
 
 /* The mode buttons should be a tight 2x2 control pad */
-.rail-segment-grid,
-.hardware-style-mini,
 .compact-render-row,
-.rail-preset-row,
 .layer-manager-presets{
   display:grid!important;
   grid-template-columns:repeat(2,minmax(0,1fr))!important;
   gap:6px!important;
   margin:0 0 10px!important;
 }
-.hardware-style-mini button,
 .compact-render-row button,
 .layer-manager-presets button{
   box-sizing:border-box!important;
@@ -1181,7 +1167,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   border:1px solid rgba(215,196,155,.16)!important;
   color:#eee7da!important;
 }
-.hardware-style-mini button.active,
 .compact-render-row button.active,
 .layer-manager-presets button.active{
   border-color:#c99a4a!important;
@@ -1190,15 +1175,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   box-shadow:inset 0 0 0 1px rgba(201,154,74,.45)!important;
 }
 
-/* Layers: compact two-column checklist */
-.rail-layer-grid,
-.layer-toggle-grid{
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  column-gap:14px!important;
-  row-gap:7px!important;
-  margin-top:8px!important;
-}
 .layer-toggle,
 .layer-manager-line{
   box-sizing:border-box!important;
@@ -1215,8 +1191,7 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   line-height:1.1!important;
 }
 .layer-manager-name,
-.layer-toggle span,
-.rail-layer-grid span{
+.layer-toggle span{
   min-width:0!important;
   overflow:hidden!important;
   text-overflow:ellipsis!important;
