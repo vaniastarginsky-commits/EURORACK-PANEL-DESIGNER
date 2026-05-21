@@ -18,12 +18,13 @@ Tracks dead CSS removal on the `ux-polish` branch. Target file: `styles.css`.
 | `7731dc9` | style: remove shadowed template card text CSS rule |
 | `8e81238` | style: remove shadowed export dialog visual CSS |
 | `6d9573e` | style: remove dead selectors from layer manager CSS lists |
+| `2f7c7be` | style: remove dead layer selector entries (Group B surgery) |
 
 ---
 
 ## Current state
 
-**Approximate `!important` count:** ~3,446 (measured after 8e81238; S2/S3/S4 removed selector lines only, no `!important`)
+**Approximate `!important` count:** 3,437 (measured after 2f7c7be)
 
 ---
 
@@ -52,13 +53,13 @@ Remove `.inspector-rail-popover` (and `.local-projects-dialog`, `.component-pick
 ~~### S2 — button rule~~ ✅ **Done** (commit `6d9573e`)
 ~~### S3 — button.active rule~~ ✅ **Done** (commit `6d9573e`)
 ~~### S4 — label rule~~ ✅ **Done** (commit `6d9573e`)
+~~### Group B — .hardware-style-mini / .rail-segment-grid / .rail-preset-row / .rail-layer-grid / .layer-toggle-grid~~ ✅ **Done** (commit `2f7c7be`)
 
-Removed 13 dead selector lines from three rules. Live selectors preserved:
-`.hardware-style-mini button`, `.compact-render-row button`, `.layer-manager-presets button`,
-`.layer-toggle`, `.layer-manager-line`.
-
-Note: `.hardware-style-mini` is also inside dead `CanvasLayerPanel` (Codex warning, non-blocking).
-Kept conservatively — no other call sites exist, but the selector was not in scope for this pass.
+Group B removed 16 dead selector entries from 9 rules (27 lines net, −9 `!important`).
+Whole-rule deletes: `.rail-layer-grid,.layer-toggle-grid` rules ×2.
+Selector-list surgery: stripped dead entries from 7 mixed rules.
+Live selectors preserved: `.compact-render-row`, `.layer-manager-presets`, `.layer-toggle`,
+`.layer-manager-line`, `.layer-manager-name`, `.layer-toggle span`.
 
 ### `.layer-panel-trigger` compound cleanup
 Strips `.layer-panel-trigger` from compound rules that also target `.inspector-rail` and `.rail`. Requires resolving the `.rail` ambiguity first.
@@ -84,11 +85,23 @@ Rules that differ in property values (not just shadow/override) require manual v
 
 ~~**Export dialog var/hex group** (#378, #452, #463, #577)~~ ✅ Done (commit `851322f`)
 
+**Group A — .inspector-rail / .layer-panel-trigger compound rules (deferred until .rail is cleared):**
+13 compound rules (L165–L339, L3036–L3052) targeting `.inspector-rail,.rail,.layer-panel-trigger`.
+All three selectors are dead. `.rail` is blocked: it is also used as a live class on SVG `<rect>`
+elements in `MobileSafeZonesLayer` (Canvas.js:2569/2580). CSS nav-container properties have no
+effect on SVG rects, but Codex flagged this as needing safe-zones visual coverage before proceeding.
+✅ Safe-zones screenshot now exists (`desktop-safe-zones` in tests/visual-review.spec.js, commit `23a609f`).
+**Next recommended:** request Codex to re-review Group A now that `desktop-safe-zones` is in the baseline.
+
+**Group C — :not(.layer-panel-trigger) guards (deferred):**
+L3182 and L3671: strip `:not(.inspector-rail):not(.rail):not(.layer-panel-trigger)` from two
+canvas-wrap catch-all rules. Safe to proceed alongside Group A.
+
 **Remaining visual-only candidates (line-2 surgery):**
-Candidates `#6`, `#7`, `#120`, `#155` are all on the minified line 2.
+Candidates `#6`, `#7`, `#120`, `#155` are all on the minified line 2 (S1).
 `#6`/`#7` (`.sidebar-left`/`.sidebar-right` border) are safe but require minified-line surgery.
-`#120`/`#155` (`.inline-modal-title`, `.inline-modal-actions button.danger`) involve value differences — require Codex review before touching.
-All four must be treated as a single L2 surgery operation (S1).
+`#120`/`#155` (`.inline-modal-title`, `.inline-modal-actions button.danger`) involve value differences — require Codex review.
+All four must be treated as a single L2 surgery operation.
 
 ---
 
