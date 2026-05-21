@@ -27,19 +27,22 @@ Tracks dead CSS removal on the `ux-polish` branch. Target file: `styles.css`.
 | `b831864` | style: remove shadowed export dialog layout CSS (batch #2, 15 rules) |
 | `281b507` | style: remove remaining shadowed export dialog CSS (batch #3A, 15 rules) |
 | `e893194` | style: remove shadowed KiCad export CSS (3 rules) |
+| `931592c` | test: add topbar popover visual coverage |
+| `5a29a5d` | style: remove shadowed topbar popover CSS |
 
 ---
 
 ## Current state
 
-**Approximate `!important` count:** 3,150 (measured after e893194)
+**Approximate `!important` count:** 3,095 (measured after 5a29a5d)
 
-**Cascade audit (fresh after e893194):**
-- Total lines: 4,236
-- Raw rules parsed: 925
-- !important count: 3,150
-- Whole-rule deletion candidates: 29
+**Cascade audit (fresh after 5a29a5d):**
+- Total lines: 4,176
+- Raw rules parsed: 910
+- !important count: 3,095
+- Whole-rule deletion candidates: 14
 - Selector-list item removal candidates: 40
+- Visual QA coverage: 20/20 screenshots
 
 ---
 
@@ -110,6 +113,18 @@ Rules removed: `.kicad-preset-row` (v432 occurrence, `gap:8px` single-line), `.k
 
 **Preservation note:** A non-candidate `.kicad-origin-row` at former L378 with `grid-template-columns:auto minmax(0,240px)` was correctly retained — it was not shadowed by the same winner and remains live.
 
+### Topbar section popover visual coverage (commit `931592c`)
+Added `desktop-topbar-section-popover` to `tests/visual-review.spec.js`. The scenario opens the `Panel ▾` topbar section control and waits for `.toolbar-popover.topbar-section-popover`.
+
+Verify: 20/20.
+
+### Topbar section popover CSS cleanup (commit `5a29a5d`)
+1 whole-rule deletion, −4 lines, 0 `!important` removed. Verify: 20/20.
+
+Rule removed: `.toolbar-popover.topbar-section-popover { width: min(360px, calc(100vw - 16px)); }`.
+
+Rationale: the early non-important `width` rule was fully shadowed by the later scoped topbar popover repair rule, which sets the same `width` plus `max-width` and `overflow-x` with `!important`. Coverage was unblocked by `desktop-topbar-section-popover`.
+
 ---
 
 ## Deferred — do not touch without Codex review
@@ -152,22 +167,22 @@ Rules that differ in property values (not just shadow/override) require manual v
 ~~**Export dialog cascade batch #2** (15 rules)~~ ✅ Done (commit `b831864`)
 ~~**Export dialog cascade batch #3A** (15 rules)~~ ✅ Done (commit `281b507`)
 ~~**KiCad export CSS cleanup** (3 rules)~~ ✅ Done (commit `e893194`)
+~~**Topbar section popover shadowed rule** (`.toolbar-popover.topbar-section-popover`)~~ ✅ Done (coverage `931592c`, cleanup `5a29a5d`)
 
 **Export dialog remaining deferred:**
 - `.export-dialog-panel` dimensions — two occurrences (v429 + v437); width, height, grid-template-rows; high structural risk.
 - `.export-tab-body > *` — z-index:2 + pointer-events:auto; stacking context concern.
 
-**Fresh audit (post-KiCad cleanup) — 29 whole-rule candidates, 40 selectorListItem candidates:**
+**Fresh audit (post-topbar cleanup) — 14 whole-rule candidates, 40 selectorListItem candidates:**
 
 Top categories:
-- **v376-clean-style (10 rules):** `.sidebar-left`, `.sidebar-right`, `.app-brand`, `.component-hover-card`, `.template-manager-backdrop`, `.local-projects-panel`, `.inline-modal-card`, `.inline-modal-title`, `.inline-modal-actions`, `.inline-modal-actions button.danger` — majority on line 2 (S1 surgery required).
-- **v433-desktop-dock-grid-export-templates-fix (8 rules):** `.template-manager-panel .template-card-realistic/main/actions`, `.export-tab-body > *` (deferred), `.layer-manager-presets`, `.layer-manager-name`, `.compact-render-row`, `.perf-toggle`.
-- **v429-templates-export-modal-css-fix (4 rules):** `.template-card-grid,.preset-card-grid`, `.template-preview-realistic,.library-real-preview`, `.template-card-main h3/strong`, `.export-dialog-panel` (deferred).
-- **v427-canvas-rail-overlap-fix (2 rules):** `.canvas-hud`, `.canvas-quick-dock`.
-- **Singletons (5 rules):** `.sidebar-left .component-library-shell`, `.quick-pop-grid`, `.layer-manager-presets` (v430), `.export-dialog-panel` (v437, deferred), `.toolbar-popover.topbar-section-popover`.
+- **v376-clean-style (10 rules):** `.sidebar-left`, `.sidebar-right`, `.app-brand`, `.component-hover-card`, `.template-manager-backdrop`, `.local-projects-panel`, `.inline-modal-card`, `.inline-modal-title`, `.inline-modal-actions`, `.inline-modal-actions button.danger` — all on line 2 (S1 surgery required).
+- **v429-templates-export-modal-css-fix (2 rules):** `.template-card-main h3,.template-card-main strong`, `.export-dialog-panel` (deferred).
+- **v433-desktop-dock-grid-export-templates-fix (1 rule):** `.export-tab-body > *` (deferred).
+- **v437-export-layout-polish (1 rule):** `.export-dialog-panel` (deferred).
 
 **Next recommended Codex batch:**
-Template manager card cascade (v433, 3–4 rules), canvas HUD/dock (v427, 2 rules), layer manager (v430/v433, 2–3 rules) — all covered by existing screenshots. Excludes S1 line-2 surgery (requires separate operation).
+Review the two remaining export dialog structural candidates (`.export-dialog-panel` ×2, `.export-tab-body > *`) separately before deletion. The remaining line-2 candidates should be handled as an explicit S1 surgery operation.
 
 **Remaining visual-only candidates (line-2 surgery):**
 Candidates are all on the minified line 2 (S1).
@@ -179,7 +194,7 @@ All must be treated as a single L2 surgery operation.
 
 ## Process notes
 
-- Each deletion batch must pass `npm run verify` (19/19 screenshots) before commit.
+- Each deletion batch must pass `npm run verify` (20/20 screenshots) before commit.
 - Only `styles.css` should appear in `git diff --name-only` after a CSS-only cleanup commit.
 - Whole-rule deletion (all selectors dead) is safe. Selector-list surgery (mixed live/dead) requires Codex review.
 - The `verify` screenshots in `design-review/verify-tmp/` are gitignored and serve as the visual regression check.
