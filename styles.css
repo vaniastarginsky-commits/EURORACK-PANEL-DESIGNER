@@ -236,7 +236,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .template-card-actions button{flex:1 1 auto!important;min-height:30px!important;text-align:center!important}
 .template-preview-empty{height:160px!important;display:grid!important;place-items:center!important;color:#5f5a50!important;background:#050505!important;border-bottom:1px solid rgba(215,196,155,.10)!important}
 
-.export-dialog-panel{grid-template-rows:auto auto minmax(0,1fr) auto!important;width:min(1080px,calc(100vw - 44px))!important}
 .export-preview-card,.export-package-card,.export-recommended-banner,.runtime-diagnostics-card{background:#080807!important;border:1px solid rgba(215,196,155,.14)!important;color:#d8d0c0!important;padding:12px!important}
 .export-preview-card svg{width:100%!important;height:auto!important;max-height:420px!important;object-fit:contain!important;background:#111!important}
 .export-option-row,.checklist-row,.runtime-diagnostics-list>div{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;border-bottom:1px solid rgba(215,196,155,.08)!important;padding:6px 0!important}
@@ -438,7 +437,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 /* Export: ensure controls/buttons are the interactive top layer and layout doesn't overlay them. */
 .export-dialog-panel{pointer-events:auto!important}
 .export-tab-body{position:relative!important;z-index:1!important;pointer-events:auto!important}
-.export-tab-body > *{position:relative!important;z-index:2!important;pointer-events:auto!important}
 .export-preview-card{position:relative!important;z-index:1!important;pointer-events:auto!important}
 .export-dialog-actions,
 .export-tabs,
@@ -713,12 +711,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 
 /* v437-export-layout-polish */
 /* Export final polish: compact preview, readable options, no clipped checkboxes/text */
-.export-dialog-panel{
-  width:min(1180px,calc(100vw - 44px))!important;
-  height:min(790px,calc(100vh - 44px))!important;
-  grid-template-rows:auto minmax(300px,40vh) auto minmax(250px,1fr)!important;
-}
-
 /* In this build the preview block sits above tabs. Keep it useful but not dominant. */
 .export-preview-card svg{
   width:100%!important;
