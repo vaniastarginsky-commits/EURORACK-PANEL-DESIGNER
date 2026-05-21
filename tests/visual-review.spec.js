@@ -38,6 +38,47 @@ const states = [
     await page.locator(".export-dialog-panel").waitFor({ state: "visible" });
     await page.locator(".export-tabs").getByRole("button", { name: "SVG", exact: true }).click();
   }],
+
+  // P1: export dialog – KiCad tab (default tab; recommended banner + package card only appear here)
+  ["desktop-export-kicad", desktop, async page => {
+    await clickButton(page, "File ▾");
+    await clickButton(page, "Export...");
+    await page.locator(".export-dialog-panel").waitFor({ state: "visible" });
+    await page.locator(".export-tabs").getByRole("button", { name: "KiCad", exact: true }).click();
+  }],
+
+  // P1: layer manager (lives in right sidebar Layers tab; the canvas-layer-panel / layer-panel-trigger
+  //     component in Canvas.js is defined but never instantiated — this is the real layer manager)
+  ["desktop-layer-manager", desktop, async page => {
+    await page.locator(".sidebar-right").getByRole("button", { name: "Layers", exact: true }).first().click();
+    await page.locator(".compact-layer-manager").waitFor({ state: "visible" });
+  }],
+
+  // P1: component library popover (fixed-position grid overlay above canvas)
+  ["desktop-component-library-popover", desktop, async page => {
+    await openComponentLibraryPopover(page);
+  }],
+
+  // P1: inline modal layered inside templates dialog (edit-metadata form)
+  ["desktop-templates-inline-edit", desktop, async page => {
+    await clickButton(page, "Templates ▾");
+    await clickButton(page, "Load / Manage templates");
+    await page.locator(".template-manager-panel").waitFor({ state: "visible" });
+    await page.locator(".template-manager-panel").getByRole("button", { name: "Edit", exact: true }).first().click();
+    await page.locator(".inline-modal-layer").waitFor({ state: "visible" });
+  }],
+
+  // P1: component hover card (positioned float over SVG component)
+  ["desktop-component-hover-card", desktop, async page => {
+    await placeComponentOnCanvas(page);
+    const group = page.locator(".panel-canvas-svg [data-id]").first();
+    await group.waitFor({ state: "visible" });
+    const box = await group.boundingBox();
+    if (!box || box.width < 1 || box.height < 1) throw new Error("component SVG group has no bounding box");
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.locator(".component-hover-card").waitFor({ state: "visible" });
+  }],
+
   ["mobile-default", mobile, async () => {}],
   ["mobile-more-sheet", mobile, async page => {
     await page.locator(".mobile-main-dock button").last().click();
@@ -127,6 +168,50 @@ async function setDesktopPanels(page, desired) {
     await clickButton(page, "Right");
     await page.waitForFunction(value => document.querySelector(".workspace")?.dataset.rightOpen === value, String(desired.right));
   }
+}
+
+async function openComponentLibraryPopover(page) {
+  // Open the left sidebar first so the library launcher is visible and the popover has a valid anchor.
+  const workspace = page.locator(".workspace");
+  const leftOpen = (await workspace.getAttribute("data-left-open")) === "true";
+  if (!leftOpen) {
+    await clickButton(page, "Left");
+    await page.waitForFunction(v => document.querySelector(".workspace")?.dataset.leftOpen === v, "true");
+  }
+  await page.locator(".component-library-launcher").click();
+  await page.locator(".component-library-popover").waitFor({ state: "visible" });
+}
+
+async function placeComponentOnCanvas(page) {
+  // Dispatch the internal placement event with a minimal Thonkiconn jack definition.
+  await page.evaluate(() => {
+    window.dispatchEvent(new CustomEvent("start-part-placement", {
+      detail: {
+        def: {
+          type: "jack",
+          name: "Thonkiconn Jack",
+          holeDiameter: 6.1,
+          frontDiameter: 8.0,
+          rearBodyW: 8.5,
+          rearBodyH: 10.5,
+          rearDepth: 12.0,
+          keepoutW: 10.5,
+          keepoutH: 12.5,
+          minSpacing: 1.5,
+          category: "jack",
+          verificationStatus: "datasheet",
+        },
+      },
+    }));
+  });
+  // Click the canvas at its visual center to place the pending component.
+  const svg = page.locator(".panel-canvas-svg");
+  await svg.waitFor({ state: "visible" });
+  const box = await svg.boundingBox();
+  if (!box) throw new Error(".panel-canvas-svg bounding box not available");
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  // Wait for the component SVG group to appear in the DOM.
+  await page.locator(".panel-canvas-svg [data-id]").first().waitFor({ state: "visible" });
 }
 
 async function openMobilePanel(page, buttonName, panelSelector) {
