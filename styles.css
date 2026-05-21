@@ -887,14 +887,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   min-height:72px!important;
   padding:14px 18px!important;
 }
-.export-dialog-title{
-  font-size:18px!important;
-  line-height:1.1!important;
-}
-.export-dialog-subtitle{
-  font-size:12px!important;
-  line-height:1.25!important;
-}
 
 /* In this build the preview block sits above tabs. Keep it useful but not dominant. */
 .export-preview-card{
@@ -1113,9 +1105,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 /* Prevent any internal side scrollbar from covering option labels unless content truly overflows */
 .export-tab-body > div:not(.export-preview-card){
   overflow:visible!important;
-}
-.export-tab-body{
-  scrollbar-color:rgba(201,154,74,.45) rgba(5,5,5,.7)!important;
 }
 
 @media(max-width:1050px){
