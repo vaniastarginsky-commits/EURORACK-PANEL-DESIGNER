@@ -39,6 +39,15 @@ const states = [
     await page.locator(".export-tabs").getByRole("button", { name: "SVG", exact: true }).click();
   }],
 
+  // Safe-zones overlay: enables MobileSafeZonesLayer which renders SVG <rect class="rail"> elements.
+  // Required before any CSS cleanup of .rail compound selectors (Codex blocker).
+  ["desktop-safe-zones", desktop, async page => {
+    await page.locator('.canvas-tool-rail button[title="View"]').click();
+    await page.locator(".canvas-tool-popover").waitFor({ state: "visible" });
+    await page.locator(".canvas-tool-popover").getByRole("button", { name: "Safe zones", exact: true }).click();
+    await page.locator("rect.rail").first().waitFor({ state: "attached" });
+  }],
+
   // P1: export dialog – KiCad tab (default tab; recommended banner + package card only appear here)
   ["desktop-export-kicad", desktop, async page => {
     await clickButton(page, "File ▾");
