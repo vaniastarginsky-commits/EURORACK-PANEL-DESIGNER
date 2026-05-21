@@ -15,16 +15,16 @@ label{display:block;color:#928b7d}
 .app-shell,.designer-shell,.workspace-shell{display:grid!important;grid-template-rows:auto 1fr!important;background:#020202!important}
 .topbar,.top-bar,.app-topbar,.toolbar-main{height:auto;min-height:42px;display:flex!important;align-items:center!important;gap:6px!important;padding:4px 8px!important;border-bottom:1px solid rgba(215,196,155,.12)!important;background:#050505!important;white-space:nowrap;overflow:hidden}
 .topbar .brand,.brand,.logo-title{display:flex!important;align-items:center!important;gap:8px!important;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
-.main,.workspace,.editor-layout,.panel-designer-layout{height:100%;min-height:0;display:grid!important;grid-template-columns:280px minmax(0,1fr)300px!important;grid-template-rows:1fr!important;overflow:hidden!important}
-.left-sidebar,.sidebar-left,.left-panel,.drawer-left{min-width:0;height:100%;overflow:auto!important;border-right:1px solid rgba(215,196,155,.12)!important;background:#030303!important;padding:8px!important}
-.right-sidebar,.sidebar-right,.right-panel,.drawer-right{min-width:0;height:100%;overflow:auto!important;border-left:1px solid rgba(215,196,155,.12)!important;background:#030303!important;padding:8px!important}
-.center,.canvas-wrap,.canvas-area,.editor-center,.stage-wrap{min-width:0;min-height:0;height:100%;overflow:hidden!important;position:relative!important;background:#010101!important}
+.main,.editor-layout,.panel-designer-layout{height:100%;min-height:0;display:grid!important;grid-template-columns:280px minmax(0,1fr)300px!important;grid-template-rows:1fr!important;overflow:hidden!important}
+.left-sidebar,.left-panel,.drawer-left{min-width:0;height:100%;overflow:auto!important;border-right:1px solid rgba(215,196,155,.12)!important;background:#030303!important;padding:8px!important}
+.right-sidebar,.right-panel,.drawer-right{min-width:0;height:100%;overflow:auto!important;border-left:1px solid rgba(215,196,155,.12)!important;background:#030303!important;padding:8px!important}
+.center,.canvas-area,.editor-center,.stage-wrap{min-width:0;min-height:0;height:100%;overflow:hidden!important;position:relative!important;background:#010101!important}
 .canvas-toolbar,.stage-toolbar,.floating-toolbar{display:flex!important;gap:6px!important;align-items:center!important;justify-content:center!important;position:absolute!important;top:10px!important;left:50%!important;transform:translateX(-50%)!important;z-index:10!important;background:rgba(5,5,5,.86)!important;border:1px solid rgba(215,196,155,.16)!important;padding:6px!important}
 .status-strip,.bottom-status,.mobile-status{position:absolute!important;left:10px!important;bottom:10px!important;z-index:10!important;background:rgba(5,5,5,.86)!important;border:1px solid rgba(215,196,155,.13)!important;padding:4px 8px!important;color:#d8d0c0!important}
-.section,.sidebar-section,.panel-section,details{border:1px solid rgba(215,196,155,.09)!important;background:#050505!important;margin:0 0 8px!important;padding:8px!important}
+.sidebar-section,.panel-section,details{border:1px solid rgba(215,196,155,.09)!important;background:#050505!important;margin:0 0 8px!important;padding:8px!important}
 .section-title,.sidebar-title,summary,h3,h4{margin:0 0 8px!important;color:#eee7da!important;font-size:12px!important;font-weight:900!important;letter-spacing:.22em!important;text-transform:uppercase!important}
-.row,.field-row,.form-row{display:flex!important;align-items:center!important;gap:6px!important;margin:4px 0!important}
-.field-row label,.form-row label{min-width:90px}
+.row,.form-row{display:flex!important;align-items:center!important;gap:6px!important;margin:4px 0!important}
+.form-row label{min-width:90px}
 .kv,.status-row{display:flex!important;justify-content:space-between!important;gap:10px!important;border-bottom:1px solid rgba(215,196,155,.08)!important;padding:3px 0!important}
 .tabs,.tab-row,.segmented{display:flex!important;gap:0!important;margin-bottom:8px!important}
 .tabs button,.tab-row button,.segmented button{flex:1}
