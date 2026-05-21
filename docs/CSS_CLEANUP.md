@@ -14,12 +14,16 @@ Tracks dead CSS removal on the `ux-polish` branch. Target file: `styles.css`.
 | `013f6ea` | style: remove shadowed rail checkbox CSS rules |
 | `0cf0b95` | style: remove dead quick-add popover CSS |
 | `a8969af` | style: remove dead rail popover CSS |
+| `851322f` | style: remove shadowed export accent CSS rules |
+| `7731dc9` | style: remove shadowed template card text CSS rule |
+| `8e81238` | style: remove shadowed export dialog visual CSS |
+| `6d9573e` | style: remove dead selectors from layer manager CSS lists |
 
 ---
 
 ## Current state
 
-**Approximate `!important` count:** ~3,490 (measured 3,464 after a8969af)
+**Approximate `!important` count:** ~3,446 (measured after 8e81238; S2/S3/S4 removed selector lines only, no `!important`)
 
 ---
 
@@ -45,14 +49,16 @@ The following cases require selector-list surgery (live selectors mixed with dea
 ### S1 — L2 minified base block
 Remove `.inspector-rail-popover` (and `.local-projects-dialog`, `.component-picker`) from an 11-selector compound rule on the large minified line 2. 8 live selectors remain. High edit risk due to single-line minified format.
 
-### S2 — button rule (~L1182–1204)
-Strip `.inspector-rail-popover button`, `.rail-popover button`, `.layer-panel-body button`, `.rail-segment-grid button` from a rule that also covers live selectors: `.hardware-style-mini button`, `.compact-render-row button`, `.layer-manager-presets button`.
+~~### S2 — button rule~~ ✅ **Done** (commit `6d9573e`)
+~~### S3 — button.active rule~~ ✅ **Done** (commit `6d9573e`)
+~~### S4 — label rule~~ ✅ **Done** (commit `6d9573e`)
 
-### S3 — button.active rule (~L1209–1221)
-Same pattern as S2 for the `button.active` state.
+Removed 13 dead selector lines from three rules. Live selectors preserved:
+`.hardware-style-mini button`, `.compact-render-row button`, `.layer-manager-presets button`,
+`.layer-toggle`, `.layer-manager-line`.
 
-### S4 — label rule (~L1232–1249)
-Strip `.inspector-rail-popover label`, `.rail-popover label`, `.layer-panel-body label`. Live remainder: `.layer-toggle`, `.layer-manager-line`.
+Note: `.hardware-style-mini` is also inside dead `CanvasLayerPanel` (Codex warning, non-blocking).
+Kept conservatively — no other call sites exist, but the selector was not in scope for this pass.
 
 ### `.layer-panel-trigger` compound cleanup
 Strips `.layer-panel-trigger` from compound rules that also target `.inspector-rail` and `.rail`. Requires resolving the `.rail` ambiguity first.
@@ -76,14 +82,13 @@ Rules that differ in property values (not just shadow/override) require manual v
 
 ## Next recommended Codex-reviewed batch
 
-**Export dialog var/hex group** — review for dead or redundant value declarations:
+~~**Export dialog var/hex group** (#378, #452, #463, #577)~~ ✅ Done (commit `851322f`)
 
-- Line `#378`
-- Line `#452`
-- Line `#463`
-- Line `#577`
-
-Run Codex adversarial review before executing.
+**Remaining visual-only candidates (line-2 surgery):**
+Candidates `#6`, `#7`, `#120`, `#155` are all on the minified line 2.
+`#6`/`#7` (`.sidebar-left`/`.sidebar-right` border) are safe but require minified-line surgery.
+`#120`/`#155` (`.inline-modal-title`, `.inline-modal-actions button.danger`) involve value differences — require Codex review before touching.
+All four must be treated as a single L2 surgery operation (S1).
 
 ---
 
