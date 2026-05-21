@@ -374,7 +374,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .export-dialog-actions button{min-width:110px!important;justify-content:center!important;text-align:center!important}
 
 /* Specifically prevent KiCad tab controls from overlapping */
-.kicad-preset-row{display:flex!important;gap:8px!important;flex-wrap:wrap!important;margin:0 0 12px!important}
 .kicad-origin-row{display:grid!important;grid-template-columns:auto minmax(0,240px)!important;gap:10px!important;align-items:center!important;margin-bottom:12px!important}
 
 @media(max-width:1050px){
@@ -855,22 +854,9 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 }
 
 /* KiCad: keep origin + checkboxes balanced */
-.kicad-origin-row{
-  display:grid!important;
-  grid-template-columns:90px minmax(180px,300px)!important;
-  gap:10px!important;
-  align-items:center!important;
-  margin:0 0 12px!important;
-}
 .kicad-origin-row select{
   width:100%!important;
   min-width:0!important;
-}
-.kicad-preset-row{
-  display:flex!important;
-  flex-wrap:wrap!important;
-  gap:7px!important;
-  margin:0 0 12px!important;
 }
 /* PNG / PSD forms */
 
