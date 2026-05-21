@@ -22,18 +22,21 @@ Tracks dead CSS removal on the `ux-polish` branch. Target file: `styles.css`.
 | `23a609f` | test: add safe-zones visual coverage |
 | `39505af` | style: remove dead rail exclusions from CSS guards (Group C) |
 | `e9f955c` | style: remove dead rail compound CSS (Group A) |
+| `ecab357` | style: remove shadowed export dialog cascade rules (batch #1, 10 rules) |
+| `3785f06` | test: add export dialog visual coverage (PNG, Package, Report tabs) |
+| `b831864` | style: remove shadowed export dialog layout CSS (batch #2, 15 rules) |
 
 ---
 
 ## Current state
 
-**Approximate `!important` count:** 3,367 (measured after e9f955c)
+**Approximate `!important` count:** 3,238 (measured after b831864)
 
-**Cascade audit (fresh after e9f955c):**
-- Total lines: 4,445
-- Raw rules parsed: 968
-- !important count: 3,367
-- Whole-rule deletion candidates: 72
+**Cascade audit (fresh after b831864):**
+- Total lines: 4,412
+- Raw rules parsed: 958
+- !important count: 3,319 (pre-b831864) → 3,238 (post-b831864, −81)
+- Whole-rule deletion candidates: 62 (down from 72 after batch #1)
 - Selector-list item removal candidates: 40
 
 ---
@@ -68,6 +71,28 @@ Rules spanned: top-level (2 pairs), two `@media(max-width:900px)` blocks (2 pair
 `styles.css` rule at the former L301 applied `pointer-events:auto!important` to `.rail`, which **overrode** the parent `<g style={{ pointerEvents: "none" }}>` declared in `MobileSafeZonesLayer` (Canvas.js:2554). Deleting this rule restored the intended non-interactive behavior of the visual-only safe-zone rect overlays. This was a corrective deletion, not a neutral one.
 
 Also confirmed: `@media(max-width:0px)` at former L2928 is a permanently dead media query. All rules inside it (including the L3011–L3027 rail block) could never apply to any real viewport.
+
+### Export dialog visual coverage expansion (commit `3785f06`)
+Added three new export tab screenshots to `tests/visual-review.spec.js`:
+- `desktop-export-png` — PNG tab; `export-dialog-actions` footer visible in viewport
+- `desktop-export-package` — Package tab; `export-recommended-banner`, `export-package-card`, `export-action-grid`
+- `desktop-export-report` — Report tab; `runtime-diagnostics-card`, diagnostics list
+
+Total visual coverage: 19 screenshots. Export dialog now has all 5 tabs covered (SVG, KiCad, PNG, Package, Report).
+
+### Export dialog cascade batch #1 — shadowed early patches (commit `ecab357`)
+10 whole-rule deletions from sections v429–v439, −33 lines, −48 `!important`.
+
+Selectors removed: `.export-tabs` (3 versions), `.export-tabs button` (1 version), `.export-dialog-backdrop`, `.export-dialog-header` (2 versions), `.export-dialog-title`, `.export-dialog-subtitle`, `.kicad-export-grid` (overflow-only version).
+
+All shadows verified by `design-review/css-cascade-audit.json`. Winners in v439-export-senior-layout-pass and v444-export-tabs-final-fit.
+
+### Export dialog cascade batch #2 — layout and option rules (commit `b831864`)
+15 whole-rule deletions from sections v429–v437, −44 lines, −81 `!important`. Verify: 19/19.
+
+Selectors removed: `.export-dialog-actions`, `.export-tab-body` (×2), `.export-preview-card` (×2), `.export-preview-stats`, `.export-options-grid,.kicad-export-grid,.export-action-grid` (×2), `.export-option-row label`, `.export-dialog-panel input[type="checkbox"]` (×2), `.export-tabs button` (×2), `.export-option-row,.checklist-row`, `.export-option-row label,.checklist-row label`, `.export-preview-card svg`.
+
+Now-covered unlock: `.export-dialog-actions` deferred in batch #1 (actions footer not in screenshots) — unblocked by `desktop-export-png`.
 
 ---
 
@@ -107,6 +132,13 @@ Rules that differ in property values (not just shadow/override) require manual v
 ~~**Export dialog var/hex group** (#378, #452, #463, #577)~~ ✅ Done (commit `851322f`)
 ~~**Group A — .inspector-rail / .rail / .layer-panel-trigger compound rules**~~ ✅ Done (commit `e9f955c`)
 ~~**Group C — :not() guards**~~ ✅ Done (commit `39505af`)
+~~**Export dialog cascade batch #1** (10 rules)~~ ✅ Done (commit `ecab357`)
+~~**Export dialog cascade batch #2** (15 rules)~~ ✅ Done (commit `b831864`)
+
+**Export dialog cascade batch #3 — remaining deferred export candidates:**
+ruleIndex 363, 505 — `.export-dialog-panel` dimensions (width, height, grid-template-rows); high structural risk, defer until panel layout is stable.
+ruleIndex 456 — `.export-tab-body > *` (z-index + pointer-events); stacking context concern.
+ruleIndex 508, 510, 511, 512, 513, 521, 522, 526, 527, 529, 582, 583, 588, 589, 590 — remaining v437–v439 export family rules; all valid whole-rule candidates, ready for Codex review.
 
 **Remaining visual-only candidates (line-2 surgery):**
 Candidates rule #6/7/120/155 are all on the minified line 2 (S1).
@@ -114,16 +146,14 @@ Candidates rule #6/7/120/155 are all on the minified line 2 (S1).
 `#120`/`#155` (`.inline-modal-title`, `.inline-modal-actions button.danger`) involve value differences — require Codex review.
 All four must be treated as a single L2 surgery operation.
 
-**Fresh audit top candidates (whole-rule, non-line-2):**
-72 whole-rule candidates and 40 selector-list item candidates remain per `design-review/css-cascade-audit.json`.
-Top concentrated areas: `.export-dialog-panel` family (v429–v444 patches), `.sidebar-left` input controls (v424/v447 patches), `.template-manager-panel` / `.export-dialog-backdrop`.
-Next recommended Codex batch: export dialog cascade consolidation (high shadow count, clearly superseded earlier blocks).
+**Fresh audit (post-batch #2):**
+62 whole-rule candidates and 40 selector-list item candidates remain per `design-review/css-cascade-audit.json`.
 
 ---
 
 ## Process notes
 
-- Each deletion batch must pass `npm run verify` (16/16 screenshots) before commit.
+- Each deletion batch must pass `npm run verify` (19/19 screenshots) before commit.
 - Only `styles.css` should appear in `git diff --name-only` after a CSS-only cleanup commit.
 - Whole-rule deletion (all selectors dead) is safe. Selector-list surgery (mixed live/dead) requires Codex review.
 - The `verify` screenshots in `design-review/verify-tmp/` are gitignored and serve as the visual regression check.
