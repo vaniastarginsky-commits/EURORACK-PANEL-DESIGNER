@@ -89,7 +89,10 @@ function AddMenuContent({ onClose }) {
       ),
       React.createElement(
         "button",
-        { onClick: () => document.getElementById("topbar-artwork-import-input")?.click() },
+        {
+          onClick: () =>
+            document.getElementById("topbar-artwork-import-input")?.click(),
+        },
         "+ Add Image",
       ),
       React.createElement("button", { onClick: addText }, "+ Add Text"),
@@ -133,7 +136,11 @@ function TemplatesMenuContent({ onClose }) {
         {
           disabled: state.selected.length === 0,
           onClick: async () => {
-            const t = await makeTemplateFromState(state, "block", state.selected);
+            const t = await makeTemplateFromState(
+              state,
+              "block",
+              state.selected,
+            );
             if (t) {
               saveTemplateToBrowser(t);
               alert(`Saved block template "${t.name}".`);
@@ -183,7 +190,13 @@ function TemplatesMenuContent({ onClose }) {
   );
 }
 
-function FileMenuContent({ onClose, onExportSVGClick, onRequestProjectFileImport, onRequestKiCadPcbImport, onOpenLocalProjects }) {
+function FileMenuContent({
+  onClose,
+  onExportSVGClick,
+  onRequestProjectFileImport,
+  onRequestKiCadPcbImport,
+  onOpenLocalProjects,
+}) {
   const state = useAppState();
   const dispatch = useAppDispatch();
   const [fileRecentOpen, setFileRecentOpen] = useState(true);
@@ -357,8 +370,17 @@ function HelpMenuContent({ onClose, onOpenShortcuts, onOpenProductionCheck }) {
   return React.createElement(
     React.Fragment,
     null,
-    React.createElement("div", { className: "menu-title" }, "Help / quick reference"),
-    React.createElement("div", { className: "menu-note" }, "Build: ", APP_VERSION),
+    React.createElement(
+      "div",
+      { className: "menu-title" },
+      "Help / quick reference",
+    ),
+    React.createElement(
+      "div",
+      { className: "menu-note" },
+      "Build: ",
+      APP_VERSION,
+    ),
     React.createElement(
       "div",
       { className: "help-popover-grid" },
@@ -376,7 +398,11 @@ function HelpMenuContent({ onClose, onOpenShortcuts, onOpenProductionCheck }) {
         "div",
         { className: "help-card" },
         React.createElement("strong", null, "Mobile"),
-        React.createElement("span", null, "Use Add / Select / Part / View / More. Pinch to zoom."),
+        React.createElement(
+          "span",
+          null,
+          "Use Add / Select / Part / View / More. Pinch to zoom.",
+        ),
       ),
       React.createElement(
         "div",

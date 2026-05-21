@@ -123,26 +123,24 @@ function SelfCheckPanel({ warnings }) {
     React.createElement(
       "div",
       { style: { marginTop: 6 } },
-      items
-        .slice(0, 10)
-        .map((item, i) =>
-          React.createElement(
-            "div",
-            {
-              key: i,
-              className: `warning-item ${item.level === "error" ? "" : "warn"}`,
-              style:
-                item.level === "ok"
-                  ? {
-                      color: "#8ee88e",
-                      borderColor: "rgba(80,220,80,0.35)",
-                      background: "rgba(80,220,80,0.08)",
-                    }
-                  : undefined,
-            },
-            item.message,
-          ),
+      items.slice(0, 10).map((item, i) =>
+        React.createElement(
+          "div",
+          {
+            key: i,
+            className: `warning-item ${item.level === "error" ? "" : "warn"}`,
+            style:
+              item.level === "ok"
+                ? {
+                    color: "#8ee88e",
+                    borderColor: "rgba(80,220,80,0.35)",
+                    background: "rgba(80,220,80,0.08)",
+                  }
+                : undefined,
+          },
+          item.message,
         ),
+      ),
     ),
     React.createElement(
       "div",

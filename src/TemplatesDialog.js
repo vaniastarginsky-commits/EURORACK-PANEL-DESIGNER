@@ -415,23 +415,21 @@ function TemplateRealisticPreview({ record }) {
         ),
       comps.map(hole),
       comps.map(hardware),
-      template.textItems
-        ?.slice(0, 24)
-        .map((t) =>
-          React.createElement(
-            "text",
-            {
-              key: t.id,
-              x: t.x,
-              y: t.y,
-              fontSize: Math.max(1.4, (t.fontSize || 3) * 0.55),
-              textAnchor: t.align || "middle",
-              fill: t.color || "#dcecf1",
-              opacity: ".75",
-            },
-            t.text,
-          ),
+      template.textItems?.slice(0, 24).map((t) =>
+        React.createElement(
+          "text",
+          {
+            key: t.id,
+            x: t.x,
+            y: t.y,
+            fontSize: Math.max(1.4, (t.fontSize || 3) * 0.55),
+            textAnchor: t.align || "middle",
+            fill: t.color || "#dcecf1",
+            opacity: ".75",
+          },
+          t.text,
         ),
+      ),
     ),
   );
 }

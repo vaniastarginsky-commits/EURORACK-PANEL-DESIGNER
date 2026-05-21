@@ -96,18 +96,16 @@ function DepthViewPanel() {
           stroke: "#4af",
           strokeDasharray: "3 2",
         }),
-      state.components
-        .slice(0, 12)
-        .map((c, i) =>
-          React.createElement("rect", {
-            key: c.id,
-            x: 10,
-            y: 8 + i * 4.5,
-            width: Math.max(1, c.rearDepth * scale),
-            height: 3,
-            fill: c.rearDepth > d.caseDepthLimitMm ? "#f55" : "#0af",
-          }),
-        ),
+      state.components.slice(0, 12).map((c, i) =>
+        React.createElement("rect", {
+          key: c.id,
+          x: 10,
+          y: 8 + i * 4.5,
+          width: Math.max(1, c.rearDepth * scale),
+          height: 3,
+          fill: c.rearDepth > d.caseDepthLimitMm ? "#f55" : "#0af",
+        }),
+      ),
     ),
     React.createElement(
       "div",
