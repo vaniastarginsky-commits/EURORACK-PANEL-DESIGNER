@@ -12,7 +12,7 @@ context defined in `appState.js`.
 
 | File | Role |
 |------|------|
-| `src/core.js` | Core model constants, geometry helpers, and shared utilities. Still a catch-all; future splitting should extract well-defined domains from here. |
+| `src/core.js` | Legacy catch-all — 1988 lines, ~91 top-level definitions across 17 distinct logical groups. See **core.js audit** section below for the full map and proposed split plan. |
 | `src/appState.js` | React context + reducer that owns all application state. Every component reads state via `useAppState()` and writes via `useAppDispatch()`. |
 | `src/App.js` | Main orchestration layer. Wires together all major panels, handles pointer/keyboard events, and contains the top-level render tree. |
 | `src/Canvas.js` | Owns panel rendering (SVG) and all canvas interactions — drag, resize, select, ruler, snap guides. |
@@ -134,6 +134,68 @@ The KiCad helpers (`kicad*` functions and `rotatePointAround`) are pure and have
 - Risk: low — purely editorial, no logic change; verify via `node --check` after
 
 Do not execute these passes until explicitly directed.
+
+## core.js audit
+
+`src/core.js` is 1988 lines, loaded by ~23 source files. It is a legacy catch-all pending incremental extraction. The groups below are in file order.
+
+### Group map
+
+| # | Lines | Group | Functions / constants | Pure? | External callers (outside core.js) |
+|---|-------|-------|-----------------------|-------|-------------------------------------|
+| 1 | 1–31 | **Bootstrap / build metadata** | React version guard, `APP_VERSION`, `window.__EURORACK_PANEL_DESIGNER_BUILD__`, html attribute stamp | Browser (runs at parse time) | None — self-executing |
+| 2 | 32–39 | **Eurorack model constants** | `HP_TO_MM`, `PANEL_HEIGHT_MM`, `MOUNTING_HOLE_*`, `MAX_UNDO`, `STANDARD_HP` | Pure constants | 15+ files — nearly everything |
+| 3 | 40–85 | **App-wide defaults** | `DEFAULT_EXPORT_OPTIONS`, `defaultSnapSettings` | Pure data | App.js, ExportDialog.js, kiCadExport.js, exportEngine.js, psdExport.js |
+| 4 | 86–139 | **DFM profiles + layer visibility** | `DFM_PROFILES`, `defaultLayerVisibility` | Pure data | ExportDialog.js, projectSchema.js, App.js |
+| 5 | 140–221 | **Component type taxonomy** | `inferCategoryForType`, `isSamePartType`, `REF_PREFIX_BY_TYPE`, `refPrefixForType`, `nextRefForComponent`, `renumberRefs` | Pure | appState.js, projectSchema.js, exportEngine.js, App.js, TopbarMenus.js |
+| 6 | 222–317 | **Component display helpers** | `defaultAttachedLabelFor`, `verificationLabel`, `verificationColor`, `isPartVerified`, `shortPartName`, `defaultLabelForComponentDef`, `partTooltip` | Pure | LeftSidebarPanels.js, RightSidebarComponentProperties.js, kiCadExport.js, App.js |
+| 7 | 318–833 | **React part library UI** | `PartIcon`, `PartPickerLabel`, `LibraryPartPreview` | React (browser) | Only `LibraryPartPreview` — called from LeftSidebarPanels.js:617. `PartIcon`/`PartPickerLabel` used only within core.js. |
+| 8 | 835–876 | **Component sorting / catalog order** | `COMPONENT_TYPE_SORT_ORDER`, `componentSortKey`, `sortComponentDefs` | Pure | LeftSidebarPanels.js, AppOverlays.js |
+| 9 | 878–910 | **UX part history (localStorage)** | `UX_RECENT_PARTS_KEY`, `UX_FAVORITE_PARTS_KEY`, `partStableKey`, `readStringListStorage`, `writeStringListStorage`, `rememberRecentPart`, `sendPartPlacementEvent` | Browser (localStorage + CustomEvent) | LeftSidebarPanels.js (heavily), App.js |
+| 10 | 911–1012 | **Panel / mounting-hole geometry** | `panelWidthMM`, `snapToGrid`, `mountingHoleRailY`, `mountingHoleSide`, `normalizeMountingHoleRail`, `mountingHolesForPreset`, `defaultMountingHoles`, `defaultMountingHoleConfig`, `normalizeMountingHoleConfig` | Pure | appState.js, projectSchema.js, kiCadExport.js, Canvas.js, TemplatesDialog.js, templateDefaults.js, App.js, RightSidebarProductionPanels.js |
+| 11 | 1013–1133 | **Front-shape / DIP-8 geometry** | `aabbOverlap`, `circleOverlap`, `getFrontShape`, `dip8SocketBodyBounds`, `getFrontBounds`, `isDip8Socket`, `dip8SocketPinOffsets`, `rotatePointLocal`, `dip8SocketPinHoles`, `dip8SocketHoleCenters`, `getFrontOBB`, `getFrontExtents`, `getFrontBottomOffset`, `frontClearance` | Pure | Canvas.js, canvasOverlays.js, exportHelpers.js, kiCadExport.js, componentHelpers.js, appState.js, App.js |
+| 12 | 1134–1499 | **Warning / DFM engine** | `pcbHeightWarnings`, `mergeBroadAABB`, `inflateBroadAABB`, `componentWarningBroadAABB`, `buildWarningPairCandidateMap`, `computeWarnings` | Pure | App.js, RightSidebarProductionPanels.js, ExportDialog.js |
+| 13 | 1500–1560 | **Measurement / scale factories** | `computeMaxDepth`, `distanceBetween`, `edgeClearance`, `getScaleReferenceRadius`, `makeCompactKnobScale`, `makeFaderScale` | Pure | App.js, canvasOverlays.js, Canvas.js |
+| 14 | 1561–1681 | **OBB collision math** | `degToRad`, `obbVertices`, `obbAxes`, `projectOntoAxis`, `obbOverlap`, `obbEdgeExtents`, `makeBodyOBB`, `makeKeepoutOBB`, `makeRearBodyFootprintOBBAt`, `getRearBodyFootprintExtentsAt`, `makeHoleOBB` | Pure math | Canvas.js, canvasOverlays.js, exportHelpers.js, AppOverlays.js, App.js; also used by Group 12 internally |
+| 15 | 1682–1789 | **App state factories** | `makeInitialState`, `snapshot`, `withHistory`, `layerVisibilityForViewMode` | Pure (makeInitialState uses crypto.randomUUID) | appState.js, App.js |
+| 16 | 1790–1849 | **ErrorBoundary React component** | `ErrorBoundary` | React (browser) | main.js only |
+| 17 | 1889–1987 | **Runtime self-test** | `runRuntimeSelfTest` | Pure (calls validateAndNormalize, serializeProject, COMPONENT_LIBRARY) | ExportDialog.js, App.js |
+
+### Dependency notes
+
+- Groups 12 (warning engine) and 14 (OBB math) are tightly coupled — the warning engine uses OBB math internally. They must be extracted together or left together.
+- Groups 5 and 6 (taxonomy + display helpers) are referenced by Groups 7 and 8 inside core.js. Extracting 7 or 8 requires these to already be defined (they are, since all are in the same file today).
+- Group 10 (panel geometry) is the most widely depended-on group outside core.js — 8+ files. Keep in place until last.
+
+### Proposed extraction plan (not yet executed)
+
+**Pass 1 — UX part history (Group 9)** ← safest first
+- Target: `src/ux/partHistory.js`
+- Move: `UX_RECENT_PARTS_KEY`, `UX_FAVORITE_PARTS_KEY`, `partStableKey`, `readStringListStorage`, `writeStringListStorage`, `rememberRecentPart`, `sendPartPlacementEvent`
+- **Zero intra-core.js dependencies** — completely self-contained
+- Add script tag before `core.js` (or after `componentHelpers.js` — either works)
+- Risk: **low** — 33 lines, no logic change, no load-order issue
+
+**Pass 2 — ErrorBoundary (Group 16)**
+- Target: append to `src/runtime-errors.js` (already a browser-error handler; ErrorBoundary is the React-tree equivalent)
+- Move: `ErrorBoundary` class
+- Caller: main.js only; main.js loads last, after runtime-errors.js
+- Risk: **low** — ~60 lines, self-contained React class, one caller
+
+**Pass 3 — React part library UI (Group 7)**
+- Target: `src/components/library/PartLibraryUI.js`
+- Move: `PartIcon`, `PartPickerLabel`, `LibraryPartPreview`
+- Depends on: componentHelpers.js globals (`isFaderLike` etc.) and core.js globals (`getFrontBounds`, `dip8SocketHoleCenters`) — must load after both
+- Only `LibraryPartPreview` is called externally (LeftSidebarPanels.js)
+- Risk: **medium** — ~515 lines, React components with many indirect deps
+
+**Pass 4 — OBB math + warning engine (Groups 12 + 14, joint)**
+- Target: `src/geometry/obbMath.js` (Group 14) + `src/warningEngine.js` (Group 12)
+- Groups are coupled: warning engine uses OBB internally; extract both at once
+- Callers span Canvas.js, App.js, ExportDialog.js, canvasOverlays.js, AppOverlays.js, exportHelpers.js
+- Risk: **medium-high** — large extraction, many callers, needs careful load ordering
+
+Later passes (Groups 2–6, 8, 10, 11, 13, 15, 17) depend on each other heavily and are best addressed after the above passes reduce core.js size and make the remaining boundaries clearer.
 
 ## Styles
 
