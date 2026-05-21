@@ -34,19 +34,21 @@ Tracks dead CSS removal on the `ux-polish` branch. Target file: `styles.css`.
 | `d3d6976` | style: remove shadowed sidebar selector entries (slic commit 1, 6 entries) |
 | `fe15054` | style: remove shadowed export card selector entries (slic commit 2, 4 entries) |
 | `a3b7b12` | style: remove shadowed layer manager selector entry (slic commit 3, 1 entry) |
+| `6cba7e9` | style: remove shadowed backdrop and export grid selectors (slic commit 4, 6 entries) |
+| `d3549d2` | style: remove shadowed template preview selectors (slic commit 5, 2 entries) |
 
 ---
 
 ## Current state
 
-**Approximate `!important` count:** 3,084 (measured after a3b7b12 — selector-list surgery does not change !important count)
+**Approximate `!important` count:** 3,084 (unchanged — selector-list surgery does not change !important count)
 
-**Cascade audit (fresh after a3b7b12):**
-- Total lines: 4,163
+**Cascade audit (fresh after d3549d2):**
+- Total lines: 4,160
 - Raw rules parsed: 906
 - !important count: 3,084
 - Whole-rule deletion candidates: 10 (all on line 2 — S1 surgery only)
-- Selector-list item removal candidates: 29 (was 40; −11 removed across 3 commits)
+- Selector-list item removal candidates: 21 (was 29; −8 removed across commits 6cba7e9 and d3549d2)
 - Visual QA coverage: 20/20 screenshots
 
 ---
@@ -145,9 +147,9 @@ Rules removed:
 
 Note: `desktop-export-report` visual output confirmed unchanged before/after (before/after PNG hashes identical). The removal of `.export-tab-body > *` stacking did not affect any screenshot.
 
-### Selector-list surgery — slic commits 1–3
+### Selector-list surgery — slic commits 1–5
 
-Three commits, 11 selector entries removed. `!important` count unchanged (selector strings carry no `!important`). All 20/20 screenshots passed for each commit.
+Five commits, 19 selector entries removed. `!important` count unchanged (selector strings carry no `!important`). All 20/20 screenshots passed for each commit.
 
 **Commit 1 — `d3d6976` — sidebar/shell (6 entries):**
 - `ri211` L56: stripped `.component-library-shell` from `[style],.component-library-shell{display:none}` — winner: ri681|L2432 (`display:block`)
@@ -163,6 +165,14 @@ Three commits, 11 selector entries removed. `!important` count unchanged (select
 
 **Commit 3 — `a3b7b12` — layer manager (1 entry):**
 - `ri496` L856: stripped `.layer-manager-presets` from `.compact-render-row,.layer-manager-presets{display:grid;...}` — `.compact-render-row` is the sole survivor
+
+**Commit 4 — `6cba7e9` — backdrop + export grids (6 entries):**
+- `ri289` L154: stripped `.template-manager-backdrop`, `.local-projects-backdrop`, `.export-dialog-backdrop`, `.command-palette-backdrop` from 5-selector backdrop z-index rule — `.app-modal-backdrop` is the sole survivor
+- `ri479` L758: stripped `.export-options-grid` and `.kicad-export-grid` from 3-selector export grids rule — `.export-action-grid` is the sole survivor
+
+**Commit 5 — `d3549d2` — template preview (2 entries):**
+- `ri424` L410: stripped `.template-manager-panel .template-preview-realistic` from 3-selector preview container rule — live: `.library-real-preview`, `.template-preview-empty`; winner: ri458|L589 v436 solo rule
+- `ri425` L420: stripped `.template-manager-panel .template-preview-realistic svg` from 2-selector SVG rule (becomes single-selector) — `.library-real-preview svg` is the sole survivor; winner: ri459|L602 v436 solo rule
 
 ---
 
@@ -210,24 +220,20 @@ Rules that differ in property values (not just shadow/override) require manual v
 ~~**Template card title CSS** (ri359 line-sharing resolved)~~ ✅ Done (commit `defec3e`)
 ~~**Export structural CSS** (panel dimensions ×2 + tab stacking)~~ ✅ Done (commit `39ceb7c`)
 ~~**Selector-list surgery commits 1–3** (11 entries)~~ ✅ Done (`d3d6976`, `fe15054`, `a3b7b12`)
+~~**Selector-list surgery commits 4–5** (8 entries)~~ ✅ Done (`6cba7e9`, `d3549d2`)
 
-**Fresh audit (post-a3b7b12) — 10 whole-rule candidates (all L2), 29 slic candidates:**
+**Fresh audit (post-d3549d2) — 10 whole-rule candidates (all L2), 21 slic candidates:**
 
 **Whole-rule (10, all line 2 / S1):**
 `.sidebar-left` (border-right), `.sidebar-right` (border-left), `.app-brand`, `.component-hover-card`, `.template-manager-backdrop`, `.local-projects-panel`, `.inline-modal-card`, `.inline-modal-title`, `.inline-modal-actions`, `.inline-modal-actions button.danger`.
 
-**Selector-list item candidates (29, grouped):**
+**Selector-list item candidates (21, grouped):**
 
 | Group | Count | Area | Key dead selectors |
 |-------|-------|------|--------------------|
 | L2/S1 | 7 | Line 2 | `body`, `#root`, `html`, `.section-title`, `.sidebar-title`, `.sidebar-left .section-title`, `.toolbar-popover button` |
 | v422 aliases | 7 | Emergency layout restore | `.workspace`, `.sidebar-left`, `.sidebar-right`, `.canvas-wrap`, `.section`, `.field-row`, `.field-row label` |
-| v426 backdrop | 4 | Backdrop z-index (ri289) | `.template-manager-backdrop`, `.export-dialog-backdrop`, `.local-projects-backdrop`, `.command-palette-backdrop` |
 | v429 templates/export | 7 | Shared dialog headers/cards | `.export-dialog-header`, `.template-manager-panel>div:first-child`, `.template-manager-panel h2`, `.export-dialog-title`, `.export-dialog-subtitle`, `.template-manager-panel p`, `.template-card-realistic` |
-| v433 template preview | 2 | Template preview compound | `.template-manager-panel .template-preview-realistic` (×2 rules) |
-| v437 export grids | 2 | Export options grid (ri479) | `.export-options-grid`, `.kicad-export-grid` |
-
-**Next recommended batch:** v426 backdrop (4 entries, 1 rule — strip to `.app-modal-backdrop` only) and v437 export grids (2 entries, 1 rule — strip to `.export-action-grid` only). Both are simple, covered by screenshots, and Codex-pre-evaluated.
 
 **Remaining visual-only candidates (line-2 surgery):**
 `.sidebar-left`/`.sidebar-right` border, `.inline-modal-title`, `.inline-modal-actions button.danger`. All require S1 minified-line surgery as a single operation.
