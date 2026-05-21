@@ -3683,10 +3683,6 @@ input[type="number"],
   gap: 6px;
 }
 
-.toolbar-popover.topbar-section-popover {
-  width: min(360px, calc(100vw - 16px));
-}
-
 .toolbar-popover.topbar-section-popover .section {
   margin: 0;
 }
