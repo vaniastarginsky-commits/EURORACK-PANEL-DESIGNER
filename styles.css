@@ -785,54 +785,12 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   min-height:0!important;
   object-fit:contain!important;
 }
-.export-preview-stats{
-  display:flex!important;
-  gap:14px!important;
-  flex-wrap:wrap!important;
-  align-items:center!important;
-  padding:6px 0 0!important;
-  margin:0!important;
-  font-size:11px!important;
-  line-height:1.2!important;
-  color:#928b7d!important;
-}
 .export-preview-stats span,
 .export-preview-stats div{
   white-space:nowrap!important;
 }
 
-/* Tabs: smaller, clean, no crowding. */
-.export-tabs button{
-  height:42px!important;
-  min-height:42px!important;
-  min-width:82px!important;
-  padding:0 14px!important;
-  font-size:14px!important;
-  justify-content:center!important;
-}
 
-/* Body: options should fit and scroll as one area if needed. */
-.export-tab-body{
-  min-height:0!important;
-  overflow:auto!important;
-  padding:14px 18px 16px!important;
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr) minmax(330px,380px)!important;
-  gap:18px!important;
-  align-items:start!important;
-}
-.export-tab-body > div{
-  min-width:0!important;
-}
-.export-tab-body h3,
-.export-tab-body h4,
-.export-tab-body .section-title{
-  font-size:12px!important;
-  line-height:1.1!important;
-  letter-spacing:.18em!important;
-  margin:0 0 10px!important;
-  color:#eee7da!important;
-}
 
 /* Option cards / recommendation cards */
 .export-package-card,
@@ -895,34 +853,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   width:100%!important;
   min-width:0!important;
 }
-.export-option-row span,
-.checklist-row span,
-.export-option-row label span,
-.checklist-row label span{
-  min-width:0!important;
-  white-space:normal!important;
-  overflow:visible!important;
-  text-overflow:clip!important;
-  line-height:1.25!important;
-  font-size:13px!important;
-  color:#928b7d!important;
-}
-.export-dialog-panel input[type="checkbox"]{
-  appearance:none!important;
-  -webkit-appearance:none!important;
-  width:15px!important;
-  height:15px!important;
-  min-width:15px!important;
-  min-height:15px!important;
-  max-width:15px!important;
-  max-height:15px!important;
-  margin:2px 0 0!important;
-  padding:0!important;
-  border:1px solid rgba(238,231,218,.60)!important;
-  background:#050505!important;
-  display:grid!important;
-  place-items:center!important;
-}
 
 /* KiCad: keep origin + checkboxes balanced */
 .kicad-origin-row{
@@ -943,28 +873,11 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   margin:0 0 12px!important;
 }
 /* PNG / PSD forms */
-.export-tab-body select,
-.export-tab-body input:not([type="checkbox"]){
-  height:32px!important;
-  min-height:32px!important;
-  font-size:13px!important;
-}
-.export-tab-body .field-row{
-  grid-template-columns:160px minmax(180px,300px)!important;
-  gap:12px!important;
-  align-items:center!important;
-}
 
 /* Actions row inside body */
 .export-tab-body .btn-row,
 .export-action-grid{
   margin-top:12px!important;
-}
-.export-tab-body .btn-row button,
-.export-action-grid button{
-  min-height:32px!important;
-  justify-content:center!important;
-  text-align:center!important;
 }
 
 /* Bottom actions if present */
@@ -1441,16 +1354,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .export-tab-body .custom-svg-options{
   min-width:0!important;
 }
-.export-tab-body .svg-quick-actions{
-  display:grid!important;
-  grid-template-columns:1fr 1fr!important;
-  gap:8px!important;
-}
-.export-tab-body .svg-quick-actions button{
-  min-height:32px!important;
-  justify-content:center!important;
-  text-align:center!important;
-}
 
 /* KiCad tab */
 .kicad-preset-row{
@@ -1477,27 +1380,7 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   text-align:center!important;
   margin-top:8px!important;
 }
-.export-tab-body .individual-package-files,
-.export-tab-body .loose-package-files{
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:8px!important;
-}
 
-/* Report tab */
-.runtime-diagnostics-card{
-  max-height:260px!important;
-  overflow:auto!important;
-}
-.runtime-diagnostics-card .checklist-row,
-.runtime-diagnostics-card > div{
-  display:grid!important;
-  grid-template-columns:72px minmax(0,1fr)!important;
-  gap:10px!important;
-  align-items:start!important;
-  padding:6px 0!important;
-  border-bottom:1px solid rgba(215,196,155,.08)!important;
-}
 
 /* Scrollbars: subtle and not content-overlapping */
 .export-tab-body,
