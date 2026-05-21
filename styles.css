@@ -407,7 +407,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .template-manager-panel [class*="template-card"]{
   min-width:0!important;
 }
-.template-manager-panel .template-preview-realistic,
 .template-manager-panel .library-real-preview,
 .template-manager-panel .template-preview-empty{
   height:150px!important;
@@ -417,7 +416,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   display:grid!important;
   place-items:center!important;
 }
-.template-manager-panel .template-preview-realistic svg,
 .template-manager-panel .library-real-preview svg{
   width:auto!important;
   height:auto!important;
