@@ -234,7 +234,7 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .template-card-actions button{flex:1 1 auto!important;min-height:30px!important;text-align:center!important}
 .template-preview-empty{height:160px!important;display:grid!important;place-items:center!important;color:#5f5a50!important;background:#050505!important;border-bottom:1px solid rgba(215,196,155,.10)!important}
 
-.export-preview-card,.export-package-card,.export-recommended-banner,.runtime-diagnostics-card{background:#080807!important;border:1px solid rgba(215,196,155,.14)!important;color:#d8d0c0!important;padding:12px!important}
+.export-preview-card{background:#080807!important;border:1px solid rgba(215,196,155,.14)!important;color:#d8d0c0!important;padding:12px!important}
 .export-preview-card svg{width:100%!important;height:auto!important;max-height:420px!important;object-fit:contain!important;background:#111!important}
 .export-option-row,.checklist-row,.runtime-diagnostics-list>div{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;border-bottom:1px solid rgba(215,196,155,.08)!important;padding:6px 0!important}
 
@@ -727,8 +727,7 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 /* Option cards / recommendation cards */
 .export-package-card,
 .export-recommended-banner,
-.runtime-diagnostics-card,
-.export-sanity{
+.runtime-diagnostics-card{
   padding:12px!important;
   margin:0 0 12px!important;
   line-height:1.35!important;
