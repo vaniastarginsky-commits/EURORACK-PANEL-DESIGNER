@@ -243,16 +243,9 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .template-preview-empty{height:160px!important;display:grid!important;place-items:center!important;color:#5f5a50!important;background:#050505!important;border-bottom:1px solid rgba(215,196,155,.10)!important}
 
 .export-dialog-panel{grid-template-rows:auto auto minmax(0,1fr) auto!important;width:min(1080px,calc(100vw - 44px))!important}
-.export-dialog-actions{display:flex!important;gap:8px!important;align-items:center!important;justify-content:flex-end!important;padding:12px 16px!important;border-top:1px solid rgba(215,196,155,.14)!important;background:#050505!important}
-.export-tab-body{min-height:0!important;overflow:auto!important;padding:16px!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(280px,360px)!important;gap:16px!important;align-items:start!important}
 .export-preview-card,.export-package-card,.export-recommended-banner,.runtime-diagnostics-card{background:#080807!important;border:1px solid rgba(215,196,155,.14)!important;color:#d8d0c0!important;padding:12px!important}
-.export-preview-card{max-height:520px!important;overflow:auto!important}
 .export-preview-card svg{width:100%!important;height:auto!important;max-height:420px!important;object-fit:contain!important;background:#111!important}
-.export-preview-stats{display:grid!important;gap:4px!important;font-size:12px!important;color:#928b7d!important;margin-top:8px!important}
-.export-options-grid,.kicad-export-grid,.export-action-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important}
 .export-option-row,.checklist-row,.runtime-diagnostics-list>div{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;border-bottom:1px solid rgba(215,196,155,.08)!important;padding:6px 0!important}
-.export-option-row label{display:flex!important;align-items:center!important;gap:8px!important}
-.export-dialog-panel input[type="checkbox"]{width:16px!important;height:16px!important;min-width:16px!important;min-height:16px!important}
 
 .local-projects-panel{grid-template-rows:auto minmax(0,1fr)!important}
 .local-project-card-row{padding:8px 16px!important;border-bottom:1px solid rgba(215,196,155,.09)!important}
@@ -361,44 +354,17 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   box-shadow:0 28px 90px rgba(0,0,0,.86)!important;color:#eee7da!important;
   display:grid!important;grid-template-rows:auto auto minmax(0,1fr) auto!important;
 }
-.export-tabs button{
-  flex:0 0 auto!important;min-width:92px!important;height:44px!important;min-height:44px!important;
-  border-top:0!important;border-bottom:0!important;text-align:center!important;justify-content:center!important;
-  white-space:nowrap!important;
-}
-.export-tab-body{
-  min-height:0!important;overflow:hidden!important;padding:14px 18px!important;
-  display:grid!important;grid-template-columns:minmax(0,1fr) 390px!important;gap:16px!important;align-items:stretch!important;
-}
 .export-preview-card{
   min-width:0!important;min-height:0!important;height:100%!important;overflow:auto!important;
   background:#111!important;border:1px solid rgba(215,196,155,.14)!important;padding:12px!important;
   display:grid!important;grid-template-rows:minmax(0,1fr) auto!important;
 }
-.export-preview-card svg{
-  width:100%!important;height:100%!important;max-height:none!important;min-height:0!important;display:block!important;object-fit:contain!important;
-}
 .export-preview-stats{font-size:12px!important;color:#928b7d!important;margin-top:8px!important;display:flex!important;gap:12px!important;flex-wrap:wrap!important}
 .export-tab-body>div:not(.export-preview-card):not(.export-preview-stats){
   min-width:0!important;overflow:auto!important;
 }
-.export-options-grid,.kicad-export-grid,.export-action-grid{
-  display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;align-content:start!important;
-}
 .export-package-card,.export-recommended-banner,.runtime-diagnostics-card,.export-sanity{
   background:#080807!important;border:1px solid rgba(215,196,155,.14)!important;color:#d8d0c0!important;padding:12px!important;margin-bottom:10px!important;
-}
-.export-option-row,.checklist-row{
-  display:grid!important;grid-template-columns:auto 1fr!important;gap:8px!important;align-items:center!important;
-  border-bottom:1px solid rgba(215,196,155,.08)!important;padding:8px 0!important;
-}
-.export-option-row label,.checklist-row label{
-  display:contents!important;
-}
-.export-dialog-panel input[type="checkbox"]{
-  appearance:none!important;-webkit-appearance:none!important;
-  width:16px!important;height:16px!important;min-width:16px!important;min-height:16px!important;
-  margin:0!important;border:1px solid rgba(238,231,218,.55)!important;background:#050505!important;
 }
 .export-dialog-panel input[type="checkbox"]:checked::after{content:"✓";display:grid;place-items:center;color:#050505;font-weight:900;font-size:13px;line-height:16px}
 .export-dialog-actions{
@@ -812,16 +778,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 }
 
 /* In this build the preview block sits above tabs. Keep it useful but not dominant. */
-.export-preview-card{
-  height:auto!important;
-  min-height:300px!important;
-  max-height:340px!important;
-  overflow:hidden!important;
-  padding:10px!important;
-  background:#141414!important;
-  display:grid!important;
-  grid-template-rows:minmax(0,1fr) auto!important;
-}
 .export-preview-card svg{
   width:100%!important;
   height:100%!important;
