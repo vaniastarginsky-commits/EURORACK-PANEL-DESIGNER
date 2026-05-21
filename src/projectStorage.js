@@ -1,6 +1,197 @@
-function safeProjectFileName(name){const base=(name||'panel-layout').trim().replace(/[^a-z0-9а-яё_\-]+/gi,'-').replace(/^-+|-+$/g,'')||'panel-layout';return`${base}.epanel.json`;}function serializeProject(state,pretty=false){const{history:_h,future:_f,...clean}=state;const meta={...clean.projectMeta,updatedAt:new Date().toISOString()};return JSON.stringify({projectVersion:PROJECT_FILE_VERSION,...clean,projectMeta:meta},null,pretty?2:0);}function isIOSLike(){return/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);}async function saveTextFile(filename,text,mime='application/json'){const blob=new Blob([text],{type:mime});const file=new File([blob],filename,{type:mime});const nav=navigator;if(isIOSLike()&&nav.canShare&&nav.share&&nav.canShare({files:[file]})){try{await nav.share({files:[file],title:filename});return;}catch(e){if(e?.name==='AbortError')return;}}const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;a.rel='noopener';a.style.display='none';document.body.appendChild(a);a.click();window.setTimeout(()=>{a.remove();URL.revokeObjectURL(url);},1500);}function downloadTextFile(filename,text,mime='application/json'){saveTextFile(filename,text,mime).catch(()=>{try{const blob=new Blob([text],{type:mime});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;a.rel='noopener';a.style.display='none';document.body.appendChild(a);a.click();window.setTimeout(()=>{a.remove();URL.revokeObjectURL(url);},1500);}catch{alert('Save failed. Try Save to browser or Export ZIP instead.');}});}function downloadBlobFile(filename,blob){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;a.rel='noopener';a.style.display='none';document.body.appendChild(a);a.click();window.setTimeout(()=>{a.remove();URL.revokeObjectURL(url);},1500);}function exportJSON(state){void saveTextFile(safeProjectFileName(state.projectMeta?.name||'panel-layout'),serializeProject(state,true),'application/json');}function kicadNum(n){const v=Number.isFinite(n)?n:0;return String(Math.round(v*1000000)/1000000);}function kicadStr(s){return`"${String(s ?? '').replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;}function kicadRefPrefix(type){if(type.includes('jack'))return'J';if(type.includes('pot')||type.includes('trimmer')||type.includes('fader'))return'RV';if(type.includes('switch')||type==='toggle')return'SW';if(type.includes('led'))return'D';if(type.includes('encoder'))return'ENC';return'H';}function kicadSafeName(s){return String(s||'part').replace(/[^A-Za-z0-9_.+-]+/g,'_').replace(/^_+|_+$/g,'')||'part';}function rotatePointAround(px,py,cx,cy,deg){const a=deg*Math.PI/180;const dx=px-cx;const dy=py-cy;return{x:cx+dx*Math.cos(a)-dy*Math.sin(a),y:cy+dx*Math.sin(a)+dy*Math.cos(a)};}function kicadEdgeLine(x1,y1,x2,y2,width=0.1){return`  (gr_line (start ${kicadNum(x1)} ${kicadNum(y1)}) (end ${kicadNum(x2)} ${kicadNum(y2)}) (stroke (width ${kicadNum(width)}) (type solid)) (layer "Edge.Cuts") (tstamp ${crypto.randomUUID()}))`;}function kicadRectLines(cx,cy,w,h,rot=0,layer='Edge.Cuts',width=0.1){const pts=[rotatePointAround(cx-w/2,cy-h/2,cx,cy,rot),rotatePointAround(cx+w/2,cy-h/2,cx,cy,rot),rotatePointAround(cx+w/2,cy+h/2,cx,cy,rot),rotatePointAround(cx-w/2,cy+h/2,cx,cy,rot),];return pts.map((p,i)=>{const q=pts[(i+1)%pts.length];return`  (gr_line (start ${kicadNum(p.x)} ${kicadNum(p.y)}) (end ${kicadNum(q.x)} ${kicadNum(q.y)}) (stroke (width ${kicadNum(width)}) (type solid)) (layer ${kicadStr(layer)}) (tstamp ${crypto.randomUUID()}))`;});}function kicadCircle(cx,cy,r,layer='Dwgs.User',width=0.08){return`  (gr_circle (center ${kicadNum(cx)} ${kicadNum(cy)}) (end ${kicadNum(cx + r)} ${kicadNum(cy)}) (stroke (width ${kicadNum(width)}) (type solid)) (fill none) (layer ${kicadStr(layer)}) (tstamp ${crypto.randomUUID()}))`;}function kicadGrText(text,x,y,size=1.2,rot=0,layer='F.SilkS'){const s=Math.max(0.3,size);return`  (gr_text ${kicadStr(text)} (at ${kicadNum(x)} ${kicadNum(y)} ${kicadNum(rot)}) (layer ${kicadStr(layer)}) (tstamp ${crypto.randomUUID()})
+function safeProjectFileName(name) {
+  const base =
+    (name || "panel-layout")
+      .trim()
+      .replace(/[^a-z0-9а-яё_\-]+/gi, "-")
+      .replace(/^-+|-+$/g, "") || "panel-layout";
+  return `${base}.epanel.json`;
+}
+function serializeProject(state, pretty = false) {
+  const { history: _h, future: _f, ...clean } = state;
+  const meta = { ...clean.projectMeta, updatedAt: new Date().toISOString() };
+  return JSON.stringify(
+    { projectVersion: PROJECT_FILE_VERSION, ...clean, projectMeta: meta },
+    null,
+    pretty ? 2 : 0,
+  );
+}
+function isIOSLike() {
+  return (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+  );
+}
+async function saveTextFile(filename, text, mime = "application/json") {
+  const blob = new Blob([text], { type: mime });
+  const file = new File([blob], filename, { type: mime });
+  const nav = navigator;
+  if (
+    isIOSLike() &&
+    nav.canShare &&
+    nav.share &&
+    nav.canShare({ files: [file] })
+  ) {
+    try {
+      await nav.share({ files: [file], title: filename });
+      return;
+    } catch (e) {
+      if (e?.name === "AbortError") return;
+    }
+  }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.rel = "noopener";
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+  window.setTimeout(() => {
+    a.remove();
+    URL.revokeObjectURL(url);
+  }, 1500);
+}
+function downloadTextFile(filename, text, mime = "application/json") {
+  saveTextFile(filename, text, mime).catch(() => {
+    try {
+      const blob = new Blob([text], { type: mime });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.rel = "noopener";
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      window.setTimeout(() => {
+        a.remove();
+        URL.revokeObjectURL(url);
+      }, 1500);
+    } catch {
+      alert("Save failed. Try Save to browser or Export ZIP instead.");
+    }
+  });
+}
+function downloadBlobFile(filename, blob) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.rel = "noopener";
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+  window.setTimeout(() => {
+    a.remove();
+    URL.revokeObjectURL(url);
+  }, 1500);
+}
+function exportJSON(state) {
+  void saveTextFile(
+    safeProjectFileName(state.projectMeta?.name || "panel-layout"),
+    serializeProject(state, true),
+    "application/json",
+  );
+}
+function kicadNum(n) {
+  const v = Number.isFinite(n) ? n : 0;
+  return String(Math.round(v * 1000000) / 1000000);
+}
+function kicadStr(s) {
+  return `"${String(s ?? "")
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"')}"`;
+}
+function kicadRefPrefix(type) {
+  if (type.includes("jack")) return "J";
+  if (
+    type.includes("pot") ||
+    type.includes("trimmer") ||
+    type.includes("fader")
+  )
+    return "RV";
+  if (type.includes("switch") || type === "toggle") return "SW";
+  if (type.includes("led")) return "D";
+  if (type.includes("encoder")) return "ENC";
+  return "H";
+}
+function kicadSafeName(s) {
+  return (
+    String(s || "part")
+      .replace(/[^A-Za-z0-9_.+-]+/g, "_")
+      .replace(/^_+|_+$/g, "") || "part"
+  );
+}
+function rotatePointAround(px, py, cx, cy, deg) {
+  const a = (deg * Math.PI) / 180;
+  const dx = px - cx;
+  const dy = py - cy;
+  return {
+    x: cx + dx * Math.cos(a) - dy * Math.sin(a),
+    y: cy + dx * Math.sin(a) + dy * Math.cos(a),
+  };
+}
+function kicadEdgeLine(x1, y1, x2, y2, width = 0.1) {
+  return `  (gr_line (start ${kicadNum(x1)} ${kicadNum(y1)}) (end ${kicadNum(x2)} ${kicadNum(y2)}) (stroke (width ${kicadNum(width)}) (type solid)) (layer "Edge.Cuts") (tstamp ${crypto.randomUUID()}))`;
+}
+function kicadRectLines(
+  cx,
+  cy,
+  w,
+  h,
+  rot = 0,
+  layer = "Edge.Cuts",
+  width = 0.1,
+) {
+  const pts = [
+    rotatePointAround(cx - w / 2, cy - h / 2, cx, cy, rot),
+    rotatePointAround(cx + w / 2, cy - h / 2, cx, cy, rot),
+    rotatePointAround(cx + w / 2, cy + h / 2, cx, cy, rot),
+    rotatePointAround(cx - w / 2, cy + h / 2, cx, cy, rot),
+  ];
+  return pts.map((p, i) => {
+    const q = pts[(i + 1) % pts.length];
+    return `  (gr_line (start ${kicadNum(p.x)} ${kicadNum(p.y)}) (end ${kicadNum(q.x)} ${kicadNum(q.y)}) (stroke (width ${kicadNum(width)}) (type solid)) (layer ${kicadStr(layer)}) (tstamp ${crypto.randomUUID()}))`;
+  });
+}
+function kicadCircle(cx, cy, r, layer = "Dwgs.User", width = 0.08) {
+  return `  (gr_circle (center ${kicadNum(cx)} ${kicadNum(cy)}) (end ${kicadNum(cx + r)} ${kicadNum(cy)}) (stroke (width ${kicadNum(width)}) (type solid)) (fill none) (layer ${kicadStr(layer)}) (tstamp ${crypto.randomUUID()}))`;
+}
+function kicadGrText(text, x, y, size = 1.2, rot = 0, layer = "F.SilkS") {
+  const s = Math.max(0.3, size);
+  return `  (gr_text ${kicadStr(text)} (at ${kicadNum(x)} ${kicadNum(y)} ${kicadNum(rot)}) (layer ${kicadStr(layer)}) (tstamp ${crypto.randomUUID()})
     (effects (font (size ${kicadNum(s)} ${kicadNum(s)}) (thickness ${kicadNum(Math.max(0.08, s * 0.12))})))
-  )`;}function kicadNPTHFootprint(ref,name,x,y,type,d,slotLength,rot=0,value,ovalAxis='x'){const fp=kicadSafeName(name);const hole=Math.max(0.1,d||3);const len=Math.max(hole,slotLength||hole);const padSize=type==='oval'?(ovalAxis==='x'?`${kicadNum(len)} ${kicadNum(hole)}`:`${kicadNum(hole)} ${kicadNum(len)}`):`${kicadNum(hole)} ${kicadNum(hole)}`;const drill=type==='oval'?(ovalAxis==='x'?`oval ${kicadNum(len)} ${kicadNum(hole)}`:`oval ${kicadNum(hole)} ${kicadNum(len)}`):`${kicadNum(hole)}`;const shape=type==='oval'?'oval':'circle';return`  (footprint "PanelDesigner:${fp}" (layer "F.Cu")
+  )`;
+}
+function kicadNPTHFootprint(
+  ref,
+  name,
+  x,
+  y,
+  type,
+  d,
+  slotLength,
+  rot = 0,
+  value,
+  ovalAxis = "x",
+) {
+  const fp = kicadSafeName(name);
+  const hole = Math.max(0.1, d || 3);
+  const len = Math.max(hole, slotLength || hole);
+  const padSize =
+    type === "oval"
+      ? ovalAxis === "x"
+        ? `${kicadNum(len)} ${kicadNum(hole)}`
+        : `${kicadNum(hole)} ${kicadNum(len)}`
+      : `${kicadNum(hole)} ${kicadNum(hole)}`;
+  const drill =
+    type === "oval"
+      ? ovalAxis === "x"
+        ? `oval ${kicadNum(len)} ${kicadNum(hole)}`
+        : `oval ${kicadNum(hole)} ${kicadNum(len)}`
+      : `${kicadNum(hole)}`;
+  const shape = type === "oval" ? "oval" : "circle";
+  return `  (footprint "PanelDesigner:${fp}" (layer "F.Cu")
     (tstamp ${crypto.randomUUID()})
     (at ${kicadNum(x)} ${kicadNum(y)} ${kicadNum(rot)})
     (attr board_only exclude_from_pos_files exclude_from_bom)
@@ -9,7 +200,248 @@ function safeProjectFileName(name){const base=(name||'panel-layout').trim().repl
     (fp_text reference ${kicadStr(ref)} (at 0 ${kicadNum(-(len / 2 + 1.2))} 0) (layer "F.SilkS") hide (effects (font (size 1 1) (thickness 0.15))))
     (fp_text value ${kicadStr(value || name)} (at 0 ${kicadNum(len / 2 + 1.2)} 0) (layer "F.Fab") hide (effects (font (size 1 1) (thickness 0.15))))
     (pad "" np_thru_hole ${shape} (at 0 0) (size ${padSize}) (drill ${drill}) (layers "*.Cu" "*.Mask"))
-  )`;}function exportKiCadPCB(state,options=DEFAULT_EXPORT_OPTIONS){const widthMM=panelWidthMM(state.panel);const heightMM=PANEL_HEIGHT_MM;const includePanelOutline=options.kicadPanelOutline!==false;const includeMountingHoles=options.kicadMountingHoles!==false;const includeComponentHoles=options.kicadComponentHoles!==false;const includeRectCutouts=options.kicadRectCutouts!==false;const includeVisualOutlines=!!options.kicadVisualOutlines;const includeKeepoutHints=!!options.kicadKeepoutHints;const includeRefs=!!options.kicadRefs;const includeTextLabels=!!options.kicadTextLabels;const kicadOrigin=options.kicadOrigin||'top-left';const ox=kicadOrigin==='center'?-widthMM/2:0;const oy=kicadOrigin==='center'?-heightMM/2:0;const tx=(x)=>x+ox;const ty=(y)=>y+oy;const lines=[];const footprints=[];const graphics=[];if(includePanelOutline){lines.push(kicadEdgeLine(tx(0),ty(0),tx(widthMM),ty(0)));lines.push(kicadEdgeLine(tx(widthMM),ty(0),tx(widthMM),ty(heightMM)));lines.push(kicadEdgeLine(tx(widthMM),ty(heightMM),tx(0),ty(heightMM)));lines.push(kicadEdgeLine(tx(0),ty(heightMM),tx(0),ty(0)));}if(includeMountingHoles&&state.mountingHoles?.enabled){for(let i=0;i<state.mountingHoles.holes.length;i++){const h=normalizeMountingHoleRail(state.mountingHoles.holes[i]);if(state.mountingHoles.holeShape==='oval'){footprints.push(kicadNPTHFootprint(`MH${i + 1}`,'Mounting_Hole_Oval',tx(h.x),ty(h.y),'oval',MOUNTING_HOLE_DIAMETER_MM,state.mountingHoles.ovalLength||4.8,0,'Mounting hole','x'));}else{footprints.push(kicadNPTHFootprint(`MH${i + 1}`,'Mounting_Hole',tx(h.x),ty(h.y),'circle',MOUNTING_HOLE_DIAMETER_MM,undefined,0,'Mounting hole'));}if(includeKeepoutHints&&state.mountingHoles.showKeepouts)graphics.push(kicadCircle(tx(h.x),ty(h.y),state.mountingHoles.keepoutRadius||MOUNTING_HOLE_KEEPOUT_R_MM,'Cmts.User',0.06));}}if(includeComponentHoles||includeRectCutouts||includeVisualOutlines||includeKeepoutHints||includeRefs){for(let i=0;i<state.components.length;i++){const c=state.components[i];const ref=c.ref||`${kicadRefPrefix(c.type)}${i + 1}`;const rot=c.rotation||0;if(isDip8Socket(c)){if(includeComponentHoles){const pts=dip8SocketHoleCenters(c).map(p=>({x:tx(p.x),y:ty(p.y)}));pts.forEach((p,pinIdx)=>footprints.push(kicadNPTHFootprint(`${ref}_${pinIdx + 1}`,c.name||c.type,p.x,p.y,'circle',c.holeDiameter||1.05,undefined,0,`${shortPartName(c)} pin ${pinIdx + 1}`)));}if(includeVisualOutlines)graphics.push(...kicadRectLines(tx(c.x),ty(c.y),c.frontW??10.2,c.frontH??10.2,rot,'Dwgs.User',0.08));if(includeKeepoutHints)graphics.push(...kicadRectLines(tx(c.x),ty(c.y),c.keepoutW||12,c.keepoutH||12,rot,'Cmts.User',0.05));}else if(c.holeType==='rect'){const w=c.holeW??c.frontW??c.holeDiameter??3;const h=c.holeH??c.frontH??c.holeDiameter??3;if(includeRectCutouts)lines.push(...kicadRectLines(tx(c.x),ty(c.y),w,h,rot,'Edge.Cuts',0.1));if(includeVisualOutlines)graphics.push(...kicadRectLines(tx(c.x),ty(c.y),c.frontW??w,c.frontH??h,rot,'Dwgs.User',0.08));}else if(c.holeType==='slot'){if(includeComponentHoles)footprints.push(kicadNPTHFootprint(ref,c.name||c.type,tx(c.x),ty(c.y),'oval',c.holeDiameter||3,c.slotLength||c.holeDiameter||3,rot,shortPartName(c),'y'));if(includeKeepoutHints)graphics.push(...kicadRectLines(tx(c.x),ty(c.y),c.keepoutW||(c.holeDiameter||3)+2,c.keepoutH||(c.slotLength||3)+2,rot,'Cmts.User',0.05));}else{if(includeComponentHoles)footprints.push(kicadNPTHFootprint(ref,c.name||c.type,tx(c.x),ty(c.y),'circle',c.holeDiameter||3,undefined,rot,shortPartName(c)));if(includeVisualOutlines)graphics.push(kicadCircle(tx(c.x),ty(c.y),(c.frontDiameter||c.holeDiameter||3)/2,'Dwgs.User',0.08));if(includeKeepoutHints)graphics.push(kicadCircle(tx(c.x),ty(c.y),Math.max(c.keepoutW||0,c.keepoutH||0,c.holeDiameter||3)/2,'Cmts.User',0.05));}if(includeRefs)graphics.push(kicadGrText(ref,tx(c.x),ty(c.y)-Math.max(2.5,(c.frontDiameter||c.frontH||6)/2+2),1.0,0,'F.SilkS'));}}if(includeTextLabels){for(const t of state.textItems){if(!t.visible)continue;graphics.push(kicadGrText(t.text||'TEXT',tx(t.x),ty(t.y),Math.max(0.6,t.fontSizeMm||1.2),t.rotation||0,t.layer==='background'?'B.SilkS':'F.SilkS'));}}const board=`(kicad_pcb
+  )`;
+}
+function exportKiCadPCB(state, options = DEFAULT_EXPORT_OPTIONS) {
+  const widthMM = panelWidthMM(state.panel);
+  const heightMM = PANEL_HEIGHT_MM;
+  const includePanelOutline = options.kicadPanelOutline !== false;
+  const includeMountingHoles = options.kicadMountingHoles !== false;
+  const includeComponentHoles = options.kicadComponentHoles !== false;
+  const includeRectCutouts = options.kicadRectCutouts !== false;
+  const includeVisualOutlines = !!options.kicadVisualOutlines;
+  const includeKeepoutHints = !!options.kicadKeepoutHints;
+  const includeRefs = !!options.kicadRefs;
+  const includeTextLabels = !!options.kicadTextLabels;
+  const kicadOrigin = options.kicadOrigin || "top-left";
+  const ox = kicadOrigin === "center" ? -widthMM / 2 : 0;
+  const oy = kicadOrigin === "center" ? -heightMM / 2 : 0;
+  const tx = (x) => x + ox;
+  const ty = (y) => y + oy;
+  const lines = [];
+  const footprints = [];
+  const graphics = [];
+  if (includePanelOutline) {
+    lines.push(kicadEdgeLine(tx(0), ty(0), tx(widthMM), ty(0)));
+    lines.push(kicadEdgeLine(tx(widthMM), ty(0), tx(widthMM), ty(heightMM)));
+    lines.push(kicadEdgeLine(tx(widthMM), ty(heightMM), tx(0), ty(heightMM)));
+    lines.push(kicadEdgeLine(tx(0), ty(heightMM), tx(0), ty(0)));
+  }
+  if (includeMountingHoles && state.mountingHoles?.enabled) {
+    for (let i = 0; i < state.mountingHoles.holes.length; i++) {
+      const h = normalizeMountingHoleRail(state.mountingHoles.holes[i]);
+      if (state.mountingHoles.holeShape === "oval") {
+        footprints.push(
+          kicadNPTHFootprint(
+            `MH${i + 1}`,
+            "Mounting_Hole_Oval",
+            tx(h.x),
+            ty(h.y),
+            "oval",
+            MOUNTING_HOLE_DIAMETER_MM,
+            state.mountingHoles.ovalLength || 4.8,
+            0,
+            "Mounting hole",
+            "x",
+          ),
+        );
+      } else {
+        footprints.push(
+          kicadNPTHFootprint(
+            `MH${i + 1}`,
+            "Mounting_Hole",
+            tx(h.x),
+            ty(h.y),
+            "circle",
+            MOUNTING_HOLE_DIAMETER_MM,
+            undefined,
+            0,
+            "Mounting hole",
+          ),
+        );
+      }
+      if (includeKeepoutHints && state.mountingHoles.showKeepouts)
+        graphics.push(
+          kicadCircle(
+            tx(h.x),
+            ty(h.y),
+            state.mountingHoles.keepoutRadius || MOUNTING_HOLE_KEEPOUT_R_MM,
+            "Cmts.User",
+            0.06,
+          ),
+        );
+    }
+  }
+  if (
+    includeComponentHoles ||
+    includeRectCutouts ||
+    includeVisualOutlines ||
+    includeKeepoutHints ||
+    includeRefs
+  ) {
+    for (let i = 0; i < state.components.length; i++) {
+      const c = state.components[i];
+      const ref = c.ref || `${kicadRefPrefix(c.type)}${i + 1}`;
+      const rot = c.rotation || 0;
+      if (isDip8Socket(c)) {
+        if (includeComponentHoles) {
+          const pts = dip8SocketHoleCenters(c).map((p) => ({
+            x: tx(p.x),
+            y: ty(p.y),
+          }));
+          pts.forEach((p, pinIdx) =>
+            footprints.push(
+              kicadNPTHFootprint(
+                `${ref}_${pinIdx + 1}`,
+                c.name || c.type,
+                p.x,
+                p.y,
+                "circle",
+                c.holeDiameter || 1.05,
+                undefined,
+                0,
+                `${shortPartName(c)} pin ${pinIdx + 1}`,
+              ),
+            ),
+          );
+        }
+        if (includeVisualOutlines)
+          graphics.push(
+            ...kicadRectLines(
+              tx(c.x),
+              ty(c.y),
+              c.frontW ?? 10.2,
+              c.frontH ?? 10.2,
+              rot,
+              "Dwgs.User",
+              0.08,
+            ),
+          );
+        if (includeKeepoutHints)
+          graphics.push(
+            ...kicadRectLines(
+              tx(c.x),
+              ty(c.y),
+              c.keepoutW || 12,
+              c.keepoutH || 12,
+              rot,
+              "Cmts.User",
+              0.05,
+            ),
+          );
+      } else if (c.holeType === "rect") {
+        const w = c.holeW ?? c.frontW ?? c.holeDiameter ?? 3;
+        const h = c.holeH ?? c.frontH ?? c.holeDiameter ?? 3;
+        if (includeRectCutouts)
+          lines.push(
+            ...kicadRectLines(tx(c.x), ty(c.y), w, h, rot, "Edge.Cuts", 0.1),
+          );
+        if (includeVisualOutlines)
+          graphics.push(
+            ...kicadRectLines(
+              tx(c.x),
+              ty(c.y),
+              c.frontW ?? w,
+              c.frontH ?? h,
+              rot,
+              "Dwgs.User",
+              0.08,
+            ),
+          );
+      } else if (c.holeType === "slot") {
+        if (includeComponentHoles)
+          footprints.push(
+            kicadNPTHFootprint(
+              ref,
+              c.name || c.type,
+              tx(c.x),
+              ty(c.y),
+              "oval",
+              c.holeDiameter || 3,
+              c.slotLength || c.holeDiameter || 3,
+              rot,
+              shortPartName(c),
+              "y",
+            ),
+          );
+        if (includeKeepoutHints)
+          graphics.push(
+            ...kicadRectLines(
+              tx(c.x),
+              ty(c.y),
+              c.keepoutW || (c.holeDiameter || 3) + 2,
+              c.keepoutH || (c.slotLength || 3) + 2,
+              rot,
+              "Cmts.User",
+              0.05,
+            ),
+          );
+      } else {
+        if (includeComponentHoles)
+          footprints.push(
+            kicadNPTHFootprint(
+              ref,
+              c.name || c.type,
+              tx(c.x),
+              ty(c.y),
+              "circle",
+              c.holeDiameter || 3,
+              undefined,
+              rot,
+              shortPartName(c),
+            ),
+          );
+        if (includeVisualOutlines)
+          graphics.push(
+            kicadCircle(
+              tx(c.x),
+              ty(c.y),
+              (c.frontDiameter || c.holeDiameter || 3) / 2,
+              "Dwgs.User",
+              0.08,
+            ),
+          );
+        if (includeKeepoutHints)
+          graphics.push(
+            kicadCircle(
+              tx(c.x),
+              ty(c.y),
+              Math.max(c.keepoutW || 0, c.keepoutH || 0, c.holeDiameter || 3) /
+                2,
+              "Cmts.User",
+              0.05,
+            ),
+          );
+      }
+      if (includeRefs)
+        graphics.push(
+          kicadGrText(
+            ref,
+            tx(c.x),
+            ty(c.y) - Math.max(2.5, (c.frontDiameter || c.frontH || 6) / 2 + 2),
+            1.0,
+            0,
+            "F.SilkS",
+          ),
+        );
+    }
+  }
+  if (includeTextLabels) {
+    for (const t of state.textItems) {
+      if (!t.visible) continue;
+      graphics.push(
+        kicadGrText(
+          t.text || "TEXT",
+          tx(t.x),
+          ty(t.y),
+          Math.max(0.6, t.fontSizeMm || 1.2),
+          t.rotation || 0,
+          t.layer === "background" ? "B.SilkS" : "F.SilkS",
+        ),
+      );
+    }
+  }
+  const board = `(kicad_pcb
   (version 20221018)
   (generator "Panel Designer KiCad mechanical export")
   (general
@@ -49,8 +481,183 @@ function safeProjectFileName(name){const base=(name||'panel-layout').trim().repl
     (pad_to_mask_clearance 0)
     (grid_origin 0 0)
   )
-${lines.join('\n')}
-${graphics.join('\n')}
-${footprints.join('\n')}
+${lines.join("\n")}
+${graphics.join("\n")}
+${footprints.join("\n")}
 )
-`;const base=safeProjectFileName(state.projectMeta?.name||'panel-layout').replace(/\.json$/i,'');void saveTextFile(`${base}.kicad_pcb`,board,'application/x-kicad-pcb');}const LOCAL_PROJECTS_INDEX_KEY='eurorack-panel-local-project-index-v2';const LOCAL_PROJECT_RECORD_PREFIX='eurorack-panel-local-project-record-v2:';function safeStorageAvailable(){try{const k='__eurorack_panel_storage_test__';localStorage.setItem(k,'1');localStorage.removeItem(k);return true;}catch{return false;}}function localProjectRecordKey(id){return`${LOCAL_PROJECT_RECORD_PREFIX}${id}`;}function cleanLocalProjectRecord(p){if(!p||typeof p!=='object')return null;if(typeof p.data!=='string'||!p.data.trim())return null;const id=typeof p.id==='string'&&p.id?p.id:crypto.randomUUID();const name=typeof p.name==='string'&&p.name.trim()?p.name.trim():'Untitled panel';const updatedAt=typeof p.updatedAt==='string'&&p.updatedAt?p.updatedAt:new Date().toISOString();const sizeBytes=typeof p.sizeBytes==='number'&&Number.isFinite(p.sizeBytes)?p.sizeBytes:p.data.length;return{id,name,updatedAt,sizeBytes,data:p.data};}function loadLocalProjects(){if(!safeStorageAvailable())return[];const out=[];const seen=new Set();function add(rec){if(!rec)return;const key=rec.id||rec.name;if(seen.has(key))return;seen.add(key);out.push(rec);}try{const rawIndex=localStorage.getItem(LOCAL_PROJECTS_INDEX_KEY);const index=rawIndex?JSON.parse(rawIndex):[];if(Array.isArray(index)){for(const item of index){if(!item||typeof item!=='object')continue;const id=typeof item.id==='string'?item.id:'';if(!id)continue;const rawRecord=localStorage.getItem(localProjectRecordKey(id));if(rawRecord)add(cleanLocalProjectRecord(JSON.parse(rawRecord)));}}}catch{}try{const rawLegacy=localStorage.getItem(LOCAL_PROJECTS_KEY);const legacy=rawLegacy?JSON.parse(rawLegacy):[];if(Array.isArray(legacy)){for(const item of legacy)add(cleanLocalProjectRecord(item));}}catch{}try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i)||'';if(!k.startsWith(LOCAL_PROJECT_RECORD_PREFIX))continue;const raw=localStorage.getItem(k);if(!raw)continue;add(cleanLocalProjectRecord(JSON.parse(raw)));}}catch{}return out.sort((a,b)=>Date.parse(b.updatedAt)-Date.parse(a.updatedAt));}function storeLocalProjects(projects){if(!safeStorageAvailable())throw new Error('Browser storage is unavailable.');const normalized=projects.map(cleanLocalProjectRecord).filter(Boolean);const keepIds=new Set(normalized.map(p=>p.id));try{const toRemove=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i)||'';if(k.startsWith(LOCAL_PROJECT_RECORD_PREFIX)){const id=k.slice(LOCAL_PROJECT_RECORD_PREFIX.length);if(!keepIds.has(id))toRemove.push(k);}}toRemove.forEach(k=>localStorage.removeItem(k));}catch{}for(const p of normalized){localStorage.setItem(localProjectRecordKey(p.id),JSON.stringify(p));}const index=normalized.map(({id,name,updatedAt,sizeBytes})=>({id,name,updatedAt,sizeBytes}));localStorage.setItem(LOCAL_PROJECTS_INDEX_KEY,JSON.stringify(index));try{localStorage.setItem(LOCAL_PROJECTS_KEY,JSON.stringify(normalized));}catch{}}/* appConfirm moved to NativeDialogs.js *//* appNumberPrompt moved to NativeDialogs.js *//* appPatternPrompt moved to NativeDialogs.js *//* appTextPrompt moved to NativeDialogs.js */async function saveProjectToBrowser(state){if(!safeStorageAvailable()){alert('Browser storage is unavailable. Use Save Project File instead.');return;}const current=loadLocalProjects();const suggested=state.projectMeta?.name&&state.projectMeta.name!=='Untitled panel'?state.projectMeta.name:`Panel ${new Date().toLocaleDateString()}`;const name=await appTextPrompt({title:'Save to Browser',subtitle:'Stored locally in this browser. Export a project file too for a real backup.',label:'Project name',defaultValue:suggested,confirmText:'Save'});if(!name||!name.trim())return;const cleanName=name.trim();const data=serializeProject({...state,projectMeta:{...state.projectMeta,name:cleanName,updatedAt:new Date().toISOString()}},false);const existing=current.find(p=>p.name===cleanName);const rec={id:existing?.id||crypto.randomUUID(),name:cleanName,updatedAt:new Date().toISOString(),sizeBytes:data.length,data,};const next=[rec,...current.filter(p=>p.id!==rec.id&&p.name!==cleanName)].slice(0,30);try{storeLocalProjects(next);const verified=loadLocalProjects().some(p=>p.id===rec.id||p.name===rec.name);if(!verified)throw new Error('Saved project was not visible after write.');alert(`Saved “${cleanName}” to browser (${(data.length / 1024).toFixed(0)} KB). Export a project file too for real backup.`);}catch(err){console.error(err);alert(`Could not save to browser storage. The project may be too large or storage may be blocked. Use Save Project File instead.\n\n${String(err?.message || err)}`);}}function deleteLocalProject(id){storeLocalProjects(loadLocalProjects().filter(p=>p.id!==id));}
+`;
+  const base = safeProjectFileName(
+    state.projectMeta?.name || "panel-layout",
+  ).replace(/\.json$/i, "");
+  void saveTextFile(`${base}.kicad_pcb`, board, "application/x-kicad-pcb");
+}
+const LOCAL_PROJECTS_INDEX_KEY = "eurorack-panel-local-project-index-v2";
+const LOCAL_PROJECT_RECORD_PREFIX = "eurorack-panel-local-project-record-v2:";
+function safeStorageAvailable() {
+  try {
+    const k = "__eurorack_panel_storage_test__";
+    localStorage.setItem(k, "1");
+    localStorage.removeItem(k);
+    return true;
+  } catch {
+    return false;
+  }
+}
+function localProjectRecordKey(id) {
+  return `${LOCAL_PROJECT_RECORD_PREFIX}${id}`;
+}
+function cleanLocalProjectRecord(p) {
+  if (!p || typeof p !== "object") return null;
+  if (typeof p.data !== "string" || !p.data.trim()) return null;
+  const id = typeof p.id === "string" && p.id ? p.id : crypto.randomUUID();
+  const name =
+    typeof p.name === "string" && p.name.trim()
+      ? p.name.trim()
+      : "Untitled panel";
+  const updatedAt =
+    typeof p.updatedAt === "string" && p.updatedAt
+      ? p.updatedAt
+      : new Date().toISOString();
+  const sizeBytes =
+    typeof p.sizeBytes === "number" && Number.isFinite(p.sizeBytes)
+      ? p.sizeBytes
+      : p.data.length;
+  return { id, name, updatedAt, sizeBytes, data: p.data };
+}
+function loadLocalProjects() {
+  if (!safeStorageAvailable()) return [];
+  const out = [];
+  const seen = new Set();
+  function add(rec) {
+    if (!rec) return;
+    const key = rec.id || rec.name;
+    if (seen.has(key)) return;
+    seen.add(key);
+    out.push(rec);
+  }
+  try {
+    const rawIndex = localStorage.getItem(LOCAL_PROJECTS_INDEX_KEY);
+    const index = rawIndex ? JSON.parse(rawIndex) : [];
+    if (Array.isArray(index)) {
+      for (const item of index) {
+        if (!item || typeof item !== "object") continue;
+        const id = typeof item.id === "string" ? item.id : "";
+        if (!id) continue;
+        const rawRecord = localStorage.getItem(localProjectRecordKey(id));
+        if (rawRecord) add(cleanLocalProjectRecord(JSON.parse(rawRecord)));
+      }
+    }
+  } catch {}
+  try {
+    const rawLegacy = localStorage.getItem(LOCAL_PROJECTS_KEY);
+    const legacy = rawLegacy ? JSON.parse(rawLegacy) : [];
+    if (Array.isArray(legacy)) {
+      for (const item of legacy) add(cleanLocalProjectRecord(item));
+    }
+  } catch {}
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i) || "";
+      if (!k.startsWith(LOCAL_PROJECT_RECORD_PREFIX)) continue;
+      const raw = localStorage.getItem(k);
+      if (!raw) continue;
+      add(cleanLocalProjectRecord(JSON.parse(raw)));
+    }
+  } catch {}
+  return out.sort((a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt));
+}
+function storeLocalProjects(projects) {
+  if (!safeStorageAvailable())
+    throw new Error("Browser storage is unavailable.");
+  const normalized = projects.map(cleanLocalProjectRecord).filter(Boolean);
+  const keepIds = new Set(normalized.map((p) => p.id));
+  try {
+    const toRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i) || "";
+      if (k.startsWith(LOCAL_PROJECT_RECORD_PREFIX)) {
+        const id = k.slice(LOCAL_PROJECT_RECORD_PREFIX.length);
+        if (!keepIds.has(id)) toRemove.push(k);
+      }
+    }
+    toRemove.forEach((k) => localStorage.removeItem(k));
+  } catch {}
+  for (const p of normalized) {
+    localStorage.setItem(localProjectRecordKey(p.id), JSON.stringify(p));
+  }
+  const index = normalized.map(({ id, name, updatedAt, sizeBytes }) => ({
+    id,
+    name,
+    updatedAt,
+    sizeBytes,
+  }));
+  localStorage.setItem(LOCAL_PROJECTS_INDEX_KEY, JSON.stringify(index));
+  try {
+    localStorage.setItem(LOCAL_PROJECTS_KEY, JSON.stringify(normalized));
+  } catch {}
+}
+/* appConfirm moved to NativeDialogs.js */ /* appNumberPrompt moved to NativeDialogs.js */ /* appPatternPrompt moved to NativeDialogs.js */ /* appTextPrompt moved to NativeDialogs.js */ async function saveProjectToBrowser(
+  state,
+) {
+  if (!safeStorageAvailable()) {
+    alert("Browser storage is unavailable. Use Save Project File instead.");
+    return;
+  }
+  const current = loadLocalProjects();
+  const suggested =
+    state.projectMeta?.name && state.projectMeta.name !== "Untitled panel"
+      ? state.projectMeta.name
+      : `Panel ${new Date().toLocaleDateString()}`;
+  const name = await appTextPrompt({
+    title: "Save to Browser",
+    subtitle:
+      "Stored locally in this browser. Export a project file too for a real backup.",
+    label: "Project name",
+    defaultValue: suggested,
+    confirmText: "Save",
+  });
+  if (!name || !name.trim()) return;
+  const cleanName = name.trim();
+  const data = serializeProject(
+    {
+      ...state,
+      projectMeta: {
+        ...state.projectMeta,
+        name: cleanName,
+        updatedAt: new Date().toISOString(),
+      },
+    },
+    false,
+  );
+  const existing = current.find((p) => p.name === cleanName);
+  const rec = {
+    id: existing?.id || crypto.randomUUID(),
+    name: cleanName,
+    updatedAt: new Date().toISOString(),
+    sizeBytes: data.length,
+    data,
+  };
+  const next = [
+    rec,
+    ...current.filter((p) => p.id !== rec.id && p.name !== cleanName),
+  ].slice(0, 30);
+  try {
+    storeLocalProjects(next);
+    const verified = loadLocalProjects().some(
+      (p) => p.id === rec.id || p.name === rec.name,
+    );
+    if (!verified)
+      throw new Error("Saved project was not visible after write.");
+    alert(
+      `Saved “${cleanName}” to browser (${(data.length / 1024).toFixed(0)} KB). Export a project file too for real backup.`,
+    );
+  } catch (err) {
+    console.error(err);
+    alert(
+      `Could not save to browser storage. The project may be too large or storage may be blocked. Use Save Project File instead.\n\n${String(err?.message || err)}`,
+    );
+  }
+}
+function deleteLocalProject(id) {
+  storeLocalProjects(loadLocalProjects().filter((p) => p.id !== id));
+}

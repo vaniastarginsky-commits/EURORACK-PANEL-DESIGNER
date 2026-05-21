@@ -16,8 +16,8 @@ async function loadChromium() {
 const ROOT = path.resolve(__dirname, "..");
 const OUT_DIR = path.resolve(ROOT, process.env.DESIGN_REVIEW_OUT || "design-review/after");
 const BASE_URL = process.env.BASE_URL || "http://127.0.0.1:4173/";
-const LOCAL_REACT = "/Users/weedhash/Desktop/PANEL+SITE/vendor/react.production.min.js";
-const LOCAL_REACT_DOM = "/Users/weedhash/Desktop/PANEL+SITE/vendor/react-dom.production.min.js";
+const LOCAL_REACT = path.resolve(ROOT, "vendor/react.production.min.js");
+const LOCAL_REACT_DOM = path.resolve(ROOT, "vendor/react-dom.production.min.js");
 
 const desktop = { width: 1440, height: 900 };
 const mobile = { width: 390, height: 844, isMobile: true };

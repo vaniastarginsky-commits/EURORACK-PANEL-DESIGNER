@@ -16,7 +16,11 @@ function Topbar({
     function onDocPointerDown(e) {
       const target = e.target;
       if (!target) return;
-      if (target.closest(".toolbar-popover") || target.closest(".toolbar-menu-trigger")) return;
+      if (
+        target.closest(".toolbar-popover") ||
+        target.closest(".toolbar-menu-trigger")
+      )
+        return;
       setOpenMenu(null);
     }
     function onKey(e) {
@@ -37,12 +41,18 @@ function Topbar({
 
   function toggleMenu(name, e) {
     const r = e.currentTarget.getBoundingClientRect();
-    const estimatedWidth = sectionMenus.includes(name) ? 360 : name === "help" ? 390 : 250;
-    const left = Math.max(8, Math.min(r.left, window.innerWidth - estimatedWidth - 8));
+    const estimatedWidth = sectionMenus.includes(name)
+      ? 360
+      : name === "help"
+        ? 390
+        : 250;
+    const left = Math.max(
+      8,
+      Math.min(r.left, window.innerWidth - estimatedWidth - 8),
+    );
     setMenuPos({ left, top: r.bottom + 6 });
     setOpenMenu(openMenu === name ? null : name);
   }
-
 
   function menuButton(name, label) {
     return React.createElement(
@@ -67,15 +77,26 @@ function Topbar({
       React.createElement(
         "span",
         { className: "app-brand", title: "Panel Designer" },
-        React.createElement("span", { className: "app-logo app-logo-fallback", "aria-hidden": "true" }, "PD"),
-        React.createElement("span", { className: "app-title" }, "PANEL DESIGNER"),
+        React.createElement(
+          "span",
+          { className: "app-logo app-logo-fallback", "aria-hidden": "true" },
+          "PD",
+        ),
+        React.createElement(
+          "span",
+          { className: "app-title" },
+          "PANEL DESIGNER",
+        ),
       ),
       React.createElement(
         "div",
         { className: "topbar-actions" },
         React.createElement(
           "div",
-          { className: "topbar-work-actions", "aria-label": "Panel setup menus" },
+          {
+            className: "topbar-work-actions",
+            "aria-label": "Panel setup menus",
+          },
           menuButton("project", "Project"),
           menuButton("panel", "Panel"),
           menuButton("add", "Add"),
@@ -115,9 +136,15 @@ function Topbar({
           },
           openMenu === "project" && React.createElement(ProjectPanel, null),
           openMenu === "panel" && React.createElement(PanelSettings, null),
-          openMenu === "add" && React.createElement(AddMenuContent, { onClose: () => setOpenMenu(null) }),
+          openMenu === "add" &&
+            React.createElement(AddMenuContent, {
+              onClose: () => setOpenMenu(null),
+            }),
           openMenu === "text" && React.createElement(TextPanel, null),
-          openMenu === "templates" && React.createElement(TemplatesMenuContent, { onClose: () => setOpenMenu(null) }),
+          openMenu === "templates" &&
+            React.createElement(TemplatesMenuContent, {
+              onClose: () => setOpenMenu(null),
+            }),
           openMenu === "file" &&
             React.createElement(FileMenuContent, {
               onClose: () => setOpenMenu(null),

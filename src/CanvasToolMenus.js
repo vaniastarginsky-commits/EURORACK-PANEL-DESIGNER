@@ -19,12 +19,18 @@ function CanvasToolMoreMenu({
       { className: "menu-grid" },
       React.createElement(
         "button",
-        { className: clearanceMode ? "active" : "", onClick: onToggleClearanceMode },
+        {
+          className: clearanceMode ? "active" : "",
+          onClick: onToggleClearanceMode,
+        },
         "Clearance",
       ),
       React.createElement(
         "button",
-        { className: showSafeZones ? "active" : "", onClick: onToggleSafeZones },
+        {
+          className: showSafeZones ? "active" : "",
+          onClick: onToggleSafeZones,
+        },
         showSafeZones ? "Hide safe zones" : "Safe zones",
       ),
       React.createElement(
@@ -88,7 +94,11 @@ function CanvasToolViewMenu({
         ),
       ),
     ),
-    React.createElement("div", { className: "menu-title", style: { marginTop: 10 } }, "Render mode"),
+    React.createElement(
+      "div",
+      { className: "menu-title", style: { marginTop: 10 } },
+      "Render mode",
+    ),
     React.createElement(
       "div",
       { className: "menu-grid two" },
@@ -97,25 +107,38 @@ function CanvasToolViewMenu({
           "button",
           {
             key: mode,
-            className: (state.hardwareRenderMode || "auto") === mode ? "active" : "",
+            className:
+              (state.hardwareRenderMode || "auto") === mode ? "active" : "",
             onClick: () => dispatch({ type: "SET_HARDWARE_RENDER_MODE", mode }),
           },
-          mode === "realistic" ? "Realistic" : mode.charAt(0).toUpperCase() + mode.slice(1),
+          mode === "realistic"
+            ? "Realistic"
+            : mode.charAt(0).toUpperCase() + mode.slice(1),
         ),
       ),
     ),
-    React.createElement("div", { className: "menu-title", style: { marginTop: 10 } }, "Overlays"),
+    React.createElement(
+      "div",
+      { className: "menu-title", style: { marginTop: 10 } },
+      "Overlays",
+    ),
     React.createElement(
       "div",
       { className: "menu-grid two" },
       React.createElement(
         "button",
-        { className: showSafeZones ? "active" : "", onClick: onToggleSafeZones },
+        {
+          className: showSafeZones ? "active" : "",
+          onClick: onToggleSafeZones,
+        },
         showSafeZones ? "Safe zones ON" : "Safe zones",
       ),
       React.createElement(
         "button",
-        { className: clearanceMode ? "active" : "", onClick: onToggleClearanceMode },
+        {
+          className: clearanceMode ? "active" : "",
+          onClick: onToggleClearanceMode,
+        },
         clearanceMode ? "Clearance ON" : "Clearance",
       ),
     ),
@@ -138,7 +161,8 @@ function CanvasToolSnapMenu({ snapSettings, onSnapSettingsChange }) {
         {
           className: "tb-select",
           value: state.grid.size,
-          onChange: (e) => dispatch({ type: "SET_GRID_SIZE", size: +e.target.value }),
+          onChange: (e) =>
+            dispatch({ type: "SET_GRID_SIZE", size: +e.target.value }),
         },
         React.createElement("option", { value: 0.25 }, "0.25 mm"),
         React.createElement("option", { value: 0.5 }, "0.5 mm"),
@@ -168,7 +192,11 @@ function CanvasToolSnapMenu({ snapSettings, onSnapSettingsChange }) {
         "5 mm major grid",
       ),
     ),
-    React.createElement("div", { className: "menu-title", style: { marginTop: 10 } }, "Snap"),
+    React.createElement(
+      "div",
+      { className: "menu-title", style: { marginTop: 10 } },
+      "Snap",
+    ),
     React.createElement(
       "div",
       { className: "menu-grid two" },
@@ -176,7 +204,8 @@ function CanvasToolSnapMenu({ snapSettings, onSnapSettingsChange }) {
         "button",
         {
           className: snapSettings.grid ? "active" : "",
-          onClick: () => onSnapSettingsChange({ ...snapSettings, grid: !snapSettings.grid }),
+          onClick: () =>
+            onSnapSettingsChange({ ...snapSettings, grid: !snapSettings.grid }),
         },
         "Grid snap",
       ),
@@ -184,7 +213,11 @@ function CanvasToolSnapMenu({ snapSettings, onSnapSettingsChange }) {
         "button",
         {
           className: snapSettings.panelEdges ? "active" : "",
-          onClick: () => onSnapSettingsChange({ ...snapSettings, panelEdges: !snapSettings.panelEdges }),
+          onClick: () =>
+            onSnapSettingsChange({
+              ...snapSettings,
+              panelEdges: !snapSettings.panelEdges,
+            }),
         },
         "Panel edges",
       ),
@@ -192,7 +225,11 @@ function CanvasToolSnapMenu({ snapSettings, onSnapSettingsChange }) {
         "button",
         {
           className: snapSettings.pcbEdges ? "active" : "",
-          onClick: () => onSnapSettingsChange({ ...snapSettings, pcbEdges: !snapSettings.pcbEdges }),
+          onClick: () =>
+            onSnapSettingsChange({
+              ...snapSettings,
+              pcbEdges: !snapSettings.pcbEdges,
+            }),
         },
         "PCB edges",
       ),
@@ -201,12 +238,19 @@ function CanvasToolSnapMenu({ snapSettings, onSnapSettingsChange }) {
         {
           className: snapSettings.componentCenters ? "active" : "",
           onClick: () =>
-            onSnapSettingsChange({ ...snapSettings, componentCenters: !snapSettings.componentCenters }),
+            onSnapSettingsChange({
+              ...snapSettings,
+              componentCenters: !snapSettings.componentCenters,
+            }),
         },
         "Centers",
       ),
     ),
-    React.createElement("label", { style: { marginTop: 8 } }, "Snap distance (mm)"),
+    React.createElement(
+      "label",
+      { style: { marginTop: 8 } },
+      "Snap distance (mm)",
+    ),
     React.createElement("input", {
       type: "number",
       step: 0.25,
@@ -214,7 +258,10 @@ function CanvasToolSnapMenu({ snapSettings, onSnapSettingsChange }) {
       max: 5,
       value: snapSettings.distance,
       onChange: (e) =>
-        onSnapSettingsChange({ ...snapSettings, distance: Math.max(0.25, parseFloat(e.target.value) || 1) }),
+        onSnapSettingsChange({
+          ...snapSettings,
+          distance: Math.max(0.25, parseFloat(e.target.value) || 1),
+        }),
     }),
   );
 }

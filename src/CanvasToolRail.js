@@ -27,7 +27,11 @@ function CanvasToolRail({
     function onDocPointerDown(e) {
       const target = e.target;
       if (!target) return;
-      if (target.closest(".canvas-tool-rail") || target.closest(".canvas-tool-popover")) return;
+      if (
+        target.closest(".canvas-tool-rail") ||
+        target.closest(".canvas-tool-popover")
+      )
+        return;
       setOpenMenu(null);
     }
     function onKey(e) {
@@ -62,12 +66,18 @@ function CanvasToolRail({
         title: label,
         ...rest,
       },
-      React.createElement("span", { className: "canvas-tool-icon", "aria-hidden": "true" }, icon),
+      React.createElement(
+        "span",
+        { className: "canvas-tool-icon", "aria-hidden": "true" },
+        icon,
+      ),
       React.createElement("span", { className: "canvas-tool-label" }, label),
     );
   }
 
-  const popoverStyle = { top: Math.max(58, Math.min(menuTop, window.innerHeight - 260)) };
+  const popoverStyle = {
+    top: Math.max(58, Math.min(menuTop, window.innerHeight - 260)),
+  };
 
   return React.createElement(
     React.Fragment,
