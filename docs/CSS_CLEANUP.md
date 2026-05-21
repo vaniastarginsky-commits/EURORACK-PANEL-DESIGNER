@@ -29,18 +29,20 @@ Tracks dead CSS removal on the `ux-polish` branch. Target file: `styles.css`.
 | `e893194` | style: remove shadowed KiCad export CSS (3 rules) |
 | `931592c` | test: add topbar popover visual coverage |
 | `5a29a5d` | style: remove shadowed topbar popover CSS |
+| `defec3e` | style: remove shadowed template card title CSS (ri359 line-sharing resolved) |
+| `39ceb7c` | style: remove shadowed export structural CSS (panel dimensions + tab stacking) |
 
 ---
 
 ## Current state
 
-**Approximate `!important` count:** 3,095 (measured after 5a29a5d)
+**Approximate `!important` count:** 3,084 (measured after 39ceb7c)
 
-**Cascade audit (fresh after 5a29a5d):**
-- Total lines: 4,176
-- Raw rules parsed: 910
-- !important count: 3,095
-- Whole-rule deletion candidates: 14
+**Cascade audit (fresh after 39ceb7c):**
+- Total lines: 4,168
+- Raw rules parsed: 906
+- !important count: 3,084
+- Whole-rule deletion candidates: 10 (all on line 2 — S1 surgery only)
 - Selector-list item removal candidates: 40
 - Visual QA coverage: 20/20 screenshots
 
@@ -125,6 +127,21 @@ Rule removed: `.toolbar-popover.topbar-section-popover { width: min(360px, calc(
 
 Rationale: the early non-important `width` rule was fully shadowed by the later scoped topbar popover repair rule, which sets the same `width` plus `max-width` and `overflow-x` with `!important`. Coverage was unblocked by `desktop-topbar-section-popover`.
 
+### Template card title CSS — deferred ri359 resolved (commit `defec3e`)
+1 shadowed rule removed via substring extraction from minified L241, −3 `!important`. Verify: 20/20.
+
+Rule removed: `.template-card-main h3,.template-card-main strong{font-size:14px!important;color:#f2dfb2!important;margin:0 0 4px!important}` — this rule was deferred in the non-line-2 mixed batch because it shared the same minified source line with the live `.template-card-actions{...}` rule. Resolution: the dead rule prefix was stripped, leaving the live rule intact on that line.
+
+### Export structural CSS cleanup — panel dimensions and tab stacking (commit `39ceb7c`)
+3 whole-rule deletions, −8 lines, −8 `!important`. Verify: 20/20.
+
+Rules removed:
+- `.export-dialog-panel{grid-template-rows:auto auto minmax(0,1fr) auto!important;width:min(1080px,calc(100vw - 44px))!important}` — v429 panel dimensions (shadowed by v444 winner)
+- `.export-tab-body > *{position:relative!important;z-index:2!important;pointer-events:auto!important}` — stacking context override (deferred due to z-index/pointer-events concern; winner confirmed present)
+- `.export-dialog-panel{width:min(1180px,calc(100vw - 44px))!important;height:min(790px,calc(100vh - 44px))!important;grid-template-rows:auto minmax(300px,40vh) auto minmax(250px,1fr)!important;}` — v437 panel dimensions (shadowed by v444 winner)
+
+Note: `desktop-export-report` visual output confirmed unchanged before/after (before/after PNG hashes identical). The removal of `.export-tab-body > *` stacking did not affect any screenshot.
+
 ---
 
 ## Deferred — do not touch without Codex review
@@ -168,27 +185,25 @@ Rules that differ in property values (not just shadow/override) require manual v
 ~~**Export dialog cascade batch #3A** (15 rules)~~ ✅ Done (commit `281b507`)
 ~~**KiCad export CSS cleanup** (3 rules)~~ ✅ Done (commit `e893194`)
 ~~**Topbar section popover shadowed rule** (`.toolbar-popover.topbar-section-popover`)~~ ✅ Done (coverage `931592c`, cleanup `5a29a5d`)
+~~**Template card title CSS** (ri359 line-sharing resolved)~~ ✅ Done (commit `defec3e`)
+~~**Export structural CSS** (panel dimensions ×2 + tab stacking)~~ ✅ Done (commit `39ceb7c`)
 
-**Export dialog remaining deferred:**
-- `.export-dialog-panel` dimensions — two occurrences (v429 + v437); width, height, grid-template-rows; high structural risk.
-- `.export-tab-body > *` — z-index:2 + pointer-events:auto; stacking context concern.
+**Fresh audit (post-39ceb7c) — 10 whole-rule candidates, all on line 2:**
 
-**Fresh audit (post-topbar cleanup) — 14 whole-rule candidates, 40 selectorListItem candidates:**
+All remaining whole-rule candidates are in the v376-clean-style section at `lineStart: 2` (the large minified base block). No non-line-2 whole-rule work remains.
 
-Top categories:
-- **v376-clean-style (10 rules):** `.sidebar-left`, `.sidebar-right`, `.app-brand`, `.component-hover-card`, `.template-manager-backdrop`, `.local-projects-panel`, `.inline-modal-card`, `.inline-modal-title`, `.inline-modal-actions`, `.inline-modal-actions button.danger` — all on line 2 (S1 surgery required).
-- **v429-templates-export-modal-css-fix (2 rules):** `.template-card-main h3,.template-card-main strong`, `.export-dialog-panel` (deferred).
-- **v433-desktop-dock-grid-export-templates-fix (1 rule):** `.export-tab-body > *` (deferred).
-- **v437-export-layout-polish (1 rule):** `.export-dialog-panel` (deferred).
+Line-2 candidates: `.sidebar-left` (border-right), `.sidebar-right` (border-left), `.app-brand` (display/gap), `.component-hover-card` (min-width), `.template-manager-backdrop` (z-index), `.local-projects-panel` (width), `.inline-modal-card` (width/background/border/box-shadow/padding), `.inline-modal-title` (typography), `.inline-modal-actions` (display/gap), `.inline-modal-actions button.danger` (background/color/border-color).
 
-**Next recommended Codex batch:**
-Review the two remaining export dialog structural candidates (`.export-dialog-panel` ×2, `.export-tab-body > *`) separately before deletion. The remaining line-2 candidates should be handled as an explicit S1 surgery operation.
+**Next recommended batch: S1 line-2 surgery**
+All 10 remaining whole-rule candidates require editing the large minified line 2. This is the last category of whole-rule candidates. Selector-list surgery for mixed line-2 selectors (`.inspector-rail-popover` etc.) also remains. Requires Codex review of the minified-line editing approach before proceeding.
+
+**Selector-list item candidates (40 remaining):**
+These require stripping individual dead selectors from mixed rules — separate Codex-reviewed operation.
 
 **Remaining visual-only candidates (line-2 surgery):**
-Candidates are all on the minified line 2 (S1).
 `.sidebar-left`/`.sidebar-right` border: safe but require minified-line surgery.
 `.inline-modal-title`, `.inline-modal-actions button.danger`: value differences — require Codex review.
-All must be treated as a single L2 surgery operation.
+All must be treated as a single L2 surgery operation alongside the dead-selector removals.
 
 ---
 

@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-05-21T20:33:10.752Z",
+  "generatedAt": "2026-05-21T21:25:27.343Z",
   "sourceFile": "styles.css",
   "stats": {
-    "totalLines": 4176,
-    "rawRulesParsed": 910,
-    "expandedEntries": 1668,
+    "totalLines": 4168,
+    "rawRulesParsed": 906,
+    "expandedEntries": 1663,
     "uniqueSelKeys": 1330,
-    "duplicatedSelKeys": 218,
-    "importantCount": 3095,
-    "shadowedDeclarations": 716,
-    "wholeRuleCandidateCount": 14,
+    "duplicatedSelKeys": 215,
+    "importantCount": 3084,
+    "shadowedDeclarations": 702,
+    "wholeRuleCandidateCount": 10,
     "selectorListItemCandidateCount": 40
   },
   "wholeRuleCandidates": [
@@ -143,8 +143,8 @@
             "shadowedValue": "230px",
             "shadowedImportant": true,
             "winner": {
-              "ruleIndex": 590,
-              "lineStart": 1665,
+              "ruleIndex": 586,
+              "lineStart": 1657,
               "value": "0",
               "important": true,
               "section": "v442-component-info-hud-card"
@@ -172,8 +172,8 @@
             "shadowedValue": "6500",
             "shadowedImportant": false,
             "winner": {
-              "ruleIndex": 383,
-              "lineStart": 281,
+              "ruleIndex": 381,
+              "lineStart": 280,
               "value": "2147483200",
               "important": true,
               "section": "v432-templates-export-layout-fix"
@@ -230,8 +230,8 @@
             "shadowedValue": "min(420px,100%)",
             "shadowedImportant": false,
             "winner": {
-              "ruleIndex": 658,
-              "lineStart": 2206,
+              "ruleIndex": 654,
+              "lineStart": 2198,
               "value": "min(440px,calc(100vw - 36px))",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -242,8 +242,8 @@
             "shadowedValue": "linear-gradient(135deg,rgba(12,12,10,.98),rgba(4,4,4,.98))",
             "shadowedImportant": false,
             "winner": {
-              "ruleIndex": 658,
-              "lineStart": 2206,
+              "ruleIndex": 654,
+              "lineStart": 2198,
               "value": "#070706",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -254,8 +254,8 @@
             "shadowedValue": "1px solid rgba(215,196,155,.22)",
             "shadowedImportant": false,
             "winner": {
-              "ruleIndex": 658,
-              "lineStart": 2206,
+              "ruleIndex": 654,
+              "lineStart": 2198,
               "value": "1px solid rgba(215,196,155,.28)",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -266,8 +266,8 @@
             "shadowedValue": "0 18px 46px rgba(0,0,0,.62)",
             "shadowedImportant": false,
             "winner": {
-              "ruleIndex": 658,
-              "lineStart": 2206,
+              "ruleIndex": 654,
+              "lineStart": 2198,
               "value": "0 28px 90px rgba(0,0,0,.88)",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -278,8 +278,8 @@
             "shadowedValue": "14px",
             "shadowedImportant": false,
             "winner": {
-              "ruleIndex": 658,
-              "lineStart": 2206,
+              "ruleIndex": 654,
+              "lineStart": 2198,
               "value": "16px",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -307,8 +307,8 @@
             "shadowedValue": "#e8ddc9",
             "shadowedImportant": false,
             "winner": {
-              "ruleIndex": 659,
-              "lineStart": 2226,
+              "ruleIndex": 655,
+              "lineStart": 2218,
               "value": "#eee7da",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -319,8 +319,8 @@
             "shadowedValue": "850",
             "shadowedImportant": false,
             "winner": {
-              "ruleIndex": 659,
-              "lineStart": 2226,
+              "ruleIndex": 655,
+              "lineStart": 2218,
               "value": "900",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -331,8 +331,8 @@
             "shadowedValue": ".14em",
             "shadowedImportant": false,
             "winner": {
-              "ruleIndex": 659,
-              "lineStart": 2226,
+              "ruleIndex": 655,
+              "lineStart": 2218,
               "value": ".18em",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -343,8 +343,8 @@
             "shadowedValue": "uppercase",
             "shadowedImportant": false,
             "winner": {
-              "ruleIndex": 659,
-              "lineStart": 2226,
+              "ruleIndex": 655,
+              "lineStart": 2218,
               "value": "uppercase",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -355,8 +355,8 @@
             "shadowedValue": "12px",
             "shadowedImportant": false,
             "winner": {
-              "ruleIndex": 659,
-              "lineStart": 2226,
+              "ruleIndex": 655,
+              "lineStart": 2218,
               "value": "14px",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -384,8 +384,8 @@
             "shadowedValue": "flex",
             "shadowedImportant": false,
             "winner": {
-              "ruleIndex": 662,
-              "lineStart": 2255,
+              "ruleIndex": 658,
+              "lineStart": 2247,
               "value": "flex",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -396,8 +396,8 @@
             "shadowedValue": "flex-end",
             "shadowedImportant": false,
             "winner": {
-              "ruleIndex": 662,
-              "lineStart": 2255,
+              "ruleIndex": 658,
+              "lineStart": 2247,
               "value": "flex-end",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -408,8 +408,8 @@
             "shadowedValue": "8px",
             "shadowedImportant": false,
             "winner": {
-              "ruleIndex": 662,
-              "lineStart": 2255,
+              "ruleIndex": 658,
+              "lineStart": 2247,
               "value": "8px",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -420,8 +420,8 @@
             "shadowedValue": "14px",
             "shadowedImportant": false,
             "winner": {
-              "ruleIndex": 662,
-              "lineStart": 2255,
+              "ruleIndex": 658,
+              "lineStart": 2247,
               "value": "14px",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -449,8 +449,8 @@
             "shadowedValue": "#170807",
             "shadowedImportant": true,
             "winner": {
-              "ruleIndex": 665,
-              "lineStart": 2277,
+              "ruleIndex": 661,
+              "lineStart": 2269,
               "value": "#160504",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -461,8 +461,8 @@
             "shadowedValue": "#efc2bc",
             "shadowedImportant": true,
             "winner": {
-              "ruleIndex": 665,
-              "lineStart": 2277,
+              "ruleIndex": 661,
+              "lineStart": 2269,
               "value": "#f1c7c1",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -473,251 +473,11 @@
             "shadowedValue": "rgba(138,48,42,.66)",
             "shadowedImportant": true,
             "winner": {
-              "ruleIndex": 665,
-              "lineStart": 2277,
+              "ruleIndex": 661,
+              "lineStart": 2269,
               "value": "rgba(138,48,42,.75)",
               "important": true,
               "section": "v445-center-inline-template-confirm"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "ruleIndex": 353,
-      "lineStart": 235,
-      "section": "v429-templates-export-modal-css-fix",
-      "media": null,
-      "fullSelector": ".template-card-main h3,.template-card-main strong",
-      "allIndividuals": [
-        ".template-card-main h3",
-        ".template-card-main strong"
-      ],
-      "shadowedIndividuals": [
-        ".template-card-main h3",
-        ".template-card-main strong"
-      ],
-      "propsByIndividual": {
-        ".template-card-main h3": [
-          {
-            "prop": "font-size",
-            "shadowedValue": "14px",
-            "shadowedImportant": true,
-            "winner": {
-              "ruleIndex": 396,
-              "lineStart": 331,
-              "value": "14px",
-              "important": true,
-              "section": "v432-templates-export-layout-fix"
-            }
-          },
-          {
-            "prop": "color",
-            "shadowedValue": "#f2dfb2",
-            "shadowedImportant": true,
-            "winner": {
-              "ruleIndex": 396,
-              "lineStart": 331,
-              "value": "#f2dfb2",
-              "important": true,
-              "section": "v432-templates-export-layout-fix"
-            }
-          },
-          {
-            "prop": "margin",
-            "shadowedValue": "0 0 4px",
-            "shadowedImportant": true,
-            "winner": {
-              "ruleIndex": 396,
-              "lineStart": 331,
-              "value": "0 0 4px",
-              "important": true,
-              "section": "v432-templates-export-layout-fix"
-            }
-          }
-        ],
-        ".template-card-main strong": [
-          {
-            "prop": "font-size",
-            "shadowedValue": "14px",
-            "shadowedImportant": true,
-            "winner": {
-              "ruleIndex": 396,
-              "lineStart": 331,
-              "value": "14px",
-              "important": true,
-              "section": "v432-templates-export-layout-fix"
-            }
-          },
-          {
-            "prop": "color",
-            "shadowedValue": "#f2dfb2",
-            "shadowedImportant": true,
-            "winner": {
-              "ruleIndex": 396,
-              "lineStart": 331,
-              "value": "#f2dfb2",
-              "important": true,
-              "section": "v432-templates-export-layout-fix"
-            }
-          },
-          {
-            "prop": "margin",
-            "shadowedValue": "0 0 4px",
-            "shadowedImportant": true,
-            "winner": {
-              "ruleIndex": 396,
-              "lineStart": 331,
-              "value": "0 0 4px",
-              "important": true,
-              "section": "v432-templates-export-layout-fix"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "ruleIndex": 357,
-      "lineStart": 239,
-      "section": "v429-templates-export-modal-css-fix",
-      "media": null,
-      "fullSelector": ".export-dialog-panel",
-      "allIndividuals": [
-        ".export-dialog-panel"
-      ],
-      "shadowedIndividuals": [
-        ".export-dialog-panel"
-      ],
-      "propsByIndividual": {
-        ".export-dialog-panel": [
-          {
-            "prop": "grid-template-rows",
-            "shadowedValue": "auto auto minmax(0,1fr) auto",
-            "shadowedImportant": true,
-            "winner": {
-              "ruleIndex": 610,
-              "lineStart": 1903,
-              "value": "76px 250px 44px minmax(0,1fr)",
-              "important": true,
-              "section": "v444-export-tabs-final-fit"
-            }
-          },
-          {
-            "prop": "width",
-            "shadowedValue": "min(1080px,calc(100vw - 44px))",
-            "shadowedImportant": true,
-            "winner": {
-              "ruleIndex": 610,
-              "lineStart": 1903,
-              "value": "min(1180px,calc(100vw - 36px))",
-              "important": true,
-              "section": "v444-export-tabs-final-fit"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "ruleIndex": 431,
-      "lineStart": 441,
-      "section": "v433-desktop-dock-grid-export-templates-fix",
-      "media": null,
-      "fullSelector": ".export-tab-body > *",
-      "allIndividuals": [
-        ".export-tab-body > *"
-      ],
-      "shadowedIndividuals": [
-        ".export-tab-body > *"
-      ],
-      "propsByIndividual": {
-        ".export-tab-body > *": [
-          {
-            "prop": "position",
-            "shadowedValue": "relative",
-            "shadowedImportant": true,
-            "winner": {
-              "ruleIndex": 522,
-              "lineStart": 1118,
-              "value": "relative",
-              "important": true,
-              "section": "v439-export-senior-layout-pass"
-            }
-          },
-          {
-            "prop": "z-index",
-            "shadowedValue": "2",
-            "shadowedImportant": true,
-            "winner": {
-              "ruleIndex": 522,
-              "lineStart": 1118,
-              "value": "2",
-              "important": true,
-              "section": "v439-export-senior-layout-pass"
-            }
-          },
-          {
-            "prop": "pointer-events",
-            "shadowedValue": "auto",
-            "shadowedImportant": true,
-            "winner": {
-              "ruleIndex": 522,
-              "lineStart": 1118,
-              "value": "auto",
-              "important": true,
-              "section": "v439-export-senior-layout-pass"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "ruleIndex": 476,
-      "lineStart": 716,
-      "section": "v437-export-layout-polish",
-      "media": null,
-      "fullSelector": ".export-dialog-panel",
-      "allIndividuals": [
-        ".export-dialog-panel"
-      ],
-      "shadowedIndividuals": [
-        ".export-dialog-panel"
-      ],
-      "propsByIndividual": {
-        ".export-dialog-panel": [
-          {
-            "prop": "width",
-            "shadowedValue": "min(1180px,calc(100vw - 44px))",
-            "shadowedImportant": true,
-            "winner": {
-              "ruleIndex": 610,
-              "lineStart": 1903,
-              "value": "min(1180px,calc(100vw - 36px))",
-              "important": true,
-              "section": "v444-export-tabs-final-fit"
-            }
-          },
-          {
-            "prop": "height",
-            "shadowedValue": "min(790px,calc(100vh - 44px))",
-            "shadowedImportant": true,
-            "winner": {
-              "ruleIndex": 610,
-              "lineStart": 1903,
-              "value": "min(820px,calc(100vh - 36px))",
-              "important": true,
-              "section": "v444-export-tabs-final-fit"
-            }
-          },
-          {
-            "prop": "grid-template-rows",
-            "shadowedValue": "auto minmax(300px,40vh) auto minmax(250px,1fr)",
-            "shadowedImportant": true,
-            "winner": {
-              "ruleIndex": 610,
-              "lineStart": 1903,
-              "value": "76px 250px 44px minmax(0,1fr)",
-              "important": true,
-              "section": "v444-export-tabs-final-fit"
             }
           }
         ]
@@ -1076,8 +836,8 @@
           "shadowedValue": "12px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 671,
-            "lineStart": 2318,
+            "ruleIndex": 667,
+            "lineStart": 2310,
             "value": "11px",
             "important": true,
             "section": "v447-left-sidebar-compact-polish"
@@ -1088,8 +848,8 @@
           "shadowedValue": ".18em",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 671,
-            "lineStart": 2318,
+            "ruleIndex": 667,
+            "lineStart": 2310,
             "value": ".22em",
             "important": true,
             "section": "v447-left-sidebar-compact-polish"
@@ -1328,8 +1088,8 @@
           "shadowedValue": "8px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 669,
-            "lineStart": 2305,
+            "ruleIndex": 665,
+            "lineStart": 2297,
             "value": "7px",
             "important": true,
             "section": "v447-left-sidebar-compact-polish"
@@ -1744,8 +1504,8 @@
           "shadowedValue": "none",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 685,
-            "lineStart": 2440,
+            "ruleIndex": 681,
+            "lineStart": 2432,
             "value": "block",
             "important": true,
             "section": "v447-left-sidebar-compact-polish"
@@ -1777,8 +1537,8 @@
           "shadowedValue": "13px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 669,
-            "lineStart": 2305,
+            "ruleIndex": 665,
+            "lineStart": 2297,
             "value": "12px",
             "important": true,
             "section": "v447-left-sidebar-compact-polish"
@@ -1789,8 +1549,8 @@
           "shadowedValue": "1.28",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 669,
-            "lineStart": 2305,
+            "ruleIndex": 665,
+            "lineStart": 2297,
             "value": "1.25",
             "important": true,
             "section": "v447-left-sidebar-compact-polish"
@@ -1822,8 +1582,8 @@
           "shadowedValue": "#c99a4a",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 676,
-            "lineStart": 2372,
+            "ruleIndex": 672,
+            "lineStart": 2364,
             "value": "#c99a4a",
             "important": true,
             "section": "v447-left-sidebar-compact-polish"
@@ -1834,8 +1594,8 @@
           "shadowedValue": "#c99a4a",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 676,
-            "lineStart": 2372,
+            "ruleIndex": 672,
+            "lineStart": 2364,
             "value": "#c99a4a",
             "important": true,
             "section": "v447-left-sidebar-compact-polish"
@@ -1870,8 +1630,8 @@
           "shadowedValue": "\"✓\"",
           "shadowedImportant": false,
           "winner": {
-            "ruleIndex": 677,
-            "lineStart": 2377,
+            "ruleIndex": 673,
+            "lineStart": 2369,
             "value": "\"✓\"",
             "important": false,
             "section": "v447-left-sidebar-compact-polish"
@@ -1882,8 +1642,8 @@
           "shadowedValue": "13px",
           "shadowedImportant": false,
           "winner": {
-            "ruleIndex": 677,
-            "lineStart": 2377,
+            "ruleIndex": 673,
+            "lineStart": 2369,
             "value": "11px",
             "important": false,
             "section": "v447-left-sidebar-compact-polish"
@@ -1894,8 +1654,8 @@
           "shadowedValue": "900",
           "shadowedImportant": false,
           "winner": {
-            "ruleIndex": 677,
-            "lineStart": 2377,
+            "ruleIndex": 673,
+            "lineStart": 2369,
             "value": "900",
             "important": false,
             "section": "v447-left-sidebar-compact-polish"
@@ -1906,8 +1666,8 @@
           "shadowedValue": "1",
           "shadowedImportant": false,
           "winner": {
-            "ruleIndex": 677,
-            "lineStart": 2377,
+            "ruleIndex": 673,
+            "lineStart": 2369,
             "value": "1",
             "important": false,
             "section": "v447-left-sidebar-compact-polish"
@@ -1918,8 +1678,8 @@
           "shadowedValue": "#050505",
           "shadowedImportant": false,
           "winner": {
-            "ruleIndex": 677,
-            "lineStart": 2377,
+            "ruleIndex": 673,
+            "lineStart": 2369,
             "value": "#050505",
             "important": false,
             "section": "v447-left-sidebar-compact-polish"
@@ -1950,8 +1710,8 @@
           "shadowedValue": "50%",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 678,
-            "lineStart": 2385,
+            "ruleIndex": 674,
+            "lineStart": 2377,
             "value": "50%",
             "important": true,
             "section": "v447-left-sidebar-compact-polish"
@@ -1986,8 +1746,8 @@
           "shadowedValue": "\"\"",
           "shadowedImportant": false,
           "winner": {
-            "ruleIndex": 679,
-            "lineStart": 2389,
+            "ruleIndex": 675,
+            "lineStart": 2381,
             "value": "\"\"",
             "important": false,
             "section": "v447-left-sidebar-compact-polish"
@@ -1998,8 +1758,8 @@
           "shadowedValue": "8px",
           "shadowedImportant": false,
           "winner": {
-            "ruleIndex": 679,
-            "lineStart": 2389,
+            "ruleIndex": 675,
+            "lineStart": 2381,
             "value": "7px",
             "important": false,
             "section": "v447-left-sidebar-compact-polish"
@@ -2010,8 +1770,8 @@
           "shadowedValue": "8px",
           "shadowedImportant": false,
           "winner": {
-            "ruleIndex": 679,
-            "lineStart": 2389,
+            "ruleIndex": 675,
+            "lineStart": 2381,
             "value": "7px",
             "important": false,
             "section": "v447-left-sidebar-compact-polish"
@@ -2022,8 +1782,8 @@
           "shadowedValue": "50%",
           "shadowedImportant": false,
           "winner": {
-            "ruleIndex": 679,
-            "lineStart": 2389,
+            "ruleIndex": 675,
+            "lineStart": 2381,
             "value": "50%",
             "important": false,
             "section": "v447-left-sidebar-compact-polish"
@@ -2034,8 +1794,8 @@
           "shadowedValue": "#c99a4a",
           "shadowedImportant": false,
           "winner": {
-            "ruleIndex": 679,
-            "lineStart": 2389,
+            "ruleIndex": 675,
+            "lineStart": 2381,
             "value": "#c99a4a",
             "important": false,
             "section": "v447-left-sidebar-compact-polish"
@@ -2072,8 +1832,8 @@
           "shadowedValue": "2147483200",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 383,
-            "lineStart": 281,
+            "ruleIndex": 381,
+            "lineStart": 280,
             "value": "2147483200",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2110,8 +1870,8 @@
           "shadowedValue": "2147483200",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 507,
-            "lineStart": 949,
+            "ruleIndex": 503,
+            "lineStart": 941,
             "value": "2147483200",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2186,8 +1946,8 @@
           "shadowedValue": "2147483200",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 898,
-            "lineStart": 4082,
+            "ruleIndex": 894,
+            "lineStart": 4074,
             "value": "2147483200",
             "important": true,
             "section": "v508-component-inspector-layout: keep selected-part inspector readable in the narrow right sidebar"
@@ -2226,8 +1986,8 @@
           "shadowedValue": "flex",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 509,
-            "lineStart": 977,
+            "ruleIndex": 505,
+            "lineStart": 969,
             "value": "flex",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2238,8 +1998,8 @@
           "shadowedValue": "flex-start",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 509,
-            "lineStart": 977,
+            "ruleIndex": 505,
+            "lineStart": 969,
             "value": "center",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2250,8 +2010,8 @@
           "shadowedValue": "space-between",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 509,
-            "lineStart": 977,
+            "ruleIndex": 505,
+            "lineStart": 969,
             "value": "space-between",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2262,8 +2022,8 @@
           "shadowedValue": "16px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 509,
-            "lineStart": 977,
+            "ruleIndex": 505,
+            "lineStart": 969,
             "value": "16px",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2274,8 +2034,8 @@
           "shadowedValue": "16px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 509,
-            "lineStart": 977,
+            "ruleIndex": 505,
+            "lineStart": 969,
             "value": "0 18px",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2286,8 +2046,8 @@
           "shadowedValue": "1px solid rgba(215,196,155,.14)",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 509,
-            "lineStart": 977,
+            "ruleIndex": 505,
+            "lineStart": 969,
             "value": "1px solid var(--export-border)",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2298,8 +2058,8 @@
           "shadowedValue": "linear-gradient(180deg,#090908,#060606)",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 509,
-            "lineStart": 977,
+            "ruleIndex": 505,
+            "lineStart": 969,
             "value": "linear-gradient(180deg,#0a0a08,#060606)",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2338,8 +2098,8 @@
           "shadowedValue": "flex",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 385,
-            "lineStart": 296,
+            "ruleIndex": 383,
+            "lineStart": 295,
             "value": "flex",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2350,8 +2110,8 @@
           "shadowedValue": "flex-start",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 385,
-            "lineStart": 296,
+            "ruleIndex": 383,
+            "lineStart": 295,
             "value": "flex-start",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2362,8 +2122,8 @@
           "shadowedValue": "space-between",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 385,
-            "lineStart": 296,
+            "ruleIndex": 383,
+            "lineStart": 295,
             "value": "space-between",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2374,8 +2134,8 @@
           "shadowedValue": "16px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 385,
-            "lineStart": 296,
+            "ruleIndex": 383,
+            "lineStart": 295,
             "value": "16px",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2386,8 +2146,8 @@
           "shadowedValue": "16px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 385,
-            "lineStart": 296,
+            "ruleIndex": 383,
+            "lineStart": 295,
             "value": "16px 18px",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2398,8 +2158,8 @@
           "shadowedValue": "1px solid rgba(215,196,155,.14)",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 385,
-            "lineStart": 296,
+            "ruleIndex": 383,
+            "lineStart": 295,
             "value": "1px solid rgba(215,196,155,.14)",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2410,8 +2170,8 @@
           "shadowedValue": "linear-gradient(180deg,#090908,#060606)",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 385,
-            "lineStart": 296,
+            "ruleIndex": 383,
+            "lineStart": 295,
             "value": "linear-gradient(180deg,#0a0a08,#060606)",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2449,8 +2209,8 @@
           "shadowedValue": "0",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 386,
-            "lineStart": 301,
+            "ruleIndex": 384,
+            "lineStart": 300,
             "value": "0",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2461,8 +2221,8 @@
           "shadowedValue": "#eee7da",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 386,
-            "lineStart": 301,
+            "ruleIndex": 384,
+            "lineStart": 300,
             "value": "#eee7da",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2473,8 +2233,8 @@
           "shadowedValue": "18px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 386,
-            "lineStart": 301,
+            "ruleIndex": 384,
+            "lineStart": 300,
             "value": "18px",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2485,8 +2245,8 @@
           "shadowedValue": ".18em",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 386,
-            "lineStart": 301,
+            "ruleIndex": 384,
+            "lineStart": 300,
             "value": ".18em",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2497,8 +2257,8 @@
           "shadowedValue": "uppercase",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 386,
-            "lineStart": 301,
+            "ruleIndex": 384,
+            "lineStart": 300,
             "value": "uppercase",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2509,8 +2269,8 @@
           "shadowedValue": "900",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 386,
-            "lineStart": 301,
+            "ruleIndex": 384,
+            "lineStart": 300,
             "value": "900",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2548,8 +2308,8 @@
           "shadowedValue": "0",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 510,
-            "lineStart": 991,
+            "ruleIndex": 506,
+            "lineStart": 983,
             "value": "0",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2560,8 +2320,8 @@
           "shadowedValue": "#eee7da",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 510,
-            "lineStart": 991,
+            "ruleIndex": 506,
+            "lineStart": 983,
             "value": "#eee7da",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2572,8 +2332,8 @@
           "shadowedValue": "18px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 510,
-            "lineStart": 991,
+            "ruleIndex": 506,
+            "lineStart": 983,
             "value": "18px",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2584,8 +2344,8 @@
           "shadowedValue": ".18em",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 510,
-            "lineStart": 991,
+            "ruleIndex": 506,
+            "lineStart": 983,
             "value": ".22em",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2596,8 +2356,8 @@
           "shadowedValue": "uppercase",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 510,
-            "lineStart": 991,
+            "ruleIndex": 506,
+            "lineStart": 983,
             "value": "uppercase",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2608,8 +2368,8 @@
           "shadowedValue": "900",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 510,
-            "lineStart": 991,
+            "ruleIndex": 506,
+            "lineStart": 983,
             "value": "900",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2645,8 +2405,8 @@
           "shadowedValue": "#928b7d",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 511,
-            "lineStart": 1000,
+            "ruleIndex": 507,
+            "lineStart": 992,
             "value": "var(--export-muted)",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2657,8 +2417,8 @@
           "shadowedValue": "12px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 511,
-            "lineStart": 1000,
+            "ruleIndex": 507,
+            "lineStart": 992,
             "value": "12px",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2669,8 +2429,8 @@
           "shadowedValue": "1.35",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 511,
-            "lineStart": 1000,
+            "ruleIndex": 507,
+            "lineStart": 992,
             "value": "1.2",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2681,8 +2441,8 @@
           "shadowedValue": "4px 0 0",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 511,
-            "lineStart": 1000,
+            "ruleIndex": 507,
+            "lineStart": 992,
             "value": "8px 0 0",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2718,8 +2478,8 @@
           "shadowedValue": "#928b7d",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 387,
-            "lineStart": 302,
+            "ruleIndex": 385,
+            "lineStart": 301,
             "value": "#928b7d",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2730,8 +2490,8 @@
           "shadowedValue": "12px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 387,
-            "lineStart": 302,
+            "ruleIndex": 385,
+            "lineStart": 301,
             "value": "12px",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2742,8 +2502,8 @@
           "shadowedValue": "1.35",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 387,
-            "lineStart": 302,
+            "ruleIndex": 385,
+            "lineStart": 301,
             "value": "1.35",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2754,8 +2514,8 @@
           "shadowedValue": "4px 0 0",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 387,
-            "lineStart": 302,
+            "ruleIndex": 385,
+            "lineStart": 301,
             "value": "4px 0 0",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2792,8 +2552,8 @@
           "shadowedValue": "#080807",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 392,
-            "lineStart": 318,
+            "ruleIndex": 390,
+            "lineStart": 317,
             "value": "#080807",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2804,8 +2564,8 @@
           "shadowedValue": "1px solid rgba(215,196,155,.16)",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 392,
-            "lineStart": 318,
+            "ruleIndex": 390,
+            "lineStart": 317,
             "value": "1px solid rgba(215,196,155,.16)",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2816,8 +2576,8 @@
           "shadowedValue": "#eee7da",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 392,
-            "lineStart": 318,
+            "ruleIndex": 390,
+            "lineStart": 317,
             "value": "#eee7da",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2828,8 +2588,8 @@
           "shadowedValue": "0",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 392,
-            "lineStart": 318,
+            "ruleIndex": 390,
+            "lineStart": 317,
             "value": "0",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2840,8 +2600,8 @@
           "shadowedValue": "hidden",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 392,
-            "lineStart": 318,
+            "ruleIndex": 390,
+            "lineStart": 317,
             "value": "hidden",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2850,8 +2610,8 @@
       ]
     },
     {
-      "ruleIndex": 358,
-      "lineStart": 240,
+      "ruleIndex": 356,
+      "lineStart": 239,
       "section": "v429-templates-export-modal-css-fix",
       "media": null,
       "fullSelector": ".export-preview-card,.export-package-card,.export-recommended-banner,.runtime-diagnostics-card",
@@ -2879,8 +2639,8 @@
           "shadowedValue": "#080807",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 526,
-            "lineStart": 1148,
+            "ruleIndex": 522,
+            "lineStart": 1140,
             "value": "#080807",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2891,8 +2651,8 @@
           "shadowedValue": "1px solid rgba(215,196,155,.14)",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 526,
-            "lineStart": 1148,
+            "ruleIndex": 522,
+            "lineStart": 1140,
             "value": "1px solid rgba(215,196,155,.13)",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2903,8 +2663,8 @@
           "shadowedValue": "#d8d0c0",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 405,
-            "lineStart": 355,
+            "ruleIndex": 403,
+            "lineStart": 354,
             "value": "#d8d0c0",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2915,8 +2675,8 @@
           "shadowedValue": "12px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 627,
-            "lineStart": 2021,
+            "ruleIndex": 623,
+            "lineStart": 2013,
             "value": "12px",
             "important": true,
             "section": "v444-export-tabs-final-fit"
@@ -2925,8 +2685,8 @@
       ]
     },
     {
-      "ruleIndex": 358,
-      "lineStart": 240,
+      "ruleIndex": 356,
+      "lineStart": 239,
       "section": "v429-templates-export-modal-css-fix",
       "media": null,
       "fullSelector": ".export-preview-card,.export-package-card,.export-recommended-banner,.runtime-diagnostics-card",
@@ -2954,8 +2714,8 @@
           "shadowedValue": "#080807",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 526,
-            "lineStart": 1148,
+            "ruleIndex": 522,
+            "lineStart": 1140,
             "value": "#080807",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2966,8 +2726,8 @@
           "shadowedValue": "1px solid rgba(215,196,155,.14)",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 526,
-            "lineStart": 1148,
+            "ruleIndex": 522,
+            "lineStart": 1140,
             "value": "1px solid rgba(215,196,155,.13)",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2978,8 +2738,8 @@
           "shadowedValue": "#d8d0c0",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 405,
-            "lineStart": 355,
+            "ruleIndex": 403,
+            "lineStart": 354,
             "value": "#d8d0c0",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2990,8 +2750,8 @@
           "shadowedValue": "12px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 526,
-            "lineStart": 1148,
+            "ruleIndex": 522,
+            "lineStart": 1140,
             "value": "12px",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -3000,8 +2760,8 @@
       ]
     },
     {
-      "ruleIndex": 358,
-      "lineStart": 240,
+      "ruleIndex": 356,
+      "lineStart": 239,
       "section": "v429-templates-export-modal-css-fix",
       "media": null,
       "fullSelector": ".export-preview-card,.export-package-card,.export-recommended-banner,.runtime-diagnostics-card",
@@ -3029,8 +2789,8 @@
           "shadowedValue": "#080807",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 526,
-            "lineStart": 1148,
+            "ruleIndex": 522,
+            "lineStart": 1140,
             "value": "#080807",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -3041,8 +2801,8 @@
           "shadowedValue": "1px solid rgba(215,196,155,.14)",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 526,
-            "lineStart": 1148,
+            "ruleIndex": 522,
+            "lineStart": 1140,
             "value": "1px solid rgba(215,196,155,.13)",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -3053,8 +2813,8 @@
           "shadowedValue": "#d8d0c0",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 405,
-            "lineStart": 355,
+            "ruleIndex": 403,
+            "lineStart": 354,
             "value": "#d8d0c0",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -3065,8 +2825,8 @@
           "shadowedValue": "12px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 526,
-            "lineStart": 1148,
+            "ruleIndex": 522,
+            "lineStart": 1140,
             "value": "12px",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -3075,8 +2835,8 @@
       ]
     },
     {
-      "ruleIndex": 426,
-      "lineStart": 413,
+      "ruleIndex": 424,
+      "lineStart": 412,
       "section": "v433-desktop-dock-grid-export-templates-fix",
       "media": null,
       "fullSelector": ".template-manager-panel .template-preview-realistic, .template-manager-panel .library-real-preview, .template-manager-panel .template-preview-empty",
@@ -3104,8 +2864,8 @@
           "shadowedValue": "150px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 461,
-            "lineStart": 593,
+            "ruleIndex": 458,
+            "lineStart": 591,
             "value": "150px",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -3116,8 +2876,8 @@
           "shadowedValue": "150px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 461,
-            "lineStart": 593,
+            "ruleIndex": 458,
+            "lineStart": 591,
             "value": "150px",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -3128,8 +2888,8 @@
           "shadowedValue": "150px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 461,
-            "lineStart": 593,
+            "ruleIndex": 458,
+            "lineStart": 591,
             "value": "150px",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -3140,8 +2900,8 @@
           "shadowedValue": "hidden",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 461,
-            "lineStart": 593,
+            "ruleIndex": 458,
+            "lineStart": 591,
             "value": "hidden",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -3152,8 +2912,8 @@
           "shadowedValue": "grid",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 461,
-            "lineStart": 593,
+            "ruleIndex": 458,
+            "lineStart": 591,
             "value": "grid",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -3164,8 +2924,8 @@
           "shadowedValue": "center",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 461,
-            "lineStart": 593,
+            "ruleIndex": 458,
+            "lineStart": 591,
             "value": "center",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -3174,8 +2934,8 @@
       ]
     },
     {
-      "ruleIndex": 427,
-      "lineStart": 423,
+      "ruleIndex": 425,
+      "lineStart": 422,
       "section": "v433-desktop-dock-grid-export-templates-fix",
       "media": null,
       "fullSelector": ".template-manager-panel .template-preview-realistic svg, .template-manager-panel .library-real-preview svg",
@@ -3199,8 +2959,8 @@
           "shadowedValue": "auto",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 462,
-            "lineStart": 606,
+            "ruleIndex": 459,
+            "lineStart": 604,
             "value": "auto",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -3211,8 +2971,8 @@
           "shadowedValue": "auto",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 462,
-            "lineStart": 606,
+            "ruleIndex": 459,
+            "lineStart": 604,
             "value": "auto",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -3223,8 +2983,8 @@
           "shadowedValue": "96%",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 462,
-            "lineStart": 606,
+            "ruleIndex": 459,
+            "lineStart": 604,
             "value": "96%",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -3235,8 +2995,8 @@
           "shadowedValue": "140px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 462,
-            "lineStart": 606,
+            "ruleIndex": 459,
+            "lineStart": 604,
             "value": "140px",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -3245,8 +3005,8 @@
       ]
     },
     {
-      "ruleIndex": 479,
-      "lineStart": 738,
+      "ruleIndex": 475,
+      "lineStart": 730,
       "section": "v437-export-layout-polish",
       "media": null,
       "fullSelector": ".export-package-card, .export-recommended-banner, .runtime-diagnostics-card, .export-sanity",
@@ -3273,8 +3033,8 @@
           "shadowedValue": "12px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 638,
-            "lineStart": 2098,
+            "ruleIndex": 634,
+            "lineStart": 2090,
             "value": "10px 12px",
             "important": true,
             "section": "v444-export-tabs-final-fit"
@@ -3285,8 +3045,8 @@
           "shadowedValue": "0 0 12px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 526,
-            "lineStart": 1148,
+            "ruleIndex": 522,
+            "lineStart": 1140,
             "value": "0 0 12px",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -3297,8 +3057,8 @@
           "shadowedValue": "1.35",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 638,
-            "lineStart": 2098,
+            "ruleIndex": 634,
+            "lineStart": 2090,
             "value": "1.32",
             "important": true,
             "section": "v444-export-tabs-final-fit"
@@ -3307,8 +3067,8 @@
       ]
     },
     {
-      "ruleIndex": 483,
-      "lineStart": 769,
+      "ruleIndex": 479,
+      "lineStart": 761,
       "section": "v437-export-layout-polish",
       "media": null,
       "fullSelector": ".export-options-grid, .kicad-export-grid, .export-action-grid",
@@ -3334,8 +3094,8 @@
           "shadowedValue": "grid",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 619,
-            "lineStart": 1966,
+            "ruleIndex": 615,
+            "lineStart": 1958,
             "value": "grid",
             "important": true,
             "section": "v444-export-tabs-final-fit"
@@ -3346,8 +3106,8 @@
           "shadowedValue": "1fr 1fr",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 619,
-            "lineStart": 1966,
+            "ruleIndex": 615,
+            "lineStart": 1958,
             "value": "1fr 1fr",
             "important": true,
             "section": "v444-export-tabs-final-fit"
@@ -3358,8 +3118,8 @@
           "shadowedValue": "8px 12px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 619,
-            "lineStart": 1966,
+            "ruleIndex": 615,
+            "lineStart": 1958,
             "value": "0 14px",
             "important": true,
             "section": "v444-export-tabs-final-fit"
@@ -3370,8 +3130,8 @@
           "shadowedValue": "start",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 529,
-            "lineStart": 1183,
+            "ruleIndex": 525,
+            "lineStart": 1175,
             "value": "start",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -3380,8 +3140,8 @@
       ]
     },
     {
-      "ruleIndex": 483,
-      "lineStart": 769,
+      "ruleIndex": 479,
+      "lineStart": 761,
       "section": "v437-export-layout-polish",
       "media": null,
       "fullSelector": ".export-options-grid, .kicad-export-grid, .export-action-grid",
@@ -3407,8 +3167,8 @@
           "shadowedValue": "grid",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 639,
-            "lineStart": 2106,
+            "ruleIndex": 635,
+            "lineStart": 2098,
             "value": "grid",
             "important": true,
             "section": "v444-export-tabs-final-fit"
@@ -3419,8 +3179,8 @@
           "shadowedValue": "1fr 1fr",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 639,
-            "lineStart": 2106,
+            "ruleIndex": 635,
+            "lineStart": 2098,
             "value": "1fr 1fr",
             "important": true,
             "section": "v444-export-tabs-final-fit"
@@ -3431,8 +3191,8 @@
           "shadowedValue": "8px 12px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 639,
-            "lineStart": 2106,
+            "ruleIndex": 635,
+            "lineStart": 2098,
             "value": "0 14px",
             "important": true,
             "section": "v444-export-tabs-final-fit"
@@ -3443,8 +3203,8 @@
           "shadowedValue": "start",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 529,
-            "lineStart": 1183,
+            "ruleIndex": 525,
+            "lineStart": 1175,
             "value": "start",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -3453,8 +3213,8 @@
       ]
     },
     {
-      "ruleIndex": 500,
-      "lineStart": 867,
+      "ruleIndex": 496,
+      "lineStart": 859,
       "section": "v437-export-layout-polish",
       "media": null,
       "fullSelector": ".compact-render-row, .layer-manager-presets",
@@ -3478,8 +3238,8 @@
           "shadowedValue": "grid",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 561,
-            "lineStart": 1400,
+            "ruleIndex": 557,
+            "lineStart": 1392,
             "value": "grid",
             "important": true,
             "section": "v440-layer-manager-structural-layout"
@@ -3490,8 +3250,8 @@
           "shadowedValue": "repeat(2,minmax(0,1fr))",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 561,
-            "lineStart": 1400,
+            "ruleIndex": 557,
+            "lineStart": 1392,
             "value": "repeat(2,minmax(0,1fr))",
             "important": true,
             "section": "v440-layer-manager-structural-layout"
@@ -3502,8 +3262,8 @@
           "shadowedValue": "6px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 561,
-            "lineStart": 1400,
+            "ruleIndex": 557,
+            "lineStart": 1392,
             "value": "6px",
             "important": true,
             "section": "v440-layer-manager-structural-layout"
@@ -3514,8 +3274,8 @@
           "shadowedValue": "0 0 10px",
           "shadowedImportant": true,
           "winner": {
-            "ruleIndex": 561,
-            "lineStart": 1400,
+            "ruleIndex": 557,
+            "lineStart": 1392,
             "value": "8px 0 12px",
             "important": true,
             "section": "v440-layer-manager-structural-layout"
