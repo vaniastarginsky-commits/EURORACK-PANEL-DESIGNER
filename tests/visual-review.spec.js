@@ -108,6 +108,15 @@ const states = [
     await page.locator(".inline-modal-layer").waitFor({ state: "visible" });
   }],
 
+  // P1: template delete confirmation — danger inline modal (.inline-modal-actions button.danger)
+  ["desktop-inline-modal-danger", desktop, async page => {
+    await clickButton(page, "Templates ▾");
+    await clickButton(page, "Load / Manage templates");
+    await page.locator(".template-manager-panel").waitFor({ state: "visible" });
+    await page.locator(".template-manager-panel").getByRole("button", { name: "Delete", exact: true }).first().click();
+    await page.locator(".inline-modal-actions button.danger").waitFor({ state: "visible" });
+  }],
+
   // P1: component hover card (positioned float over SVG component)
   ["desktop-component-hover-card", desktop, async page => {
     await placeComponentOnCanvas(page);
