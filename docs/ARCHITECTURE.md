@@ -59,6 +59,82 @@ context defined in `appState.js`.
 | `src/still-loading.js` | Loading screen shown while scripts are initializing. |
 | `src/main.js` | Final script — calls `ReactDOM.createRoot` and mounts `App`. |
 
+## Storage and schema layer
+
+### localStorage keys
+
+| Key | Defined in | Purpose |
+|-----|-----------|---------|
+| `eurorack-panel-local-projects-v1` | `projectSchema.js` | **Legacy** project list (v1). Read-only migration path in `loadLocalProjects`. Do not write new data here. |
+| `eurorack-panel-local-project-index-v2` | `projectStorage.js` | **Current** project index — list of `{id, name, updatedAt, sizeBytes}` objects. |
+| `eurorack-panel-local-project-record-v2:<id>` | `projectStorage.js` | **Current** per-project record `{id, name, updatedAt, sizeBytes, data}`. |
+| `eurorack-panel-templates-index-v1` | `projectSchema.js` | Template index — array of template IDs. |
+| `eurorack-panel-template:<id>` | `projectSchema.js` | Per-template JSON blob. |
+| `eurorack_panel_designer_hidden_template_ids_v1` | `templateStorage.js` | Set of factory/local template IDs hidden by the user. |
+
+**Note:** `LOCAL_PROJECTS_KEY`, `LOCAL_TEMPLATE_INDEX_KEY`, and `LOCAL_TEMPLATE_PREFIX` are defined in `projectSchema.js` but are consumed by `projectStorage.js` and `templateStorage.js`. This is a historical coupling that should be untangled in a future pass (move each constant to the file that owns it).
+
+### projectSchema.js — what it actually contains
+
+Despite its name, `projectSchema.js` is currently a mixed file:
+
+| Group | Functions | Nature |
+|-------|-----------|--------|
+| Validation/normalization | `validateAndNormalize`, `sanitizePart` | Pure — take raw JSON, return clean app state |
+| Template I/O helpers | `stripIdsFromComponents` | Pure — tiny utility |
+| Storage key constants | `PROJECT_FILE_VERSION`, `LOCAL_PROJECTS_KEY`, `LOCAL_TEMPLATE_INDEX_KEY`, `LOCAL_TEMPLATE_PREFIX` | Constants — should migrate to the files that use them |
+| UI modal | `appTemplateSavePrompt` | **Browser DOM** — builds a dialog, attaches event listeners, returns a Promise |
+
+`appTemplateSavePrompt` is the only browser-touching function in projectSchema.js and is called exclusively by `makeTemplateFromState` in `templateStorage.js`. It is a candidate for moving to `templateStorage.js` in a future pass.
+
+### projectStorage.js — what it actually contains
+
+| Group | Functions | Nature |
+|-------|-----------|--------|
+| File naming | `safeProjectFileName` | Pure string formatter |
+| Serialization | `serializeProject` | Pure — JSON.stringify + version stamp |
+| Browser download | `isIOSLike`, `saveTextFile`, `downloadTextFile`, `downloadBlobFile` | Browser API — must stay in storage/download layer |
+| Project persistence | `safeStorageAvailable`, `loadLocalProjects`, `storeLocalProjects`, `saveProjectToBrowser`, `deleteLocalProject` | localStorage |
+| User-facing actions | `exportJSON` | Thin orchestration — serializes + downloads |
+| **KiCad export** | `exportKiCadPCB` + `kicadNum`, `kicadStr`, `kicadRefPrefix`, `kicadSafeName`, `kicadEdgeLine`, `kicadRectLines`, `kicadCircle`, `kicadGrText`, `kicadNPTHFootprint`, `rotatePointAround` | **Misplaced** — these are a self-contained KiCad DSL and exporter with no storage logic. Future target: `src/export/kiCadExport.js`. |
+
+The KiCad helpers (`kicad*` functions and `rotatePointAround`) are pure and have no localStorage dependency. Only `exportKiCadPCB` touches `saveTextFile`, so extracting the group to `src/export/kiCadExport.js` is safe and mechanical.
+
+### templateStorage.js — what it actually contains
+
+| Group | Functions | Nature |
+|-------|-----------|--------|
+| Template normalization | `normalizeTemplate` | Pure — validates raw template JSON into canonical shape |
+| Template construction | `makeTemplateFromState`, `replaceTemplateContentFromState`, `updateTemplateMetadata`, `templateRecordFromTemplate` | Mixed — data transforms that call `appTemplateSavePrompt` (browser) |
+| localStorage CRUD | `loadLocalTemplates`, `saveTemplateToBrowser`, `deleteLocalTemplate` | localStorage |
+| Hidden-IDs management | `hiddenTemplateIds`, `saveHiddenTemplateIds`, `hideTemplateEverywhere`, `unhideTemplate` | localStorage |
+| Catalog assembly | `editableTemplateRecords` | Pure — merges factory + local templates, filters hidden |
+| File I/O | `exportTemplatesLibrary`, `importTemplatesLibraryFile` | Browser API — download + FileReader |
+
+`normalizeTemplate` is also called directly by `FactoryTemplates.js`, so it must remain a global.
+
+### Proposed next split plan (not yet executed)
+
+**Pass A — move KiCad export out of projectStorage.js**
+- Create `src/export/kiCadExport.js`
+- Move: `kicadNum`, `kicadStr`, `kicadRefPrefix`, `kicadSafeName`, `rotatePointAround`, `kicadEdgeLine`, `kicadRectLines`, `kicadCircle`, `kicadGrText`, `kicadNPTHFootprint`, `exportKiCadPCB`
+- Add script tag in `index.html` after `src/export/zipUtils.js` and before `src/exportEngine.js`
+- All globals remain available; `exportKiCadPCB` is called only from `App.js`
+- Risk: low — purely mechanical extraction, no shared state
+
+**Pass B — move `appTemplateSavePrompt` to templateStorage.js**
+- Move `appTemplateSavePrompt` from `projectSchema.js` to `templateStorage.js`
+- No script-tag change needed (`templateStorage.js` is already loaded after `projectSchema.js`)
+- Risk: low — only one caller (`makeTemplateFromState` in `templateStorage.js`)
+
+**Pass C — relocate legacy storage key constants**
+- Move `LOCAL_PROJECTS_KEY` to `projectStorage.js` (already has `LOCAL_PROJECTS_INDEX_KEY`)
+- Move `LOCAL_TEMPLATE_INDEX_KEY` and `LOCAL_TEMPLATE_PREFIX` to `templateStorage.js`
+- `PROJECT_FILE_VERSION` stays in `projectSchema.js` (referenced by `serializeProject` in `projectStorage.js` which loads after)
+- Risk: low — purely editorial, no logic change; verify via `node --check` after
+
+Do not execute these passes until explicitly directed.
+
 ## Styles
 
 `styles.css` is the single legacy global stylesheet. It covers layout, theming,
