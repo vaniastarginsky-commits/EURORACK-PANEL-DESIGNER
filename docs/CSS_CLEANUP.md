@@ -25,18 +25,19 @@ Tracks dead CSS removal on the `ux-polish` branch. Target file: `styles.css`.
 | `ecab357` | style: remove shadowed export dialog cascade rules (batch #1, 10 rules) |
 | `3785f06` | test: add export dialog visual coverage (PNG, Package, Report tabs) |
 | `b831864` | style: remove shadowed export dialog layout CSS (batch #2, 15 rules) |
+| `281b507` | style: remove remaining shadowed export dialog CSS (batch #3A, 15 rules) |
 
 ---
 
 ## Current state
 
-**Approximate `!important` count:** 3,238 (measured after b831864)
+**Approximate `!important` count:** 3,163 (measured after 281b507)
 
-**Cascade audit (fresh after b831864):**
-- Total lines: 4,412
-- Raw rules parsed: 958
-- !important count: 3,319 (pre-b831864) → 3,238 (post-b831864, −81)
-- Whole-rule deletion candidates: 62 (down from 72 after batch #1)
+**Cascade audit (fresh after 281b507):**
+- Total lines: 4,251
+- Raw rules parsed: 928
+- !important count: 3,163
+- Whole-rule deletion candidates: 32
 - Selector-list item removal candidates: 40
 
 ---
@@ -94,6 +95,13 @@ Selectors removed: `.export-dialog-actions`, `.export-tab-body` (×2), `.export-
 
 Now-covered unlock: `.export-dialog-actions` deferred in batch #1 (actions footer not in screenshots) — unblocked by `desktop-export-png`.
 
+### Export dialog cascade batch #3A — v437–v439 layout and sub-component rules (commit `281b507`)
+15 whole-rule deletions from sections v437–v439, −117 lines, −75 `!important`. Verify: 19/19.
+
+Selectors removed: `.export-preview-stats` (v437), `.export-tabs button` (v437), `.export-tab-body` (v437 third occurrence, incl. `> div` and `h3/h4/section-title`), compound span selector (4 selectors), `.export-dialog-panel input[type="checkbox"]` (v437 third), `.export-tab-body select/input:not([type="checkbox"])`, `.export-tab-body .field-row`, `.export-tab-body .btn-row button / .export-action-grid button`, `.export-tab-body .svg-quick-actions` + button, `.export-tab-body .individual-package-files / .loose-package-files`, `.runtime-diagnostics-card` + `.checklist-row / > div`.
+
+Note: ruleIndex numbers for this batch were re-derived from the fresh post-batch-#2 audit because batch #2 deletions shifted all subsequent ruleIndexes. The 15 candidates were matched by selector string, not original ruleIndex.
+
 ---
 
 ## Deferred — do not touch without Codex review
@@ -134,20 +142,26 @@ Rules that differ in property values (not just shadow/override) require manual v
 ~~**Group C — :not() guards**~~ ✅ Done (commit `39505af`)
 ~~**Export dialog cascade batch #1** (10 rules)~~ ✅ Done (commit `ecab357`)
 ~~**Export dialog cascade batch #2** (15 rules)~~ ✅ Done (commit `b831864`)
+~~**Export dialog cascade batch #3A** (15 rules)~~ ✅ Done (commit `281b507`)
 
-**Export dialog cascade batch #3 — remaining deferred export candidates:**
-ruleIndex 363, 505 — `.export-dialog-panel` dimensions (width, height, grid-template-rows); high structural risk, defer until panel layout is stable.
-ruleIndex 456 — `.export-tab-body > *` (z-index + pointer-events); stacking context concern.
-ruleIndex 508, 510, 511, 512, 513, 521, 522, 526, 527, 529, 582, 583, 588, 589, 590 — remaining v437–v439 export family rules; all valid whole-rule candidates, ready for Codex review.
+**Export dialog remaining deferred:**
+- `.export-dialog-panel` dimensions — width, height, grid-template-rows; two occurrences, high structural risk.
+- `.export-tab-body > *` — z-index:2 + pointer-events:auto; stacking context concern; deferred pending dedicated review.
+
+**Next approved bonus batch (KiCad row cleanup) — Codex pre-approved, styles.css-only:**
+- `.kicad-preset-row` (v432 occurrence) — display:flex, gap, flex-wrap, margin
+- `.kicad-origin-row` (v437) — display:grid, grid-template-columns, gap, align-items, margin
+- `.kicad-preset-row` (v437 occurrence) — display:flex, flex-wrap, gap, margin
+All covered by `desktop-export-kicad`. No blockers. Ready to commit as `style: remove shadowed KiCad row CSS`.
 
 **Remaining visual-only candidates (line-2 surgery):**
-Candidates rule #6/7/120/155 are all on the minified line 2 (S1).
-`#6`/`#7` (`.sidebar-left`/`.sidebar-right` border) are safe but require minified-line surgery.
-`#120`/`#155` (`.inline-modal-title`, `.inline-modal-actions button.danger`) involve value differences — require Codex review.
+Candidates are all on the minified line 2 (S1).
+`.sidebar-left`/`.sidebar-right` border: safe but require minified-line surgery.
+`.inline-modal-title`, `.inline-modal-actions button.danger`: value differences — require Codex review.
 All four must be treated as a single L2 surgery operation.
 
-**Fresh audit (post-batch #2):**
-62 whole-rule candidates and 40 selector-list item candidates remain per `design-review/css-cascade-audit.json`.
+**Fresh audit (post-batch #3A):**
+32 whole-rule candidates and 40 selector-list item candidates remain per `design-review/css-cascade-audit.json`.
 
 ---
 
