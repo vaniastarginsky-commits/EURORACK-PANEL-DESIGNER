@@ -12,11 +12,13 @@ context defined in `appState.js`.
 
 | File | Role |
 |------|------|
-| `src/core.js` | Legacy catch-all — 1988 lines, ~91 top-level definitions across 17 distinct logical groups. See **core.js audit** section below for the full map and proposed split plan. |
+| `src/core.js` | Legacy catch-all — 1378 lines after Groups 9, 16, 7 extracted. See **core.js audit** section below for the full map and proposed split plan. |
 | `src/appState.js` | React context + reducer that owns all application state. Every component reads state via `useAppState()` and writes via `useAppDispatch()`. |
 | `src/App.js` | Main orchestration layer. Wires together all major panels, handles pointer/keyboard events, and contains the top-level render tree. |
 | `src/Canvas.js` | Owns panel rendering (SVG) and all canvas interactions — drag, resize, select, ruler, snap guides. |
-| `src/componentLibrary.js` | Built-in component definitions (jacks, pots, LEDs, switches, faders, DIP-8 socket, etc.). Pure data — no React. |
+| `src/components/library/componentDefinitions.js` | Raw component data — the canonical array of part definitions. Pure data, no React. |
+| `src/componentLibrary.js` | Compatibility facade — assembles `COMPONENT_LIBRARY` (the global array) from `componentDefinitions.js` and any custom parts. |
+| `src/components/library/PartLibraryUI.js` | React UI layer for the component picker — `PartIcon`, `PartPickerLabel`, `LibraryPartPreview`. Depends on `core.js` geometry helpers and `sanitizePart` from `projectSchema.js`; loads after both. |
 | `src/FactoryTemplates.js` | Built-in factory templates and their preview/thumbnail helpers. |
 | `src/exportEngine.js` | SVG, PNG, PDF, and drill-file export logic. |
 | `src/projectStorage.js` | Browser localStorage persistence for projects (save, load, list, delete). |
