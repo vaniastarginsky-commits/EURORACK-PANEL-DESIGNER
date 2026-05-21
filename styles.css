@@ -244,8 +244,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 
 .export-dialog-panel{grid-template-rows:auto auto minmax(0,1fr) auto!important;width:min(1080px,calc(100vw - 44px))!important}
 .export-dialog-actions{display:flex!important;gap:8px!important;align-items:center!important;justify-content:flex-end!important;padding:12px 16px!important;border-top:1px solid rgba(215,196,155,.14)!important;background:#050505!important}
-.export-tabs{display:flex!important;gap:0!important;padding:0 16px!important;border-bottom:1px solid rgba(215,196,155,.10)!important;background:#050505!important}
-.export-tabs button{min-height:40px!important;border-bottom:0!important}
 .export-tab-body{min-height:0!important;overflow:auto!important;padding:16px!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(280px,360px)!important;gap:16px!important;align-items:start!important}
 .export-preview-card,.export-package-card,.export-recommended-banner,.runtime-diagnostics-card{background:#080807!important;border:1px solid rgba(215,196,155,.14)!important;color:#d8d0c0!important;padding:12px!important}
 .export-preview-card{max-height:520px!important;overflow:auto!important}
@@ -355,11 +353,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .template-card-actions .danger, .template-card-actions button.danger{border-color:rgba(138,48,42,.75)!important;background:#160504!important;color:#f1c7c1!important}
 
 /* Export: modal layout and tab body must not collapse into raw flow */
-.export-dialog-backdrop{
-  position:fixed!important;inset:0!important;z-index:2147483200!important;
-  display:grid!important;place-items:center!important;padding:18px!important;
-  background:rgba(0,0,0,.74)!important;backdrop-filter:blur(8px)!important;
-}
 .export-dialog-panel{
   width:min(1180px,calc(100vw - 36px))!important;
   height:min(820px,calc(100vh - 36px))!important;
@@ -367,18 +360,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   overflow:hidden!important;background:#070706!important;border:1px solid rgba(215,196,155,.28)!important;
   box-shadow:0 28px 90px rgba(0,0,0,.86)!important;color:#eee7da!important;
   display:grid!important;grid-template-rows:auto auto minmax(0,1fr) auto!important;
-}
-.export-dialog-header{
-  display:flex!important;align-items:flex-start!important;justify-content:space-between!important;
-  gap:16px!important;padding:16px 18px!important;border-bottom:1px solid rgba(215,196,155,.14)!important;
-  background:linear-gradient(180deg,#0a0a08,#060606)!important;
-}
-.export-dialog-title{margin:0!important;color:#eee7da!important;font-size:20px!important;font-weight:900!important;letter-spacing:.20em!important;text-transform:uppercase!important}
-.export-dialog-subtitle{margin:4px 0 0!important;color:#928b7d!important;font-size:13px!important}
-.export-tabs{
-  min-height:44px!important;display:flex!important;align-items:stretch!important;gap:0!important;
-  padding:0 18px!important;border-bottom:1px solid rgba(215,196,155,.12)!important;background:#050505!important;
-  overflow-x:auto!important;overflow-y:hidden!important;
 }
 .export-tabs button{
   flex:0 0 auto!important;min-width:92px!important;height:44px!important;min-height:44px!important;
@@ -829,10 +810,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   height:min(790px,calc(100vh - 44px))!important;
   grid-template-rows:auto minmax(300px,40vh) auto minmax(250px,1fr)!important;
 }
-.export-dialog-header{
-  min-height:72px!important;
-  padding:14px 18px!important;
-}
 
 /* In this build the preview block sits above tabs. Keep it useful but not dominant. */
 .export-preview-card{
@@ -869,12 +846,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 }
 
 /* Tabs: smaller, clean, no crowding. */
-.export-tabs{
-  min-height:42px!important;
-  height:42px!important;
-  padding:0 14px!important;
-  overflow-x:auto!important;
-}
 .export-tabs button{
   height:42px!important;
   min-height:42px!important;
@@ -1537,10 +1508,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   height:30px!important;
   padding:5px 10px!important;
   white-space:nowrap!important;
-}
-.kicad-export-grid{
-  max-height:none!important;
-  overflow:visible!important;
 }
 
 /* Package tab: recommended card actions */
