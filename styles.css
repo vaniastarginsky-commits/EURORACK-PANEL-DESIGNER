@@ -151,7 +151,7 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .toolbar-popover .help-card{border:1px solid rgba(215,196,155,.13)!important;background:#080807!important;padding:9px!important;color:#d8d0c0!important}
 .toolbar-popover .help-card strong{display:block!important;color:#f2dfb2!important;margin-bottom:4px!important}
 .mobile-sidebar-backdrop{z-index:60!important}
-.app-modal-backdrop,.template-manager-backdrop,.local-projects-backdrop,.export-dialog-backdrop,.command-palette-backdrop{z-index:2147483200!important}
+.app-modal-backdrop{z-index:2147483200!important}
 @media(max-width:700px){
   .toolbar-popover{left:8px!important;right:8px!important;top:48px!important;min-width:0!important;max-width:none!important}
   .toolbar-popover.help-popover{min-width:0!important}
@@ -755,8 +755,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 }
 
 /* Checkbox rows: no display:contents; explicit 18px + text grid */
-.export-options-grid,
-.kicad-export-grid,
 .export-action-grid{
   display:grid!important;
   grid-template-columns:1fr 1fr!important;
