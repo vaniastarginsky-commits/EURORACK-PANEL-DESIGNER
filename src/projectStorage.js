@@ -1,3 +1,4 @@
+const LOCAL_PROJECTS_KEY = "eurorack-panel-local-projects-v1";
 function safeProjectFileName(name) {
   const base =
     (name || "panel-layout")

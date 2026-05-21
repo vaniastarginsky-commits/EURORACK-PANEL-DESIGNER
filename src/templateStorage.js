@@ -1,3 +1,5 @@
+const LOCAL_TEMPLATE_INDEX_KEY = "eurorack-panel-templates-index-v1";
+const LOCAL_TEMPLATE_PREFIX = "eurorack-panel-template:";
 async function makeTemplateFromState(state, kind, componentIds) {
   const selectedSet = new Set(componentIds || []);
   const comps =
