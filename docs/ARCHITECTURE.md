@@ -163,41 +163,61 @@ Do not execute these passes until explicitly directed.
 | 16 | 1790–1849 | **ErrorBoundary React component** | `ErrorBoundary` | React (browser) | main.js only |
 | 17 | 1889–1987 | **Runtime self-test** | `runRuntimeSelfTest` | Pure (calls validateAndNormalize, serializeProject, COMPONENT_LIBRARY) | ExportDialog.js, App.js |
 
-### Dependency notes
+### Re-audit after Passes 1–3 (Groups 9, 16, 7 extracted)
 
-- Groups 12 (warning engine) and 14 (OBB math) are tightly coupled — the warning engine uses OBB math internally. They must be extracted together or left together.
-- Groups 5 and 6 (taxonomy + display helpers) are referenced by Groups 7 and 8 inside core.js. Extracting 7 or 8 requires these to already be defined (they are, since all are in the same file today).
-- Group 10 (panel geometry) is the most widely depended-on group outside core.js — 8+ files. Keep in place until last.
+Current state: **1378 lines**, 14 remaining groups (renumbered A–N below).
 
-### Proposed extraction plan (not yet executed)
+| ID | Lines (approx) | Group | Key names | Pure? | External callers | Intra-core deps |
+|----|----------------|-------|-----------|-------|-----------------|-----------------|
+| A | 1–31 | Bootstrap / build metadata | `APP_VERSION`, `__EURORACK_PANEL_DESIGNER_BUILD__` | Browser, parse-time | None | None |
+| B | 32–39 | Eurorack constants | `HP_TO_MM`, `PANEL_HEIGHT_MM`, `MOUNTING_HOLE_*`, `MAX_UNDO`, `STANDARD_HP` | Pure | 15+ files | None |
+| C | 40–85 | App defaults | `DEFAULT_EXPORT_OPTIONS`, `defaultSnapSettings` | Pure | App.js, ExportDialog.js, kiCadExport.js, exportEngine.js, psdExport.js | None |
+| D | 86–139 | DFM + layer visibility | `DFM_PROFILES`, `defaultLayerVisibility` | Pure | ExportDialog.js, projectSchema.js, App.js | Group M (makeInitialState) calls defaultLayerVisibility |
+| E | 140–221 | Component taxonomy | `inferCategoryForType`, `isSamePartType`, `REF_PREFIX_BY_TYPE`, `refPrefixForType`, `nextRefForComponent`, `renumberRefs` | Pure | 13+ files | None |
+| F | 222–317 | Component display helpers | `defaultAttachedLabelFor`, `verificationLabel`, `verificationColor`, `isPartVerified`, `shortPartName`, `defaultLabelForComponentDef`, `partTooltip` | Pure | 11+ files | `defaultAttachedLabelFor` → `getFrontBottomOffset` (Group I) |
+| G | 318–360 | Component sorting | `COMPONENT_TYPE_SORT_ORDER`, `componentSortKey`, `sortComponentDefs` | Pure | LeftSidebarPanels.js, MobileDock.js | `componentSortKey` → `inferCategoryForType` (E), `shortPartName` (F) |
+| H | 361–462 | Panel / mounting-hole geometry | `panelWidthMM`, `snapToGrid`, `mountingHoleRailY`, `mountingHoleSide`, `normalizeMountingHoleRail`, `mountingHolesForPreset`, `defaultMountingHoles`, `defaultMountingHoleConfig`, `normalizeMountingHoleConfig` | Pure | 18+ files (most widely used) | Uses B constants; called by Group M |
+| I | 463–583 | Front-shape / DIP-8 geometry | `aabbOverlap`, `circleOverlap`, `getFrontShape`, `dip8Socket*`, `rotatePointLocal`, `getFrontOBB`, `getFrontExtents`, `getFrontBottomOffset`, `frontClearance` | Pure | 12+ files | `getFrontExtents` → `obbEdgeExtents` (L) |
+| J | 584–949 | Warning / DFM engine | `pcbHeightWarnings`, `mergeBroadAABB`, `inflateBroadAABB`, `componentWarningBroadAABB`, `buildWarningPairCandidateMap`, `computeWarnings` | Pure | App.js, RightSidebarProductionPanels.js, ExportDialog.js | Groups I and L heavily |
+| K | 950–1010 | Measurement / scale factories | `computeMaxDepth`, `distanceBetween`, `edgeClearance`, `getScaleReferenceRadius`, `makeCompactKnobScale`, `makeFaderScale` | Pure | 7 files | `edgeClearance` → `frontClearance` (I); `makeFaderScale` → `getFrontBounds` (I) |
+| L | 1011–1131 | OBB collision math | `degToRad`, `obbVertices`, `obbAxes`, `projectOntoAxis`, `obbOverlap`, `obbEdgeExtents`, `makeBodyOBB`, `makeKeepoutOBB`, `makeRearBodyFootprintOBBAt`, `getRearBodyFootprintExtentsAt`, `makeHoleOBB` | Pure math | Canvas.js, canvasOverlays.js, exportHelpers.js, AppOverlays.js, App.js | **Zero** — completely self-contained within group |
+| M | 1132–1278 | App state factories | `makeInitialState`, `snapshot`, `withHistory`, `layerVisibilityForViewMode` | Pure | appState.js, MobileDock.js, TemplatesDialog.js, App.js | Groups C, D, H |
+| N | 1279–1378 | Runtime self-test | `runRuntimeSelfTest` | Pure | ExportDialog.js, App.js | `panelWidthMM` (H); cross-file: `COMPONENT_LIBRARY`, `validateAndNormalize`, `serializeProject` |
 
-**Pass 1 — UX part history (Group 9)** ← safest first
-- Target: `src/ux/partHistory.js`
-- Move: `UX_RECENT_PARTS_KEY`, `UX_FAVORITE_PARTS_KEY`, `partStableKey`, `readStringListStorage`, `writeStringListStorage`, `rememberRecentPart`, `sendPartPlacementEvent`
-- **Zero intra-core.js dependencies** — completely self-contained
-- Add script tag before `core.js` (or after `componentHelpers.js` — either works)
-- Risk: **low** — 33 lines, no logic change, no load-order issue
+### Coupling constraints
 
-**Pass 2 — ErrorBoundary (Group 16)**
-- Target: append to `src/runtime-errors.js` (already a browser-error handler; ErrorBoundary is the React-tree equivalent)
-- Move: `ErrorBoundary` class
-- Caller: main.js only; main.js loads last, after runtime-errors.js
-- Risk: **low** — ~60 lines, self-contained React class, one caller
+- **L → I**: `getFrontExtents` (Group I) calls `obbEdgeExtents` (Group L). Extracting L first leaves I intact — `obbEdgeExtents` stays globally visible.
+- **J → I + L**: `computeWarnings` calls both OBB and front-shape functions. Groups I, J, L form a cluster; J cannot move without I and L already being global.
+- **G → E + F**: `componentSortKey` calls `inferCategoryForType` and `shortPartName`. If G moves after core.js, both are already global.
+- **K → I**: `edgeClearance` and `makeFaderScale` call functions from Group I. If K moves after core.js, Group I globals are available.
+- **M → C + D + H**: `makeInitialState` calls `defaultSnapSettings`, `defaultLayerVisibility`, `defaultMountingHoleConfig`. These must remain global before M's functions are called.
 
-**Pass 3 — React part library UI (Group 7)**
-- Target: `src/components/library/PartLibraryUI.js`
-- Move: `PartIcon`, `PartPickerLabel`, `LibraryPartPreview`
-- Depends on: componentHelpers.js globals (`isFaderLike` etc.) and core.js globals (`getFrontBounds`, `dip8SocketHoleCenters`) — must load after both
-- Only `LibraryPartPreview` is called externally (LeftSidebarPanels.js)
-- Risk: **medium** — ~515 lines, React components with many indirect deps
+### Proposed extraction order (remaining passes)
 
-**Pass 4 — OBB math + warning engine (Groups 12 + 14, joint)**
-- Target: `src/geometry/obbMath.js` (Group 14) + `src/warningEngine.js` (Group 12)
-- Groups are coupled: warning engine uses OBB internally; extract both at once
-- Callers span Canvas.js, App.js, ExportDialog.js, canvasOverlays.js, AppOverlays.js, exportHelpers.js
-- Risk: **medium-high** — large extraction, many callers, needs careful load ordering
+**Next — OBB math (Group L)** ← safest remaining
+- Target: `src/geometry/obbMath.js`
+- Move: `degToRad`, `obbVertices`, `obbAxes`, `projectOntoAxis`, `obbOverlap`, `obbEdgeExtents`, `makeBodyOBB`, `makeKeepoutOBB`, `makeRearBodyFootprintOBBAt`, `getRearBodyFootprintExtentsAt`, `makeHoleOBB`
+- **Zero intra-core.js dependencies** — purely self-contained math
+- Load before `core.js` so Groups I and J can still call these as globals
+- Risk: **low** — 121 lines, pure functions, no logic change
 
-Later passes (Groups 2–6, 8, 10, 11, 13, 15, 17) depend on each other heavily and are best addressed after the above passes reduce core.js size and make the remaining boundaries clearer.
+**Then — Component sorting (Group G)**
+- Target: `src/components/library/componentSorting.js` or keep near PartLibraryUI
+- Depends on `inferCategoryForType` and `shortPartName` (both stay in core.js, visible as globals)
+- Load after `core.js`; callers are LeftSidebarPanels.js and MobileDock.js
+- Risk: **low** — 43 lines, 2 callers
+
+**Then — Runtime self-test (Group N)**
+- Target: `src/diagnostics/runtimeSelfTest.js`
+- Load after `projectStorage.js` (needs `serializeProject`)
+- Risk: **low-medium** — 100 lines, cross-file deps all already global at runtime
+
+**Later — Measurement/scale factories (Group K), warning engine (Group J)**
+- K is extractable independently (43 lines in Group I remain in core.js as globals)
+- J is the largest remaining group; extract last or with I
+
+**Keep in core.js until last — Groups B, E, F, H, M**
+These are the most widely used (10–18 external callers each) and are depended on by other remaining groups. Extracting them last avoids cascading load-order work.
 
 ## Styles
 
