@@ -56,6 +56,33 @@ const states = [
     await page.locator(".export-tabs").getByRole("button", { name: "KiCad", exact: true }).click();
   }],
 
+  // P1: export dialog – PNG tab (checkboxes + DPI select; export-dialog-actions footer in view)
+  ["desktop-export-png", desktop, async page => {
+    await clickButton(page, "File ▾");
+    await clickButton(page, "Export...");
+    await page.locator(".export-dialog-panel").waitFor({ state: "visible" });
+    await page.locator(".export-tabs").getByRole("button", { name: "PNG", exact: true }).click();
+    await page.locator(".export-tab-body").waitFor({ state: "visible" });
+  }],
+
+  // P1: export dialog – Package tab (export-recommended-banner + package card + action grid)
+  ["desktop-export-package", desktop, async page => {
+    await clickButton(page, "File ▾");
+    await clickButton(page, "Export...");
+    await page.locator(".export-dialog-panel").waitFor({ state: "visible" });
+    await page.locator(".export-tabs").getByRole("button", { name: "Package", exact: true }).click();
+    await page.locator(".export-recommended-banner").waitFor({ state: "visible" });
+  }],
+
+  // P1: export dialog – Report tab (runtime-diagnostics-card + production checklist)
+  ["desktop-export-report", desktop, async page => {
+    await clickButton(page, "File ▾");
+    await clickButton(page, "Export...");
+    await page.locator(".export-dialog-panel").waitFor({ state: "visible" });
+    await page.locator(".export-tabs").getByRole("button", { name: "Report", exact: true }).click();
+    await page.locator(".runtime-diagnostics-card").waitFor({ state: "visible" });
+  }],
+
   // P1: layer manager (lives in right sidebar Layers tab; the canvas-layer-panel / layer-panel-trigger
   //     component in Canvas.js is defined but never instantiated — this is the real layer manager)
   ["desktop-layer-manager", desktop, async page => {
