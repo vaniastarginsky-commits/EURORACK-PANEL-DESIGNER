@@ -26,18 +26,19 @@ Tracks dead CSS removal on the `ux-polish` branch. Target file: `styles.css`.
 | `3785f06` | test: add export dialog visual coverage (PNG, Package, Report tabs) |
 | `b831864` | style: remove shadowed export dialog layout CSS (batch #2, 15 rules) |
 | `281b507` | style: remove remaining shadowed export dialog CSS (batch #3A, 15 rules) |
+| `e893194` | style: remove shadowed KiCad export CSS (3 rules) |
 
 ---
 
 ## Current state
 
-**Approximate `!important` count:** 3,163 (measured after 281b507)
+**Approximate `!important` count:** 3,150 (measured after e893194)
 
-**Cascade audit (fresh after 281b507):**
-- Total lines: 4,251
-- Raw rules parsed: 928
-- !important count: 3,163
-- Whole-rule deletion candidates: 32
+**Cascade audit (fresh after e893194):**
+- Total lines: 4,236
+- Raw rules parsed: 925
+- !important count: 3,150
+- Whole-rule deletion candidates: 29
 - Selector-list item removal candidates: 40
 
 ---
@@ -102,6 +103,13 @@ Selectors removed: `.export-preview-stats` (v437), `.export-tabs button` (v437),
 
 Note: ruleIndex numbers for this batch were re-derived from the fresh post-batch-#2 audit because batch #2 deletions shifted all subsequent ruleIndexes. The 15 candidates were matched by selector string, not original ruleIndex.
 
+### KiCad export CSS cleanup (commit `e893194`)
+3 whole-rule deletions, −14 lines, −13 `!important`. Verify: 19/19.
+
+Rules removed: `.kicad-preset-row` (v432 occurrence, `gap:8px` single-line), `.kicad-origin-row` (v437, multi-line `grid-template-columns:90px minmax(180px,300px)`), `.kicad-preset-row` (v437 occurrence, `gap:7px` multi-line).
+
+**Preservation note:** A non-candidate `.kicad-origin-row` at former L378 with `grid-template-columns:auto minmax(0,240px)` was correctly retained — it was not shadowed by the same winner and remains live.
+
 ---
 
 ## Deferred — do not touch without Codex review
@@ -143,25 +151,29 @@ Rules that differ in property values (not just shadow/override) require manual v
 ~~**Export dialog cascade batch #1** (10 rules)~~ ✅ Done (commit `ecab357`)
 ~~**Export dialog cascade batch #2** (15 rules)~~ ✅ Done (commit `b831864`)
 ~~**Export dialog cascade batch #3A** (15 rules)~~ ✅ Done (commit `281b507`)
+~~**KiCad export CSS cleanup** (3 rules)~~ ✅ Done (commit `e893194`)
 
 **Export dialog remaining deferred:**
-- `.export-dialog-panel` dimensions — width, height, grid-template-rows; two occurrences, high structural risk.
-- `.export-tab-body > *` — z-index:2 + pointer-events:auto; stacking context concern; deferred pending dedicated review.
+- `.export-dialog-panel` dimensions — two occurrences (v429 + v437); width, height, grid-template-rows; high structural risk.
+- `.export-tab-body > *` — z-index:2 + pointer-events:auto; stacking context concern.
 
-**Next approved bonus batch (KiCad row cleanup) — Codex pre-approved, styles.css-only:**
-- `.kicad-preset-row` (v432 occurrence) — display:flex, gap, flex-wrap, margin
-- `.kicad-origin-row` (v437) — display:grid, grid-template-columns, gap, align-items, margin
-- `.kicad-preset-row` (v437 occurrence) — display:flex, flex-wrap, gap, margin
-All covered by `desktop-export-kicad`. No blockers. Ready to commit as `style: remove shadowed KiCad row CSS`.
+**Fresh audit (post-KiCad cleanup) — 29 whole-rule candidates, 40 selectorListItem candidates:**
+
+Top categories:
+- **v376-clean-style (10 rules):** `.sidebar-left`, `.sidebar-right`, `.app-brand`, `.component-hover-card`, `.template-manager-backdrop`, `.local-projects-panel`, `.inline-modal-card`, `.inline-modal-title`, `.inline-modal-actions`, `.inline-modal-actions button.danger` — majority on line 2 (S1 surgery required).
+- **v433-desktop-dock-grid-export-templates-fix (8 rules):** `.template-manager-panel .template-card-realistic/main/actions`, `.export-tab-body > *` (deferred), `.layer-manager-presets`, `.layer-manager-name`, `.compact-render-row`, `.perf-toggle`.
+- **v429-templates-export-modal-css-fix (4 rules):** `.template-card-grid,.preset-card-grid`, `.template-preview-realistic,.library-real-preview`, `.template-card-main h3/strong`, `.export-dialog-panel` (deferred).
+- **v427-canvas-rail-overlap-fix (2 rules):** `.canvas-hud`, `.canvas-quick-dock`.
+- **Singletons (5 rules):** `.sidebar-left .component-library-shell`, `.quick-pop-grid`, `.layer-manager-presets` (v430), `.export-dialog-panel` (v437, deferred), `.toolbar-popover.topbar-section-popover`.
+
+**Next recommended Codex batch:**
+Template manager card cascade (v433, 3–4 rules), canvas HUD/dock (v427, 2 rules), layer manager (v430/v433, 2–3 rules) — all covered by existing screenshots. Excludes S1 line-2 surgery (requires separate operation).
 
 **Remaining visual-only candidates (line-2 surgery):**
 Candidates are all on the minified line 2 (S1).
 `.sidebar-left`/`.sidebar-right` border: safe but require minified-line surgery.
 `.inline-modal-title`, `.inline-modal-actions button.danger`: value differences — require Codex review.
-All four must be treated as a single L2 surgery operation.
-
-**Fresh audit (post-batch #3A):**
-32 whole-rule candidates and 40 selector-list item candidates remain per `design-review/css-cascade-audit.json`.
+All must be treated as a single L2 surgery operation.
 
 ---
 

@@ -1,120 +1,120 @@
 ═══════════════════════════════════════════════════════════════
 CSS CASCADE AUDIT — styles.css
 ═══════════════════════════════════════════════════════════════
-Total lines              : 4251
-Raw rules parsed         : 928
-Expanded entries         : 1688  (after selector-list expansion)
+Total lines              : 4237
+Raw rules parsed         : 925
+Expanded entries         : 1685  (after selector-list expansion)
 Unique sel keys          : 1330
 Duplicated sel keys      : 229
-!important count         : 3163
-Shadowed declarations    : 798
-Whole-rule del. cands.   : 32
+!important count         : 3150
+Shadowed declarations    : 785
+Whole-rule del. cands.   : 29
 Sel-list item rem. cands.: 40
 Full candidate list      : design-review/css-cascade-audit.json
 
 ── TOP 20 WORST DUPLICATED SELECTORS ──────────────────────────
 
 1. [score:106] .export-dialog-panel ★
-   Occurrences   : 8  (lines 227, 245, 349, 470, 774, 1031, 1974, 3001)
-   Rule indices  : 345, 363, 408, 440, 491, 525, 627, 759
+   Occurrences   : 8  (lines 227, 245, 349, 469, 773, 1017, 1960, 2987)
+   Rule indices  : 345, 363, 408, 439, 490, 522, 624, 756
    Sections      : v429-templates-export-modal-css-fix → v432-templates-export-layout-fix → v433-desktop-dock-grid-export-templates-fix → v437-export-layout-polish → v439-export-senior-layout-pass → v444-export-tabs-final-fit → v451-mobile-canvas-dock-cleanup legacy block.
    Repeated props: 10  Shadowed earlier: 26
    Props list    : width, max-height, overflow, background, border, box-shadow, color, display, grid-template-rows, height
-     width: min(1180px,calc(100vw - 36px)) !important (rule #627 line 1974, 6 decls)
+     width: min(1180px,calc(100vw - 36px)) !important (rule #624 line 1960, 6 decls)
      max-height: calc(100vh - 36px) !important (rule #408 line 349, 2 decls)
-     overflow: hidden !important (rule #525 line 1031, 3 decls)
-     background: #070706 !important (rule #525 line 1031, 3 decls)
-     border: 1px solid rgba(215,196,155,.28) !important (rule #525 line 1031, 4 decls)
-     box-shadow: 0 30px 96px rgba(0,0,0,.88) !important (rule #525 line 1031, 4 decls)
+     overflow: hidden !important (rule #522 line 1017, 3 decls)
+     background: #070706 !important (rule #522 line 1017, 3 decls)
+     border: 1px solid rgba(215,196,155,.28) !important (rule #522 line 1017, 4 decls)
+     box-shadow: 0 30px 96px rgba(0,0,0,.88) !important (rule #522 line 1017, 4 decls)
      … and 4 more
 
 2. [score:79] .sidebar-left input[type="radio"] ★
-   Occurrences   : 4  (lines 104, 112, 2425, 2456)
-   Rule indices  : 251, 254, 692, 695
+   Occurrences   : 4  (lines 104, 112, 2411, 2442)
+   Rule indices  : 251, 254, 689, 692
    Sections      : v424-sidebar-controls-css-polish → v447-left-sidebar-compact-polish
    Repeated props: 15  Shadowed earlier: 15
    Props list    : appearance, -webkit-appearance, width, height, min-width, min-height, max-width, max-height, margin, padding…
-     appearance: none !important (rule #692 line 2425, 2 decls)
-     -webkit-appearance: none !important (rule #692 line 2425, 2 decls)
-     width: 15px !important (rule #692 line 2425, 2 decls)
-     height: 15px !important (rule #692 line 2425, 2 decls)
-     min-width: 15px !important (rule #692 line 2425, 2 decls)
-     min-height: 15px !important (rule #692 line 2425, 2 decls)
+     appearance: none !important (rule #689 line 2411, 2 decls)
+     -webkit-appearance: none !important (rule #689 line 2411, 2 decls)
+     width: 15px !important (rule #689 line 2411, 2 decls)
+     height: 15px !important (rule #689 line 2411, 2 decls)
+     min-width: 15px !important (rule #689 line 2411, 2 decls)
+     min-height: 15px !important (rule #689 line 2411, 2 decls)
      … and 9 more
 
 3. [score:74] .export-recommended-banner
-   Occurrences   : 7  (lines 2, 246, 366, 796, 1219, 1373, 2092)
-   Rule indices  : 85, 364, 412, 494, 543, 559, 644
+   Occurrences   : 7  (lines 2, 246, 366, 795, 1205, 1359, 2078)
+   Rule indices  : 85, 364, 412, 493, 540, 556, 641
    Sections      : v376-clean-style → v429-templates-export-modal-css-fix → v432-templates-export-layout-fix → v437-export-layout-polish → v439-export-senior-layout-pass → v444-export-tabs-final-fit
    Repeated props: 8  Shadowed earlier: 17
    Props list    : display, gap, margin-bottom, padding, border, background, color, margin
-     display: flex !important (rule #644 line 2092, 3 decls)
-     gap: 8px !important (rule #644 line 2092, 2 decls)
+     display: flex !important (rule #641 line 2078, 3 decls)
+     gap: 8px !important (rule #641 line 2078, 2 decls)
      margin-bottom: 10px !important (rule #412 line 366, 2 decls)
-     padding: 12px !important (rule #644 line 2092, 6 decls)
-     border: 1px solid rgba(215,196,155,.13) !important (rule #543 line 1219, 4 decls)
-     background: #080807 !important (rule #543 line 1219, 4 decls)
+     padding: 12px !important (rule #641 line 2078, 6 decls)
+     border: 1px solid rgba(215,196,155,.13) !important (rule #540 line 1205, 4 decls)
+     background: #080807 !important (rule #540 line 1205, 4 decls)
      … and 2 more
 
 4. [score:72] .export-preview-card
-   Occurrences   : 5  (lines 246, 357, 473, 1090, 1979)
-   Rule indices  : 364, 409, 443, 531, 628
+   Occurrences   : 5  (lines 246, 357, 472, 1076, 1965)
+   Rule indices  : 364, 409, 442, 528, 625
    Sections      : v429-templates-export-modal-css-fix → v432-templates-export-layout-fix → v433-desktop-dock-grid-export-templates-fix → v439-export-senior-layout-pass → v444-export-tabs-final-fit
    Repeated props: 11  Shadowed earlier: 15
    Props list    : background, border, padding, min-height, height, overflow, display, grid-template-rows, position, z-index…
-     background: #151515 !important (rule #531 line 1090, 3 decls)
-     border: 0 !important (rule #531 line 1090, 3 decls)
-     padding: 10px 14px 0 !important (rule #531 line 1090, 3 decls)
-     min-height: 0 !important (rule #531 line 1090, 2 decls)
-     height: 250px !important (rule #628 line 1979, 3 decls)
-     overflow: hidden !important (rule #531 line 1090, 2 decls)
+     background: #151515 !important (rule #528 line 1076, 3 decls)
+     border: 0 !important (rule #528 line 1076, 3 decls)
+     padding: 10px 14px 0 !important (rule #528 line 1076, 3 decls)
+     min-height: 0 !important (rule #528 line 1076, 2 decls)
+     height: 250px !important (rule #625 line 1965, 3 decls)
+     overflow: hidden !important (rule #528 line 1076, 2 decls)
      … and 5 more
 
 5. [score:72] .sidebar-left input[type="checkbox"] ★
-   Occurrences   : 2  (lines 104, 2425)
-   Rule indices  : 251, 692
+   Occurrences   : 2  (lines 104, 2411)
+   Rule indices  : 251, 689
    Sections      : v424-sidebar-controls-css-polish → v447-left-sidebar-compact-polish
    Repeated props: 14  Shadowed earlier: 14
    Props list    : appearance, -webkit-appearance, width, height, min-width, min-height, max-width, max-height, margin, padding…
-     appearance: none !important (rule #692 line 2425, 2 decls)
-     -webkit-appearance: none !important (rule #692 line 2425, 2 decls)
-     width: 15px !important (rule #692 line 2425, 2 decls)
-     height: 15px !important (rule #692 line 2425, 2 decls)
-     min-width: 15px !important (rule #692 line 2425, 2 decls)
-     min-height: 15px !important (rule #692 line 2425, 2 decls)
+     appearance: none !important (rule #689 line 2411, 2 decls)
+     -webkit-appearance: none !important (rule #689 line 2411, 2 decls)
+     width: 15px !important (rule #689 line 2411, 2 decls)
+     height: 15px !important (rule #689 line 2411, 2 decls)
+     min-width: 15px !important (rule #689 line 2411, 2 decls)
+     min-height: 15px !important (rule #689 line 2411, 2 decls)
      … and 8 more
 
 6. [score:57] .export-option-row
-   Occurrences   : 4  (lines 248, 835, 1262, 2043)
-   Rule indices  : 366, 499, 547, 637
+   Occurrences   : 4  (lines 248, 834, 1248, 2029)
+   Rule indices  : 366, 498, 544, 634
    Sections      : v429-templates-export-modal-css-fix → v437-export-layout-polish → v439-export-senior-layout-pass → v444-export-tabs-final-fit
    Repeated props: 7  Shadowed earlier: 13
    Props list    : display, align-items, gap, border-bottom, padding, min-height, color
-     display: block !important (rule #547 line 1262, 3 decls)
-     align-items: start !important (rule #499 line 835, 2 decls)
-     gap: 8px !important (rule #499 line 835, 2 decls)
-     border-bottom: 1px solid rgba(215,196,155,.08) !important (rule #637 line 2043, 4 decls)
-     padding: 7px 0 !important (rule #637 line 2043, 4 decls)
-     min-height: 34px !important (rule #637 line 2043, 3 decls)
+     display: block !important (rule #544 line 1248, 3 decls)
+     align-items: start !important (rule #498 line 834, 2 decls)
+     gap: 8px !important (rule #498 line 834, 2 decls)
+     border-bottom: 1px solid rgba(215,196,155,.08) !important (rule #634 line 2029, 4 decls)
+     padding: 7px 0 !important (rule #634 line 2029, 4 decls)
+     min-height: 34px !important (rule #634 line 2029, 3 decls)
      … and 1 more
 
 7. [score:57] .checklist-row
-   Occurrences   : 4  (lines 248, 835, 1262, 2043)
-   Rule indices  : 366, 499, 547, 637
+   Occurrences   : 4  (lines 248, 834, 1248, 2029)
+   Rule indices  : 366, 498, 544, 634
    Sections      : v429-templates-export-modal-css-fix → v437-export-layout-polish → v439-export-senior-layout-pass → v444-export-tabs-final-fit
    Repeated props: 7  Shadowed earlier: 13
    Props list    : display, align-items, gap, border-bottom, padding, min-height, color
-     display: block !important (rule #547 line 1262, 3 decls)
-     align-items: start !important (rule #499 line 835, 2 decls)
-     gap: 8px !important (rule #499 line 835, 2 decls)
-     border-bottom: 1px solid rgba(215,196,155,.08) !important (rule #637 line 2043, 4 decls)
-     padding: 7px 0 !important (rule #637 line 2043, 4 decls)
-     min-height: 34px !important (rule #637 line 2043, 3 decls)
+     display: block !important (rule #544 line 1248, 3 decls)
+     align-items: start !important (rule #498 line 834, 2 decls)
+     gap: 8px !important (rule #498 line 834, 2 decls)
+     border-bottom: 1px solid rgba(215,196,155,.08) !important (rule #634 line 2029, 4 decls)
+     padding: 7px 0 !important (rule #634 line 2029, 4 decls)
+     min-height: 34px !important (rule #634 line 2029, 3 decls)
      … and 1 more
 
 8. [score:55] .sidebar-left ★
-   Occurrences   : 6  (lines 2, 2, 19, 53, 94, 2376)
-   Rule indices  : 5, 6, 178, 208, 246, 686
+   Occurrences   : 6  (lines 2, 2, 19, 53, 94, 2362)
+   Rule indices  : 5, 6, 178, 208, 246, 683
    Sections      : v376-clean-style → v422-emergency-layout-css-restore → v423-targeted-workspace-css-restore → v424-sidebar-controls-css-polish → v447-left-sidebar-compact-polish
    Repeated props: 8  Shadowed earlier: 11
    Props list    : background, border-right, min-width, height, overflow, padding, font-size, line-height
@@ -123,12 +123,12 @@ Full candidate list      : design-review/css-cascade-audit.json
      min-width: 292px !important (rule #208 line 53, 2 decls)
      height: 100% !important (rule #208 line 53, 2 decls)
      overflow: auto !important (rule #208 line 53, 2 decls)
-     padding: 7px !important (rule #686 line 2376, 3 decls)
+     padding: 7px !important (rule #683 line 2362, 3 decls)
      … and 2 more
 
 9. [score:53] .template-manager-panel ★
-   Occurrences   : 5  (lines 227, 228, 297, 404, 3001)
-   Rule indices  : 345, 346, 391, 431, 759
+   Occurrences   : 5  (lines 227, 228, 297, 403, 2987)
+   Rule indices  : 345, 346, 391, 430, 756
    Sections      : v429-templates-export-modal-css-fix → v432-templates-export-layout-fix → v433-desktop-dock-grid-export-templates-fix → v451-mobile-canvas-dock-cleanup legacy block.
    Repeated props: 9  Shadowed earlier: 10
    Props list    : width, max-height, overflow, background, border, box-shadow, color, display, grid-template-rows
@@ -155,121 +155,98 @@ Full candidate list      : design-review/css-cascade-audit.json
      … and 2 more
 
 11. [score:49] .export-dialog-header ★
-   Occurrences   : 4  (lines 229, 474, 1048, 3010)
-   Rule indices  : 347, 444, 526, 760
+   Occurrences   : 4  (lines 229, 473, 1034, 2996)
+   Rule indices  : 347, 443, 523, 757
    Sections      : v429-templates-export-modal-css-fix → v433-desktop-dock-grid-export-templates-fix → v439-export-senior-layout-pass → v451-mobile-canvas-dock-cleanup legacy block.
    Repeated props: 9  Shadowed earlier: 9
    Props list    : display, align-items, justify-content, gap, padding, border-bottom, background, position, z-index
-     display: flex !important (rule #526 line 1048, 2 decls)
-     align-items: center !important (rule #526 line 1048, 2 decls)
-     justify-content: space-between !important (rule #526 line 1048, 2 decls)
-     gap: 16px !important (rule #526 line 1048, 2 decls)
-     padding: 0 18px !important (rule #526 line 1048, 2 decls)
-     border-bottom: 1px solid var(--export-border) !important (rule #526 line 1048, 3 decls)
+     display: flex !important (rule #523 line 1034, 2 decls)
+     align-items: center !important (rule #523 line 1034, 2 decls)
+     justify-content: space-between !important (rule #523 line 1034, 2 decls)
+     gap: 16px !important (rule #523 line 1034, 2 decls)
+     padding: 0 18px !important (rule #523 line 1034, 2 decls)
+     border-bottom: 1px solid var(--export-border) !important (rule #523 line 1034, 3 decls)
      … and 3 more
 
 12. [score:48] .layer-manager-line
-   Occurrences   : 3  (lines 534, 974, 1490)
-   Rule indices  : 456, 520, 580
+   Occurrences   : 3  (lines 533, 960, 1476)
+   Rule indices  : 455, 517, 577
    Sections      : v433-desktop-dock-grid-export-templates-fix → v437-export-layout-polish → v440-layer-manager-structural-layout
    Repeated props: 6  Shadowed earlier: 11
    Props list    : display, align-items, gap, min-height, border-bottom, padding
-     display: grid !important (rule #580 line 1490, 3 decls)
-     align-items: center !important (rule #580 line 1490, 3 decls)
-     gap: 8px !important (rule #580 line 1490, 3 decls)
-     min-height: 58px !important (rule #580 line 1490, 3 decls)
-     border-bottom: 1px solid rgba(215,196,155,.10) !important (rule #580 line 1490, 2 decls)
-     padding: 9px 0 !important (rule #580 line 1490, 3 decls)
+     display: grid !important (rule #577 line 1476, 3 decls)
+     align-items: center !important (rule #577 line 1476, 3 decls)
+     gap: 8px !important (rule #577 line 1476, 3 decls)
+     min-height: 58px !important (rule #577 line 1476, 3 decls)
+     border-bottom: 1px solid rgba(215,196,155,.10) !important (rule #577 line 1476, 2 decls)
+     padding: 9px 0 !important (rule #577 line 1476, 3 decls)
 
 13. [score:48] .export-option-row label
-   Occurrences   : 3  (lines 846, 1270, 2049)
-   Rule indices  : 500, 548, 638
+   Occurrences   : 3  (lines 845, 1256, 2035)
+   Rule indices  : 499, 545, 635
    Sections      : v437-export-layout-polish → v439-export-senior-layout-pass → v444-export-tabs-final-fit
    Repeated props: 6  Shadowed earlier: 11
    Props list    : display, grid-template-columns, gap, align-items, width, min-width
-     display: grid !important (rule #638 line 2049, 3 decls)
-     grid-template-columns: 16px minmax(0,1fr) !important (rule #638 line 2049, 3 decls)
-     gap: 9px !important (rule #638 line 2049, 3 decls)
-     align-items: start !important (rule #638 line 2049, 3 decls)
-     width: 100% !important (rule #638 line 2049, 3 decls)
-     min-width: 0 !important (rule #548 line 1270, 2 decls)
+     display: grid !important (rule #635 line 2035, 3 decls)
+     grid-template-columns: 16px minmax(0,1fr) !important (rule #635 line 2035, 3 decls)
+     gap: 9px !important (rule #635 line 2035, 3 decls)
+     align-items: start !important (rule #635 line 2035, 3 decls)
+     width: 100% !important (rule #635 line 2035, 3 decls)
+     min-width: 0 !important (rule #545 line 1256, 2 decls)
 
 14. [score:48] .checklist-row label
-   Occurrences   : 3  (lines 846, 1270, 2049)
-   Rule indices  : 500, 548, 638
+   Occurrences   : 3  (lines 845, 1256, 2035)
+   Rule indices  : 499, 545, 635
    Sections      : v437-export-layout-polish → v439-export-senior-layout-pass → v444-export-tabs-final-fit
    Repeated props: 6  Shadowed earlier: 11
    Props list    : display, grid-template-columns, gap, align-items, width, min-width
-     display: grid !important (rule #638 line 2049, 3 decls)
-     grid-template-columns: 16px minmax(0,1fr) !important (rule #638 line 2049, 3 decls)
-     gap: 9px !important (rule #638 line 2049, 3 decls)
-     align-items: start !important (rule #638 line 2049, 3 decls)
-     width: 100% !important (rule #638 line 2049, 3 decls)
-     min-width: 0 !important (rule #548 line 1270, 2 decls)
+     display: grid !important (rule #635 line 2035, 3 decls)
+     grid-template-columns: 16px minmax(0,1fr) !important (rule #635 line 2035, 3 decls)
+     gap: 9px !important (rule #635 line 2035, 3 decls)
+     align-items: start !important (rule #635 line 2035, 3 decls)
+     width: 100% !important (rule #635 line 2035, 3 decls)
+     min-width: 0 !important (rule #545 line 1256, 2 decls)
 
 15. [score:46] .export-dialog-backdrop ★
-   Occurrences   : 3  (lines 157, 226, 1020)
-   Rule indices  : 290, 344, 524
+   Occurrences   : 3  (lines 157, 226, 1006)
+   Rule indices  : 290, 344, 521
    Sections      : v426-toolbar-popover-css-fix → v429-templates-export-modal-css-fix → v439-export-senior-layout-pass
    Repeated props: 8  Shadowed earlier: 9
    Props list    : z-index, position, inset, background, backdrop-filter, display, place-items, padding
-     z-index: 2147483200 !important (rule #524 line 1020, 3 decls)
-     position: fixed !important (rule #524 line 1020, 2 decls)
-     inset: 0 !important (rule #524 line 1020, 2 decls)
-     background: rgba(0,0,0,.76) !important (rule #524 line 1020, 2 decls)
-     backdrop-filter: blur(8px) !important (rule #524 line 1020, 2 decls)
-     display: grid !important (rule #524 line 1020, 2 decls)
+     z-index: 2147483200 !important (rule #521 line 1006, 3 decls)
+     position: fixed !important (rule #521 line 1006, 2 decls)
+     inset: 0 !important (rule #521 line 1006, 2 decls)
+     background: rgba(0,0,0,.76) !important (rule #521 line 1006, 2 decls)
+     backdrop-filter: blur(8px) !important (rule #521 line 1006, 2 decls)
+     display: grid !important (rule #521 line 1006, 2 decls)
      … and 2 more
 
 16. [score:45] .layer-manager-presets
-   Occurrences   : 4  (lines 280, 528, 938, 1471)
-   Rule indices  : 388, 455, 517, 578
+   Occurrences   : 4  (lines 280, 527, 924, 1457)
+   Rule indices  : 388, 454, 514, 575
    Sections      : v430-top-add-quick-popover-icon-fix → v433-desktop-dock-grid-export-templates-fix → v437-export-layout-polish → v440-layer-manager-structural-layout
    Repeated props: 4  Shadowed earlier: 11
    Props list    : display, grid-template-columns, gap, margin
-     display: grid !important (rule #578 line 1471, 4 decls)
-     grid-template-columns: repeat(2,minmax(0,1fr)) !important (rule #578 line 1471, 4 decls)
-     gap: 6px !important (rule #578 line 1471, 4 decls)
-     margin: 8px 0 12px !important (rule #578 line 1471, 3 decls)
+     display: grid !important (rule #575 line 1457, 4 decls)
+     grid-template-columns: repeat(2,minmax(0,1fr)) !important (rule #575 line 1457, 4 decls)
+     gap: 6px !important (rule #575 line 1457, 4 decls)
+     margin: 8px 0 12px !important (rule #575 line 1457, 3 decls)
 
-17. [score:45] .kicad-preset-row
-   Occurrences   : 4  (lines 377, 869, 1359, 2187)
-   Rule indices  : 416, 503, 557, 658
-   Sections      : v432-templates-export-layout-fix → v437-export-layout-polish → v439-export-senior-layout-pass → v444-export-tabs-final-fit
-   Repeated props: 4  Shadowed earlier: 11
-   Props list    : display, gap, flex-wrap, margin
-     display: flex !important (rule #658 line 2187, 4 decls)
-     gap: 8px !important (rule #658 line 2187, 4 decls)
-     flex-wrap: wrap !important (rule #658 line 2187, 4 decls)
-     margin: 0 0 12px !important (rule #557 line 1359, 3 decls)
-
-18. [score:44] .kicad-origin-row
-   Occurrences   : 4  (lines 378, 858, 1338, 2184)
-   Rule indices  : 417, 501, 554, 657
-   Sections      : v432-templates-export-layout-fix → v437-export-layout-polish → v439-export-senior-layout-pass → v444-export-tabs-final-fit
-   Repeated props: 5  Shadowed earlier: 10
-   Props list    : display, grid-template-columns, gap, align-items, margin
-     display: grid !important (rule #554 line 1338, 3 decls)
-     grid-template-columns: 90px minmax(180px,310px) !important (rule #657 line 2184, 4 decls)
-     gap: 12px !important (rule #554 line 1338, 3 decls)
-     align-items: center !important (rule #554 line 1338, 3 decls)
-     margin: 0 0 14px !important (rule #554 line 1338, 2 decls)
-
-19. [score:43] .runtime-diagnostics-card
-   Occurrences   : 6  (lines 246, 366, 796, 1219, 1386, 2137)
-   Rule indices  : 364, 412, 494, 543, 561, 649
+17. [score:43] .runtime-diagnostics-card
+   Occurrences   : 6  (lines 246, 366, 795, 1205, 1372, 2123)
+   Rule indices  : 364, 412, 493, 540, 558, 646
    Sections      : v429-templates-export-modal-css-fix → v432-templates-export-layout-fix → v437-export-layout-polish → v439-export-senior-layout-pass → v444-export-tabs-final-fit
    Repeated props: 5  Shadowed earlier: 9
    Props list    : background, border, color, padding, margin
-     background: #080807 !important (rule #543 line 1219, 3 decls)
-     border: 1px solid rgba(215,196,155,.13) !important (rule #543 line 1219, 3 decls)
+     background: #080807 !important (rule #540 line 1205, 3 decls)
+     border: 1px solid rgba(215,196,155,.13) !important (rule #540 line 1205, 3 decls)
      color: #d8d0c0 !important (rule #412 line 366, 2 decls)
-     padding: 12px !important (rule #543 line 1219, 4 decls)
-     margin: 0 0 12px !important (rule #543 line 1219, 2 decls)
+     padding: 12px !important (rule #540 line 1205, 4 decls)
+     margin: 0 0 12px !important (rule #540 line 1205, 2 decls)
 
-20. [score:43] .template-card-realistic
-   Occurrences   : 5  (lines 2, 237, 238, 329, 420)
-   Rule indices  : 105, 355, 356, 399, 433
+18. [score:43] .template-card-realistic
+   Occurrences   : 5  (lines 2, 237, 238, 329, 419)
+   Rule indices  : 105, 355, 356, 399, 432
    Sections      : v376-clean-style → v429-templates-export-modal-css-fix → v432-templates-export-layout-fix → v433-desktop-dock-grid-export-templates-fix
    Repeated props: 7  Shadowed earlier: 8
    Props list    : background, border, color, min-height, overflow, display, grid-template-rows
@@ -281,28 +258,55 @@ Full candidate list      : design-review/css-cascade-audit.json
      display: grid !important (rule #399 line 329, 2 decls)
      … and 1 more
 
+19. [score:42] body
+   Occurrences   : 4  (lines 2, 2, 5, 45)
+   Rule indices  : 2, 3, 164, 200
+   Sections      : v376-clean-style → v422-emergency-layout-css-restore → v423-targeted-workspace-css-restore
+   Repeated props: 7  Shadowed earlier: 8
+   Props list    : background, color, font-family, width, height, margin, overflow
+     background: #020202 !important (rule #200 line 45, 3 decls)
+     color: #eee7da !important (rule #200 line 45, 3 decls)
+     font-family: Inter,"SF Pro Text",system-ui,-apple-system,BlinkMacSystemFont,sans-serif !important (rule #3 line 2, 2 decls)
+     width: 100vw !important (rule #200 line 45, 2 decls)
+     height: 100vh !important (rule #200 line 45, 2 decls)
+     margin: 0 !important (rule #200 line 45, 2 decls)
+     … and 1 more
+
+20. [score:41] .sidebar-right ★
+   Occurrences   : 5  (lines 2, 2, 20, 54, 94)
+   Rule indices  : 5, 7, 179, 209, 246
+   Sections      : v376-clean-style → v422-emergency-layout-css-restore → v423-targeted-workspace-css-restore → v424-sidebar-controls-css-polish
+   Repeated props: 6  Shadowed earlier: 8
+   Props list    : background, border-left, min-width, height, overflow, padding
+     background: #030303 !important (rule #209 line 54, 3 decls)
+     border-left: 1px solid rgba(215,196,155,.13) !important (rule #209 line 54, 3 decls)
+     min-width: 312px !important (rule #209 line 54, 2 decls)
+     height: 100% !important (rule #209 line 54, 2 decls)
+     overflow: auto !important (rule #209 line 54, 2 decls)
+     padding: 8px !important (rule #209 line 54, 2 decls)
+
 ── PRIORITY UI AREAS WITH DUPLICATES ──────────────────────────
 Found 72 priority selectors with duplicates
   .export-dialog-panel
-    8 occs @ lines 227, 245, 349, 470, 774, 1031, 1974, 3001 | 26 shadowed
+    8 occs @ lines 227, 245, 349, 469, 773, 1017, 1960, 2987 | 26 shadowed
   .sidebar-left input[type="radio"]
-    4 occs @ lines 104, 112, 2425, 2456 | 15 shadowed
+    4 occs @ lines 104, 112, 2411, 2442 | 15 shadowed
   .sidebar-left input[type="checkbox"]
-    2 occs @ lines 104, 2425 | 14 shadowed
+    2 occs @ lines 104, 2411 | 14 shadowed
   .sidebar-left
-    6 occs @ lines 2, 2, 19, 53, 94, 2376 | 11 shadowed
+    6 occs @ lines 2, 2, 19, 53, 94, 2362 | 11 shadowed
   .template-manager-panel
-    5 occs @ lines 227, 228, 297, 404, 3001 | 10 shadowed
+    5 occs @ lines 227, 228, 297, 403, 2987 | 10 shadowed
   .template-manager-backdrop
     4 occs @ lines 2, 157, 226, 292 | 10 shadowed
   .export-dialog-header
-    4 occs @ lines 229, 474, 1048, 3010 | 9 shadowed
+    4 occs @ lines 229, 473, 1034, 2996 | 9 shadowed
   .export-dialog-backdrop
-    3 occs @ lines 157, 226, 1020 | 9 shadowed
+    3 occs @ lines 157, 226, 1006 | 9 shadowed
   .sidebar-right
     5 occs @ lines 2, 2, 20, 54, 94 | 8 shadowed
   .canvas-hud
-    5 occs @ lines 2, 60, 165, 276, 1871 | 8 shadowed
+    5 occs @ lines 2, 60, 165, 276, 1857 | 8 shadowed
   .workspace
     4 occs @ lines 2, 18, 52, 168 | 7 shadowed
   @media(@media(max-width:900px)) .sidebar-left
@@ -310,21 +314,21 @@ Found 72 priority selectors with duplicates
   @media(@media(max-width:900px)) .sidebar-right
     4 occs @ lines 37, 39, 86, 88 | 7 shadowed
   .template-manager-panel .template-card-realistic
-    3 occs @ lines 420, 425, 634 | 7 shadowed
+    3 occs @ lines 419, 424, 633 | 7 shadowed
   .template-manager-panel>div:first-child
     2 occs @ lines 229, 307 | 7 shadowed
   .canvas-wrap
     3 occs @ lines 2, 21, 57 | 7 shadowed
   @media(@media(max-width:700px)) .export-dialog-panel
-    4 occs @ lines 387, 917, 1416, 2238 | 8 shadowed
+    4 occs @ lines 386, 903, 1402, 2224 | 8 shadowed
   .template-manager-panel h2
     2 occs @ lines 230, 312 | 6 shadowed
   .export-dialog-title
-    2 occs @ lines 230, 1062 | 6 shadowed
+    2 occs @ lines 230, 1048 | 6 shadowed
   .template-manager-panel .template-preview-realistic
-    2 occs @ lines 434, 651 | 6 shadowed
+    2 occs @ lines 433, 650 | 6 shadowed
 
-── WHOLE-RULE DELETION CANDIDATES (preview 15/32) ───
+── WHOLE-RULE DELETION CANDIDATES (preview 15/29) ───
 (safe to delete entire rule: every selector shadowed — see JSON for complete list)
   Rule #6 line 2 [v376-clean-style]
     Full rule: .sidebar-left
@@ -371,7 +375,7 @@ Found 72 priority selectors with duplicates
   Rule #354 line 236 [v429-templates-export-modal-css-fix]
     Full rule: .template-card-grid,.preset-card-grid
     All shadowed: .template-card-grid, .preset-card-grid
-  … and 17 more in design-review/css-cascade-audit.json
+  … and 14 more in design-review/css-cascade-audit.json
 
 ── SELECTOR-LIST ITEM REMOVAL CANDIDATES (preview 15/40) ───
 (only THIS selector is shadowed — do NOT delete the whole rule — see JSON for full list)
@@ -457,8 +461,8 @@ Found 72 priority selectors with duplicates
     60  v422-emergency-layout-css-restore
     55  v439-export-senior-layout-pass
     45  v429-templates-export-modal-css-fix
-    39  v437-export-layout-polish
-    38  v432-templates-export-layout-fix
+    37  v432-templates-export-layout-fix
+    37  v437-export-layout-polish
     34  v444-export-tabs-final-fit
     32  v433-desktop-dock-grid-export-templates-fix
     32  v451-mobile-canvas-dock-cleanup legacy block.
