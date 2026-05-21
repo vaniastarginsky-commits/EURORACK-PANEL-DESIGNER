@@ -853,8 +853,7 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 
 
 /* The mode buttons should be a tight 2x2 control pad */
-.compact-render-row,
-.layer-manager-presets{
+.compact-render-row{
   display:grid!important;
   grid-template-columns:repeat(2,minmax(0,1fr))!important;
   gap:6px!important;
