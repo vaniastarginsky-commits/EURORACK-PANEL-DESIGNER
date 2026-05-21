@@ -67,9 +67,7 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .hud-top-right{right:10px!important;top:10px!important}
 .selection-action-toolbar,.dfm-status-main,.selection-measure-float,.coord-readout{background:rgba(5,5,5,.88)!important;border:1px solid rgba(215,196,155,.13)!important;padding:4px 8px!important}
 .canvas-quick-dock{position:absolute!important;left:50%!important;top:10px!important;transform:translateX(-50%)!important;z-index:40!important;display:flex!important;gap:6px!important;align-items:center!important;background:rgba(5,5,5,.92)!important;border:1px solid rgba(215,196,155,.16)!important;padding:6px!important}
-.workflow-rail{display:flex!important;gap:4px!important}
-.canvas-quick-add-popover{position:absolute!important;top:42px!important;left:0!important;background:#050505!important;border:1px solid rgba(215,196,155,.22)!important;padding:10px!important;min-width:260px!important}
-.section{background:#050505!important;border:1px solid rgba(215,196,155,.10)!important;margin:0 0 8px!important;padding:8px!important}
+.workflow-rail{display:flex!important;gap:4px!important}.section{background:#050505!important;border:1px solid rgba(215,196,155,.10)!important;margin:0 0 8px!important;padding:8px!important}
 .section-title{font-size:12px!important;letter-spacing:.22em!important;text-transform:uppercase!important;color:#eee7da!important;margin-bottom:8px!important}
 .field-row{display:grid!important;grid-template-columns:98px minmax(0,1fr)!important;align-items:center!important;gap:6px!important;margin:5px 0!important}
 .field-row label{min-width:0!important;color:#928b7d!important}
@@ -216,8 +214,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .mobile-spacing-row{display:grid!important;grid-template-columns:1fr auto!important;align-items:center!important;gap:8px!important}
 .mobile-edit-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important}
 .mobile-file-open-button{display:block!important;border:1px solid rgba(215,196,155,.16)!important;background:#070707!important;color:#eee7da!important;padding:7px 9px!important;cursor:pointer!important}
-
-.canvas-quick-add-popover{position:absolute!important;top:48px!important;left:0!important;width:320px!important;max-height:calc(100vh - 140px)!important;overflow:auto!important;background:#050505!important;border:1px solid rgba(215,196,155,.24)!important;box-shadow:0 20px 70px rgba(0,0,0,.82)!important;padding:10px!important;z-index:80!important}
 .quick-pop-title{color:#d6aa58!important;font-size:12px!important;font-weight:900!important;letter-spacing:.16em!important;text-transform:uppercase!important;margin-bottom:8px!important}
 .quick-pop-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important}
 .quick-pop-grid button{min-height:58px!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;gap:3px!important}
@@ -282,9 +278,7 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   .filter-row input{min-width:0!important}
 }
 
-/* v430-top-add-quick-popover-icon-fix */
-.canvas-quick-add-popover{width:360px!important;max-width:min(360px,calc(100vw - 24px))!important;max-height:560px!important;overflow:auto!important}
-.quick-pop-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important}
+/* v430-top-add-quick-popover-icon-fix */.quick-pop-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important}
 .quick-pop-grid button{position:relative!important;min-height:82px!important;height:82px!important;overflow:hidden!important;display:grid!important;grid-template-columns:52px minmax(0,1fr)!important;grid-template-rows:auto auto!important;align-items:center!important;gap:2px 8px!important;text-align:left!important;padding:8px!important;background:#070707!important;border:1px solid rgba(215,196,155,.14)!important;color:#eee7da!important}
 .quick-pop-grid button svg,.quick-pop-grid button .part-icon,.quick-pop-grid button .component-icon-preview,.quick-pop-grid button img{grid-row:1/3!important;grid-column:1!important;width:46px!important;height:46px!important;max-width:46px!important;max-height:46px!important;min-width:0!important;min-height:0!important;object-fit:contain!important;display:block!important;transform:none!important}
 .quick-pop-grid button svg *{vector-effect:non-scaling-stroke}
@@ -292,9 +286,7 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .quick-pop-grid button small{grid-column:2!important;display:block!important;min-width:0!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:10px!important;line-height:1.15!important;color:#928b7d!important}
 .quick-pop-grid button:hover{border-color:rgba(201,154,74,.65)!important;background:#15110a!important}
 .quick-pop-title{position:sticky!important;top:0!important;background:#050505!important;z-index:2!important;padding-bottom:8px!important}
-@media(max-width:700px){
-  .canvas-quick-add-popover{left:8px!important;right:8px!important;width:auto!important;max-width:none!important}
-  .quick-pop-grid{grid-template-columns:1fr!important}
+@media(max-width:700px){  .quick-pop-grid{grid-template-columns:1fr!important}
 }
 
 /* v431-grid-and-inspector-rail-fix */
