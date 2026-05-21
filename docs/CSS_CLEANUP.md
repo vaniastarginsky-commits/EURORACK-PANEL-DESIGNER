@@ -36,6 +36,8 @@ Tracks dead CSS removal on the `ux-polish` branch. Target file: `styles.css`.
 | `a3b7b12` | style: remove shadowed layer manager selector entry (slic commit 3, 1 entry) |
 | `6cba7e9` | style: remove shadowed backdrop and export grid selectors (slic commit 4, 6 entries) |
 | `d3549d2` | style: remove shadowed template preview selectors (slic commit 5, 2 entries) |
+| `dbe8e1a` | style: remove shadowed template export selector entries (slic commit 6, 7 entries) |
+| `55b6f68` | style: remove shadowed v422 alias selectors (slic commit 7, 7 entries) |
 
 ---
 
@@ -43,13 +45,15 @@ Tracks dead CSS removal on the `ux-polish` branch. Target file: `styles.css`.
 
 **Approximate `!important` count:** 3,084 (unchanged — selector-list surgery does not change !important count)
 
-**Cascade audit (fresh after d3549d2):**
+**Cascade audit (fresh after 55b6f68):**
 - Total lines: 4,160
 - Raw rules parsed: 906
 - !important count: 3,084
 - Whole-rule deletion candidates: 10 (all on line 2 — S1 surgery only)
-- Selector-list item removal candidates: 21 (was 29; −8 removed across commits 6cba7e9 and d3549d2)
+- Selector-list item removal candidates: 7 (all on line 2 — S1/L2 only; all non-line-2 slic surgery complete)
 - Visual QA coverage: 20/20 screenshots
+
+**All non-line-2 selector-list surgery is complete. Remaining cleanup is line 2 / S1 only.**
 
 ---
 
@@ -147,9 +151,9 @@ Rules removed:
 
 Note: `desktop-export-report` visual output confirmed unchanged before/after (before/after PNG hashes identical). The removal of `.export-tab-body > *` stacking did not affect any screenshot.
 
-### Selector-list surgery — slic commits 1–5
+### Selector-list surgery — slic commits 1–7
 
-Five commits, 19 selector entries removed. `!important` count unchanged (selector strings carry no `!important`). All 20/20 screenshots passed for each commit.
+Seven commits, 33 selector entries removed. `!important` count unchanged (selector strings carry no `!important`). All 20/20 screenshots passed for each commit.
 
 **Commit 1 — `d3d6976` — sidebar/shell (6 entries):**
 - `ri211` L56: stripped `.component-library-shell` from `[style],.component-library-shell{display:none}` — winner: ri681|L2432 (`display:block`)
@@ -173,6 +177,21 @@ Five commits, 19 selector entries removed. `!important` count unchanged (selecto
 **Commit 5 — `d3549d2` — template preview (2 entries):**
 - `ri424` L410: stripped `.template-manager-panel .template-preview-realistic` from 3-selector preview container rule — live: `.library-real-preview`, `.template-preview-empty`; winner: ri458|L589 v436 solo rule
 - `ri425` L420: stripped `.template-manager-panel .template-preview-realistic svg` from 2-selector SVG rule (becomes single-selector) — `.library-real-preview svg` is the sole survivor; winner: ri459|L602 v436 solo rule
+
+**Commit 6 — `dbe8e1a` — v429 templates/export complex compounds (7 entries):**
+- `ri343` L223: stripped `.template-manager-panel>div:first-child` and `.export-dialog-header` — sole survivor: `.local-projects-toolbar`
+- `ri344` L224: stripped `.template-manager-panel h2` and `.export-dialog-title` — sole survivor: `.local-projects-panel h2`
+- `ri345` L225: stripped `.export-dialog-subtitle` and `.template-manager-panel p` — sole survivor: `.template-preset-note`
+- `ri350` L230: stripped `.template-card-realistic` — live: `.template-card-main`, `.preset-card-button`
+
+**Commit 7 — `55b6f68` — v422 alias selectors (7 entries):**
+- `ri177` L18: stripped `.workspace` from `.main,.workspace,.editor-layout,.panel-designer-layout` — winner: ri207|L52 v423 solo rule
+- `ri178` L19: stripped `.sidebar-left` from `.left-sidebar,.sidebar-left,.left-panel,.drawer-left` — winner: ri208|L53 v423 solo rule
+- `ri179` L20: stripped `.sidebar-right` from `.right-sidebar,.sidebar-right,.right-panel,.drawer-right` — winner: ri209|L54 v423 solo rule
+- `ri180` L21: stripped `.canvas-wrap` from `.center,.canvas-wrap,.canvas-area,.editor-center,.stage-wrap` — winner: ri212|L57 v423 solo rule
+- `ri183` L24: stripped `.section` from `.section,.sidebar-section,.panel-section,details` (details preserved) — winner: ri226|L70 v423 solo rule
+- `ri185` L26: stripped `.field-row` from `.row,.field-row,.form-row` — winner: ri228|L72 v423 solo rule
+- `ri186` L27: stripped `.field-row label` from `.field-row label,.form-row label` (sole survivor: `.form-row label`) — winner: ri229|L73 v423 solo rule
 
 ---
 
@@ -221,22 +240,24 @@ Rules that differ in property values (not just shadow/override) require manual v
 ~~**Export structural CSS** (panel dimensions ×2 + tab stacking)~~ ✅ Done (commit `39ceb7c`)
 ~~**Selector-list surgery commits 1–3** (11 entries)~~ ✅ Done (`d3d6976`, `fe15054`, `a3b7b12`)
 ~~**Selector-list surgery commits 4–5** (8 entries)~~ ✅ Done (`6cba7e9`, `d3549d2`)
+~~**Selector-list surgery commit 6** (7 entries — v429 templates/export)~~ ✅ Done (`dbe8e1a`)
+~~**Selector-list surgery commit 7** (7 entries — v422 aliases)~~ ✅ Done (`55b6f68`)
 
-**Fresh audit (post-d3549d2) — 10 whole-rule candidates (all L2), 21 slic candidates:**
+**Fresh audit (post-55b6f68) — 10 whole-rule candidates (all L2), 7 slic candidates (all L2):**
+
+**All non-line-2 cleanup is complete.**
 
 **Whole-rule (10, all line 2 / S1):**
 `.sidebar-left` (border-right), `.sidebar-right` (border-left), `.app-brand`, `.component-hover-card`, `.template-manager-backdrop`, `.local-projects-panel`, `.inline-modal-card`, `.inline-modal-title`, `.inline-modal-actions`, `.inline-modal-actions button.danger`.
 
-**Selector-list item candidates (21, grouped):**
+**Selector-list item candidates (7, all line 2 / S1):**
 
 | Group | Count | Area | Key dead selectors |
 |-------|-------|------|--------------------|
 | L2/S1 | 7 | Line 2 | `body`, `#root`, `html`, `.section-title`, `.sidebar-title`, `.sidebar-left .section-title`, `.toolbar-popover button` |
-| v422 aliases | 7 | Emergency layout restore | `.workspace`, `.sidebar-left`, `.sidebar-right`, `.canvas-wrap`, `.section`, `.field-row`, `.field-row label` |
-| v429 templates/export | 7 | Shared dialog headers/cards | `.export-dialog-header`, `.template-manager-panel>div:first-child`, `.template-manager-panel h2`, `.export-dialog-title`, `.export-dialog-subtitle`, `.template-manager-panel p`, `.template-card-realistic` |
 
-**Remaining visual-only candidates (line-2 surgery):**
-`.sidebar-left`/`.sidebar-right` border, `.inline-modal-title`, `.inline-modal-actions button.danger`. All require S1 minified-line surgery as a single operation.
+**Remaining cleanup: line 2 / S1 surgery only.**
+All 17 non-L2 whole-rule deletions and all 26 non-L2 selector-list item removals are complete. The remaining 10 whole-rule candidates and 7 slic candidates are all on the large minified line 2 and require a single coordinated S1 operation.
 
 ---
 
