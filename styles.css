@@ -3154,7 +3154,7 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   }
 
   /* Keep any raw status/debug text from covering the editor. */
-  .canvas-wrap > div:not(.canvas-quick-dock):not(.mobile-bottom-sheet):not(.mobile-sheet-backdrop):not(.inspector-rail):not(.rail):not(.layer-panel-trigger){
+  .canvas-wrap > div:not(.canvas-quick-dock):not(.mobile-bottom-sheet):not(.mobile-sheet-backdrop){
     max-width:100%!important;
   }
 
@@ -3643,7 +3643,7 @@ input[type="number"],
     display: none !important;
   }
 
-  .canvas-wrap > div:not(.mobile-main-dock):not(.mobile-bottom-sheet):not(.mobile-sheet-backdrop):not(.inspector-rail):not(.rail):not(.layer-panel-trigger):not(.canvas-hud) {
+  .canvas-wrap > div:not(.mobile-main-dock):not(.mobile-bottom-sheet):not(.mobile-sheet-backdrop):not(.canvas-hud) {
     max-width: 100% !important;
   }
 
