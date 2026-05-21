@@ -162,15 +162,11 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 }
 
 /* v427-canvas-rail-overlap-fix */
-.inspector-rail,.rail,.layer-panel-trigger{position:absolute!important;top:10px!important;left:10px!important;z-index:42!important;display:flex!important;gap:0!important;background:#050505!important;border:1px solid rgba(215,196,155,.18)!important;box-shadow:0 10px 28px rgba(0,0,0,.55)!important}
-.inspector-rail button,.rail button,.layer-panel-trigger button{width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;padding:0!important;display:grid!important;place-items:center!important;background:#070707!important;border:0!important;border-right:1px solid rgba(215,196,155,.14)!important;color:#eee7da!important}
 .canvas-hud{top:10px!important;left:132px!important}
 .canvas-quick-dock{top:10px!important}
 .toolbar{z-index:1000!important}
 .workspace{isolation:isolate!important}
 @media(max-width:900px){
-  .inspector-rail,.rail,.layer-panel-trigger{top:8px!important;left:8px!important}
-  .inspector-rail button,.rail button,.layer-panel-trigger button{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important}
   .canvas-hud{left:8px!important;top:50px!important}
 }
 
@@ -285,44 +281,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 @media(max-width:700px){  .quick-pop-grid{grid-template-columns:1fr!important}
 }
 
-/* v431-grid-and-inspector-rail-fix */
-/* Canvas rail: right-top corner, not left, and fully clickable */
-.inspector-rail,.rail,.layer-panel-trigger{
-  position:absolute!important;
-  top:10px!important;
-  right:10px!important;
-  left:auto!important;
-  z-index:90!important;
-  display:flex!important;
-  gap:0!important;
-  background:#050505!important;
-  border:1px solid rgba(215,196,155,.22)!important;
-  box-shadow:0 12px 34px rgba(0,0,0,.70)!important;
-  pointer-events:auto!important;
-}
-.inspector-rail button,.rail button,.layer-panel-trigger button{
-  width:38px!important;
-  height:38px!important;
-  min-width:38px!important;
-  min-height:38px!important;
-  padding:0!important;
-  display:grid!important;
-  place-items:center!important;
-  background:#070707!important;
-  border:0!important;
-  border-right:1px solid rgba(215,196,155,.14)!important;
-  color:#eee7da!important;
-  pointer-events:auto!important;
-  cursor:pointer!important;
-}
-.inspector-rail button:last-child,.rail button:last-child,.layer-panel-trigger button:last-child{border-right:0!important}
-.inspector-rail button:hover,.rail button:hover,.layer-panel-trigger button:hover{background:#15110a!important;color:#f2dfb2!important}
-.inspector-rail button.active,.rail button.active,.layer-panel-trigger button.active{
-  background:#17120a!important;
-  color:#f2dfb2!important;
-  box-shadow:inset 0 0 0 1px #c99a4a!important;
-}
-
 /* HUD should not collide with the right rail */
 .canvas-hud{left:10px!important;right:auto!important;top:10px!important;max-width:calc(100% - 190px)!important}
 .canvas-quick-dock{top:10px!important;z-index:55!important}
@@ -335,8 +293,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 }
 
 @media(max-width:900px){
-  .inspector-rail,.rail,.layer-panel-trigger{top:8px!important;right:8px!important}
-  .inspector-rail button,.rail button,.layer-panel-trigger button{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important}
   .canvas-hud{top:50px!important;left:8px!important;max-width:calc(100% - 16px)!important}
 }
 
@@ -3005,25 +2961,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
     border:1px solid rgba(215,196,155,.18)!important;
     backdrop-filter:blur(4px)!important;
     pointer-events:none!important;
-  }
-
-  /* Canvas rail in the top-right, compact. */
-  .inspector-rail,
-  .rail,
-  .layer-panel-trigger{
-    top:8px!important;
-    right:8px!important;
-    left:auto!important;
-    z-index:58!important;
-  }
-
-  .inspector-rail button,
-  .rail button,
-  .layer-panel-trigger button{
-    width:32px!important;
-    height:32px!important;
-    min-width:32px!important;
-    min-height:32px!important;
   }
 
   /* One actual mobile dock, bottom. Remove the centered desktop-style pill look. */
