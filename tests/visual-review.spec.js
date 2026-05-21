@@ -27,6 +27,10 @@ const states = [
   ["desktop-left-closed", desktop, async page => setDesktopPanels(page, { left: false, right: true })],
   ["desktop-right-closed", desktop, async page => setDesktopPanels(page, { left: true, right: false })],
   ["desktop-both-closed", desktop, async page => setDesktopPanels(page, { left: false, right: false })],
+  ["desktop-topbar-section-popover", desktop, async page => {
+    await clickButton(page, "Panel ▾");
+    await page.locator(".toolbar-popover.topbar-section-popover").waitFor({ state: "visible" });
+  }],
   ["desktop-templates-dialog", desktop, async page => {
     await clickButton(page, "Templates ▾");
     await clickButton(page, "Load / Manage templates");
