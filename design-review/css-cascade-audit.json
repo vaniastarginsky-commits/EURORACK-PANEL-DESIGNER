@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-05-21T21:25:27.343Z",
+  "generatedAt": "2026-05-21T21:59:49.662Z",
   "sourceFile": "styles.css",
   "stats": {
-    "totalLines": 4168,
+    "totalLines": 4164,
     "rawRulesParsed": 906,
-    "expandedEntries": 1663,
+    "expandedEntries": 1652,
     "uniqueSelKeys": 1330,
-    "duplicatedSelKeys": 215,
+    "duplicatedSelKeys": 210,
     "importantCount": 3084,
-    "shadowedDeclarations": 702,
+    "shadowedDeclarations": 667,
     "wholeRuleCandidateCount": 10,
-    "selectorListItemCandidateCount": 40
+    "selectorListItemCandidateCount": 29
   },
   "wholeRuleCandidates": [
     {
@@ -144,7 +144,7 @@
             "shadowedImportant": true,
             "winner": {
               "ruleIndex": 586,
-              "lineStart": 1657,
+              "lineStart": 1653,
               "value": "0",
               "important": true,
               "section": "v442-component-info-hud-card"
@@ -173,7 +173,7 @@
             "shadowedImportant": false,
             "winner": {
               "ruleIndex": 381,
-              "lineStart": 280,
+              "lineStart": 278,
               "value": "2147483200",
               "important": true,
               "section": "v432-templates-export-layout-fix"
@@ -202,7 +202,7 @@
             "shadowedImportant": false,
             "winner": {
               "ruleIndex": 341,
-              "lineStart": 223,
+              "lineStart": 221,
               "value": "min(1180px,calc(100vw - 44px))",
               "important": true,
               "section": "v429-templates-export-modal-css-fix"
@@ -231,7 +231,7 @@
             "shadowedImportant": false,
             "winner": {
               "ruleIndex": 654,
-              "lineStart": 2198,
+              "lineStart": 2194,
               "value": "min(440px,calc(100vw - 36px))",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -243,7 +243,7 @@
             "shadowedImportant": false,
             "winner": {
               "ruleIndex": 654,
-              "lineStart": 2198,
+              "lineStart": 2194,
               "value": "#070706",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -255,7 +255,7 @@
             "shadowedImportant": false,
             "winner": {
               "ruleIndex": 654,
-              "lineStart": 2198,
+              "lineStart": 2194,
               "value": "1px solid rgba(215,196,155,.28)",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -267,7 +267,7 @@
             "shadowedImportant": false,
             "winner": {
               "ruleIndex": 654,
-              "lineStart": 2198,
+              "lineStart": 2194,
               "value": "0 28px 90px rgba(0,0,0,.88)",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -279,7 +279,7 @@
             "shadowedImportant": false,
             "winner": {
               "ruleIndex": 654,
-              "lineStart": 2198,
+              "lineStart": 2194,
               "value": "16px",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -308,7 +308,7 @@
             "shadowedImportant": false,
             "winner": {
               "ruleIndex": 655,
-              "lineStart": 2218,
+              "lineStart": 2214,
               "value": "#eee7da",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -320,7 +320,7 @@
             "shadowedImportant": false,
             "winner": {
               "ruleIndex": 655,
-              "lineStart": 2218,
+              "lineStart": 2214,
               "value": "900",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -332,7 +332,7 @@
             "shadowedImportant": false,
             "winner": {
               "ruleIndex": 655,
-              "lineStart": 2218,
+              "lineStart": 2214,
               "value": ".18em",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -344,7 +344,7 @@
             "shadowedImportant": false,
             "winner": {
               "ruleIndex": 655,
-              "lineStart": 2218,
+              "lineStart": 2214,
               "value": "uppercase",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -356,7 +356,7 @@
             "shadowedImportant": false,
             "winner": {
               "ruleIndex": 655,
-              "lineStart": 2218,
+              "lineStart": 2214,
               "value": "14px",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -385,7 +385,7 @@
             "shadowedImportant": false,
             "winner": {
               "ruleIndex": 658,
-              "lineStart": 2247,
+              "lineStart": 2243,
               "value": "flex",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -397,7 +397,7 @@
             "shadowedImportant": false,
             "winner": {
               "ruleIndex": 658,
-              "lineStart": 2247,
+              "lineStart": 2243,
               "value": "flex-end",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -409,7 +409,7 @@
             "shadowedImportant": false,
             "winner": {
               "ruleIndex": 658,
-              "lineStart": 2247,
+              "lineStart": 2243,
               "value": "8px",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -421,7 +421,7 @@
             "shadowedImportant": false,
             "winner": {
               "ruleIndex": 658,
-              "lineStart": 2247,
+              "lineStart": 2243,
               "value": "14px",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -450,7 +450,7 @@
             "shadowedImportant": true,
             "winner": {
               "ruleIndex": 661,
-              "lineStart": 2269,
+              "lineStart": 2265,
               "value": "#160504",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -462,7 +462,7 @@
             "shadowedImportant": true,
             "winner": {
               "ruleIndex": 661,
-              "lineStart": 2269,
+              "lineStart": 2265,
               "value": "#f1c7c1",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -474,7 +474,7 @@
             "shadowedImportant": true,
             "winner": {
               "ruleIndex": 661,
-              "lineStart": 2269,
+              "lineStart": 2265,
               "value": "rgba(138,48,42,.75)",
               "important": true,
               "section": "v445-center-inline-template-confirm"
@@ -837,7 +837,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 667,
-            "lineStart": 2310,
+            "lineStart": 2306,
             "value": "11px",
             "important": true,
             "section": "v447-left-sidebar-compact-polish"
@@ -849,7 +849,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 667,
-            "lineStart": 2310,
+            "lineStart": 2306,
             "value": ".22em",
             "important": true,
             "section": "v447-left-sidebar-compact-polish"
@@ -887,7 +887,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 278,
-            "lineStart": 145,
+            "lineStart": 143,
             "value": "30px",
             "important": true,
             "section": "v426-toolbar-popover-css-fix"
@@ -1089,7 +1089,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 665,
-            "lineStart": 2297,
+            "lineStart": 2293,
             "value": "7px",
             "important": true,
             "section": "v447-left-sidebar-compact-polish"
@@ -1482,330 +1482,8 @@
       ]
     },
     {
-      "ruleIndex": 211,
-      "lineStart": 56,
-      "section": "v423-targeted-workspace-css-restore",
-      "media": null,
-      "fullSelector": ".component-library-shell[style],.component-library-shell",
-      "allIndividuals": [
-        ".component-library-shell[style]",
-        ".component-library-shell"
-      ],
-      "shadowedIndividual": ".component-library-shell",
-      "unshadowedSiblings": [
-        ".component-library-shell[style]"
-      ],
-      "props": [
-        "display"
-      ],
-      "propDetail": [
-        {
-          "prop": "display",
-          "shadowedValue": "none",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 681,
-            "lineStart": 2432,
-            "value": "block",
-            "important": true,
-            "section": "v447-left-sidebar-compact-polish"
-          }
-        }
-      ]
-    },
-    {
-      "ruleIndex": 246,
-      "lineStart": 94,
-      "section": "v424-sidebar-controls-css-polish",
-      "media": null,
-      "fullSelector": ".sidebar-left,.sidebar-right",
-      "allIndividuals": [
-        ".sidebar-left",
-        ".sidebar-right"
-      ],
-      "shadowedIndividual": ".sidebar-left",
-      "unshadowedSiblings": [
-        ".sidebar-right"
-      ],
-      "props": [
-        "font-size",
-        "line-height"
-      ],
-      "propDetail": [
-        {
-          "prop": "font-size",
-          "shadowedValue": "13px",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 665,
-            "lineStart": 2297,
-            "value": "12px",
-            "important": true,
-            "section": "v447-left-sidebar-compact-polish"
-          }
-        },
-        {
-          "prop": "line-height",
-          "shadowedValue": "1.28",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 665,
-            "lineStart": 2297,
-            "value": "1.25",
-            "important": true,
-            "section": "v447-left-sidebar-compact-polish"
-          }
-        }
-      ]
-    },
-    {
-      "ruleIndex": 252,
-      "lineStart": 108,
-      "section": "v424-sidebar-controls-css-polish",
-      "media": null,
-      "fullSelector": ".sidebar-left input[type=\"checkbox\"]:checked, .sidebar-right input[type=\"checkbox\"]:checked",
-      "allIndividuals": [
-        ".sidebar-left input[type=\"checkbox\"]:checked",
-        ".sidebar-right input[type=\"checkbox\"]:checked"
-      ],
-      "shadowedIndividual": ".sidebar-left input[type=\"checkbox\"]:checked",
-      "unshadowedSiblings": [
-        ".sidebar-right input[type=\"checkbox\"]:checked"
-      ],
-      "props": [
-        "background",
-        "border-color"
-      ],
-      "propDetail": [
-        {
-          "prop": "background",
-          "shadowedValue": "#c99a4a",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 672,
-            "lineStart": 2364,
-            "value": "#c99a4a",
-            "important": true,
-            "section": "v447-left-sidebar-compact-polish"
-          }
-        },
-        {
-          "prop": "border-color",
-          "shadowedValue": "#c99a4a",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 672,
-            "lineStart": 2364,
-            "value": "#c99a4a",
-            "important": true,
-            "section": "v447-left-sidebar-compact-polish"
-          }
-        }
-      ]
-    },
-    {
-      "ruleIndex": 253,
-      "lineStart": 110,
-      "section": "v424-sidebar-controls-css-polish",
-      "media": null,
-      "fullSelector": ".sidebar-left input[type=\"checkbox\"]:checked::after, .sidebar-right input[type=\"checkbox\"]:checked::after",
-      "allIndividuals": [
-        ".sidebar-left input[type=\"checkbox\"]:checked::after",
-        ".sidebar-right input[type=\"checkbox\"]:checked::after"
-      ],
-      "shadowedIndividual": ".sidebar-left input[type=\"checkbox\"]:checked::after",
-      "unshadowedSiblings": [
-        ".sidebar-right input[type=\"checkbox\"]:checked::after"
-      ],
-      "props": [
-        "content",
-        "font-size",
-        "font-weight",
-        "line-height",
-        "color"
-      ],
-      "propDetail": [
-        {
-          "prop": "content",
-          "shadowedValue": "\"✓\"",
-          "shadowedImportant": false,
-          "winner": {
-            "ruleIndex": 673,
-            "lineStart": 2369,
-            "value": "\"✓\"",
-            "important": false,
-            "section": "v447-left-sidebar-compact-polish"
-          }
-        },
-        {
-          "prop": "font-size",
-          "shadowedValue": "13px",
-          "shadowedImportant": false,
-          "winner": {
-            "ruleIndex": 673,
-            "lineStart": 2369,
-            "value": "11px",
-            "important": false,
-            "section": "v447-left-sidebar-compact-polish"
-          }
-        },
-        {
-          "prop": "font-weight",
-          "shadowedValue": "900",
-          "shadowedImportant": false,
-          "winner": {
-            "ruleIndex": 673,
-            "lineStart": 2369,
-            "value": "900",
-            "important": false,
-            "section": "v447-left-sidebar-compact-polish"
-          }
-        },
-        {
-          "prop": "line-height",
-          "shadowedValue": "1",
-          "shadowedImportant": false,
-          "winner": {
-            "ruleIndex": 673,
-            "lineStart": 2369,
-            "value": "1",
-            "important": false,
-            "section": "v447-left-sidebar-compact-polish"
-          }
-        },
-        {
-          "prop": "color",
-          "shadowedValue": "#050505",
-          "shadowedImportant": false,
-          "winner": {
-            "ruleIndex": 673,
-            "lineStart": 2369,
-            "value": "#050505",
-            "important": false,
-            "section": "v447-left-sidebar-compact-polish"
-          }
-        }
-      ]
-    },
-    {
-      "ruleIndex": 254,
-      "lineStart": 112,
-      "section": "v424-sidebar-controls-css-polish",
-      "media": null,
-      "fullSelector": ".sidebar-left input[type=\"radio\"],.sidebar-right input[type=\"radio\"]",
-      "allIndividuals": [
-        ".sidebar-left input[type=\"radio\"]",
-        ".sidebar-right input[type=\"radio\"]"
-      ],
-      "shadowedIndividual": ".sidebar-left input[type=\"radio\"]",
-      "unshadowedSiblings": [
-        ".sidebar-right input[type=\"radio\"]"
-      ],
-      "props": [
-        "border-radius"
-      ],
-      "propDetail": [
-        {
-          "prop": "border-radius",
-          "shadowedValue": "50%",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 674,
-            "lineStart": 2377,
-            "value": "50%",
-            "important": true,
-            "section": "v447-left-sidebar-compact-polish"
-          }
-        }
-      ]
-    },
-    {
-      "ruleIndex": 255,
-      "lineStart": 113,
-      "section": "v424-sidebar-controls-css-polish",
-      "media": null,
-      "fullSelector": ".sidebar-left input[type=\"radio\"]:checked::after,.sidebar-right input[type=\"radio\"]:checked::after",
-      "allIndividuals": [
-        ".sidebar-left input[type=\"radio\"]:checked::after",
-        ".sidebar-right input[type=\"radio\"]:checked::after"
-      ],
-      "shadowedIndividual": ".sidebar-left input[type=\"radio\"]:checked::after",
-      "unshadowedSiblings": [
-        ".sidebar-right input[type=\"radio\"]:checked::after"
-      ],
-      "props": [
-        "content",
-        "width",
-        "height",
-        "border-radius",
-        "background"
-      ],
-      "propDetail": [
-        {
-          "prop": "content",
-          "shadowedValue": "\"\"",
-          "shadowedImportant": false,
-          "winner": {
-            "ruleIndex": 675,
-            "lineStart": 2381,
-            "value": "\"\"",
-            "important": false,
-            "section": "v447-left-sidebar-compact-polish"
-          }
-        },
-        {
-          "prop": "width",
-          "shadowedValue": "8px",
-          "shadowedImportant": false,
-          "winner": {
-            "ruleIndex": 675,
-            "lineStart": 2381,
-            "value": "7px",
-            "important": false,
-            "section": "v447-left-sidebar-compact-polish"
-          }
-        },
-        {
-          "prop": "height",
-          "shadowedValue": "8px",
-          "shadowedImportant": false,
-          "winner": {
-            "ruleIndex": 675,
-            "lineStart": 2381,
-            "value": "7px",
-            "important": false,
-            "section": "v447-left-sidebar-compact-polish"
-          }
-        },
-        {
-          "prop": "border-radius",
-          "shadowedValue": "50%",
-          "shadowedImportant": false,
-          "winner": {
-            "ruleIndex": 675,
-            "lineStart": 2381,
-            "value": "50%",
-            "important": false,
-            "section": "v447-left-sidebar-compact-polish"
-          }
-        },
-        {
-          "prop": "background",
-          "shadowedValue": "#c99a4a",
-          "shadowedImportant": false,
-          "winner": {
-            "ruleIndex": 675,
-            "lineStart": 2381,
-            "value": "#c99a4a",
-            "important": false,
-            "section": "v447-left-sidebar-compact-polish"
-          }
-        }
-      ]
-    },
-    {
       "ruleIndex": 289,
-      "lineStart": 156,
+      "lineStart": 154,
       "section": "v426-toolbar-popover-css-fix",
       "media": null,
       "fullSelector": ".app-modal-backdrop,.template-manager-backdrop,.local-projects-backdrop,.export-dialog-backdrop,.command-palette-backdrop",
@@ -1833,7 +1511,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 381,
-            "lineStart": 280,
+            "lineStart": 278,
             "value": "2147483200",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -1843,7 +1521,7 @@
     },
     {
       "ruleIndex": 289,
-      "lineStart": 156,
+      "lineStart": 154,
       "section": "v426-toolbar-popover-css-fix",
       "media": null,
       "fullSelector": ".app-modal-backdrop,.template-manager-backdrop,.local-projects-backdrop,.export-dialog-backdrop,.command-palette-backdrop",
@@ -1871,7 +1549,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 503,
-            "lineStart": 941,
+            "lineStart": 937,
             "value": "2147483200",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -1881,7 +1559,7 @@
     },
     {
       "ruleIndex": 289,
-      "lineStart": 156,
+      "lineStart": 154,
       "section": "v426-toolbar-popover-css-fix",
       "media": null,
       "fullSelector": ".app-modal-backdrop,.template-manager-backdrop,.local-projects-backdrop,.export-dialog-backdrop,.command-palette-backdrop",
@@ -1909,7 +1587,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 340,
-            "lineStart": 222,
+            "lineStart": 220,
             "value": "2147483200",
             "important": true,
             "section": "v429-templates-export-modal-css-fix"
@@ -1919,7 +1597,7 @@
     },
     {
       "ruleIndex": 289,
-      "lineStart": 156,
+      "lineStart": 154,
       "section": "v426-toolbar-popover-css-fix",
       "media": null,
       "fullSelector": ".app-modal-backdrop,.template-manager-backdrop,.local-projects-backdrop,.export-dialog-backdrop,.command-palette-backdrop",
@@ -1947,7 +1625,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 894,
-            "lineStart": 4074,
+            "lineStart": 4070,
             "value": "2147483200",
             "important": true,
             "section": "v508-component-inspector-layout: keep selected-part inspector readable in the narrow right sidebar"
@@ -1957,7 +1635,7 @@
     },
     {
       "ruleIndex": 343,
-      "lineStart": 225,
+      "lineStart": 223,
       "section": "v429-templates-export-modal-css-fix",
       "media": null,
       "fullSelector": ".template-manager-panel>div:first-child,.export-dialog-header,.local-projects-toolbar",
@@ -1987,7 +1665,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 505,
-            "lineStart": 969,
+            "lineStart": 965,
             "value": "flex",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -1999,7 +1677,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 505,
-            "lineStart": 969,
+            "lineStart": 965,
             "value": "center",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2011,7 +1689,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 505,
-            "lineStart": 969,
+            "lineStart": 965,
             "value": "space-between",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2023,7 +1701,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 505,
-            "lineStart": 969,
+            "lineStart": 965,
             "value": "16px",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2035,7 +1713,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 505,
-            "lineStart": 969,
+            "lineStart": 965,
             "value": "0 18px",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2047,7 +1725,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 505,
-            "lineStart": 969,
+            "lineStart": 965,
             "value": "1px solid var(--export-border)",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2059,7 +1737,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 505,
-            "lineStart": 969,
+            "lineStart": 965,
             "value": "linear-gradient(180deg,#0a0a08,#060606)",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2069,7 +1747,7 @@
     },
     {
       "ruleIndex": 343,
-      "lineStart": 225,
+      "lineStart": 223,
       "section": "v429-templates-export-modal-css-fix",
       "media": null,
       "fullSelector": ".template-manager-panel>div:first-child,.export-dialog-header,.local-projects-toolbar",
@@ -2099,7 +1777,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 383,
-            "lineStart": 295,
+            "lineStart": 293,
             "value": "flex",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2111,7 +1789,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 383,
-            "lineStart": 295,
+            "lineStart": 293,
             "value": "flex-start",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2123,7 +1801,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 383,
-            "lineStart": 295,
+            "lineStart": 293,
             "value": "space-between",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2135,7 +1813,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 383,
-            "lineStart": 295,
+            "lineStart": 293,
             "value": "16px",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2147,7 +1825,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 383,
-            "lineStart": 295,
+            "lineStart": 293,
             "value": "16px 18px",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2159,7 +1837,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 383,
-            "lineStart": 295,
+            "lineStart": 293,
             "value": "1px solid rgba(215,196,155,.14)",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2171,7 +1849,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 383,
-            "lineStart": 295,
+            "lineStart": 293,
             "value": "linear-gradient(180deg,#0a0a08,#060606)",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2181,7 +1859,7 @@
     },
     {
       "ruleIndex": 344,
-      "lineStart": 226,
+      "lineStart": 224,
       "section": "v429-templates-export-modal-css-fix",
       "media": null,
       "fullSelector": ".template-manager-panel h2,.export-dialog-title,.local-projects-panel h2",
@@ -2210,7 +1888,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 384,
-            "lineStart": 300,
+            "lineStart": 298,
             "value": "0",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2222,7 +1900,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 384,
-            "lineStart": 300,
+            "lineStart": 298,
             "value": "#eee7da",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2234,7 +1912,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 384,
-            "lineStart": 300,
+            "lineStart": 298,
             "value": "18px",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2246,7 +1924,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 384,
-            "lineStart": 300,
+            "lineStart": 298,
             "value": ".18em",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2258,7 +1936,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 384,
-            "lineStart": 300,
+            "lineStart": 298,
             "value": "uppercase",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2270,7 +1948,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 384,
-            "lineStart": 300,
+            "lineStart": 298,
             "value": "900",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2280,7 +1958,7 @@
     },
     {
       "ruleIndex": 344,
-      "lineStart": 226,
+      "lineStart": 224,
       "section": "v429-templates-export-modal-css-fix",
       "media": null,
       "fullSelector": ".template-manager-panel h2,.export-dialog-title,.local-projects-panel h2",
@@ -2309,7 +1987,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 506,
-            "lineStart": 983,
+            "lineStart": 979,
             "value": "0",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2321,7 +1999,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 506,
-            "lineStart": 983,
+            "lineStart": 979,
             "value": "#eee7da",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2333,7 +2011,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 506,
-            "lineStart": 983,
+            "lineStart": 979,
             "value": "18px",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2345,7 +2023,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 506,
-            "lineStart": 983,
+            "lineStart": 979,
             "value": ".22em",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2357,7 +2035,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 506,
-            "lineStart": 983,
+            "lineStart": 979,
             "value": "uppercase",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2369,7 +2047,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 506,
-            "lineStart": 983,
+            "lineStart": 979,
             "value": "900",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2379,7 +2057,7 @@
     },
     {
       "ruleIndex": 345,
-      "lineStart": 227,
+      "lineStart": 225,
       "section": "v429-templates-export-modal-css-fix",
       "media": null,
       "fullSelector": ".export-dialog-subtitle,.template-preset-note,.template-manager-panel p",
@@ -2406,7 +2084,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 507,
-            "lineStart": 992,
+            "lineStart": 988,
             "value": "var(--export-muted)",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2418,7 +2096,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 507,
-            "lineStart": 992,
+            "lineStart": 988,
             "value": "12px",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2430,7 +2108,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 507,
-            "lineStart": 992,
+            "lineStart": 988,
             "value": "1.2",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2442,7 +2120,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 507,
-            "lineStart": 992,
+            "lineStart": 988,
             "value": "8px 0 0",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -2452,7 +2130,7 @@
     },
     {
       "ruleIndex": 345,
-      "lineStart": 227,
+      "lineStart": 225,
       "section": "v429-templates-export-modal-css-fix",
       "media": null,
       "fullSelector": ".export-dialog-subtitle,.template-preset-note,.template-manager-panel p",
@@ -2479,7 +2157,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 385,
-            "lineStart": 301,
+            "lineStart": 299,
             "value": "#928b7d",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2491,7 +2169,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 385,
-            "lineStart": 301,
+            "lineStart": 299,
             "value": "12px",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2503,7 +2181,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 385,
-            "lineStart": 301,
+            "lineStart": 299,
             "value": "1.35",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2515,7 +2193,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 385,
-            "lineStart": 301,
+            "lineStart": 299,
             "value": "4px 0 0",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2525,7 +2203,7 @@
     },
     {
       "ruleIndex": 350,
-      "lineStart": 232,
+      "lineStart": 230,
       "section": "v429-templates-export-modal-css-fix",
       "media": null,
       "fullSelector": ".template-card-realistic,.template-card-main,.preset-card-button",
@@ -2553,7 +2231,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 390,
-            "lineStart": 317,
+            "lineStart": 315,
             "value": "#080807",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2565,7 +2243,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 390,
-            "lineStart": 317,
+            "lineStart": 315,
             "value": "1px solid rgba(215,196,155,.16)",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2577,7 +2255,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 390,
-            "lineStart": 317,
+            "lineStart": 315,
             "value": "#eee7da",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2589,7 +2267,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 390,
-            "lineStart": 317,
+            "lineStart": 315,
             "value": "0",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2601,7 +2279,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 390,
-            "lineStart": 317,
+            "lineStart": 315,
             "value": "hidden",
             "important": true,
             "section": "v432-templates-export-layout-fix"
@@ -2610,233 +2288,8 @@
       ]
     },
     {
-      "ruleIndex": 356,
-      "lineStart": 239,
-      "section": "v429-templates-export-modal-css-fix",
-      "media": null,
-      "fullSelector": ".export-preview-card,.export-package-card,.export-recommended-banner,.runtime-diagnostics-card",
-      "allIndividuals": [
-        ".export-preview-card",
-        ".export-package-card",
-        ".export-recommended-banner",
-        ".runtime-diagnostics-card"
-      ],
-      "shadowedIndividual": ".export-recommended-banner",
-      "unshadowedSiblings": [
-        ".export-preview-card",
-        ".export-package-card",
-        ".runtime-diagnostics-card"
-      ],
-      "props": [
-        "background",
-        "border",
-        "color",
-        "padding"
-      ],
-      "propDetail": [
-        {
-          "prop": "background",
-          "shadowedValue": "#080807",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 522,
-            "lineStart": 1140,
-            "value": "#080807",
-            "important": true,
-            "section": "v439-export-senior-layout-pass"
-          }
-        },
-        {
-          "prop": "border",
-          "shadowedValue": "1px solid rgba(215,196,155,.14)",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 522,
-            "lineStart": 1140,
-            "value": "1px solid rgba(215,196,155,.13)",
-            "important": true,
-            "section": "v439-export-senior-layout-pass"
-          }
-        },
-        {
-          "prop": "color",
-          "shadowedValue": "#d8d0c0",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 403,
-            "lineStart": 354,
-            "value": "#d8d0c0",
-            "important": true,
-            "section": "v432-templates-export-layout-fix"
-          }
-        },
-        {
-          "prop": "padding",
-          "shadowedValue": "12px",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 623,
-            "lineStart": 2013,
-            "value": "12px",
-            "important": true,
-            "section": "v444-export-tabs-final-fit"
-          }
-        }
-      ]
-    },
-    {
-      "ruleIndex": 356,
-      "lineStart": 239,
-      "section": "v429-templates-export-modal-css-fix",
-      "media": null,
-      "fullSelector": ".export-preview-card,.export-package-card,.export-recommended-banner,.runtime-diagnostics-card",
-      "allIndividuals": [
-        ".export-preview-card",
-        ".export-package-card",
-        ".export-recommended-banner",
-        ".runtime-diagnostics-card"
-      ],
-      "shadowedIndividual": ".runtime-diagnostics-card",
-      "unshadowedSiblings": [
-        ".export-preview-card",
-        ".export-package-card",
-        ".export-recommended-banner"
-      ],
-      "props": [
-        "background",
-        "border",
-        "color",
-        "padding"
-      ],
-      "propDetail": [
-        {
-          "prop": "background",
-          "shadowedValue": "#080807",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 522,
-            "lineStart": 1140,
-            "value": "#080807",
-            "important": true,
-            "section": "v439-export-senior-layout-pass"
-          }
-        },
-        {
-          "prop": "border",
-          "shadowedValue": "1px solid rgba(215,196,155,.14)",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 522,
-            "lineStart": 1140,
-            "value": "1px solid rgba(215,196,155,.13)",
-            "important": true,
-            "section": "v439-export-senior-layout-pass"
-          }
-        },
-        {
-          "prop": "color",
-          "shadowedValue": "#d8d0c0",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 403,
-            "lineStart": 354,
-            "value": "#d8d0c0",
-            "important": true,
-            "section": "v432-templates-export-layout-fix"
-          }
-        },
-        {
-          "prop": "padding",
-          "shadowedValue": "12px",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 522,
-            "lineStart": 1140,
-            "value": "12px",
-            "important": true,
-            "section": "v439-export-senior-layout-pass"
-          }
-        }
-      ]
-    },
-    {
-      "ruleIndex": 356,
-      "lineStart": 239,
-      "section": "v429-templates-export-modal-css-fix",
-      "media": null,
-      "fullSelector": ".export-preview-card,.export-package-card,.export-recommended-banner,.runtime-diagnostics-card",
-      "allIndividuals": [
-        ".export-preview-card",
-        ".export-package-card",
-        ".export-recommended-banner",
-        ".runtime-diagnostics-card"
-      ],
-      "shadowedIndividual": ".export-package-card",
-      "unshadowedSiblings": [
-        ".export-preview-card",
-        ".export-recommended-banner",
-        ".runtime-diagnostics-card"
-      ],
-      "props": [
-        "background",
-        "border",
-        "color",
-        "padding"
-      ],
-      "propDetail": [
-        {
-          "prop": "background",
-          "shadowedValue": "#080807",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 522,
-            "lineStart": 1140,
-            "value": "#080807",
-            "important": true,
-            "section": "v439-export-senior-layout-pass"
-          }
-        },
-        {
-          "prop": "border",
-          "shadowedValue": "1px solid rgba(215,196,155,.14)",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 522,
-            "lineStart": 1140,
-            "value": "1px solid rgba(215,196,155,.13)",
-            "important": true,
-            "section": "v439-export-senior-layout-pass"
-          }
-        },
-        {
-          "prop": "color",
-          "shadowedValue": "#d8d0c0",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 403,
-            "lineStart": 354,
-            "value": "#d8d0c0",
-            "important": true,
-            "section": "v432-templates-export-layout-fix"
-          }
-        },
-        {
-          "prop": "padding",
-          "shadowedValue": "12px",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 522,
-            "lineStart": 1140,
-            "value": "12px",
-            "important": true,
-            "section": "v439-export-senior-layout-pass"
-          }
-        }
-      ]
-    },
-    {
       "ruleIndex": 424,
-      "lineStart": 412,
+      "lineStart": 410,
       "section": "v433-desktop-dock-grid-export-templates-fix",
       "media": null,
       "fullSelector": ".template-manager-panel .template-preview-realistic, .template-manager-panel .library-real-preview, .template-manager-panel .template-preview-empty",
@@ -2865,7 +2318,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 458,
-            "lineStart": 591,
+            "lineStart": 589,
             "value": "150px",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -2877,7 +2330,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 458,
-            "lineStart": 591,
+            "lineStart": 589,
             "value": "150px",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -2889,7 +2342,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 458,
-            "lineStart": 591,
+            "lineStart": 589,
             "value": "150px",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -2901,7 +2354,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 458,
-            "lineStart": 591,
+            "lineStart": 589,
             "value": "hidden",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -2913,7 +2366,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 458,
-            "lineStart": 591,
+            "lineStart": 589,
             "value": "grid",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -2925,7 +2378,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 458,
-            "lineStart": 591,
+            "lineStart": 589,
             "value": "center",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -2935,7 +2388,7 @@
     },
     {
       "ruleIndex": 425,
-      "lineStart": 422,
+      "lineStart": 420,
       "section": "v433-desktop-dock-grid-export-templates-fix",
       "media": null,
       "fullSelector": ".template-manager-panel .template-preview-realistic svg, .template-manager-panel .library-real-preview svg",
@@ -2960,7 +2413,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 459,
-            "lineStart": 604,
+            "lineStart": 602,
             "value": "auto",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -2972,7 +2425,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 459,
-            "lineStart": 604,
+            "lineStart": 602,
             "value": "auto",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -2984,7 +2437,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 459,
-            "lineStart": 604,
+            "lineStart": 602,
             "value": "96%",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -2996,7 +2449,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 459,
-            "lineStart": 604,
+            "lineStart": 602,
             "value": "140px",
             "important": true,
             "section": "v436-template-cards-labels-click-fix"
@@ -3005,70 +2458,8 @@
       ]
     },
     {
-      "ruleIndex": 475,
-      "lineStart": 730,
-      "section": "v437-export-layout-polish",
-      "media": null,
-      "fullSelector": ".export-package-card, .export-recommended-banner, .runtime-diagnostics-card, .export-sanity",
-      "allIndividuals": [
-        ".export-package-card",
-        ".export-recommended-banner",
-        ".runtime-diagnostics-card",
-        ".export-sanity"
-      ],
-      "shadowedIndividual": ".export-sanity",
-      "unshadowedSiblings": [
-        ".export-package-card",
-        ".export-recommended-banner",
-        ".runtime-diagnostics-card"
-      ],
-      "props": [
-        "padding",
-        "margin",
-        "line-height"
-      ],
-      "propDetail": [
-        {
-          "prop": "padding",
-          "shadowedValue": "12px",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 634,
-            "lineStart": 2090,
-            "value": "10px 12px",
-            "important": true,
-            "section": "v444-export-tabs-final-fit"
-          }
-        },
-        {
-          "prop": "margin",
-          "shadowedValue": "0 0 12px",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 522,
-            "lineStart": 1140,
-            "value": "0 0 12px",
-            "important": true,
-            "section": "v439-export-senior-layout-pass"
-          }
-        },
-        {
-          "prop": "line-height",
-          "shadowedValue": "1.35",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 634,
-            "lineStart": 2090,
-            "value": "1.32",
-            "important": true,
-            "section": "v444-export-tabs-final-fit"
-          }
-        }
-      ]
-    },
-    {
       "ruleIndex": 479,
-      "lineStart": 761,
+      "lineStart": 758,
       "section": "v437-export-layout-polish",
       "media": null,
       "fullSelector": ".export-options-grid, .kicad-export-grid, .export-action-grid",
@@ -3095,7 +2486,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 615,
-            "lineStart": 1958,
+            "lineStart": 1954,
             "value": "grid",
             "important": true,
             "section": "v444-export-tabs-final-fit"
@@ -3107,7 +2498,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 615,
-            "lineStart": 1958,
+            "lineStart": 1954,
             "value": "1fr 1fr",
             "important": true,
             "section": "v444-export-tabs-final-fit"
@@ -3119,7 +2510,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 615,
-            "lineStart": 1958,
+            "lineStart": 1954,
             "value": "0 14px",
             "important": true,
             "section": "v444-export-tabs-final-fit"
@@ -3131,7 +2522,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 525,
-            "lineStart": 1175,
+            "lineStart": 1171,
             "value": "start",
             "important": true,
             "section": "v439-export-senior-layout-pass"
@@ -3141,7 +2532,7 @@
     },
     {
       "ruleIndex": 479,
-      "lineStart": 761,
+      "lineStart": 758,
       "section": "v437-export-layout-polish",
       "media": null,
       "fullSelector": ".export-options-grid, .kicad-export-grid, .export-action-grid",
@@ -3168,7 +2559,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 635,
-            "lineStart": 2098,
+            "lineStart": 2094,
             "value": "grid",
             "important": true,
             "section": "v444-export-tabs-final-fit"
@@ -3180,7 +2571,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 635,
-            "lineStart": 2098,
+            "lineStart": 2094,
             "value": "1fr 1fr",
             "important": true,
             "section": "v444-export-tabs-final-fit"
@@ -3192,7 +2583,7 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 635,
-            "lineStart": 2098,
+            "lineStart": 2094,
             "value": "0 14px",
             "important": true,
             "section": "v444-export-tabs-final-fit"
@@ -3204,81 +2595,10 @@
           "shadowedImportant": true,
           "winner": {
             "ruleIndex": 525,
-            "lineStart": 1175,
+            "lineStart": 1171,
             "value": "start",
             "important": true,
             "section": "v439-export-senior-layout-pass"
-          }
-        }
-      ]
-    },
-    {
-      "ruleIndex": 496,
-      "lineStart": 859,
-      "section": "v437-export-layout-polish",
-      "media": null,
-      "fullSelector": ".compact-render-row, .layer-manager-presets",
-      "allIndividuals": [
-        ".compact-render-row",
-        ".layer-manager-presets"
-      ],
-      "shadowedIndividual": ".layer-manager-presets",
-      "unshadowedSiblings": [
-        ".compact-render-row"
-      ],
-      "props": [
-        "display",
-        "grid-template-columns",
-        "gap",
-        "margin"
-      ],
-      "propDetail": [
-        {
-          "prop": "display",
-          "shadowedValue": "grid",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 557,
-            "lineStart": 1392,
-            "value": "grid",
-            "important": true,
-            "section": "v440-layer-manager-structural-layout"
-          }
-        },
-        {
-          "prop": "grid-template-columns",
-          "shadowedValue": "repeat(2,minmax(0,1fr))",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 557,
-            "lineStart": 1392,
-            "value": "repeat(2,minmax(0,1fr))",
-            "important": true,
-            "section": "v440-layer-manager-structural-layout"
-          }
-        },
-        {
-          "prop": "gap",
-          "shadowedValue": "6px",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 557,
-            "lineStart": 1392,
-            "value": "6px",
-            "important": true,
-            "section": "v440-layer-manager-structural-layout"
-          }
-        },
-        {
-          "prop": "margin",
-          "shadowedValue": "0 0 10px",
-          "shadowedImportant": true,
-          "winner": {
-            "ruleIndex": 557,
-            "lineStart": 1392,
-            "value": "8px 0 12px",
-            "important": true,
-            "section": "v440-layer-manager-structural-layout"
           }
         }
       ]
