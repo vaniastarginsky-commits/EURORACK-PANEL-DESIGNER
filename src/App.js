@@ -1,4 +1,68 @@
 // Extracted component declarations from index.html.
+
+function InlineTextEditor({ textItem, svgRef, onCommit, onCancel }) {
+  const [value, setValueState] = React.useState(textItem.text);
+  const inputRef = React.useRef(null);
+  React.useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, []);
+  const getPosition = () => {
+    if (!svgRef.current) return null;
+    const ctm = svgRef.current.getScreenCTM();
+    if (!ctm) return null;
+    const fontSizeMm = Math.min(Math.max(textItem.fontSizeMm || 3, 0.4), 18);
+    const screenX = ctm.a * textItem.x + ctm.c * textItem.y + ctm.e;
+    const screenY = ctm.b * textItem.x + ctm.d * textItem.y + ctm.f;
+    const fontSizePx = ctm.a * fontSizeMm;
+    return { screenX, screenY, fontSizePx };
+  };
+  const pos = getPosition();
+  if (!pos) return null;
+  const { screenX, screenY, fontSizePx } = pos;
+  const align = textItem.align || "center";
+  const translateX =
+    align === "center" ? "-50%" : align === "right" ? "-100%" : "0%";
+  function handleKeyDown(e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      onCommit(value);
+    }
+    if (e.key === "Escape") {
+      e.preventDefault();
+      onCancel();
+    }
+  }
+  return React.createElement("input", {
+    ref: inputRef,
+    type: "text",
+    value: value,
+    onChange: (e) => setValueState(e.target.value),
+    onKeyDown: handleKeyDown,
+    onBlur: () => onCommit(value),
+    style: {
+      position: "fixed",
+      left: screenX + "px",
+      top: screenY - fontSizePx + "px",
+      transform: `translateX(${translateX})`,
+      minWidth: "80px",
+      height: fontSizePx * 1.4 + "px",
+      padding: "0 4px",
+      fontSize: fontSizePx + "px",
+      fontFamily: textItem.fontFamily || "sans-serif",
+      textAlign: align,
+      background: "rgba(0,0,0,0.75)",
+      color: "#f0e8d8",
+      border: "1px solid rgba(214,170,88,0.7)",
+      outline: "none",
+      zIndex: 9999,
+      boxSizing: "border-box",
+    },
+  });
+}
+
 // App
 function App() {
   const state = useAppState();
@@ -1612,7 +1676,10 @@ function App() {
           if (e.target.closest("[data-label-component-id]")) {
             window.setTimeout(() => {
               const inp = document.querySelector("[data-label-input]");
-              if (inp) { inp.focus(); inp.select(); }
+              if (inp) {
+                inp.focus();
+                inp.select();
+              }
             }, 80);
           }
         }
@@ -3634,6 +3701,27 @@ function App() {
         editingTextId: editingTextId,
         onSVGDoubleClick: onSVGDoubleClick,
       }),
+      editingTextId &&
+        (() => {
+          const t = state.textItems.find((tt) => tt.id === editingTextId);
+          if (!t) return null;
+          return React.createElement(InlineTextEditor, {
+            key: editingTextId,
+            textItem: t,
+            svgRef: svgRef,
+            onCommit: (value) => {
+              if (value.trim()) {
+                dispatch({
+                  type: "UPDATE_TEXT",
+                  id: editingTextId,
+                  patch: { text: value },
+                });
+              }
+              setEditingTextId(null);
+            },
+            onCancel: () => setEditingTextId(null),
+          });
+        })(),
       React.createElement(CanvasQuickAddDock, {
         hidden: sidePanelOpen && isNarrowInitial,
         focusMode: focusMode,
