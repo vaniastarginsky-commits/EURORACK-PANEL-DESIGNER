@@ -2071,7 +2071,29 @@ function App() {
         const next = marqueeSelection.additive
           ? [...new Set([...base, ...ids])]
           : ids;
-        dispatch({ type: "SELECT", ids: next, additive: false });
+        if (next.length === 0) {
+          const rect = {
+            x1: Math.min(marqueeSelection.start.x, marqueeSelection.current.x),
+            x2: Math.max(marqueeSelection.start.x, marqueeSelection.current.x),
+            y1: Math.min(marqueeSelection.start.y, marqueeSelection.current.y),
+            y2: Math.max(marqueeSelection.start.y, marqueeSelection.current.y),
+          };
+          const textInside = state.textItems.find(
+            (t) =>
+              t.visible &&
+              t.x >= rect.x1 &&
+              t.x <= rect.x2 &&
+              t.y >= rect.y1 &&
+              t.y <= rect.y2,
+          );
+          if (textInside) {
+            dispatch({ type: "SELECT_TEXT", id: textInside.id });
+          } else {
+            dispatch({ type: "SELECT", ids: next, additive: false });
+          }
+        } else {
+          dispatch({ type: "SELECT", ids: next, additive: false });
+        }
       }
       setMarqueeSelection(null);
       resetCanvasInteractionMode();
@@ -2325,7 +2347,29 @@ function App() {
             ? (current.initialSelection ?? state.selected)
             : [];
           const next = current.additive ? [...new Set([...base, ...ids])] : ids;
-          dispatch({ type: "SELECT", ids: next, additive: false });
+          if (next.length === 0) {
+            const rect = {
+              x1: Math.min(current.start.x, current.current.x),
+              x2: Math.max(current.start.x, current.current.x),
+              y1: Math.min(current.start.y, current.current.y),
+              y2: Math.max(current.start.y, current.current.y),
+            };
+            const textInside = stateRef.current.textItems.find(
+              (t) =>
+                t.visible &&
+                t.x >= rect.x1 &&
+                t.x <= rect.x2 &&
+                t.y >= rect.y1 &&
+                t.y <= rect.y2,
+            );
+            if (textInside) {
+              dispatch({ type: "SELECT_TEXT", id: textInside.id });
+            } else {
+              dispatch({ type: "SELECT", ids: next, additive: false });
+            }
+          } else {
+            dispatch({ type: "SELECT", ids: next, additive: false });
+          }
         }
         setMarqueeSelection(null);
         resetCanvasInteractionMode();
