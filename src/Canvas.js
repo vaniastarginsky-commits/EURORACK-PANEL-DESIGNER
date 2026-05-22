@@ -3013,6 +3013,14 @@ function SVGCanvas({
           fill: "rgba(0,0,0,0.13)",
           opacity: 0.75,
         }),
+        state.layerVisibility.mountingHoles &&
+          React.createElement(
+            "g",
+            { opacity: lop("mountingHoles") },
+            React.createElement(MountingHolesLayer, {
+              config: state.mountingHoles,
+            }),
+          ),
         state.layerVisibility.grid &&
           React.createElement(
             "g",
@@ -3169,14 +3177,6 @@ function SVGCanvas({
             ),
           );
         }),
-        state.layerVisibility.mountingHoles &&
-          React.createElement(
-            "g",
-            { opacity: lop("mountingHoles") },
-            React.createElement(MountingHolesLayer, {
-              config: state.mountingHoles,
-            }),
-          ),
         state.layerVisibility.pcb &&
           React.createElement(
             "g",
@@ -3431,12 +3431,6 @@ function SVGCanvas({
         React.createElement(RulerLayer, { ruler: ruler }),
       ),
     ),
-    showSafeZones &&
-      React.createElement(
-        "div",
-        { className: "mobile-safe-zone-pill" },
-        "SAFE ZONES \u00B7 edge / rail / PCB / clearances",
-      ),
     React.createElement(
       "div",
       {
