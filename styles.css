@@ -184,10 +184,10 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .library-search-compact{min-width:220px!important;max-width:320px!important}
 .library-category-select-wide{min-width:190px!important}
 .component-icon-grid,.popover-component-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(132px,1fr))!important;gap:10px!important}
-.quick-add-item,.component-icon-grid button,.popover-component-grid button{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:6px!important;min-height:150px!important;padding:10px!important;text-align:center!important;background:#080807!important;border:1px solid rgba(215,196,155,.14)!important;color:#eee7da!important}
-.component-icon-preview{width:86px!important;height:86px!important;display:grid!important;place-items:center!important}
-.component-icon-name{font-weight:700!important;font-size:13px!important;line-height:1.15!important}
-.component-icon-meta{font-size:11px!important;color:#928b7d!important}
+.quick-add-item,.component-icon-grid button,.popover-component-grid button{display:flex;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:6px!important;min-height:150px;padding:10px;text-align:center!important;background:#080807!important;border:1px solid rgba(215,196,155,.14)!important;color:#eee7da!important}
+.component-icon-preview{width:86px;height:86px;display:grid!important;place-items:center!important}
+.component-icon-name{font-weight:700!important;font-size:13px;line-height:1.15!important}
+.component-icon-meta{font-size:11px;color:#928b7d!important}
 
 .mobile-sheet-backdrop{position:fixed!important;inset:0!important;z-index:2147482400!important;background:rgba(0,0,0,.34)!important;pointer-events:auto!important}
 .mobile-bottom-sheet{position:fixed!important;right:18px!important;bottom:58px!important;width:min(360px,calc(100vw - 36px))!important;max-height:calc(100vh - 120px)!important;overflow:auto!important;background:#050505!important;border:1px solid rgba(215,196,155,.24)!important;box-shadow:0 24px 80px rgba(0,0,0,.82)!important;padding:12px!important;color:#eee7da!important}
@@ -3965,18 +3965,19 @@ input[type="number"],
 }
 
 .component-library-popover .component-icon-card {
-  display: block !important;
-  position: relative !important;
-  aspect-ratio: 1 !important;
-  min-height: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
+  display: block;
+  position: relative;
+  aspect-ratio: 1;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 .component-library-popover .component-icon-card > .part-favorite-mini {
   position: absolute;
-  top: 5px;
-  left: 6px;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 2;
   font-size: 11px;
   line-height: 1;
@@ -3987,46 +3988,43 @@ input[type="number"],
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 84% !important;
-  height: 84% !important;
-  overflow: hidden !important;
+  width: 84%;
+  height: 84%;
 }
 
 .component-library-popover .library-real-preview {
-  width: 100% !important;
-  height: 100% !important;
-  max-height: 100% !important;
-  border-bottom: 0 !important;
-  background: transparent !important;
-  transform: none !important;
-  transform-origin: center !important;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  border-bottom: 0;
+  background: transparent;
+  transform: none;
+  transform-origin: center;
 }
 
 .component-library-popover .component-icon-name {
-  position: absolute !important;
-  bottom: 16px !important;
-  left: 4px !important;
-  right: 4px !important;
-  text-align: center !important;
-  font-size: 11px !important;
-  max-width: 100% !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
+  position: absolute;
+  bottom: 16px;
+  left: 4px;
+  right: 4px;
+  text-align: center;
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   z-index: 1;
 }
 
 .component-library-popover .component-icon-meta {
-  position: absolute !important;
-  bottom: 4px !important;
-  left: 4px !important;
-  right: 4px !important;
-  text-align: center !important;
-  font-size: 10px !important;
-  max-width: 100% !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  right: 4px;
+  text-align: center;
+  font-size: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   z-index: 1;
 }
 
