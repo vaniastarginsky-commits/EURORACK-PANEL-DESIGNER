@@ -251,6 +251,7 @@ function App() {
   rotationPreviewRef.current = rotationPreview;
   const [draggingText, setDraggingText] = useState(null);
   const [textDragPreview, setTextDragPreview] = useState(null);
+  const [textsDragPreview, setTextsDragPreview] = useState(null);
   const draggingTextRef = useRef(draggingText);
   const textDragPreviewRef = useRef(textDragPreview);
   draggingTextRef.current = draggingText;
@@ -1889,6 +1890,16 @@ function App() {
         newPreview.set(cid, { x: pos.x + dx, y: pos.y + dy }),
       );
       setDragPreview(newPreview);
+      if (stateRef.current.selectedTexts?.length) {
+        const tp = {};
+        stateRef.current.selectedTexts.forEach((tid) => {
+          const t = stateRef.current.textItems.find(
+            (tt) => tt.id === tid && !tt.componentId,
+          );
+          if (t) tp[tid] = { x: t.x + dx, y: t.y + dy };
+        });
+        setTextsDragPreview(tp);
+      }
       if (
         typeof shouldShowDragMeasurement === "function"
           ? shouldShowDragMeasurement(selectionSize)
@@ -2413,6 +2424,7 @@ function App() {
         }
         setDragging(null);
         setDragPreview(null);
+        setTextsDragPreview(null);
         setDragStartPositions(null);
         clearLiveGuides();
         resetCanvasInteractionMode();
@@ -3736,6 +3748,7 @@ function App() {
         artworkDragPreview: artworkDragPreview,
         artworkResizePreview: artworkResizePreview,
         textDragPreview: textDragPreview,
+        textsDragPreview: textsDragPreview,
         snapGuides: snapGuides,
         distanceGuides: renderedDistanceGuides,
         ruler: ruler,

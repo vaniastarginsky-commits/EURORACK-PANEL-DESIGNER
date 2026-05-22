@@ -1470,6 +1470,7 @@ const TextLayer = React.memo(function TextLayer({
   layer,
   selectedTexts,
   textDragPreview,
+  textsDragPreview,
   viewMode,
   editingTextId,
 }) {
@@ -1480,7 +1481,9 @@ const TextLayer = React.memo(function TextLayer({
     items
       .filter((t) => t.layer === layer && t.visible)
       .map((t) => {
-        const p = textDragPreview?.id === t.id ? textDragPreview : null;
+        const p =
+          textsDragPreview?.[t.id] ??
+          (textDragPreview?.id === t.id ? textDragPreview : null);
         const x = p?.x ?? t.x,
           y = p?.y ?? t.y;
         const fontSizeMm = Number.isFinite(t.fontSizeMm)
@@ -2706,6 +2709,7 @@ function SVGCanvas({
   artworkDragPreview,
   artworkResizePreview,
   textDragPreview,
+  textsDragPreview,
   snapGuides,
   distanceGuides,
   ruler,
@@ -3064,6 +3068,7 @@ function SVGCanvas({
               layer: "background",
               selectedTexts: state.selectedTexts,
               textDragPreview: textDragPreview,
+              textsDragPreview: textsDragPreview,
               viewMode: state.viewMode,
               editingTextId: editingTextId,
             }),
@@ -3240,6 +3245,7 @@ function SVGCanvas({
               layer: "foreground",
               selectedTexts: state.selectedTexts,
               textDragPreview: textDragPreview,
+              textsDragPreview: textsDragPreview,
               viewMode: state.viewMode,
               editingTextId: editingTextId,
             }),
