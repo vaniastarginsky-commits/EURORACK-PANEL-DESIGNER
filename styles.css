@@ -3966,11 +3966,14 @@ input[type="number"],
 
 .component-library-popover .component-icon-card {
   display: grid !important;
-  grid-template-rows: 18px 86px auto auto !important;
+  grid-template-rows: 16px 1fr !important;
   align-items: center !important;
   justify-items: center !important;
-  min-height: 156px !important;
-  padding: 8px !important;
+  aspect-ratio: 1 !important;
+  min-height: 0 !important;
+  padding: 6px !important;
+  gap: 0 !important;
+  position: relative !important;
 }
 
 .component-library-popover .component-icon-preview {
@@ -3989,8 +3992,26 @@ input[type="number"],
   transform-origin: center !important;
 }
 
-.component-library-popover .component-icon-name,
+.component-library-popover .component-icon-name {
+  position: absolute !important;
+  bottom: 18px !important;
+  left: 4px !important;
+  right: 4px !important;
+  text-align: center !important;
+  font-size: 11px !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
 .component-library-popover .component-icon-meta {
+  position: absolute !important;
+  bottom: 5px !important;
+  left: 4px !important;
+  right: 4px !important;
+  text-align: center !important;
+  font-size: 10px !important;
   max-width: 100% !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
@@ -4086,19 +4107,9 @@ input[type="number"],
     grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)) !important;
   }
 
-  .component-library-popover .component-icon-card {
-    grid-template-rows: 18px 64px auto auto !important;
-    min-height: 142px !important;
-    gap: 4px !important;
-  }
-
   .component-library-popover .component-icon-preview {
     width: 64px !important;
     height: 64px !important;
-  }
-
-  .component-library-popover .component-icon-name {
-    font-size: 12px !important;
   }
 }
 
