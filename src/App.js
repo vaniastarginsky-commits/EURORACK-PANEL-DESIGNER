@@ -2714,7 +2714,7 @@ function App() {
           `Edge.Cuts: ${result.boardOutline.width.toFixed(2)} × ${result.boardOutline.height.toFixed(2)} mm.`,
         );
       if (result.warnings.length) msg.push("", ...result.warnings);
-      alert(msg.join("\n"));
+      window.appNotify(msg.join("\n"), { timeout: 12000 });
     };
     reader.readAsText(file);
     e.target.value = "";
