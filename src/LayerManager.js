@@ -98,7 +98,7 @@ function LayersPanel() {
     ),
     React.createElement(
       "div",
-      { className: "btn-row layer-manager-presets compact" },
+      { className: "layer-compact-presets" },
       React.createElement(
         "button",
         {
@@ -131,85 +131,81 @@ function LayersPanel() {
     ),
     React.createElement(
       "div",
-      { className: "layer-manager-table compact" },
+      { className: "layer-compact-table" },
       labels.map(([k, l, hint]) =>
         React.createElement(
           "div",
           {
             key: k,
-            className: `layer-manager-row compact ${state.layerVisibility[k] ? "on" : "off"}`,
+            className: `layer-compact-row ${state.layerVisibility[k] ? "on" : "off"}`,
           },
           React.createElement(
             "div",
-            { className: "layer-manager-line" },
+            { className: "layer-compact-top" },
+            React.createElement("b", null, l),
+            React.createElement("input", {
+              className: "layer-compact-slider",
+              type: "range",
+              min: 0.1,
+              max: 1,
+              step: 0.05,
+              value: opacity(k),
+              onChange: (e) =>
+                dispatch({
+                  type: "SET_LAYER_OPACITY",
+                  key: k,
+                  value: +e.target.value,
+                }),
+            }),
+          ),
+          React.createElement(
+            "div",
+            { className: "layer-compact-bottom" },
+            React.createElement("small", null, hint),
             React.createElement(
               "div",
-              { className: "layer-row-top" },
-              React.createElement("b", null, l),
-              React.createElement("input", {
-                className: "layer-opacity",
-                type: "range",
-                min: 0.1,
-                max: 1,
-                step: 0.05,
-                value: opacity(k),
-                onChange: (e) =>
-                  dispatch({
-                    type: "SET_LAYER_OPACITY",
-                    key: k,
-                    value: +e.target.value,
-                  }),
-              }),
-            ),
-            React.createElement(
-              "div",
-              { className: "layer-row-bottom" },
-              React.createElement("small", null, hint),
+              { className: "layer-compact-actions" },
               React.createElement(
-                "div",
-                { className: "layer-actions" },
-                React.createElement(
-                  "label",
-                  { className: "layer-toggle mini", title: "Show layer" },
-                  React.createElement("span", null, "Show"),
-                  React.createElement("input", {
-                    type: "checkbox",
-                    checked: state.layerVisibility[k],
-                    onChange: (e) =>
-                      dispatch({
-                        type: "SET_LAYER_VISIBILITY",
-                        key: k,
-                        value: e.target.checked,
-                      }),
-                  }),
-                ),
-                React.createElement(
-                  "label",
-                  {
-                    className: "layer-toggle mini",
-                    title: "Export include/exclude",
-                  },
-                  React.createElement("span", null, "Exp"),
-                  React.createElement("input", {
-                    type: "checkbox",
-                    checked: exportEnabled(k),
-                    onChange: (e) =>
-                      dispatch({
-                        type: "SET_LAYER_EXPORT",
-                        key: k,
-                        value: e.target.checked,
-                      }),
-                  }),
-                ),
-                React.createElement(
-                  "button",
-                  {
-                    className: "layer-solo-mini",
-                    title: `Show only ${l}`,
-                    onClick: () => solo(k),
-                  },
-                  "Solo",
-                ),
+                "label",
+                { className: "layer-compact-toggle", title: "Show layer" },
+                React.createElement("span", null, "Show"),
+                React.createElement("input", {
+                  type: "checkbox",
+                  checked: state.layerVisibility[k],
+                  onChange: (e) =>
+                    dispatch({
+                      type: "SET_LAYER_VISIBILITY",
+                      key: k,
+                      value: e.target.checked,
+                    }),
+                }),
+              ),
+              React.createElement(
+                "label",
+                {
+                  className: "layer-compact-toggle",
+                  title: "Export include/exclude",
+                },
+                React.createElement("span", null, "Exp"),
+                React.createElement("input", {
+                  type: "checkbox",
+                  checked: exportEnabled(k),
+                  onChange: (e) =>
+                    dispatch({
+                      type: "SET_LAYER_EXPORT",
+                      key: k,
+                      value: e.target.checked,
+                    }),
+                }),
+              ),
+              React.createElement(
+                "button",
+                {
+                  className: "layer-compact-solo",
+                  title: `Show only ${l}`,
+                  onClick: () => solo(k),
+                },
+                "Solo",
               ),
             ),
           ),
