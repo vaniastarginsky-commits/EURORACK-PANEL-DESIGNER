@@ -2385,7 +2385,22 @@ function App() {
           dragPreviewRef.current.forEach((pos, id) =>
             moves.push({ id, x: pos.x, y: pos.y }),
           );
-          if (moves.length === 1) {
+          const textMoves = [];
+          if (stateRef.current.selectedTexts?.length && moves.length > 0) {
+            const firstMove = moves[0];
+            const startPos = dragStartPositionsRef.current?.get(firstMove.id);
+            if (startPos) {
+              const dx = firstMove.x - startPos.x;
+              const dy = firstMove.y - startPos.y;
+              stateRef.current.selectedTexts.forEach((tid) => {
+                const t = stateRef.current.textItems.find(
+                  (tt) => tt.id === tid && !tt.componentId,
+                );
+                if (t) textMoves.push({ id: tid, x: t.x + dx, y: t.y + dy });
+              });
+            }
+          }
+          if (moves.length === 1 && textMoves.length === 0) {
             dispatch({
               type: "MOVE_COMPONENT",
               id: moves[0].id,
@@ -2393,7 +2408,7 @@ function App() {
               y: moves[0].y,
             });
           } else {
-            dispatch({ type: "MOVE_COMPONENTS", moves });
+            dispatch({ type: "MOVE_COMPONENTS", moves, textMoves });
           }
         }
         setDragging(null);
@@ -2582,7 +2597,8 @@ function App() {
                 y: t.y + dy,
               });
           });
-        } else if (s.selectedArtwork) {
+        }
+        if (s.selectedArtwork) {
           const a = s.artworks.find((aa) => aa.id === s.selectedArtwork);
           if (a && !a.locked)
             dispatch({
@@ -2591,7 +2607,8 @@ function App() {
               x: a.x + dx,
               y: a.y + dy,
             });
-        } else {
+        }
+        if (s.selected.length > 0) {
           const byId = new Map(s.components.map((c) => [c.id, c]));
           const moves = s.selected
             .map((id) => {

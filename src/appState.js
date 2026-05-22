@@ -70,6 +70,7 @@ function appReducer(state, action) {
     }
     case "DELETE_SELECTED": {
       const deletedIds = new Set(state.selected);
+      const deletedTextIds = new Set(state.selectedTexts);
       return withHistory(state, {
         ...snapshot(state),
         components: state.components.filter((c) => !deletedIds.has(c.id)),
@@ -77,9 +78,12 @@ function appReducer(state, action) {
           (sc) => !sc.componentId || !deletedIds.has(sc.componentId),
         ),
         textItems: state.textItems.filter(
-          (t) => !t.componentId || !deletedIds.has(t.componentId),
+          (t) =>
+            !deletedTextIds.has(t.id) &&
+            (!t.componentId || !deletedIds.has(t.componentId)),
         ),
         selected: [],
+        selectedTexts: [],
       });
     }
     case "DELETE_COMPONENT": {
@@ -257,6 +261,9 @@ function appReducer(state, action) {
     }
     case "MOVE_COMPONENTS": {
       const movesMap = new Map(action.moves.map((m) => [m.id, m]));
+      const textMovesMap = new Map(
+        (action.textMoves || []).map((m) => [m.id, m]),
+      );
       const deltas = new Map();
       for (const c of state.components) {
         const m = movesMap.get(c.id);
@@ -270,6 +277,12 @@ function appReducer(state, action) {
             : c,
         ),
         textItems: state.textItems.map((t) => {
+          if (textMovesMap.has(t.id))
+            return {
+              ...t,
+              x: textMovesMap.get(t.id).x,
+              y: textMovesMap.get(t.id).y,
+            };
           const d = t.componentId ? deltas.get(t.componentId) : undefined;
           return d ? { ...t, x: t.x + d.dx, y: t.y + d.dy } : t;
         }),
