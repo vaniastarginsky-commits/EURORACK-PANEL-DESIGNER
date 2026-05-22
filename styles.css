@@ -211,8 +211,6 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   .shortcut-help-backdrop{padding:10px!important;place-items:stretch!important}
   .shortcut-help{width:100%!important;max-height:calc(100vh - 20px)!important}
   .shortcut-help-grid{grid-template-columns:1fr!important}
-  .component-library-popover{left:8px!important;right:8px!important;bottom:58px!important;transform:none!important;width:auto!important;max-height:60vh!important}
-  .component-icon-grid,.popover-component-grid{grid-template-columns:repeat(auto-fill,minmax(112px,1fr))!important}
   .mobile-bottom-sheet{left:8px!important;right:8px!important;bottom:58px!important;width:auto!important;max-height:62vh!important}
 }
 
@@ -4107,7 +4105,6 @@ input[type="number"],
     left: 8px !important;
     right: 8px !important;
     top: 72px !important;
-    bottom: auto !important;
     transform: none !important;
     width: auto !important;
     max-height: calc(100vh - 146px) !important;
