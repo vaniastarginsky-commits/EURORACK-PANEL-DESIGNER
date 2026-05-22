@@ -40,22 +40,29 @@ Tracks dead CSS removal on the `ux-polish` branch. Target file: `styles.css`.
 | `55b6f68` | style: remove shadowed v422 alias selectors (slic commit 7, 7 entries) |
 | `2ca3f45` | style: remove shadowed S1 non-important CSS (Batch A, 5 substrings) |
 | `3b738fb` | style: remove shadowed S1 var-equivalent CSS (Batch B, 2 rules + ri2 selector shrink) |
+| `bfa3c89` | style: remove shadowed S1 visual override CSS (Batch C, 3 whole-rule deletes) |
+| `72f684e` | style: remove shadowed S1 selector entries (Batch D, 4 selector-list surgeries) |
 
 ---
 
-## Current state
+## Current state — CSS cleanup phase complete ✅
 
-**`!important` count:** 3,082 (−2 from Batch B whole-rule deletes)
+**`!important` count:** 3,075
 
-**Cascade audit (fresh after 3b738fb):**
+**Cascade audit (fresh after 72f684e):**
 - Total lines: 4,160
-- Raw rules parsed: 899
-- !important count: 3,082
-- Whole-rule deletion candidates: 3 (all on line 2 — Batch C)
-- Selector-list item removal candidates: 4 (all on line 2 — Batch D)
-- Visual QA coverage: 20/20 screenshots
+- Raw rules parsed: (see audit JSON)
+- !important count: 3,075
+- Whole-rule deletion candidates: **0**
+- Selector-list item removal candidates: **0**
+- Visual QA coverage: 21/21 screenshots
 
-**All non-line-2 selector-list surgery is complete. Remaining cleanup is line 2 / S1 only.**
+**CSS cleanup phase complete:**
+- All non-line-2 whole-rule deletions complete
+- All non-line-2 selector-list surgeries complete
+- All S1 / line 2 candidates addressed (Batches A–D)
+
+**Remaining ~3,075 `!important` are active architectural/theme/layout declarations — no known dead or shadowed cleanup candidates remain.**
 
 ---
 
@@ -209,6 +216,22 @@ Rules removed (all on line 2, section v376-clean-style): `.template-manager-back
 
 Post-Batch-B fresh audit: 3 whole-rule candidates, 4 slic candidates (all line 2).
 
+### S1 Batch C — value-different important-to-important whole-rule deletes (commit `bfa3c89`)
+3 whole-rule deletes from line 2. −7 `!important`. Braces balanced (170→167 pairs). Verify: 21/21.
+
+- Deleted `.app-brand{display:inline-flex!important;align-items:center!important;gap:8px!important}` — winner ri204 (v423): `display:flex` + same `align-items/gap`
+- Deleted `.component-hover-card{min-width:230px!important}` — winner ri586 (v442): `min-width:0!important`
+- Deleted `.inline-modal-actions button.danger{background:#170807!important;color:#efc2bc!important;border-color:rgba(138,48,42,.66)!important}` — winner ri661 (v445): near-identical dark red values; unblocked by `desktop-inline-modal-danger` coverage added in commit `1cf82d4`
+
+### S1 Batch D — selector-list surgery (commit `72f684e`)
+3 selector-list replacements, 4 dead entries removed from line 2. 0 `!important` delta (declarations unchanged). Braces balanced (167/167). Verify: 21/21.
+
+- ri10: stripped `.section-title,` and `.sidebar-title,` from 7-selector title rule — survivors: `.inspector-title,.layer-title,.export-dialog h2,.template-dialog h2,.mobile-sheet-title`; winners at ri177/ri220 (v422/v423)
+- ri11: stripped `.sidebar-left .section-title,` from 2-selector rule — survivor: `.sidebar-right .section-title`; winner ri660 (v447); full-rule disambiguation required (selector prefix appeared twice — second occurrence was inside a `@media(max-width:860px)` rule with different declarations)
+- ri70: stripped `.toolbar-popover button,` from 5-selector min-height rule — survivors: `.toolbar-popover select,.export-dialog button,.template-dialog button,.local-projects-dialog button`; winner ri271 (v426)
+
+Post-Batch-D fresh audit: **0 whole-rule candidates, 0 selector-list item candidates. CSS cleanup phase complete.**
+
 ---
 
 ## Deferred — do not touch without Codex review
@@ -234,15 +257,12 @@ Live selectors preserved: `.compact-render-row`, `.layer-manager-presets`, `.lay
 ~~### `:not(.layer-panel-trigger)` guard removal~~ ✅ **Done** (commit `39505af`)
 ~~### `.rail` ambiguity~~ ✅ **Resolved** — `desktop-safe-zones` screenshot (commit `23a609f`) confirmed visual coverage; Group A cleanup proceeded (commit `e9f955c`).
 
-### Layout-sensitive candidates
-Rules touching `position`, `z-index`, `width`, `overflow`, `display` on components with existing screenshot coverage should be reviewed against the visual baseline before deletion.
-
-### Value-different candidates
-Rules that differ in property values (not just shadow/override) require manual visual diff before removal.
+~~### Layout-sensitive candidates~~ ✅ All addressed
+~~### Value-different candidates~~ ✅ All addressed (Batch C)
 
 ---
 
-## Next recommended Codex-reviewed batch
+## Completed batch history
 
 ~~**Export dialog var/hex group** (#378, #452, #463, #577)~~ ✅ Done (commit `851322f`)
 ~~**Group A — .inspector-rail / .rail / .layer-panel-trigger compound rules**~~ ✅ Done (commit `e9f955c`)
@@ -251,39 +271,38 @@ Rules that differ in property values (not just shadow/override) require manual v
 ~~**Export dialog cascade batch #2** (15 rules)~~ ✅ Done (commit `b831864`)
 ~~**Export dialog cascade batch #3A** (15 rules)~~ ✅ Done (commit `281b507`)
 ~~**KiCad export CSS cleanup** (3 rules)~~ ✅ Done (commit `e893194`)
-~~**Topbar section popover shadowed rule** (`.toolbar-popover.topbar-section-popover`)~~ ✅ Done (coverage `931592c`, cleanup `5a29a5d`)
+~~**Topbar section popover shadowed rule**~~ ✅ Done (coverage `931592c`, cleanup `5a29a5d`)
 ~~**Template card title CSS** (ri359 line-sharing resolved)~~ ✅ Done (commit `defec3e`)
 ~~**Export structural CSS** (panel dimensions ×2 + tab stacking)~~ ✅ Done (commit `39ceb7c`)
-~~**Selector-list surgery commits 1–3** (11 entries)~~ ✅ Done (`d3d6976`, `fe15054`, `a3b7b12`)
-~~**Selector-list surgery commits 4–5** (8 entries)~~ ✅ Done (`6cba7e9`, `d3549d2`)
-~~**Selector-list surgery commit 6** (7 entries — v429 templates/export)~~ ✅ Done (`dbe8e1a`)
-~~**Selector-list surgery commit 7** (7 entries — v422 aliases)~~ ✅ Done (`55b6f68`)
+~~**Selector-list surgery commits 1–7** (33 entries total)~~ ✅ Done (`d3d6976`–`55b6f68`)
 ~~**S1 Batch A** (5 non-important substrings)~~ ✅ Done (`2ca3f45`)
 ~~**S1 Batch B** (2 whole-rule deletes + ri2 selector shrink)~~ ✅ Done (`3b738fb`)
+~~**S1 Batch C** (3 value-different whole-rule deletes)~~ ✅ Done (`bfa3c89`)
+~~**S1 Batch D** (4 selector-list entries across 3 rules)~~ ✅ Done (`72f684e`)
 
-**Fresh audit (post-3b738fb) — 3 whole-rule candidates (all L2), 4 slic candidates (all L2):**
+**Fresh audit (post-72f684e): 0 whole-rule candidates, 0 selector-list item candidates.**
 
-**All non-line-2 cleanup is complete.**
+---
 
-**Whole-rule (3, all line 2 / S1 — Batch C):**
-`.app-brand`, `.component-hover-card`, `.inline-modal-actions button.danger` (ri155 — blocked until danger-state screenshot exists).
+## Recommended next phase
 
-**Selector-list item candidates (4, all line 2 / S1 — Batch D):**
+**css-split-by-domain / design refresh**
 
-| Group | Count | Area | Key dead selectors |
-|-------|-------|------|--------------------|
-| L2/S1 | 4 | Line 2 | `.section-title`, `.sidebar-title`, `.sidebar-left .section-title`, `.toolbar-popover button` |
+The cascade architecture has grown through layered emergency patches (v422–v451). The ~3,075 remaining `!important` are active architectural declarations — not dead code, but a symptom of the patch-on-patch structure.
 
-**Remaining cleanup: line 2 / S1 surgery only.**
-- Batch C: value-different whole-rule deletes (`.app-brand`, `.component-hover-card`); ri155 (`.inline-modal-actions button.danger`) blocked until danger-state screenshot coverage exists.
-- Batch D: value-different selector-list surgery (4 entries across 3 rules).
-- ri155 blocked: danger button background/color/border-color differ between shadowed and winner values — visual coverage of the delete-confirmation danger state required before removal.
+Recommended approach:
+- Split `styles.css` by domain (layout, sidebar, export-dialog, mobile, etc.) into co-located or domain-grouped files
+- Establish a **no new `!important`** policy for all future CSS
+- Use specificity and cascade order instead of `!important` for new rules
+- Consolidate the v422/v423 emergency restore blocks into the canonical base layer
+
+This is a design-refresh-scale effort and should be planned as a dedicated branch.
 
 ---
 
 ## Process notes
 
-- Each deletion batch must pass `npm run verify` (20/20 screenshots) before commit.
+- Each deletion batch must pass `npm run verify` (21/21 screenshots) before commit.
 - Only `styles.css` should appear in `git diff --name-only` after a CSS-only cleanup commit.
-- Whole-rule deletion (all selectors dead) is safe. Selector-list surgery (mixed live/dead) requires Codex review.
+- Whole-rule deletion (all selectors dead) is safe. Selector-list surgery (mixed live/dead) requires Codex adversarial review.
 - The `verify` screenshots in `design-review/verify-tmp/` are gitignored and serve as the visual regression check.
