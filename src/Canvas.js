@@ -2891,6 +2891,7 @@ function SVGCanvas({
           onMouseLeave: handleSVGMouseLeave,
           onMouseDown: onSVGMouseDown,
           onMouseUp: onSVGMouseUp,
+          onDoubleClick: onSVGDoubleClick,
           onTouchStart: onSVGTouchStart,
           onTouchMove: onSVGTouchMove,
           onTouchEnd: onSVGTouchEnd,

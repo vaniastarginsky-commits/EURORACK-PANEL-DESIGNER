@@ -1379,6 +1379,28 @@ function App() {
       }
     }, 60);
   }
+  function openTextPropertiesPanel() {
+    setRightPanelOpen(true);
+    setRightInspectorTopTab("inspect");
+    setRightInspectTab("properties");
+  }
+  function enterTextEdit(id) {
+    dispatch({ type: "SELECT_TEXT", id });
+    setEditingTextId(id);
+    openTextPropertiesPanel();
+  }
+  function onSVGDoubleClick(e) {
+    const el = e.target;
+    const textGroup = el.closest("[data-text-id]");
+    if (textGroup) {
+      const id = textGroup.getAttribute("data-text-id");
+      const t = state.textItems.find((tt) => tt.id === id);
+      if (t && !t.locked) {
+        enterTextEdit(id);
+      }
+      return;
+    }
+  }
   function onSVGContextMenu(e) {
     const el = e.target;
     const group = el.closest("[data-id]");
@@ -3610,6 +3632,7 @@ function App() {
         rightPanelOpen: rightPanelOpen,
         showSafeZones: showSafeZones,
         editingTextId: editingTextId,
+        onSVGDoubleClick: onSVGDoubleClick,
       }),
       React.createElement(CanvasQuickAddDock, {
         hidden: sidePanelOpen && isNarrowInitial,
