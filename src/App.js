@@ -3618,10 +3618,6 @@ function App() {
           setZoom(isMobileFit ? 1.14 : 1.25);
           setPan({ x: 0, y: 0 });
         },
-        onResetView: () => {
-          setZoom(1);
-          setPan({ x: 0, y: 0 });
-        },
         snapSettings: snapSettings,
         onSnapSettingsChange: setSnapSettings,
         clearanceMode: clearanceMode,

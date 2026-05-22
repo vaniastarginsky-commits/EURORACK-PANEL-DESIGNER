@@ -7,14 +7,12 @@ function CanvasToolRail({
   touchMode,
   onSetTouchMode,
   onFitView,
-  onResetView,
   snapSettings,
   onSnapSettingsChange,
   clearanceMode,
   onToggleClearanceMode,
   showSafeZones,
   onToggleSafeZones,
-  onOpenProductionCheck,
   onOpenShortcuts,
   onAddText,
 }) {
@@ -125,14 +123,6 @@ function CanvasToolRail({
         className: touchMode === "edit" ? "active" : "",
         onClick: () => setMode("edit"),
       }),
-      command("Pan", "P", {
-        className: touchMode === "pan" ? "active" : "",
-        onClick: () => setMode("pan"),
-      }),
-      command("Select", "S", {
-        className: touchMode === "select" ? "active" : "",
-        onClick: () => setMode("select"),
-      }),
       command("Ruler", "M", {
         className: touchMode === "ruler" ? "active" : "",
         onClick: () => setMode("ruler"),
@@ -160,9 +150,19 @@ function CanvasToolRail({
       command("Tone", "O", {
         onClick: () => AppCommands.toggleViewContrast(),
       }),
-      command("More", "...", {
-        className: openMenu === "more" ? "active" : "",
-        onClick: (e) => toggleMenu("more", e),
+      command("Safe", "SZ", {
+        className: showSafeZones ? "active" : "",
+        onClick: () => {
+          setOpenMenu(null);
+          onToggleSafeZones();
+        },
+      }),
+      command("Clr", "CL", {
+        className: clearanceMode ? "active" : "",
+        onClick: () => {
+          setOpenMenu(null);
+          onToggleClearanceMode();
+        },
       }),
       command("Help", "?", {
         onClick: () => {
@@ -182,16 +182,6 @@ function CanvasToolRail({
             onPointerDown: (e) => e.stopPropagation(),
             onWheel: (e) => e.stopPropagation(),
           },
-          openMenu === "more" &&
-            React.createElement(CanvasToolMoreMenu, {
-              onClose: () => setOpenMenu(null),
-              clearanceMode,
-              showSafeZones,
-              onToggleClearanceMode,
-              onToggleSafeZones,
-              onOpenProductionCheck,
-              onResetView,
-            }),
           openMenu === "view" &&
             React.createElement(CanvasToolViewMenu, {
               onClose: () => setOpenMenu(null),
