@@ -57,7 +57,7 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .canvas-wrap{grid-column:2!important;grid-row:1!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;position:relative!important;background:#000!important;display:flex!important;align-items:center!important;justify-content:center!important}
 .canvas-wrap>div:first-child{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;display:flex!important;align-items:center!important;justify-content:center!important}
 .panel-canvas-svg{display:block!important;max-width:none!important;flex:0 0 auto!important}
-.canvas-hud{position:absolute!important;top:10px!important;left:10px!important;z-index:15!important;display:flex!important;gap:6px!important;align-items:center!important;background:rgba(5,5,5,.86)!important;border:1px solid rgba(215,196,155,.13)!important;padding:4px 8px!important;color:#d8d0c0!important;pointer-events:none!important}
+.canvas-hud{position:absolute!important;top:10px!important;left:10px!important;z-index:15!important;display:flex!important;gap:6px!important;align-items:center!important;background:transparent!important;border:0!important;padding:4px 8px!important;color:#d8d0c0!important;pointer-events:none!important;opacity:.15}
 .workspace-overlay{position:absolute!important;inset:0!important;z-index:16!important;pointer-events:none!important}
 .workspace-overlay .hud-zone{position:absolute!important;pointer-events:auto!important}
 .hud-bottom-left{left:10px!important;bottom:10px!important}
