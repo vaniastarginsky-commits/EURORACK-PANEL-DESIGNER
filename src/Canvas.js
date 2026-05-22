@@ -2532,7 +2532,18 @@ function SelectionHandles({ c, cx, cy }) {
     Math.abs((c.rotation || 0) % 360) > 0.01 &&
       React.createElement(
         "text",
-        { x: x2 + 0.9, y: y1 + 1.55, className: "rotation-label" },
+        {
+          x: x2 + 0.9,
+          y: y1 + 1.1,
+          className: "rotation-label",
+          fontSize: 1.35,
+          fontWeight: 800,
+          fill: "#f2dfb2",
+          stroke: "rgba(0,0,0,0.82)",
+          strokeWidth: 0.24,
+          paintOrder: "stroke",
+          dominantBaseline: "middle",
+        },
         Math.round(c.rotation),
         "\u00B0",
       ),
