@@ -532,7 +532,7 @@ function TemplatesDialog({ onClose, onPlaceBlock }) {
         components: templateLoadPending.components,
         selected: [],
         selectedArtwork: null,
-        selectedText: null,
+        selectedTexts: [],
         pcb: t.pcb
           ? { ...base.pcb, ...t.pcb }
           : { ...base.pcb, width: t.hp * HP_TO_MM },

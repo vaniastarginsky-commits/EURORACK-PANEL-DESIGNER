@@ -847,7 +847,7 @@ function TextPanel() {
           "div",
           {
             key: t.id,
-            className: `text-item-row ${state.selectedText === t.id ? "active" : ""}`,
+            className: `text-item-row ${state.selectedTexts?.includes(t.id) ? "active" : ""}`,
             onClick: () => dispatch({ type: "SELECT_TEXT", id: t.id }),
           },
           React.createElement(

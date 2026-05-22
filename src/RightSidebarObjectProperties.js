@@ -385,7 +385,7 @@ function ArtworkPropertiesPanel() {
 function TextPropertiesPanel() {
   const state = useAppState();
   const dispatch = useAppDispatch();
-  const t = state.textItems.find((x) => x.id === state.selectedText);
+  const t = state.textItems.find((x) => x.id === state.selectedTexts?.[0]);
   if (!t) return null;
   const patch = (p) => dispatch({ type: "UPDATE_TEXT", id: t.id, patch: p });
   const linkedComponent = t.componentId

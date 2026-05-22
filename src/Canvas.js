@@ -1468,7 +1468,7 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
 const TextLayer = React.memo(function TextLayer({
   items,
   layer,
-  selectedText,
+  selectedTexts,
   textDragPreview,
   viewMode,
   editingTextId,
@@ -1516,7 +1516,7 @@ const TextLayer = React.memo(function TextLayer({
             },
             t.text,
           ),
-          selectedText === t.id &&
+          selectedTexts?.includes(t.id) &&
             React.createElement("rect", {
               x: x - w / 2,
               y: y - fontSizeMm,
@@ -3062,7 +3062,7 @@ function SVGCanvas({
             React.createElement(TextLayer, {
               items: state.textItems,
               layer: "background",
-              selectedText: state.selectedText,
+              selectedTexts: state.selectedTexts,
               textDragPreview: textDragPreview,
               viewMode: state.viewMode,
               editingTextId: editingTextId,
@@ -3238,7 +3238,7 @@ function SVGCanvas({
             React.createElement(TextLayer, {
               items: state.textItems,
               layer: "foreground",
-              selectedText: state.selectedText,
+              selectedTexts: state.selectedTexts,
               textDragPreview: textDragPreview,
               viewMode: state.viewMode,
               editingTextId: editingTextId,

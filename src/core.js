@@ -804,7 +804,7 @@ function makeInitialState() {
     customParts: [],
     selected: [],
     selectedArtwork: null,
-    selectedText: null,
+    selectedTexts: [],
     viewMode: "front",
     topHardwareStyle: "classic",
     hardwareRenderMode: "auto",

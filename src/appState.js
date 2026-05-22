@@ -92,7 +92,7 @@ function appReducer(state, action) {
         textItems: state.textItems.filter((t) => t.componentId !== action.id),
         selected: state.selected.filter((id) => id !== action.id),
         selectedArtwork: null,
-        selectedText: null,
+        selectedTexts: [],
       });
     }
     case "CLEAR_PANEL": {
@@ -104,7 +104,7 @@ function appReducer(state, action) {
         textItems: state.textItems.filter((t) => !t.componentId),
         selected: [],
         selectedArtwork: null,
-        selectedText: null,
+        selectedTexts: [],
       });
     }
     case "START_NEW_PROJECT": {
@@ -138,7 +138,7 @@ function appReducer(state, action) {
         components: [...state.components, ...action.components],
         selected: action.selectedIds ?? action.components.map((c) => c.id),
         selectedArtwork: null,
-        selectedText: null,
+        selectedTexts: [],
       });
     }
     case "LOAD_KICAD_IMPORT": {
@@ -184,7 +184,7 @@ function appReducer(state, action) {
         artworks: [],
         selected: action.components.map((c) => c.id),
         selectedArtwork: null,
-        selectedText: null,
+        selectedTexts: [],
       });
     }
     case "DUPLICATE_COMPONENT": {
@@ -202,7 +202,7 @@ function appReducer(state, action) {
         components: [...state.components, dupe],
         selected: [dupe.id],
         selectedArtwork: null,
-        selectedText: null,
+        selectedTexts: [],
       });
     }
     case "ROTATE_SELECTED": {
@@ -229,7 +229,7 @@ function appReducer(state, action) {
         ...state,
         selected: ids,
         selectedArtwork: null,
-        selectedText: null,
+        selectedTexts: action.textIds ?? [],
       };
     }
     case "DESELECT_ALL":
@@ -237,7 +237,7 @@ function appReducer(state, action) {
         ...state,
         selected: [],
         selectedArtwork: null,
-        selectedText: null,
+        selectedTexts: [],
       };
     case "MOVE_COMPONENT": {
       const oldComp = state.components.find((c) => c.id === action.id);
@@ -538,7 +538,7 @@ function appReducer(state, action) {
       return {
         ...state,
         selectedArtwork: action.id,
-        selectedText: null,
+        selectedTexts: [],
         selected: action.id !== null ? [] : state.selected,
       };
     case "SET_CLIP_ARTWORK":
@@ -587,7 +587,7 @@ function appReducer(state, action) {
         textItems: [...state.textItems, action.item],
         selected: [],
         selectedArtwork: null,
-        selectedText: action.item.id,
+        selectedTexts: [action.item.id],
       });
     case "UPDATE_TEXT":
       return withHistory(state, {
@@ -616,8 +616,7 @@ function appReducer(state, action) {
       return withHistory(state, {
         ...snapshot(state),
         textItems: state.textItems.filter((t) => t.id !== action.id),
-        selectedText:
-          state.selectedText === action.id ? null : state.selectedText,
+        selectedTexts: state.selectedTexts.filter((id) => id !== action.id),
       });
     case "MOVE_TEXT":
       return withHistory(state, {
@@ -642,7 +641,7 @@ function appReducer(state, action) {
     case "SELECT_TEXT":
       return {
         ...state,
-        selectedText: action.id,
+        selectedTexts: action.id !== null ? [action.id] : [],
         selectedArtwork: null,
         selected: action.id !== null ? [] : state.selected,
       };

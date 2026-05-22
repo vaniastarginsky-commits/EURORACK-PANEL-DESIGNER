@@ -415,7 +415,7 @@ function App() {
   }, [
     state.selected.length,
     state.selectedArtwork,
-    state.selectedText,
+    state.selectedTexts,
     leftPanelOpen,
     rightPanelOpen,
   ]);
@@ -2071,29 +2071,23 @@ function App() {
         const next = marqueeSelection.additive
           ? [...new Set([...base, ...ids])]
           : ids;
-        if (next.length === 0) {
-          const rect = {
-            x1: Math.min(marqueeSelection.start.x, marqueeSelection.current.x),
-            x2: Math.max(marqueeSelection.start.x, marqueeSelection.current.x),
-            y1: Math.min(marqueeSelection.start.y, marqueeSelection.current.y),
-            y2: Math.max(marqueeSelection.start.y, marqueeSelection.current.y),
-          };
-          const textInside = state.textItems.find(
+        const rect = {
+          x1: Math.min(marqueeSelection.start.x, marqueeSelection.current.x),
+          x2: Math.max(marqueeSelection.start.x, marqueeSelection.current.x),
+          y1: Math.min(marqueeSelection.start.y, marqueeSelection.current.y),
+          y2: Math.max(marqueeSelection.start.y, marqueeSelection.current.y),
+        };
+        const textIds = state.textItems
+          .filter(
             (t) =>
               t.visible &&
               t.x >= rect.x1 &&
               t.x <= rect.x2 &&
               t.y >= rect.y1 &&
               t.y <= rect.y2,
-          );
-          if (textInside) {
-            dispatch({ type: "SELECT_TEXT", id: textInside.id });
-          } else {
-            dispatch({ type: "SELECT", ids: next, additive: false });
-          }
-        } else {
-          dispatch({ type: "SELECT", ids: next, additive: false });
-        }
+          )
+          .map((t) => t.id);
+        dispatch({ type: "SELECT", ids: next, textIds, additive: false });
       }
       setMarqueeSelection(null);
       resetCanvasInteractionMode();
@@ -2347,29 +2341,23 @@ function App() {
             ? (current.initialSelection ?? state.selected)
             : [];
           const next = current.additive ? [...new Set([...base, ...ids])] : ids;
-          if (next.length === 0) {
-            const rect = {
-              x1: Math.min(current.start.x, current.current.x),
-              x2: Math.max(current.start.x, current.current.x),
-              y1: Math.min(current.start.y, current.current.y),
-              y2: Math.max(current.start.y, current.current.y),
-            };
-            const textInside = stateRef.current.textItems.find(
+          const rect = {
+            x1: Math.min(current.start.x, current.current.x),
+            x2: Math.max(current.start.x, current.current.x),
+            y1: Math.min(current.start.y, current.current.y),
+            y2: Math.max(current.start.y, current.current.y),
+          };
+          const textIds = stateRef.current.textItems
+            .filter(
               (t) =>
                 t.visible &&
                 t.x >= rect.x1 &&
                 t.x <= rect.x2 &&
                 t.y >= rect.y1 &&
                 t.y <= rect.y2,
-            );
-            if (textInside) {
-              dispatch({ type: "SELECT_TEXT", id: textInside.id });
-            } else {
-              dispatch({ type: "SELECT", ids: next, additive: false });
-            }
-          } else {
-            dispatch({ type: "SELECT", ids: next, additive: false });
-          }
+            )
+            .map((t) => t.id);
+          dispatch({ type: "SELECT", ids: next, textIds, additive: false });
         }
         setMarqueeSelection(null);
         resetCanvasInteractionMode();
@@ -2493,8 +2481,10 @@ function App() {
         return;
       }
       if (e.key === "Delete" || e.key === "Backspace") {
-        if (s.selectedText) {
-          dispatch({ type: "DELETE_TEXT", id: s.selectedText });
+        if (s.selectedTexts?.length) {
+          s.selectedTexts.forEach((id) =>
+            dispatch({ type: "DELETE_TEXT", id }),
+          );
         } else if (s.selectedArtwork) {
           dispatch({ type: "DELETE_ARTWORK", id: s.selectedArtwork });
         } else {
@@ -2558,16 +2548,27 @@ function App() {
       } else if (
         ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)
       ) {
-        if (s.selected.length === 0 && !s.selectedArtwork && !s.selectedText)
+        if (
+          s.selected.length === 0 &&
+          !s.selectedArtwork &&
+          !s.selectedTexts?.length
+        )
           return;
         e.preventDefault();
         const d = e.shiftKey ? 0.1 : s.grid.size;
         const dx = e.key === "ArrowLeft" ? -d : e.key === "ArrowRight" ? d : 0;
         const dy = e.key === "ArrowUp" ? -d : e.key === "ArrowDown" ? d : 0;
-        if (s.selectedText) {
-          const t = s.textItems.find((tt) => tt.id === s.selectedText);
-          if (t)
-            dispatch({ type: "MOVE_TEXT", id: t.id, x: t.x + dx, y: t.y + dy });
+        if (s.selectedTexts?.length) {
+          s.selectedTexts.forEach((tid) => {
+            const t = s.textItems.find((tt) => tt.id === tid);
+            if (t)
+              dispatch({
+                type: "MOVE_TEXT",
+                id: t.id,
+                x: t.x + dx,
+                y: t.y + dy,
+              });
+          });
         } else if (s.selectedArtwork) {
           const a = s.artworks.find((aa) => aa.id === s.selectedArtwork);
           if (a && !a.locked)

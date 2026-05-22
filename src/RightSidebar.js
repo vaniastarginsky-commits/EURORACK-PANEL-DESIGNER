@@ -27,7 +27,7 @@ function RightSidebar({
       className: "sidebar-right closed lazy-unmounted",
       "aria-hidden": "true",
     });
-  const propertyPanel = state.selectedText
+  const propertyPanel = state.selectedTexts?.length
     ? React.createElement(TextPropertiesPanel, null)
     : state.selectedArtwork
       ? React.createElement(ArtworkPropertiesPanel, null)

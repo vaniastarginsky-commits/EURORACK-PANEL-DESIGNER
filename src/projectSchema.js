@@ -421,7 +421,7 @@ function validateAndNormalize(raw) {
     customParts,
     selected: [],
     selectedArtwork: null,
-    selectedText: null,
+    selectedTexts: [],
     viewMode: ["front", "rear", "drill", "combined"].includes(obj.viewMode)
       ? obj.viewMode
       : "front",
