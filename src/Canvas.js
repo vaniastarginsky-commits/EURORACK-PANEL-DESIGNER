@@ -2526,8 +2526,23 @@ function SelectionHandles({ c, cx, cy }) {
           width: badge.length * 1.15 + 2.4,
           height: 2.35,
           rx: 1.1,
+          fill: "rgba(4,4,4,0.82)",
+          stroke: "rgba(214,170,88,0.72)",
+          strokeWidth: 0.22,
         }),
-        React.createElement("text", { x: x1 + 1.15, y: y2 + 2.78 }, badge),
+        React.createElement(
+          "text",
+          {
+            x: x1 + 1.15,
+            y: y2 + 2.28,
+            fontSize: 1.05,
+            fontWeight: 850,
+            fill: "#f2dfb2",
+            dominantBaseline: "middle",
+            letterSpacing: 0.12,
+          },
+          badge,
+        ),
       ),
     Math.abs((c.rotation || 0) % 360) > 0.01 &&
       React.createElement(
