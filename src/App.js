@@ -3541,6 +3541,27 @@ function App() {
         onToggleSafeZones: () => setShowSafeZones((v) => !v),
         onOpenProductionCheck: () => setShowProductionCheck(true),
         onOpenShortcuts: () => setShowShortcutHelp(true),
+        onAddText: () => {
+          const id = crypto.randomUUID();
+          dispatch({
+            type: "ADD_TEXT",
+            item: {
+              id,
+              text: "TEXT",
+              x: snapToGrid(widthMM / 2, state.grid.size),
+              y: snapToGrid(PANEL_HEIGHT_MM / 2, state.grid.size),
+              rotation: 0,
+              fontSizeMm: 3,
+              align: "center",
+              layer: "foreground",
+              locked: false,
+              visible: true,
+              opacity: 1,
+              fontFamily: TEXT_FONT_OPTIONS[0].value,
+            },
+          });
+          setEditingTextId(id);
+        },
       }),
       React.createElement(ComponentLibraryPanel, {
         headless: true,

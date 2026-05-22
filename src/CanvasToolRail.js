@@ -16,6 +16,7 @@ function CanvasToolRail({
   onToggleSafeZones,
   onOpenProductionCheck,
   onOpenShortcuts,
+  onAddText,
 }) {
   const state = useAppState();
   const dispatch = useAppDispatch();
@@ -135,6 +136,12 @@ function CanvasToolRail({
       command("Ruler", "M", {
         className: touchMode === "ruler" ? "active" : "",
         onClick: () => setMode("ruler"),
+      }),
+      command("Text", "T", {
+        onClick: () => {
+          setOpenMenu(null);
+          onAddText?.();
+        },
       }),
       command("View", "V", {
         className: openMenu === "view" ? "active" : "",
