@@ -233,3 +233,24 @@ Chromium via Playwright, captures 10 screenshots (desktop and mobile states), an
 writes them to `design-review/after/`. Run it with `npm run screenshot` or
 `npm run verify`. Screenshots must not change unless a task explicitly requires a
 visual change.
+## !important reduction policy
+
+Allowed:
+
+- remove dead `!important` declarations when a later canonical rule fully overrides them;
+
+- remove redundant `!important` declarations that set the same value as the winning rule;
+
+- remove `!important` only within the UI surface being fixed;
+
+- report before/after count and run `npm run verify`.
+
+Not allowed:
+
+- global `!important` purge;
+
+- removing unrelated declarations only to improve the count;
+
+- replacing old `!important` with new broader selectors;
+
+- adding new `!important` without explicit approval.
