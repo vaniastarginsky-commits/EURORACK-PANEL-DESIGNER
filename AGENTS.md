@@ -1,3 +1,16 @@
+# Agent instructions
+
+For all CSS, visual polish, redesign, frontend-design, and layout work, read and follow:
+
+docs/CSS_DESIGN_POLICY.md
+
+No new !important declarations unless explicitly approved by the user.
+Prefer existing canonical rules.
+Run npm run verify before committing.
+Do not update screenshot baselines unless explicitly asked.
+
+---
+
 # Panel Designer Agent Notes
 
 - Keep UI behavior changes separate from tooling-only changes.
