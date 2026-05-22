@@ -3961,6 +3961,8 @@ input[type="number"],
   overflow: auto !important;
   padding-right: 4px !important;
   grid-template-columns: repeat(auto-fill, minmax(126px, 1fr)) !important;
+  align-items: start;
+  grid-auto-rows: max-content;
 }
 
 .component-library-popover .component-icon-card {
@@ -3970,6 +3972,12 @@ input[type="number"],
   min-height: 0;
   padding: 0;
   overflow: hidden;
+}
+
+.component-library-popover .component-icon-card::before {
+  content: '';
+  display: block;
+  padding-top: 100%;
 }
 
 .component-library-popover .component-icon-card > .part-favorite-mini {

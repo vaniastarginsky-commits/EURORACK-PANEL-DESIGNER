@@ -167,12 +167,41 @@
 
 ---
 
-## Нерасследованный баг: наслоение карточек на мобильном
+## ~~Нерасследованный баг: наслоение карточек на мобильном~~ — ИСПРАВЛЕН (2026-05-23)
 
 ### Симптом (из скриншотов)
 - 3 карточки (Potentiometers) — **OK**
-- 8 карточек (Switches/buttons) — начинается наслоение
-- 22 карточки (All types) — сильное наслоение
+- 8 карточек (Switches/buttons) — начинается наслоение ← **исправлено**
+- 22 карточки (All types) — сильное наслоение ← **исправлено**
+
+### Реальная причина (подтверждена Playwright-диагностикой)
+
+CSS Grid `align-self: stretch` (по умолчанию) + `aspect-ratio: 1` + все дочерние элементы `position: absolute`:
+- Хром не использует `aspect-ratio` для вычисления max-content contributions при авто-sizing строк, если нет in-flow контента
+- Строки оцениваются как 0 → "stretch auto" шаг распределяет `(546px — gaps) / N` на каждую строку
+- 11 строк → 41px/строка, 4 строки → 129px/строка; карточки рендерятся в 167px (aspect-ratio), переполняя треки → наслоение
+
+**Исправление** (3 CSS-правила без новых !important):
+```css
+/* 1. Предотвратить stretch-auto распределение высоты */
+.component-library-popover .popover-component-grid {
+  align-items: start;
+  grid-auto-rows: max-content;
+}
+/* 2. In-flow ::before даёт max-content = ширина колонки, чтобы Grid правильно определил высоту строк */
+.component-library-popover .component-icon-card::before {
+  content: '';
+  display: block;
+  padding-top: 100%; /* = column width via CSS % block padding rule */
+}
+```
+
+**Результат после исправления:**
+- All types: scrollHeight 1937px > grid 546px → скролл работает ✓
+- Switches: scrollHeight 698px > grid 546px → скролл работает ✓
+- Potentiometers: scrollHeight 344px = grid 344px → скролл не нужен ✓
+- Desktop: grid 402px, карточки 128×128px ✓
+- `npm run verify` — 24 скриншота (добавлены 3 мобильных mobile-component-library-*)
 
 ### HTML-структура попапа
 

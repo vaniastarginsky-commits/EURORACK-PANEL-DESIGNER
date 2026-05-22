@@ -135,6 +135,24 @@ const states = [
   }],
   ["mobile-left-drawer", mobile, async page => openMobilePanel(page, "Left panel", ".sidebar-left")],
   ["mobile-right-drawer", mobile, async page => openMobilePanel(page, "Right panel", ".sidebar-right")],
+
+  // P1: mobile component library — tests that cards don't overlap (row sizing regression)
+  ["mobile-component-library-all", mobile, async page => {
+    await page.evaluate(() => window.dispatchEvent(new CustomEvent("open-component-library-picker")));
+    await page.locator(".component-library-popover").waitFor({ state: "visible" });
+  }],
+  ["mobile-component-library-switches", mobile, async page => {
+    await page.evaluate(() => window.dispatchEvent(new CustomEvent("open-component-library-picker")));
+    await page.locator(".component-library-popover").waitFor({ state: "visible" });
+    await page.locator(".library-category-select-wide").selectOption("switch");
+    await page.waitForTimeout(150);
+  }],
+  ["mobile-component-library-pots", mobile, async page => {
+    await page.evaluate(() => window.dispatchEvent(new CustomEvent("open-component-library-picker")));
+    await page.locator(".component-library-popover").waitFor({ state: "visible" });
+    await page.locator(".library-category-select-wide").selectOption("potentiometer");
+    await page.waitForTimeout(150);
+  }],
 ];
 
 async function main() {
