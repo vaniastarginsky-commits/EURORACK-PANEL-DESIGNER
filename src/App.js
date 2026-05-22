@@ -46,6 +46,7 @@ function App() {
       ? Math.hypot(ruler.end.x - ruler.start.x, ruler.end.y - ruler.start.y)
       : null;
   }, [ruler]);
+  const [editingTextId, setEditingTextId] = useState(null);
   function handleSetTouchMode(mode) {
     if (mode === "ruler" && touchMode === "ruler") {
       setTouchMode("edit");
@@ -3587,6 +3588,7 @@ function App() {
         },
         rightPanelOpen: rightPanelOpen,
         showSafeZones: showSafeZones,
+        editingTextId: editingTextId,
       }),
       React.createElement(CanvasQuickAddDock, {
         hidden: sidePanelOpen && isNarrowInitial,

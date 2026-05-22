@@ -1471,6 +1471,7 @@ const TextLayer = React.memo(function TextLayer({
   selectedText,
   textDragPreview,
   viewMode,
+  editingTextId,
 }) {
   if (viewMode === "rear") return null;
   return React.createElement(
@@ -1492,7 +1493,10 @@ const TextLayer = React.memo(function TextLayer({
             key: t.id,
             "data-text-id": t.id,
             transform: `rotate(${t.rotation}, ${x}, ${y})`,
-            style: { cursor: t.locked ? "default" : "move" },
+            style: {
+              cursor: t.locked ? "default" : "move",
+              opacity: editingTextId === t.id ? 0 : 1,
+            },
           },
           React.createElement(
             "text",
@@ -2730,6 +2734,8 @@ function SVGCanvas({
   onCancelPendingAdd,
   rightPanelOpen = false,
   showSafeZones = false,
+  editingTextId,
+  onSVGDoubleClick,
 }) {
   const state = useAppState();
   const dispatch = useAppDispatch();
@@ -3050,6 +3056,7 @@ function SVGCanvas({
               selectedText: state.selectedText,
               textDragPreview: textDragPreview,
               viewMode: state.viewMode,
+              editingTextId: editingTextId,
             }),
           ),
         state.layerVisibility.text &&
@@ -3233,6 +3240,7 @@ function SVGCanvas({
               selectedText: state.selectedText,
               textDragPreview: textDragPreview,
               viewMode: state.viewMode,
+              editingTextId: editingTextId,
             }),
           ),
         React.createElement(TemplateGhostLayer, {
