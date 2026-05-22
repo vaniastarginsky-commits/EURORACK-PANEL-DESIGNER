@@ -46,6 +46,14 @@ function App() {
       ? Math.hypot(ruler.end.x - ruler.start.x, ruler.end.y - ruler.start.y)
       : null;
   }, [ruler]);
+  function handleSetTouchMode(mode) {
+    if (mode === "ruler" && touchMode === "ruler") {
+      setTouchMode("edit");
+      setRuler(null);
+    } else {
+      setTouchMode(mode);
+    }
+  }
   const projectFileInputRef = useRef(null);
   const kicadPcbInputRef = useRef(null);
   const pendingFileOpenRef = useRef(false);
@@ -3504,7 +3512,7 @@ function App() {
           });
         },
         touchMode: touchMode,
-        onSetTouchMode: setTouchMode,
+        onSetTouchMode: handleSetTouchMode,
         onFitView: () => {
           const isMobileFit = window.matchMedia?.(
             "(max-width: 860px), (pointer: coarse)",
@@ -3580,7 +3588,7 @@ function App() {
         onTogglePreviewMode: () => setPreviewMode((v) => !v),
         onOpenShortcuts: () => setShowShortcutHelp(true),
         touchMode: touchMode,
-        onSetTouchMode: setTouchMode,
+        onSetTouchMode: handleSetTouchMode,
         onOpenExport: () => setShowExportDialog(true),
         onOpenTemplates: () => setShowTemplatesDialog(true),
         onOpenLocalProjects: () => setShowLocalProjectsDialog(true),
