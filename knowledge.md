@@ -1,3 +1,76 @@
+# Knowledge capture rule
+
+Use this file for reusable project knowledge discovered during debugging and bugfixes.
+
+`PROJECT_MAP.md` explains where things live and who owns what.
+`knowledge.md` records what we learned while investigating bugs.
+
+**Update `knowledge.md` when a finding will help future debugging:**
+- confirmed root cause of a bug
+- CSS cascade conflict / winning rule / overridden rule
+- dead or redundant `!important`
+- canonical vs legacy CSS block
+- conditional DOM/layout behaviour
+- rejected hypothesis that could be rediscovered later
+- fragile area and how to verify it
+- screenshot/verify coverage for a tricky fix
+
+**Do not update `knowledge.md` for:**
+- trivial padding/colour tweaks
+- generic commit summaries
+- vague guesses without status
+- long npm logs
+- information already covered by `PROJECT_MAP.md`
+
+After each non-trivial bugfix, explicitly answer:
+> "Does this fix add reusable knowledge?"
+- If **yes**: update `knowledge.md` using the template below.
+- If **no**: write "No knowledge.md update needed" in the commit/PR and briefly explain why.
+
+---
+
+# Finding template
+
+```md
+## Finding — YYYY-MM-DD — <surface / bug>
+
+### Status
+Confirmed / Hypothesis / Rejected / Follow-up
+
+### Symptom
+What was visibly broken.
+
+### Root cause
+The actual cause, or current best hypothesis.
+
+### Files / selectors
+- `src/...`
+- `styles.css` section / approximate lines
+- `.selector-name`
+
+### Cascade / ownership notes
+- Winning rule:
+- Overridden rule:
+- Canonical owner:
+- Legacy/debt block:
+
+### Fix
+What changed.
+
+### Verification
+- `npm run verify`: pass/fail
+- Screenshots:
+  - ...
+- `!important` delta:
+  - before:
+  - after:
+
+### Follow-up
+What is still risky or worth checking later.
+```
+
+---
+
 # CSS / Component Library — session knowledge (2026-05-23)
 
 ## Что было сделано в этой сессии

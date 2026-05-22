@@ -29,3 +29,7 @@ Use it to understand the intended simple architecture and UX.
 Do not replace the current app with it.
 
 Preserve current features while restoring this level of simplicity and ownership.
+
+Before fixing a bug, read PROJECT_MAP.md / PROJECT_MAP.json for the affected surface.
+Use the “Files to touch / Files NOT to touch” section to scope the fix.
+Do not edit unrelated owners.

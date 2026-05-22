@@ -7,6 +7,10 @@ For all CSS, visual polish, redesign, frontend-design, and layout work, read and
 CSS cleanup phase is complete. Do not reintroduce cascade debt.
 ## !important reduction policy
 
+Before fixing a bug, read PROJECT_MAP.md / PROJECT_MAP.json for the affected surface.
+Use the “Files to touch / Files NOT to touch” section to scope the fix.
+Do not edit unrelated owners.
+
 Allowed:
 
 - remove dead `!important` declarations when a later canonical rule fully overrides them;
