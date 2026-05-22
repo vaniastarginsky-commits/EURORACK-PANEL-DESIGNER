@@ -2055,17 +2055,17 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .runtime-diagnostics-card .checklist-row{
   display:grid!important;
   grid-template-columns:52px minmax(170px,260px) minmax(0,1fr)!important;
-  gap:12px!important;
+  gap:14px!important;
   align-items:start!important;
-  padding:7px 0!important;
+  padding:10px 0!important;
   border-bottom:1px solid rgba(215,196,155,.08)!important;
 }
 .runtime-diagnostics-card > div > *{
   min-width:0!important;
   white-space:normal!important;
-  overflow-wrap:normal!important;
+  overflow-wrap:anywhere!important;
   word-break:normal!important;
-  line-height:1.28!important;
+  line-height:1.4!important;
 }
 .runtime-diagnostics-card > div > :first-child{
   font-weight:900!important;
