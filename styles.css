@@ -3965,21 +3965,33 @@ input[type="number"],
 }
 
 .component-library-popover .component-icon-card {
-  display: grid !important;
-  grid-template-rows: 16px 1fr !important;
-  align-items: center !important;
-  justify-items: center !important;
+  display: block !important;
+  position: relative !important;
   aspect-ratio: 1 !important;
   min-height: 0 !important;
-  padding: 6px !important;
-  gap: 0 !important;
-  position: relative !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.component-library-popover .component-icon-card > .part-favorite-mini {
+  position: absolute;
+  top: 5px;
+  left: 6px;
+  z-index: 2;
+  font-size: 11px;
+  line-height: 1;
 }
 
 .component-library-popover .component-icon-preview {
-  width: 86px !important;
-  height: 86px !important;
-  overflow: hidden !important;
+  position: absolute;
+  top: 8%;
+  left: 8%;
+  width: 84%;
+  height: 84%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .component-library-popover .library-real-preview {
@@ -3994,7 +4006,7 @@ input[type="number"],
 
 .component-library-popover .component-icon-name {
   position: absolute !important;
-  bottom: 18px !important;
+  bottom: 16px !important;
   left: 4px !important;
   right: 4px !important;
   text-align: center !important;
@@ -4003,11 +4015,12 @@ input[type="number"],
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
+  z-index: 1;
 }
 
 .component-library-popover .component-icon-meta {
   position: absolute !important;
-  bottom: 5px !important;
+  bottom: 4px !important;
   left: 4px !important;
   right: 4px !important;
   text-align: center !important;
@@ -4016,6 +4029,7 @@ input[type="number"],
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
+  z-index: 1;
 }
 
 .component-library-popover-head button {
@@ -4107,10 +4121,6 @@ input[type="number"],
     grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)) !important;
   }
 
-  .component-library-popover .component-icon-preview {
-    width: 64px !important;
-    height: 64px !important;
-  }
 }
 
 /* dfm-status-panel-redesign */
