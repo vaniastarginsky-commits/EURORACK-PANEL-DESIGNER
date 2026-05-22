@@ -1584,7 +1584,15 @@ function App() {
         e.preventDefault();
         dispatch({ type: "SELECT", ids: selectionIds, additive: false });
         if (isTouchSynthetic) AppCommands.openMobileQuickLabelEdit();
-        else openComponentPropertiesPanel();
+        else {
+          openComponentPropertiesPanel();
+          if (e.target.closest("[data-label-component-id]")) {
+            window.setTimeout(() => {
+              const inp = document.querySelector("[data-label-input]");
+              if (inp) { inp.focus(); inp.select(); }
+            }, 80);
+          }
+        }
         setDragging(null);
         setDragPreview(null);
         setDragStartPositions(null);

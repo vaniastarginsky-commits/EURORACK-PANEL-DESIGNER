@@ -1825,6 +1825,7 @@ const ComponentsLayer = React.memo(function ComponentsLayer({
             return React.createElement(
               "text",
               {
+                "data-label-component-id": c.id,
                 x: label.x,
                 y: label.y,
                 textAnchor: label.anchor,
@@ -1835,6 +1836,7 @@ const ComponentsLayer = React.memo(function ComponentsLayer({
                 stroke: "rgba(0,0,0,0.55)",
                 strokeWidth: 0.35,
                 paintOrder: "stroke fill",
+                style: { cursor: "text" },
               },
               c.label,
             );

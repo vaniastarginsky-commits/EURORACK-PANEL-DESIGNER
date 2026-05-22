@@ -126,6 +126,7 @@ function PropertiesPanel() {
         React.createElement("label", null, "Label"),
         React.createElement("input", {
           type: "text",
+          "data-label-input": "1",
           value: c.label,
           onChange: (e) => patch({ label: e.target.value }),
         }),
