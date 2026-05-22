@@ -3984,14 +3984,12 @@ input[type="number"],
 
 .component-library-popover .component-icon-preview {
   position: absolute;
-  top: 8%;
-  left: 8%;
-  width: 84%;
-  height: 84%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 84% !important;
+  height: 84% !important;
+  overflow: hidden !important;
 }
 
 .component-library-popover .library-real-preview {
