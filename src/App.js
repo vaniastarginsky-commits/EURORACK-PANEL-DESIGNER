@@ -130,6 +130,19 @@ function App() {
   const [pendingAddPreview, setPendingAddPreview] = useState(null);
   const [pendingAddRepeat, setPendingAddRepeat] = useState(false);
   useEffect(() => {
+    if (!pendingAddPart || pendingAddRepeat) return undefined;
+    function onShiftUp(e) {
+      if (e.key === "Shift") {
+        setPendingAddPart(null);
+        setPendingAddPreview(null);
+        setPendingAddRepeat(false);
+        resetCanvasInteractionMode();
+      }
+    }
+    window.addEventListener("keyup", onShiftUp);
+    return () => window.removeEventListener("keyup", onShiftUp);
+  }, [pendingAddPart, pendingAddRepeat]);
+  useEffect(() => {
     const open = () => setShowTemplatesDialog(true);
     window.addEventListener("open-template-dialog", open);
     return () => window.removeEventListener("open-template-dialog", open);
