@@ -3956,6 +3956,7 @@ input[type="number"],
 }
 
 .component-library-popover .popover-component-grid {
+  grid-row: 4;
   min-height: 0 !important;
   overflow: auto !important;
   padding-right: 4px !important;
