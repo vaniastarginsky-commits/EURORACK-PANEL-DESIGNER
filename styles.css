@@ -2048,13 +2048,13 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 
 /* Report tab: production checklist is a table, not a broken grid of tiny words. */
 .runtime-diagnostics-card{
-  max-height:260px!important;
-  overflow:auto!important;
+  max-height:none!important;
+  overflow:visible!important;
 }
 .runtime-diagnostics-card > div,
 .runtime-diagnostics-card .checklist-row{
   display:grid!important;
-  grid-template-columns:52px minmax(170px,260px) minmax(0,1fr)!important;
+  grid-template-columns:minmax(0,1fr)!important;
   gap:14px!important;
   align-items:start!important;
   padding:10px 0!important;
@@ -2070,14 +2070,14 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .runtime-diagnostics-card > div > :first-child{
   font-weight:900!important;
   color:#eee7da!important;
-  white-space:nowrap!important;
+  white-space:normal!important;
 }
 .runtime-diagnostics-card > div > :nth-child(2){
-  color:#eee7da!important;
-  font-weight:700!important;
+  color:inherit!important;
+  font-weight:inherit!important;
 }
 .runtime-diagnostics-card > div > :nth-child(3){
-  color:#d8d0c0!important;
+  color:inherit!important;
 }
 .export-sanity{
   margin-top:10px!important;
@@ -2141,10 +2141,10 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   }
   .runtime-diagnostics-card > div,
   .runtime-diagnostics-card .checklist-row{
-    grid-template-columns:52px minmax(0,1fr)!important;
+    grid-template-columns:minmax(0,1fr)!important;
   }
   .runtime-diagnostics-card > div > :nth-child(3){
-    grid-column:2!important;
+    grid-column:auto!important;
   }
 }
 @media(max-width:700px){
