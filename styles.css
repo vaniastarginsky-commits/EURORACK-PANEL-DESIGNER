@@ -4101,3 +4101,113 @@ input[type="number"],
     font-size: 12px !important;
   }
 }
+
+/* dfm-status-panel-redesign */
+.dfm-status-float {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: stretch;
+  width: 280px;
+  max-width: calc(100vw - 20px);
+}
+.dfm-status-main {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  text-align: left;
+  justify-content: flex-start;
+  width: 100%;
+}
+.dfm-status-main > strong {
+  flex: 0 0 auto;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: .12em;
+  color: #c8c0b0;
+}
+.dfm-status-float.warn .dfm-status-main > strong {
+  color: #d6aa58;
+}
+.dfm-status-float.error .dfm-status-main > strong {
+  color: #e1a09a;
+}
+.dfm-status-float.ok .dfm-status-main > strong {
+  color: #88b070;
+}
+.dfm-status-main > span {
+  flex: 0 0 auto;
+  font-size: 10px;
+  color: #928b7d;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.dfm-status-drawer {
+  background: rgba(3, 3, 3, .96);
+  border: 1px solid rgba(215, 196, 155, .18);
+  border-bottom: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.dfm-issue-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 8px;
+  min-height: 26px;
+  text-align: left;
+  justify-content: flex-start;
+  width: 100%;
+}
+.dfm-issue-row > span:first-child {
+  flex: 0 0 28px;
+  font-size: 9px;
+  font-weight: 760;
+  letter-spacing: .10em;
+  text-align: center;
+  color: #928b7d;
+}
+.dfm-issue-row.error > span:first-child {
+  color: #e1a09a;
+}
+.dfm-issue-row.warning > span:first-child {
+  color: #d6aa58;
+}
+.dfm-issue-row > b {
+  flex: 1;
+  min-width: 0;
+  font-size: 10px;
+  font-weight: 500;
+  color: #c8c0b0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dfm-empty {
+  padding: 8px 10px;
+  font-size: 11px;
+  color: #928b7d;
+  text-align: center;
+}
+.dfm-more {
+  padding: 4px 8px;
+  font-size: 10px;
+  letter-spacing: .06em;
+  color: #928b7d;
+}
+.dfm-unverified {
+  padding: 5px 8px;
+  border-top: 1px solid rgba(215, 196, 155, .08);
+  display: grid;
+  gap: 1px;
+}
+.dfm-unverified > strong {
+  font-size: 10px;
+  font-weight: 760;
+  letter-spacing: .10em;
+  color: #d6aa58;
+}
+.dfm-unverified > small {
+  font-size: 10px;
+  color: #928b7d;
+}
