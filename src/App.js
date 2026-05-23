@@ -3734,8 +3734,7 @@ function App() {
           });
           setEditingTextId(id);
         },
-        onOpenComponentLibrary: () =>
-          AppCommands.openComponentLibraryPicker(),
+        onOpenComponentLibrary: () => AppCommands.openComponentLibraryPicker(),
       }),
       React.createElement(ComponentLibraryPanel, {
         headless: true,
@@ -4012,7 +4011,10 @@ function App() {
             "button",
             {
               title: "Clear ruler measurement",
-              onClick: () => { setRuler(null); setTouchMode("edit"); },
+              onClick: () => {
+                setRuler(null);
+                setTouchMode("edit");
+              },
             },
             "Clear",
           ),

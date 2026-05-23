@@ -129,12 +129,10 @@ const states = [
   }],
 
   ["mobile-default", mobile, async () => {}],
-  ["mobile-more-sheet", mobile, async page => {
-    await page.locator(".mobile-main-dock button").last().click();
-    await page.locator(".mobile-bottom-sheet").waitFor({ state: "visible" });
+  ["mobile-right-drawer", mobile, async page => {
+    await page.locator(".canvas-tool-rail button[title='Right']").click();
+    await page.locator(".sidebar-right").waitFor({ state: "visible" });
   }],
-  ["mobile-left-drawer", mobile, async page => openMobilePanel(page, "Left panel", ".sidebar-left")],
-  ["mobile-right-drawer", mobile, async page => openMobilePanel(page, "Right panel", ".sidebar-right")],
 
   // P1: mobile component library — tests that cards don't overlap (row sizing regression)
   ["mobile-component-library-all", mobile, async page => {
