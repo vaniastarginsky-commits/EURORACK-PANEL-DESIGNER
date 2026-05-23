@@ -10,6 +10,10 @@ function AddMenuContent({ onClose }) {
   const state = useAppState();
   const dispatch = useAppDispatch();
   const widthMM = panelWidthMM(state.panel);
+  const [largeImageWarning, setLargeImageWarning] = useState(false);
+  useEffect(() => {
+    if (state.artworks.length === 0) setLargeImageWarning(false);
+  }, [state.artworks.length]);
 
   function addText() {
     dispatch({
@@ -38,6 +42,7 @@ function AddMenuContent({ onClose }) {
     const reader = new FileReader();
     reader.onload = (ev) => {
       const dataUrl = ev.target.result;
+      setLargeImageWarning(dataUrl.length > 2_000_000);
       const img = new window.Image();
       img.onload = () => {
         dispatch({
@@ -61,13 +66,15 @@ function AddMenuContent({ onClose }) {
             notes: "Auto-fit to panel on import",
           },
         });
-        onClose();
       };
       img.src = dataUrl;
     };
     reader.readAsDataURL(file);
     e.target.value = "";
   }
+
+  const allVisible =
+    state.artworks.length > 0 && state.artworks.every((a) => a.visible);
 
   return React.createElement(
     React.Fragment,
@@ -104,6 +111,205 @@ function AddMenuContent({ onClose }) {
       style: { display: "none" },
       onChange: handleArtworkFile,
     }),
+    state.artworks.length > 0 &&
+      React.createElement(
+        React.Fragment,
+        null,
+        React.createElement("div", {
+          style: {
+            borderTop: "1px solid rgba(215,196,155,0.13)",
+            margin: "8px 0 4px",
+          },
+        }),
+        React.createElement(
+          "div",
+          { className: "menu-title", style: { paddingTop: 4 } },
+          "Artwork",
+        ),
+        largeImageWarning &&
+          React.createElement(
+            "div",
+            {
+              className: "warning-item warn",
+              style: { marginBottom: 6, fontSize: 11 },
+            },
+            "Large image — JSON/SVG export may be slow.",
+          ),
+        React.createElement(
+          "div",
+          { className: "field-row" },
+          React.createElement(
+            "label",
+            null,
+            React.createElement("input", {
+              type: "checkbox",
+              checked: state.clipArtworkToPanel,
+              onChange: (e) =>
+                dispatch({
+                  type: "SET_CLIP_ARTWORK",
+                  value: e.target.checked,
+                }),
+            }),
+            " Clip artwork to panel",
+          ),
+        ),
+        React.createElement(
+          "div",
+          { className: "field-row" },
+          React.createElement(
+            "label",
+            null,
+            React.createElement("input", {
+              type: "checkbox",
+              checked: state.ignoreLockedArtworkClicks,
+              onChange: (e) =>
+                dispatch({
+                  type: "SET_IGNORE_LOCKED_CLICKS",
+                  value: e.target.checked,
+                }),
+            }),
+            " Ignore locked artwork clicks",
+          ),
+        ),
+        React.createElement(
+          "div",
+          { className: "field-row" },
+          React.createElement(
+            "label",
+            null,
+            React.createElement("input", {
+              type: "checkbox",
+              checked: state.showArtworkInDrillView,
+              onChange: (e) =>
+                dispatch({
+                  type: "SET_SHOW_ARTWORK_IN_DRILL",
+                  value: e.target.checked,
+                }),
+            }),
+            " Show artwork in drill view",
+          ),
+        ),
+        state.showArtworkInDrillView &&
+          React.createElement(
+            "div",
+            { className: "field-row" },
+            React.createElement("label", null, "Drill artwork opacity"),
+            React.createElement("input", {
+              type: "number",
+              step: 0.05,
+              min: 0,
+              max: 1,
+              value: state.drillArtworkOpacity,
+              onChange: (e) =>
+                dispatch({
+                  type: "SET_DRILL_ARTWORK_OPACITY",
+                  value: Math.max(0, Math.min(1, +e.target.value)),
+                }),
+            }),
+          ),
+        React.createElement(
+          "div",
+          { className: "field-row" },
+          React.createElement(
+            "label",
+            null,
+            React.createElement("input", {
+              type: "checkbox",
+              checked: allVisible,
+              onChange: () =>
+                dispatch({
+                  type: "SET_ALL_ARTWORK_VISIBLE",
+                  visible: !allVisible,
+                }),
+            }),
+            " Show all artwork",
+          ),
+        ),
+        state.artworks.map((a) =>
+          React.createElement(
+            "div",
+            {
+              key: a.id,
+              style: {
+                display: "flex",
+                alignItems: "center",
+                gap: 3,
+                padding: "3px 4px",
+                borderBottom: "1px solid #222",
+                fontSize: 10,
+              },
+            },
+            React.createElement(
+              "span",
+              {
+                style: {
+                  flex: 1,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  color: "#aaa",
+                },
+              },
+              a.name,
+            ),
+            React.createElement(
+              "button",
+              {
+                title: a.visible ? "Hide" : "Show",
+                style: {
+                  padding: "1px 3px",
+                  fontSize: 9,
+                  background: "transparent",
+                  border: "1px solid #333",
+                  color: a.visible ? "#aaa" : "#555",
+                },
+                onClick: () =>
+                  dispatch({
+                    type: "UPDATE_ARTWORK",
+                    id: a.id,
+                    patch: { visible: !a.visible },
+                  }),
+              },
+              a.visible ? "●" : "○",
+            ),
+            React.createElement(
+              "button",
+              {
+                title: a.locked ? "Unlock" : "Lock",
+                style: {
+                  padding: "1px 3px",
+                  fontSize: 9,
+                  background: "transparent",
+                  border: "1px solid #333",
+                  color: a.locked ? "#ffa000" : "#555",
+                },
+                onClick: () =>
+                  dispatch({
+                    type: "UPDATE_ARTWORK",
+                    id: a.id,
+                    patch: { locked: !a.locked },
+                  }),
+              },
+              a.locked ? "🔒" : "🔓",
+            ),
+            React.createElement(
+              "button",
+              {
+                title: "Delete",
+                style: {
+                  padding: "1px 3px",
+                  fontSize: 9,
+                  background: "transparent",
+                  border: "1px solid #333",
+                  color: "#f55",
+                },
+                onClick: () => dispatch({ type: "DELETE_ARTWORK", id: a.id }),
+              },
+              "×",
+            ),
+          ),
+        ),
+      ),
   );
 }
 
