@@ -4234,3 +4234,8 @@ input[type="number"],
   font-size: 10px;
   color: #928b7d;
 }
+.mobile-placement-help { display: none; }
+@media (max-width: 860px), (pointer: coarse) {
+  .desktop-placement-help { display: none; }
+  .mobile-placement-help { display: inline; }
+}
