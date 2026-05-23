@@ -215,6 +215,7 @@ function CanvasToolRail({
       }),
       React.createElement("div", { className: "canvas-tool-separator" }),
       command("Undo", ICON.undo, {
+        className: "rail-undo",
         disabled: state.history.length === 0,
         onClick: () => {
           setOpenMenu(null);
@@ -222,6 +223,7 @@ function CanvasToolRail({
         },
       }),
       command("Redo", ICON.redo, {
+        className: "rail-redo",
         disabled: state.future.length === 0,
         onClick: () => {
           setOpenMenu(null);

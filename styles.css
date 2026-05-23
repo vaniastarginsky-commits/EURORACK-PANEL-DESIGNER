@@ -4431,3 +4431,53 @@ html.pd-contrast-on::after {
   .desktop-placement-help { display: none; }
   .mobile-placement-help { display: inline; }
 }
+
+/* v-mobile-topbar-history: Undo/Redo icon buttons in topbar — mobile only */
+.topbar-history-group {
+  display: none;
+  align-items: center;
+  gap: 3px;
+}
+
+.topbar-history-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 36px !important;
+  min-width: 36px !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  padding: 0 !important;
+}
+
+@media (max-width: 900px) {
+  .topbar-history-group {
+    display: inline-flex;
+  }
+
+  /* Undo/Redo live in the topbar on mobile — hide from the rail */
+  .canvas-tool-rail .rail-undo,
+  .canvas-tool-rail .rail-redo {
+    display: none !important;
+  }
+
+  /* v-mobile-bar-stretch: context bar buttons fill width equally */
+  .mobile-selection-actions.v267-context-bar {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .mobile-selection-actions.v267-context-bar button {
+    flex: 1 !important;
+    min-width: 0 !important;
+    font-size: 12px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  /* v-mobile-hud-smaller: status text 20% smaller on mobile */
+  .canvas-hud {
+    font-size: 10px !important;
+  }
+}

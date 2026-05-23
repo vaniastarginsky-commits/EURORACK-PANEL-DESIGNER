@@ -7,6 +7,8 @@ function Topbar({
   onOpenProductionCheck,
   onOpenShortcuts,
 }) {
+  const state = useAppState();
+  const dispatch = useAppDispatch();
   const [openMenu, setOpenMenu] = useState(null);
   const [menuPos, setMenuPos] = useState({ left: 8, top: 48 });
   const sectionMenus = ["project", "panel", "add", "text"];
@@ -102,6 +104,66 @@ function Topbar({
           menuButton("panel", "Panel"),
           menuButton("add", "Add"),
           menuButton("text", "Text"),
+        ),
+        React.createElement(
+          "div",
+          { className: "topbar-history-group" },
+          React.createElement(
+            "button",
+            {
+              className: "topbar-history-btn",
+              disabled: state.history.length === 0,
+              onClick: () => dispatch({ type: "UNDO" }),
+              title: "Undo",
+              "aria-label": "Undo",
+            },
+            React.createElement(
+              "svg",
+              {
+                width: 16,
+                height: 16,
+                viewBox: "0 0 24 24",
+                fill: "none",
+                stroke: "currentColor",
+                strokeWidth: 1.7,
+                strokeLinecap: "round",
+                strokeLinejoin: "round",
+                "aria-hidden": "true",
+              },
+              React.createElement("path", { d: "M9 14 4 9l5-5" }),
+              React.createElement("path", {
+                d: "M4 9h10.5a5.5 5.5 0 0 1 0 11H11",
+              }),
+            ),
+          ),
+          React.createElement(
+            "button",
+            {
+              className: "topbar-history-btn",
+              disabled: state.future.length === 0,
+              onClick: () => dispatch({ type: "REDO" }),
+              title: "Redo",
+              "aria-label": "Redo",
+            },
+            React.createElement(
+              "svg",
+              {
+                width: 16,
+                height: 16,
+                viewBox: "0 0 24 24",
+                fill: "none",
+                stroke: "currentColor",
+                strokeWidth: 1.7,
+                strokeLinecap: "round",
+                strokeLinejoin: "round",
+                "aria-hidden": "true",
+              },
+              React.createElement("path", { d: "M15 14l5-5-5-5" }),
+              React.createElement("path", {
+                d: "M19 9H8.5a5.5 5.5 0 0 0 0 11H13",
+              }),
+            ),
+          ),
         ),
         React.createElement(
           "div",

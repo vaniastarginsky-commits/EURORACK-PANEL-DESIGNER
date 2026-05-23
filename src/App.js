@@ -4478,7 +4478,7 @@ function App() {
                         showMobileToast("Duplicated");
                       },
                     },
-                    "Dup",
+                    "Duplicate",
                   ),
                   React.createElement(
                     "button",
