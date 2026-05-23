@@ -545,3 +545,29 @@ bottom: env(safe-area-inset-bottom, 0px) !important;
 
 ### Pattern
 Когда `MobileDock` возвращает `null`, все `bottom: calc(70px + …)` в мобильных медиазапросах становятся мёртвым резервом. Искать по `70px` в `styles.css` — там могут быть аналогичные зазоры у `.mobile-bottom-sheet` (строка 3271).
+
+---
+
+## 2026-05-23 — Component library mobile grid: mobile override shadowing desktop fix
+
+### Commit
+54904c8
+
+### Status
+Fixed
+
+### Symptom
+Компонентная библиотека на мобиле показывала 2 колонки вместо 3, несмотря на коммит `6804ae7` ("fix: 3-column component library grid on mobile").
+
+### Root cause
+В `styles.css` два правила для `.component-library-popover .popover-component-grid`:
+1. **Desktop canonical** (line 4140): `grid-template-columns: repeat(auto-fill, minmax(100px, 1fr))` — исправлено в `6804ae7`
+2. **Mobile override** (line 4305, `@media(max-width:900px)`): `grid-template-columns: repeat(auto-fill, minmax(132px, 1fr))` — **не тронуто**
+
+Мобильный override стоит позже в файле И внутри медиазапроса → побеждает на мобиле. При ширине попаповера ~330px: 132×2+10=274 < 330 < 132×3+20=416 → только 2 колонки.
+
+### Fix
+Выровнять мобильный override под desktop canonical: `minmax(132px→100px, 1fr)`. При 100px: 100×3+20=320 < 330 → 3 колонки.
+
+### Pattern
+**«Двойной слой CSS»**: когда есть базовое/desktop правило И мобильный `@media` override — фикс нужно вносить в ОБА. Исправление только базового правила не влияет на мобиль. Всегда искать парный `@media(max-width:900px)` блок для того же селектора.
