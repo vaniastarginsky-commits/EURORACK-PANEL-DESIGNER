@@ -236,14 +236,10 @@ async function setDesktopPanels(page, desired) {
 }
 
 async function openComponentLibraryPopover(page) {
-  // Open the left sidebar first so the library launcher is visible and the popover has a valid anchor.
-  const workspace = page.locator(".workspace");
-  const leftOpen = (await workspace.getAttribute("data-left-open")) === "true";
-  if (!leftOpen) {
-    await clickButton(page, "Left");
-    await page.waitForFunction(v => document.querySelector(".workspace")?.dataset.leftOpen === v, "true");
-  }
-  await page.locator(".component-library-launcher").click();
+  // Fire the custom event that the headless ComponentLibraryPanel listens to.
+  await page.evaluate(() =>
+    window.dispatchEvent(new CustomEvent("open-component-library-picker"))
+  );
   await page.locator(".component-library-popover").waitFor({ state: "visible" });
 }
 

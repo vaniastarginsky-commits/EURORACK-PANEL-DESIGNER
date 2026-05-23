@@ -3671,13 +3671,14 @@ function App() {
         onTouchEnd: onDrawerSwipeEnd,
         onTouchCancel: onDrawerSwipeEnd,
       }),
-      React.createElement(LeftSidebar, {
-        open: leftPanelOpen,
-        onTouchStart: onDrawerSwipeStart,
-        onTouchMove: onDrawerSwipeMove,
-        onTouchEnd: onDrawerSwipeEnd,
-        onStartPartPlacement: startPartPlacement,
-      }),
+      isNarrowInitial &&
+        React.createElement(LeftSidebar, {
+          open: leftPanelOpen,
+          onTouchStart: onDrawerSwipeStart,
+          onTouchMove: onDrawerSwipeMove,
+          onTouchEnd: onDrawerSwipeEnd,
+          onStartPartPlacement: startPartPlacement,
+        }),
       React.createElement(CanvasToolRail, {
         leftPanelOpen: leftPanelOpen,
         rightPanelOpen: rightPanelOpen,
