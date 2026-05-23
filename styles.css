@@ -3289,7 +3289,7 @@ input[type="number"],
 
   .sidebar-right.open {
     right: 8px !important;
-    left: 46px !important;
+    left: 58px !important;
     width: auto !important;
   }
 
@@ -3789,7 +3789,7 @@ input[type="number"],
     left: 3px;
     top: 42px;
     bottom: 3px;
-    width: 38px;
+    width: 50px;
     background: none;
     border: none;
     box-shadow: none;
@@ -3797,25 +3797,25 @@ input[type="number"],
   }
 
   .canvas-tool-button {
-    width: 38px !important;
-    height: 24px !important;
-    min-height: 24px !important;
-    grid-template-rows: 14px 8px !important;
-    padding: 2px 0 !important;
+    width: 48px !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    grid-template-rows: 28px 12px !important;
+    padding: 4px 0 !important;
   }
 
   .canvas-tool-icon svg {
-    width: 12px !important;
-    height: 12px !important;
+    width: 20px !important;
+    height: 20px !important;
   }
 
   .canvas-tool-label {
-    font-size: 5.4px !important;
+    font-size: 8px !important;
   }
 
   .canvas-tool-popover {
-    left: 46px !important;
-    width: min(340px, calc(100vw - 56px)) !important;
+    left: 58px !important;
+    width: min(340px, calc(100vw - 68px)) !important;
   }
 
   .canvas-tool-left-btn {
