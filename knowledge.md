@@ -71,6 +71,33 @@ What is still risky or worth checking later.
 
 ---
 
+## Finding — 2026-05-23 — clientToMM / ruler placement depends on zoom
+
+### Status
+Confirmed
+
+### Symptom
+Tapping to place a ruler start point on mobile (iPhone/Safari) lands at the wrong canvas location when the canvas is zoomed. At zoom=1 the placement is correct; at other zoom levels the point is offset from the tap, proportional to distance from canvas centre and |zoom − 1|.
+
+### Root cause
+`clientToMM()` (App.js ~436) tried `svg.getScreenCTM()` first. Mobile Safari's `getScreenCTM()` does **not** account for CSS `transform: scale(zoom)` on ancestor HTML elements. The zoom is applied as `transform: translate(pan.x,pan.y) scale(zoom)` on a parent `<div>` (Canvas.js ~2876), not via SVG viewBox. `getScreenCTM()` returned finite (but wrong) coordinates — the `Number.isFinite` guard passed — so the correct `getBoundingClientRect()` fallback was never reached.
+
+### Files / selectors
+- `src/App.js` — `clientToMM()` lines ~436–459
+
+### Fix
+Swapped the method order: `getBoundingClientRect()` is now the primary path (it always reflects all CSS transforms). `getScreenCTM()` remains as fallback.
+
+### Verification
+- Not covered by automated screenshot suite (interactive gesture).
+- Verified by user on device after deploy (`6403269`).
+
+### Follow-up
+- `InlineTextEditor` (App.js line 14) uses `getScreenCTM()` to position the text-editing overlay over an SVG text item. Same iOS Safari bug could misplace the overlay at non-100% zoom. Fix: rewrite `getPosition()` using `getBoundingClientRect()` + viewBox interpolation in reverse.
+- `Canvas.js ~2809` uses `group.getScreenCTM()` for hover-tip screen position. Same risk.
+
+---
+
 # CSS / Component Library — session knowledge (2026-05-23)
 
 ## Что было сделано в этой сессии
@@ -479,4 +506,8 @@ Fixed
 
 ### Pattern
 Для canvas-приложений с кастомным pinch-zoom: `touchAction: "none"` и touch-обработчики должны быть на внешнем контейнере, а не только на SVG/canvas элементе — иначе pinch за пределами рисуемой области проваливается в браузерный зум страницы.
+
+### Side effect: browser zoom breaks ruler coordinates
+Если browser page zoom был применён (до фикса, через пинч на пустой области), `clientX/clientY` приходят в зумированном пространстве, но `getScreenCTM()` может некорректно это учитывать — ruler начинает не там, где тап. Симптом: "ruler начинается ниже". Решение: перезагрузить страницу (сбрасывает browser zoom). Фикс `ab77384` предотвращает нативный зум браузера, но старая кэшированная версия страницы без фикса может его вызвать.
+
 - `popoverPos` начальное значение: `{ left: 330, top: 80 }` — это десктопные координаты
