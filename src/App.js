@@ -4680,7 +4680,19 @@ function App() {
                       additive: false,
                     });
                     setComponentMenu(null);
-                    AppCommands.openMobileQuickLabelEdit();
+                    if (isNarrowInitial) {
+                      AppCommands.openMobileQuickLabelEdit();
+                    } else {
+                      openComponentPropertiesPanel();
+                      window.setTimeout(() => {
+                        const inp =
+                          document.querySelector("[data-label-input]");
+                        if (inp) {
+                          inp.focus();
+                          inp.select();
+                        }
+                      }, 80);
+                    }
                   },
                 },
                 "Edit label",
@@ -4695,7 +4707,11 @@ function App() {
                       additive: false,
                     });
                     setComponentMenu(null);
-                    AppCommands.openMobilePartSheet();
+                    if (isNarrowInitial) {
+                      AppCommands.openMobilePartSheet();
+                    } else {
+                      openComponentPropertiesPanel();
+                    }
                   },
                 },
                 "Part inspector",
