@@ -112,11 +112,35 @@ function LayoutAssistantPanel({ warnings }) {
     React.createElement(
       "div",
       { className: "btn-row", style: { marginTop: 6 } },
-      React.createElement("button", { onClick: centerLayout }, "Center XY"),
-      React.createElement("button", { onClick: centerX }, "Center X"),
-      React.createElement("button", { onClick: centerY }, "Center Y"),
-      React.createElement("button", { onClick: packColumn }, "Pack 1 col"),
-      React.createElement("button", { onClick: packTwoColumns }, "Pack 2 col"),
+      React.createElement(
+        "button",
+        { onClick: centerLayout, style: { whiteSpace: "nowrap" } },
+        "Center XY",
+      ),
+      React.createElement(
+        "button",
+        { onClick: centerX, style: { whiteSpace: "nowrap" } },
+        "Center X",
+      ),
+      React.createElement(
+        "button",
+        { onClick: centerY, style: { whiteSpace: "nowrap" } },
+        "Center Y",
+      ),
+    ),
+    React.createElement(
+      "div",
+      { className: "btn-row" },
+      React.createElement(
+        "button",
+        { onClick: packColumn, style: { whiteSpace: "nowrap" } },
+        "Pack 1 col",
+      ),
+      React.createElement(
+        "button",
+        { onClick: packTwoColumns, style: { whiteSpace: "nowrap" } },
+        "Pack 2 col",
+      ),
     ),
   );
 }
