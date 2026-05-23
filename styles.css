@@ -3790,6 +3790,7 @@ input[type="number"],
     top: 42px;
     bottom: 3px;
     width: 50px;
+    gap: 2px;
     background: none;
     border: none;
     box-shadow: none;
@@ -3798,15 +3799,15 @@ input[type="number"],
 
   .canvas-tool-button {
     width: 48px !important;
-    height: 48px !important;
-    min-height: 48px !important;
-    grid-template-rows: 28px 12px !important;
-    padding: 4px 0 !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    grid-template-rows: 22px 10px !important;
+    padding: 3px 0 !important;
   }
 
   .canvas-tool-icon svg {
-    width: 20px !important;
-    height: 20px !important;
+    width: 18px !important;
+    height: 18px !important;
   }
 
   .canvas-tool-label {
