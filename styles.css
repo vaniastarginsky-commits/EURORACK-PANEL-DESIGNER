@@ -3306,6 +3306,49 @@ input[type="number"],
   .panel-canvas {
     max-height: calc(100dvh - 176px) !important;
   }
+
+  /* nudge mode sheet — floats above selection-actions bar */
+  .mobile-nudge-mode-sheet {
+    position: absolute;
+    right: 8px;
+    bottom: calc(66px + env(safe-area-inset-bottom, 0px));
+    left: 8px;
+    z-index: 65;
+    padding: 12px;
+  }
+
+  .mobile-nudge-mode-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .mobile-nudge-mode-head strong {
+    flex: 1;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #d6aa58;
+  }
+
+  .mobile-nudge-mode-head span {
+    font-size: 11px;
+    color: #928b7d;
+  }
+
+  .mobile-nudge-mode-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .mobile-nudge-mode-presets {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
 }
 
 /* desktop tool rail layout variables and shared tone panel */
