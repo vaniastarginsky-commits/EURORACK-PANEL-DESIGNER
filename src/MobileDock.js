@@ -466,7 +466,7 @@ function CanvasQuickAddDock({
     mq.addListener(update);
     return () => mq.removeListener(update);
   }, []);
-  if (!isMobileDockViewport) return null;
+  return null; // replaced by CanvasToolRail on mobile
   const sheetTitle =
     mobileSheet === "view"
       ? "View & layers"
