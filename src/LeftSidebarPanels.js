@@ -492,7 +492,7 @@ function ComponentLibraryPanel({
             { className: "component-library-popover-controls" },
             React.createElement("input", {
               className: "mini-input library-search-compact",
-              autoFocus: true,
+              autoFocus: window.innerWidth > 900,
               type: "text",
               placeholder: "Search parts\u2026",
               value: partSearch,
