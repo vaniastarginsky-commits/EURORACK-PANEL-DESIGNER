@@ -378,4 +378,48 @@ button,.btn{min-height:40px}
   - Маленькие компоненты (потенциометры ~7мм) → viewBox ~24×24
   - Большие/вытянутые (SS-18F08 26.6×4мм) → viewBox ~40×40
   - SVG имеет класс `library-real-preview` и рендерится как `width:100%;height:100%` своего контейнера
+
+---
+
+## Finding — 2026-05-23 — MobileDock event listeners мертвы на десктопе
+
+### Status
+Confirmed
+
+### Symptom
+Кнопки «Part inspector» и «Edit label» в контекстном меню компонента (десктоп) не делали ничего.
+
+### Root cause
+`MobileDock.js:469` — `if (!isMobileDockViewport) return null` при viewport > 900px. Компонент не монтируется → его `useEffect` никогда не регистрируют listeners для `mobile-open-part-sheet` и `mobile-quick-label-edit` → события от `AppCommands` уходят в никуда.
+
+### Files
+- `src/MobileDock.js:469` — ранний return null
+- `src/MobileDock.js:200–234` — регистрация listeners `mobile-open-part-sheet`
+- `src/MobileDock.js:317–334` — регистрация listener `mobile-quick-label-edit`
+- `src/App.js:4673–4701` — кнопки в componentMenu
+
+### Fix
+Проверка `isNarrowInitial` (≤860px) перед вызовом AppCommands: на десктопе — `openComponentPropertiesPanel()` + фокус `[data-label-input]`; на мобиле — прежние mobile events.
+
+### Verification
+- `npm run verify`: pass, 24 screenshots
+
+### Follow-up
+Любой новый window event зарегистрированный только в MobileDock будет мёртв на десктопе. Паттерн: если AppCommands диспатчит событие и оно не срабатывает на десктопе — смотреть в MobileDock.
+
+---
+
+## Finding — 2026-05-23 — placement-status-pill help text классы без CSS
+
+### Status
+Confirmed
+
+### Symptom
+«Shift+click for more» отображался на мобиле (там нет Shift).
+
+### Root cause
+Классы `desktop-placement-help` и `mobile-placement-help` существовали в `Canvas.js` но не имели CSS правил — оба элемента отображались везде.
+
+### Fix
+Добавлены правила в конец `styles.css`: `.mobile-placement-help { display: none }` по умолчанию; внутри `@media (max-width:860px),(pointer:coarse)` — скрыть `.desktop-placement-help`, показать `.mobile-placement-help`.
 - `popoverPos` начальное значение: `{ left: 330, top: 80 }` — это десктопные координаты
