@@ -318,12 +318,12 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
   min-height:0!important;display:grid!important;grid-template-rows:150px auto auto!important;
   overflow:hidden!important;background:#080807!important;border:1px solid rgba(215,196,155,.16)!important;color:#eee7da!important;
 }
-.template-preview-realistic,.library-real-preview,.template-preview-empty{
+.template-preview-realistic,.template-preview-empty{
   height:150px!important;max-height:150px!important;min-height:150px!important;
   overflow:hidden!important;background:#050505!important;border-bottom:1px solid rgba(215,196,155,.10)!important;
   display:grid!important;place-items:center!important;
 }
-.template-preview-realistic svg,.library-real-preview svg{
+.template-preview-realistic svg{
   max-width:96%!important;max-height:140px!important;width:auto!important;height:auto!important;display:block!important;
 }
 .template-card-main{padding:10px!important;background:#080807!important;border:0!important;min-height:92px!important}
