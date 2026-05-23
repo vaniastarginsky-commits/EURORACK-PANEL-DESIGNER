@@ -4161,285 +4161,291 @@ function App() {
                 ),
                 React.createElement(
                   "div",
-                  { className: "mobile-sheet-section-title" },
-                  "Edit",
-                ),
-                React.createElement(
-                  "div",
-                  { className: "mobile-sheet-action-grid" },
+                  { className: "mobile-more-sheet-body" },
                   React.createElement(
-                    "button",
-                    {
-                      onClick: () => {
-                        setShowMobileSelectionMore(false);
-                        AppCommands.openMobilePartSheet();
-                      },
-                    },
-                    "Inspector",
+                    "div",
+                    { className: "mobile-sheet-section-title" },
+                    "Edit",
                   ),
                   React.createElement(
-                    "button",
-                    {
-                      onClick: () => {
-                        setShowMobileSelectionMore(false);
-                        AppCommands.openMobileQuickLabelEdit();
-                      },
-                    },
-                    "Label editor",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      onClick: () => {
-                        dispatch({ type: "ROTATE_SELECTED", degrees: 90 });
-                        showMobileToast("Rotated 90°");
-                      },
-                    },
-                    "Rotate 90",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      onClick: () => {
-                        dispatch({ type: "DUPLICATE_SELECTED" });
-                        showMobileToast("Duplicated");
-                      },
-                    },
-                    "Duplicate",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      className: appSelectedAllLocked ? "active" : "",
-                      onClick: () =>
-                        dispatch({
-                          type: "LOCK_SELECTED",
-                          locked: !appSelectedAllLocked,
-                        }),
-                    },
-                    appSelectedAllLocked ? "Unlock" : "Lock",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      className: "danger",
-                      onClick: () => {
-                        dispatch({ type: "DELETE_SELECTED" });
-                        setShowMobileSelectionMore(false);
-                        showMobileToast("Deleted · Undo available");
-                      },
-                    },
-                    "Delete",
-                  ),
-                ),
-                React.createElement(
-                  "div",
-                  { className: "mobile-sheet-section-title" },
-                  "Align / space",
-                ),
-                React.createElement(
-                  "div",
-                  { className: "mobile-sheet-action-grid three" },
-                  React.createElement(
-                    "button",
-                    {
-                      disabled: state.selected.length < 2,
-                      onClick: () => dispatch({ type: "ALIGN", axis: "left" }),
-                    },
-                    "Align L",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      disabled: state.selected.length < 2,
-                      onClick: () =>
-                        dispatch({ type: "ALIGN", axis: "centerV" }),
-                    },
-                    "Align X",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      disabled: state.selected.length < 2,
-                      onClick: () => dispatch({ type: "ALIGN", axis: "right" }),
-                    },
-                    "Align R",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      disabled: state.selected.length < 2,
-                      onClick: () => dispatch({ type: "ALIGN", axis: "top" }),
-                    },
-                    "Align T",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      disabled: state.selected.length < 2,
-                      onClick: () =>
-                        dispatch({ type: "ALIGN", axis: "centerH" }),
-                    },
-                    "Align Y",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      disabled: state.selected.length < 2,
-                      onClick: () =>
-                        dispatch({ type: "ALIGN", axis: "bottom" }),
-                    },
-                    "Align B",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      disabled: state.selected.length < 3,
-                      onClick: () =>
-                        dispatch({ type: "DISTRIBUTE", axis: "h" }),
-                    },
-                    "Dist H",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      disabled: state.selected.length < 3,
-                      onClick: () =>
-                        dispatch({ type: "DISTRIBUTE", axis: "v" }),
-                    },
-                    "Dist V",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      disabled: state.selected.length < 2,
-                      onClick: () => setSelectedSpacing("h"),
-                    },
-                    "Space H",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      disabled: state.selected.length < 2,
-                      onClick: () => setSelectedSpacing("v"),
-                    },
-                    "Space V",
-                  ),
-                  React.createElement(
-                    "button",
-                    { onClick: () => centerSelected("x") },
-                    "Center X",
-                  ),
-                  React.createElement(
-                    "button",
-                    { onClick: () => centerSelected("y") },
-                    "Center Y",
-                  ),
-                ),
-                React.createElement(
-                  "div",
-                  { className: "mobile-sheet-section-title" },
-                  "Workflow",
-                ),
-                React.createElement(
-                  "div",
-                  { className: "mobile-sheet-action-grid" },
-                  React.createElement(
-                    "button",
-                    {
-                      className: mobileFineMode ? "active" : "",
-                      onClick: () => setMobileFineMode((v) => !v),
-                    },
-                    mobileFineMode ? "Fine ON" : "Fine mode",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      className: mobileProtectMode ? "active" : "",
-                      onClick: () => setMobileProtectMode((v) => !v),
-                    },
-                    mobileProtectMode ? "Protect ON" : "Protect layout",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      className: showSafeZones ? "active" : "",
-                      onClick: () => setShowSafeZones((v) => !v),
-                    },
-                    "Safe zones",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      onClick: () => {
-                        setShowProductionCheck(true);
-                        setShowMobileSelectionMore(false);
-                      },
-                    },
-                    "Preflight",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      onClick: () => {
-                        try {
-                          localStorage.setItem(
-                            "eurorack-panel-manual-mobile-backup",
-                            projectString(state),
-                          );
-                          showMobileToast("Backup saved locally");
-                        } catch {
-                          showMobileToast("Backup failed");
-                        }
-                      },
-                    },
-                    "Backup now",
-                  ),
-                  React.createElement(
-                    "button",
-                    { onClick: () => duplicatePattern() },
-                    "Pattern",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      disabled: state.selected.length < 2,
-                      onClick: () => dispatch({ type: "GROUP_SELECTED" }),
-                    },
-                    "Group",
-                  ),
-                  React.createElement(
-                    "button",
-                    {
-                      disabled: state.selected.length < 1,
-                      onClick: () => dispatch({ type: "UNGROUP_SELECTED" }),
-                    },
-                    "Ungroup",
-                  ),
-                  touchMode === "select" &&
+                    "div",
+                    { className: "mobile-sheet-action-grid" },
                     React.createElement(
                       "button",
                       {
                         onClick: () => {
-                          setTouchMode("edit");
+                          setShowMobileSelectionMore(false);
+                          AppCommands.openMobilePartSheet();
+                        },
+                      },
+                      "Inspector",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        onClick: () => {
+                          setShowMobileSelectionMore(false);
+                          AppCommands.openMobileQuickLabelEdit();
+                        },
+                      },
+                      "Label editor",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        onClick: () => {
+                          dispatch({ type: "ROTATE_SELECTED", degrees: 90 });
+                          showMobileToast("Rotated 90°");
+                        },
+                      },
+                      "Rotate 90",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        onClick: () => {
+                          dispatch({ type: "DUPLICATE_SELECTED" });
+                          showMobileToast("Duplicated");
+                        },
+                      },
+                      "Duplicate",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        className: appSelectedAllLocked ? "active" : "",
+                        onClick: () =>
+                          dispatch({
+                            type: "LOCK_SELECTED",
+                            locked: !appSelectedAllLocked,
+                          }),
+                      },
+                      appSelectedAllLocked ? "Unlock" : "Lock",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        className: "danger",
+                        onClick: () => {
+                          dispatch({ type: "DELETE_SELECTED" });
+                          setShowMobileSelectionMore(false);
+                          showMobileToast("Deleted · Undo available");
+                        },
+                      },
+                      "Delete",
+                    ),
+                  ),
+                  React.createElement(
+                    "div",
+                    { className: "mobile-sheet-section-title" },
+                    "Align / space",
+                  ),
+                  React.createElement(
+                    "div",
+                    { className: "mobile-sheet-action-grid three" },
+                    React.createElement(
+                      "button",
+                      {
+                        disabled: state.selected.length < 2,
+                        onClick: () =>
+                          dispatch({ type: "ALIGN", axis: "left" }),
+                      },
+                      "Align L",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        disabled: state.selected.length < 2,
+                        onClick: () =>
+                          dispatch({ type: "ALIGN", axis: "centerV" }),
+                      },
+                      "Align X",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        disabled: state.selected.length < 2,
+                        onClick: () =>
+                          dispatch({ type: "ALIGN", axis: "right" }),
+                      },
+                      "Align R",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        disabled: state.selected.length < 2,
+                        onClick: () => dispatch({ type: "ALIGN", axis: "top" }),
+                      },
+                      "Align T",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        disabled: state.selected.length < 2,
+                        onClick: () =>
+                          dispatch({ type: "ALIGN", axis: "centerH" }),
+                      },
+                      "Align Y",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        disabled: state.selected.length < 2,
+                        onClick: () =>
+                          dispatch({ type: "ALIGN", axis: "bottom" }),
+                      },
+                      "Align B",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        disabled: state.selected.length < 3,
+                        onClick: () =>
+                          dispatch({ type: "DISTRIBUTE", axis: "h" }),
+                      },
+                      "Dist H",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        disabled: state.selected.length < 3,
+                        onClick: () =>
+                          dispatch({ type: "DISTRIBUTE", axis: "v" }),
+                      },
+                      "Dist V",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        disabled: state.selected.length < 2,
+                        onClick: () => setSelectedSpacing("h"),
+                      },
+                      "Space H",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        disabled: state.selected.length < 2,
+                        onClick: () => setSelectedSpacing("v"),
+                      },
+                      "Space V",
+                    ),
+                    React.createElement(
+                      "button",
+                      { onClick: () => centerSelected("x") },
+                      "Center X",
+                    ),
+                    React.createElement(
+                      "button",
+                      { onClick: () => centerSelected("y") },
+                      "Center Y",
+                    ),
+                  ),
+                  React.createElement(
+                    "div",
+                    { className: "mobile-sheet-section-title" },
+                    "Workflow",
+                  ),
+                  React.createElement(
+                    "div",
+                    { className: "mobile-sheet-action-grid" },
+                    React.createElement(
+                      "button",
+                      {
+                        className: mobileFineMode ? "active" : "",
+                        onClick: () => setMobileFineMode((v) => !v),
+                      },
+                      mobileFineMode ? "Fine ON" : "Fine mode",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        className: mobileProtectMode ? "active" : "",
+                        onClick: () => setMobileProtectMode((v) => !v),
+                      },
+                      mobileProtectMode ? "Protect ON" : "Protect layout",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        className: showSafeZones ? "active" : "",
+                        onClick: () => setShowSafeZones((v) => !v),
+                      },
+                      "Safe zones",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        onClick: () => {
+                          setShowProductionCheck(true);
                           setShowMobileSelectionMore(false);
                         },
                       },
-                      "Back to Single",
+                      "Preflight",
                     ),
-                  React.createElement(
-                    "button",
-                    {
-                      onClick: () => {
-                        dispatch({ type: "DESELECT_ALL" });
-                        setShowMobileSelectionMore(false);
-                        setShowMobileNudge(false);
-                        showMobileToast("Selection cleared");
+                    React.createElement(
+                      "button",
+                      {
+                        onClick: () => {
+                          try {
+                            localStorage.setItem(
+                              "eurorack-panel-manual-mobile-backup",
+                              projectString(state),
+                            );
+                            showMobileToast("Backup saved locally");
+                          } catch {
+                            showMobileToast("Backup failed");
+                          }
+                        },
                       },
-                    },
-                    "Clear selection",
+                      "Backup now",
+                    ),
+                    React.createElement(
+                      "button",
+                      { onClick: () => duplicatePattern() },
+                      "Pattern",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        disabled: state.selected.length < 2,
+                        onClick: () => dispatch({ type: "GROUP_SELECTED" }),
+                      },
+                      "Group",
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        disabled: state.selected.length < 1,
+                        onClick: () => dispatch({ type: "UNGROUP_SELECTED" }),
+                      },
+                      "Ungroup",
+                    ),
+                    touchMode === "select" &&
+                      React.createElement(
+                        "button",
+                        {
+                          onClick: () => {
+                            setTouchMode("edit");
+                            setShowMobileSelectionMore(false);
+                          },
+                        },
+                        "Back to Single",
+                      ),
+                    React.createElement(
+                      "button",
+                      {
+                        onClick: () => {
+                          dispatch({ type: "DESELECT_ALL" });
+                          setShowMobileSelectionMore(false);
+                          setShowMobileNudge(false);
+                          showMobileToast("Selection cleared");
+                        },
+                      },
+                      "Clear selection",
+                    ),
                   ),
-                ),
+                ), // mobile-more-sheet-body
               ),
             ),
           React.createElement(

@@ -200,6 +200,10 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .mobile-sheet-note{color:#928b7d!important;font-size:12px!important;line-height:1.35!important}
 .mobile-action-grid,.mobile-sheet-action-grid,.mobile-sheet-section .mobile-segment-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important}
 .mobile-sheet-section button,.mobile-bottom-sheet button{min-height:30px!important;text-align:left!important}
+.mobile-action-sheet-backdrop{position:fixed;inset:0;z-index:1500;background:rgba(0,0,0,.32)}
+.mobile-more-bottom-sheet{position:fixed;left:0;right:0;bottom:calc(60px + env(safe-area-inset-bottom,0px));max-height:50vh;display:flex;flex-direction:column;z-index:1501}
+.mobile-more-bottom-sheet>.mobile-sheet-grabber,.mobile-more-bottom-sheet>.mobile-sheet-headline{flex-shrink:0}
+.mobile-more-sheet-body{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;min-height:0;padding:10px}
 .mobile-bottom-sheet input[type="checkbox"]{width:16px!important;height:16px!important;min-width:16px!important;min-height:16px!important;margin-right:8px!important}
 .mobile-spacing-row{display:grid!important;grid-template-columns:1fr auto!important;align-items:center!important;gap:8px!important}
 .mobile-edit-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important}
