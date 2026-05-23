@@ -6,6 +6,8 @@ function Topbar({
   onOpenLocalProjects,
   onOpenProductionCheck,
   onOpenShortcuts,
+  rightPanelOpen,
+  onToggleRightPanel,
 }) {
   const state = useAppState();
   const dispatch = useAppDispatch();
@@ -180,6 +182,30 @@ function Topbar({
           },
           "Help",
         ),
+        onToggleRightPanel &&
+          React.createElement(
+            "button",
+            {
+              className: `toolbar-menu-trigger topbar-inspect-btn ${rightPanelOpen ? "active" : ""}`,
+              onClick: onToggleRightPanel,
+              title: "Toggle inspector panel (→)",
+            },
+            React.createElement(
+              "svg",
+              {
+                width: 14,
+                height: 14,
+                viewBox: "0 0 24 24",
+                fill: "none",
+                stroke: "currentColor",
+                strokeWidth: 2,
+                strokeLinecap: "round",
+                strokeLinejoin: "round",
+                "aria-hidden": "true",
+              },
+              React.createElement("path", { d: "M9 18l6-6-6-6" }),
+            ),
+          ),
       ),
     ),
     openMenu &&

@@ -222,15 +222,11 @@ async function installLocalReactRoutes(page) {
 
 async function setDesktopPanels(page, desired) {
   const workspace = page.locator(".workspace");
-  const currentLeft = (await workspace.getAttribute("data-left-open")) === "true";
+  // Left panel is always closed on desktop — no LeftSidebar rendered.
   const currentRight = (await workspace.getAttribute("data-right-open")) === "true";
-
-  if (currentLeft !== desired.left) {
-    await clickButton(page, "Left");
-    await page.waitForFunction(value => document.querySelector(".workspace")?.dataset.leftOpen === value, String(desired.left));
-  }
   if (currentRight !== desired.right) {
-    await clickButton(page, "Right");
+    // Right panel toggle is in the topbar on desktop.
+    await page.locator(".topbar-inspect-btn").click();
     await page.waitForFunction(value => document.querySelector(".workspace")?.dataset.rightOpen === value, String(desired.right));
   }
 }

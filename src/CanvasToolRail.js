@@ -207,7 +207,7 @@ function CanvasToolRail({
         },
       }),
       command("Right", ICON.right, {
-        className: rightPanelOpen ? "active" : "",
+        className: `rail-right-btn${rightPanelOpen ? " active" : ""}`,
         onClick: () => {
           setOpenMenu(null);
           onToggleRightPanel();

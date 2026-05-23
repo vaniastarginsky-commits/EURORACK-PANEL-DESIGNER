@@ -2594,8 +2594,17 @@ function App() {
           s.selected.length === 0 &&
           !s.selectedArtwork &&
           !s.selectedTexts?.length
-        )
+        ) {
+          if (
+            !isNarrowInitial &&
+            e.key === "ArrowRight" &&
+            !e.shiftKey &&
+            !e.ctrlKey &&
+            !e.metaKey
+          )
+            setRightPanelOpen((v) => !v);
           return;
+        }
         e.preventDefault();
         const d = e.shiftKey ? 0.1 : s.grid.size;
         const dx = e.key === "ArrowLeft" ? -d : e.key === "ArrowRight" ? d : 0;
@@ -2644,7 +2653,7 @@ function App() {
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [dispatch]);
+  }, [dispatch, setRightPanelOpen]);
   const AUTOSAVE_KEY = "eurorack-panel-autosave-v4";
   const AUTOSAVE_LEGACY_KEY = "eurorack-panel-autosave-v3";
   function projectString(st) {
@@ -3481,6 +3490,10 @@ function App() {
       onOpenLocalProjects: () => setShowLocalProjectsDialog(true),
       onOpenProductionCheck: () => setShowProductionCheck(true),
       onOpenShortcuts: () => setShowShortcutHelp(true),
+      rightPanelOpen: !isNarrowInitial ? rightPanelOpen : undefined,
+      onToggleRightPanel: !isNarrowInitial
+        ? () => setRightPanelOpen((v) => !v)
+        : undefined,
     }),
     showCommandPalette &&
       React.createElement(CommandPalette, {
