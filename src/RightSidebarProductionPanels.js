@@ -714,7 +714,7 @@ function MountingHolesPanel() {
                   key: h.id,
                   style: {
                     display: "grid",
-                    gridTemplateColumns: "26px 1fr 22px",
+                    gridTemplateColumns: "18px 52px 18px",
                     gap: 4,
                     marginBottom: 4,
                     alignItems: "center",
