@@ -460,4 +460,23 @@ Confirmed
 
 ### Fix
 Добавлены правила в конец `styles.css`: `.mobile-placement-help { display: none }` по умолчанию; внутри `@media (max-width:860px),(pointer:coarse)` — скрыть `.desktop-placement-help`, показать `.mobile-placement-help`.
+
+---
+
+## Finding — 2026-05-23 — pinch-to-zoom зумит всю страницу на пустом canvas
+
+### Status
+Fixed
+
+### Symptom
+На мобиле щипок двумя пальцами на пустой области canvas (вокруг SVG-панели) зумил всю страницу, выталкивая UI за пределы экрана. Щипок на самой панели работал корректно.
+
+### Root cause
+`touchAction: "none"` и обработчики `onTouchStart/Move/End/Cancel` были привязаны **только к SVG-элементу** (`.panel-canvas-svg`). Касания в пустой зоне `.canvas-wrap` (вне SVG) не перехватывались React — браузер применял нативный зум страницы.
+
+### Fix
+В `src/Canvas.js`: перенос touch-обработчиков и `style={{ touchAction: "none" }}` с SVG на `canvas-wrap` div. SVG лишился обработчиков (остался `touchAction: "none"` — безвредно), `canvas-wrap` получил все четыре. Двойного срабатывания нет — событие проходит один раз на уровне `canvas-wrap`.
+
+### Pattern
+Для canvas-приложений с кастомным pinch-zoom: `touchAction: "none"` и touch-обработчики должны быть на внешнем контейнере, а не только на SVG/canvas элементе — иначе pinch за пределами рисуемой области проваливается в браузерный зум страницы.
 - `popoverPos` начальное значение: `{ left: 330, top: 80 }` — это десктопные координаты

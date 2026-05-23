@@ -2861,8 +2861,13 @@ function SVGCanvas({
     "div",
     {
       className: `canvas-wrap mode-${state.viewMode} ${state.selected.length ? "has-selection" : ""}`,
+      style: { touchAction: "none" },
       onWheel: onWheel,
       onMouseDown: onWrapMouseDown,
+      onTouchStart: onSVGTouchStart,
+      onTouchMove: onSVGTouchMove,
+      onTouchEnd: onSVGTouchEnd,
+      onTouchCancel: onSVGTouchEnd,
     },
     React.createElement(
       "div",
@@ -2896,10 +2901,6 @@ function SVGCanvas({
           onMouseDown: onSVGMouseDown,
           onMouseUp: onSVGMouseUp,
           onDoubleClick: onSVGDoubleClick,
-          onTouchStart: onSVGTouchStart,
-          onTouchMove: onSVGTouchMove,
-          onTouchEnd: onSVGTouchEnd,
-          onTouchCancel: onSVGTouchEnd,
           onContextMenu: onSVGContextMenu,
         },
         React.createElement(
