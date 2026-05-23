@@ -3734,6 +3734,8 @@ function App() {
           });
           setEditingTextId(id);
         },
+        onOpenComponentLibrary: () =>
+          AppCommands.openComponentLibraryPicker(),
       }),
       React.createElement(ComponentLibraryPanel, {
         headless: true,
