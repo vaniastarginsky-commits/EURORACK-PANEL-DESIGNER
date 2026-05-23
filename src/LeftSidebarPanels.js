@@ -527,6 +527,84 @@ function ComponentLibraryPanel({
               React.createElement("option", { value: "custom" }, "Custom"),
             ),
           ),
+          React.createElement(
+            "details",
+            { className: "library-tools-compact" },
+            React.createElement("summary", null, "Tools"),
+            React.createElement(
+              "label",
+              {
+                className: "library-replace-compact",
+                title:
+                  "When enabled, clicking a part replaces the selected components while keeping their ref/label/position/rotation.",
+              },
+              React.createElement("input", {
+                type: "checkbox",
+                checked: replaceMode,
+                disabled: state.selected.length === 0,
+                onChange: (e) => setReplaceMode(e.target.checked),
+              }),
+              "Replace selected",
+            ),
+            React.createElement(
+              "div",
+              { className: "library-action-grid compact" },
+              React.createElement(
+                "button",
+                { onClick: saveSelectedAsPart },
+                "Save selected",
+              ),
+              React.createElement(
+                "button",
+                {
+                  onClick: exportParts,
+                  disabled: state.customParts.length === 0,
+                },
+                "Export custom",
+              ),
+              React.createElement(
+                "button",
+                { onClick: exportAuditCSV },
+                "Export CSV",
+              ),
+              React.createElement(
+                "button",
+                {
+                  onClick: () =>
+                    document
+                      .getElementById("popover-parts-import-input")
+                      ?.click(),
+                },
+                "Import",
+              ),
+              React.createElement(
+                "button",
+                {
+                  className: `danger inline-confirm-button ${resetPartsArmed ? "armed" : ""}`,
+                  disabled: state.customParts.length === 0,
+                  title: resetPartsArmed
+                    ? "Click again to reset custom parts"
+                    : "First click arms this action",
+                  onClick: () => {
+                    if (!resetPartsArmed) {
+                      setResetPartsArmed(true);
+                      return;
+                    }
+                    dispatch({ type: "RESET_CUSTOM_PARTS" });
+                    setResetPartsArmed(false);
+                  },
+                },
+                resetPartsArmed ? "Confirm reset" : "Reset",
+              ),
+              React.createElement("input", {
+                id: "popover-parts-import-input",
+                type: "file",
+                accept: ".json",
+                style: { display: "none" },
+                onChange: importParts,
+              }),
+            ),
+          ),
           (recentKeys.length > 0 || favoriteKeys.length > 0) &&
             !partSearch.trim() &&
             partCategory === "all" &&
@@ -707,79 +785,6 @@ function ComponentLibraryPanel({
           allParts.length,
           " parts \u00B7 icon grid",
         ),
-      ),
-    ),
-    React.createElement(
-      "details",
-      { className: "library-tools-compact library-tools-footer" },
-      React.createElement("summary", null, "Tools"),
-      React.createElement(
-        "label",
-        {
-          className: "library-replace-compact",
-          title:
-            "When enabled, clicking a part replaces the selected components while keeping their ref/label/position/rotation.",
-        },
-        React.createElement("input", {
-          type: "checkbox",
-          checked: replaceMode,
-          disabled: state.selected.length === 0,
-          onChange: (e) => setReplaceMode(e.target.checked),
-        }),
-        "Replace selected",
-      ),
-      React.createElement(
-        "div",
-        { className: "library-action-grid compact" },
-        React.createElement(
-          "button",
-          { onClick: saveSelectedAsPart },
-          "Save selected",
-        ),
-        React.createElement(
-          "button",
-          { onClick: exportParts, disabled: state.customParts.length === 0 },
-          "Export custom",
-        ),
-        React.createElement(
-          "button",
-          { onClick: exportAuditCSV },
-          "Export CSV",
-        ),
-        React.createElement(
-          "button",
-          {
-            onClick: () =>
-              document.getElementById("parts-import-input").click(),
-          },
-          "Import",
-        ),
-        React.createElement(
-          "button",
-          {
-            className: `danger inline-confirm-button ${resetPartsArmed ? "armed" : ""}`,
-            disabled: state.customParts.length === 0,
-            title: resetPartsArmed
-              ? "Click again to reset custom parts"
-              : "First click arms this action",
-            onClick: () => {
-              if (!resetPartsArmed) {
-                setResetPartsArmed(true);
-                return;
-              }
-              dispatch({ type: "RESET_CUSTOM_PARTS" });
-              setResetPartsArmed(false);
-            },
-          },
-          resetPartsArmed ? "Confirm reset" : "Reset",
-        ),
-        React.createElement("input", {
-          id: "parts-import-input",
-          type: "file",
-          accept: ".json",
-          style: { display: "none" },
-          onChange: importParts,
-        }),
       ),
     ),
     popover,
