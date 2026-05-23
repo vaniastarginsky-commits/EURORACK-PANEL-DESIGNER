@@ -4449,46 +4449,10 @@ function App() {
               onMouseDown: (e) => e.stopPropagation(),
               onTouchStart: (e) => e.stopPropagation(),
             },
-            React.createElement(
-              "button",
-              {
-                className: "mobile-clear-selection",
-                title: "Clear selection",
-                onClick: () => {
-                  dispatch({ type: "DESELECT_ALL" });
-                  setShowMobileNudge(false);
-                  setShowMobileSelectionMore(false);
-                  setShowMobileArrange(false);
-                  showMobileToast("Selection cleared");
-                },
-              },
-              "\u00D7",
-            ),
-            React.createElement(
-              "button",
-              {
-                className: `mobile-single-multi-toggle ${touchMode === "select" ? "active" : ""}`,
-                title:
-                  touchMode === "select"
-                    ? "Multi-select is ON"
-                    : "Single-select mode",
-                onClick: () =>
-                  onSetTouchMode(touchMode === "select" ? "edit" : "select"),
-              },
-              touchMode === "select" ? "Multi" : "Single",
-            ),
             state.selected.length === 1
               ? React.createElement(
                   React.Fragment,
                   null,
-                  React.createElement(
-                    "button",
-                    {
-                      className: "quick-label-button primary-action",
-                      onClick: () => AppCommands.openMobileQuickLabelEdit(),
-                    },
-                    "Label",
-                  ),
                   React.createElement(
                     "button",
                     {
