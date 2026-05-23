@@ -3291,6 +3291,7 @@ input[type="number"],
     right: 8px !important;
     left: 58px !important;
     width: auto !important;
+    overflow-x: hidden !important;
   }
 
   .sidebar-left.closed,
