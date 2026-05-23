@@ -3274,8 +3274,8 @@ input[type="number"],
 
   .sidebar-left,
   .sidebar-right {
-    top: calc(86px + 8px) !important;
-    bottom: calc(70px + env(safe-area-inset-bottom, 0px)) !important;
+    top: 42px !important;
+    bottom: env(safe-area-inset-bottom, 0px) !important;
     height: auto !important;
     width: calc(100vw - 16px) !important;
     max-width: calc(100vw - 16px) !important;
