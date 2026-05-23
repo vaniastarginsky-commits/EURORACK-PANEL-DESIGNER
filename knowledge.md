@@ -571,3 +571,35 @@ Fixed
 
 ### Pattern
 **«Двойной слой CSS»**: когда есть базовое/desktop правило И мобильный `@media` override — фикс нужно вносить в ОБА. Исправление только базового правила не влияет на мобиль. Всегда искать парный `@media(max-width:900px)` блок для того же селектора.
+
+---
+
+## 2026-05-23 — CSS filter на body ломает position:fixed на iOS Safari (ViewContrast)
+
+### Symptom
+На мобиле при перемещении слайдера View Contrast в сторону GRAY левый тулбар (`canvas-tool-rail`) становился выше и кнопка HIDE уходила за нижний край экрана.
+
+### Root cause
+`html.pd-contrast-on body { filter: var(--pd-filter) }` — согласно CSS-спецификации, любой non-none `filter` на элементе создаёт новый containing block для всех `position: fixed` потомков. Тулбар имеет `position: fixed; bottom: 3px`. После включения фильтра `bottom: 3px` отсчитывается от нижнего края `body`, а не viewport.
+
+На iOS Safari `body { height: 100vh }` = layout viewport (включает область Safari chrome, скрытую scrollом). Layout viewport выше визуального viewport. Поэтому тулбар растягивался ниже видимой области.
+
+При contrast=0 класс `pd-contrast-on` не добавляется → фильтра нет → проблемы нет. При contrast>0 → фильтр есть → тулбар рвётся.
+
+### Fix
+Убрать `filter` с `body`. Вместо него — `backdrop-filter` на псевдоэлементе `html::after` (position: fixed, inset: 0, pointer-events: none, z-index: max). Псевдоэлемент позиционируется относительно viewport (нет ancestor с filter), визуальный эффект тот же.
+
+```css
+html.pd-contrast-on::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  pointer-events: none;
+  -webkit-backdrop-filter: var(--pd-filter, none);
+  backdrop-filter: var(--pd-filter, none);
+}
+```
+
+### Pattern
+**«filter на body»**: никогда не применяй `filter` (и `transform`, `perspective`) к `body` или другим общим ancestor-элементам, если в приложении есть `position: fixed` элементы с bottom/top anchoring. Используй `backdrop-filter` на overlay-псевдоэлементе вместо `filter` на контейнере.

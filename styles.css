@@ -3442,10 +3442,6 @@ input[type="number"],
     justify-content: center !important;
   }
 
-  html.pd-contrast-on body {
-    filter: var(--pd-filter, none) !important;
-  }
-
   .hud-bottom-left {
     left: calc(var(--pd-rail-width) + 24px) !important;
     max-width: min(360px, calc(100% - var(--pd-rail-width) - 36px)) !important;
@@ -3541,9 +3537,19 @@ input[type="number"],
     justify-content: center !important;
   }
 
-  html.pd-contrast-on body {
-    filter: var(--pd-filter, none) !important;
-  }
+}
+
+/* view-contrast filter overlay: backdrop-filter on a fixed pseudo-element avoids
+   the CSS spec behavior where filter on body creates a containing block for
+   position:fixed descendants, which breaks bottom-anchored elements on iOS Safari */
+html.pd-contrast-on::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  pointer-events: none;
+  -webkit-backdrop-filter: var(--pd-filter, none);
+  backdrop-filter: var(--pd-filter, none);
 }
 
 /* v507-layer-manager-compact: new layer-compact-* classes avoid base !important conflicts */
