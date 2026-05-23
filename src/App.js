@@ -437,6 +437,15 @@ function App() {
     const svg =
       svgRef.current || document.querySelector("svg.panel-canvas-svg");
     if (!svg) return null;
+    // getBoundingClientRect accounts for CSS transforms on ancestor elements;
+    // getScreenCTM is unreliable in Mobile Safari when zoom is a CSS scale on a parent div.
+    const rect = svg.getBoundingClientRect();
+    const vb = svg.viewBox.baseVal;
+    if (rect.width > 0 && rect.height > 0 && vb.width > 0 && vb.height > 0) {
+      const x = vb.x + ((clientX - rect.left) / rect.width) * vb.width;
+      const y = vb.y + ((clientY - rect.top) / rect.height) * vb.height;
+      if (Number.isFinite(x) && Number.isFinite(y)) return { x, y };
+    }
     try {
       const pt = svg.createSVGPoint();
       pt.x = clientX;
@@ -448,13 +457,6 @@ function App() {
           return { x: mm.x, y: mm.y };
       }
     } catch {}
-    const rect = svg.getBoundingClientRect();
-    const vb = svg.viewBox.baseVal;
-    if (rect.width > 0 && rect.height > 0 && vb.width > 0 && vb.height > 0) {
-      const x = vb.x + ((clientX - rect.left) / rect.width) * vb.width;
-      const y = vb.y + ((clientY - rect.top) / rect.height) * vb.height;
-      return { x, y };
-    }
     return null;
   }
   function measurementAnchors() {
