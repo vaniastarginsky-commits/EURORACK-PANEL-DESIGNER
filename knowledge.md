@@ -409,6 +409,44 @@ Confirmed
 
 ---
 
+## Finding — 2026-05-23 — mobile-nudge-mode-sheet без layout/positioning CSS
+
+### Status
+Confirmed
+
+### Symptom
+На мобильном в nudge mode виден только заголовок «NUDGE 0.25 mm step | Done», стрелки-кнопки (↑↓←→) и пресеты скрыты под экраном.
+
+### Root cause
+`.mobile-nudge-mode-sheet` и все его дочерние классы (`.mobile-nudge-mode-head`, `.mobile-nudge-mode-grid`, `.mobile-nudge-mode-presets`) существовали только в минифицированном theme-блоке (строка 2) — исключительно для background/border. Никакого `position`, `display`, `bottom` не было. Элемент рендерился в нормальном потоке внутри `canvas-wrap` (overflow:hidden), торчал из-под `.mobile-selection-actions.v267-context-bar` (position:absolute).
+
+### Files / selectors
+- `src/App.js:4054` — рендер `.mobile-nudge-mode-sheet`
+- `styles.css` строки 3309–3356 (новый блок внутри qa-polish `@media(max-width:900px)`)
+- `.mobile-nudge-mode-sheet`, `.mobile-nudge-mode-head`, `.mobile-nudge-mode-grid`, `.mobile-nudge-mode-presets`
+
+### Cascade / ownership notes
+- Canonical owner: qa-polish `@media(max-width:900px)` блок (где живут аналогичные overlays: `.mobile-main-dock`, `.mobile-selection-actions.v267-context-bar`)
+- Selection-actions bar: `bottom: calc(8px + safe); padding: 7px; button height: 42px` → top of bar = `64px + safe` from canvas-wrap bottom
+- Nudge sheet: `bottom: calc(66px + safe)` → 2px зазор над selection bar
+
+### Fix
+Добавлены CSS правила без `!important`:
+- `.mobile-nudge-mode-sheet { position:absolute; right:8px; bottom:calc(66px+safe-area); left:8px; z-index:65; padding:12px }`
+- `.mobile-nudge-mode-head { display:flex; align-items:center; gap:10px; margin-bottom:10px }`
+- `.mobile-nudge-mode-head strong { flex:1; font-size:12px; color:#d6aa58 }`
+- `.mobile-nudge-mode-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px }`
+- `.mobile-nudge-mode-presets { display:grid; grid-template-columns:1fr 1fr; gap:6px }`
+
+### Verification
+- `npm run verify`: pass, 24 screenshots
+- `!important` delta: +0 / -0
+
+### Follow-up
+Nudge state не покрыт screenshot-тестами. Если добавлять визуальное покрытие — нужно триггерить `showMobileNudge=true` через JS в test script.
+
+---
+
 ## Finding — 2026-05-23 — placement-status-pill help text классы без CSS
 
 ### Status
