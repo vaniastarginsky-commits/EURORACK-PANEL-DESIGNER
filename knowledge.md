@@ -511,3 +511,37 @@ Fixed
 Если browser page zoom был применён (до фикса, через пинч на пустой области), `clientX/clientY` приходят в зумированном пространстве, но `getScreenCTM()` может некорректно это учитывать — ruler начинает не там, где тап. Симптом: "ruler начинается ниже". Решение: перезагрузить страницу (сбрасывает browser zoom). Фикс `ab77384` предотвращает нативный зум браузера, но старая кэшированная версия страницы без фикса может его вызвать.
 
 - `popoverPos` начальное значение: `{ left: 330, top: 80 }` — это десктопные координаты
+
+---
+
+## 2026-05-23 — Mobile right panel gaps (top and bottom)
+
+### Commit
+33a0823
+
+### Status
+Fixed
+
+### Symptom
+На мобиле правая панель (Status/Inspect/Prod/Layers) не занимала полную высоту экрана: сверху было видно полоску canvas с HUD («10HP FRONT 1:4%…»), снизу — полоску canvas с GROUND-надписями.
+
+### Root cause
+`styles.css` строка 3276, внутри `@media (max-width: 900px)`:
+```css
+.sidebar-left, .sidebar-right {
+    top: calc(86px + 8px) !important;   /* было */
+    bottom: calc(70px + env(safe-area-inset-bottom, 0px)) !important;  /* было */
+}
+```
+- `top: calc(86px + 8px)` = 94px — устаревшее значение для двухрядного `.toolbar` (86px). Реальный `.global-topbar` на мобиле имеет `height: 42px` (см. строку 3806). Разница 52px = зазор сверху.
+- `bottom: calc(70px + …)` = 70px — зарезервировано для мобильного дока (`.mobile-main-dock`), который `MobileDock.js:469` возвращает `null` (заменён на `CanvasToolRail`). 70px = мёртвый зазор снизу.
+
+### Fix
+```css
+top: 42px !important;
+bottom: env(safe-area-inset-bottom, 0px) !important;
+```
+Совпадает с `.canvas-tool-rail` (строка 3851): `top: 42px; bottom: 3px`.
+
+### Pattern
+Когда `MobileDock` возвращает `null`, все `bottom: calc(70px + …)` в мобильных медиазапросах становятся мёртвым резервом. Искать по `70px` в `styles.css` — там могут быть аналогичные зазоры у `.mobile-bottom-sheet` (строка 3271).
