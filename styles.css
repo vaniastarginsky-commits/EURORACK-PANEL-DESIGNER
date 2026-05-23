@@ -49,12 +49,12 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 .app-brand{display:flex!important;align-items:center!important;gap:8px!important;min-width:max-content!important}
 .app-logo{width:28px!important;height:28px!important;object-fit:contain!important}
 .app-title{font-size:15px!important;font-weight:900!important;letter-spacing:.18em!important;text-transform:uppercase!important;white-space:nowrap!important}
-.workspace{grid-row:2!important;width:100vw!important;height:calc(100vh - 42px)!important;min-height:0!important;display:grid!important;grid-template-columns:292px minmax(0,1fr)312px!important;grid-template-rows:minmax(0,1fr)!important;overflow:hidden!important;background:#010101!important;position:relative!important}
+.workspace{grid-row:2!important;width:100vw!important;height:calc(100vh - 42px)!important;min-height:0!important;display:grid!important;grid-template-columns:minmax(0,1fr)312px!important;grid-template-rows:minmax(0,1fr)!important;overflow:hidden!important;background:#010101!important;position:relative!important}
 .sidebar-left{grid-column:1!important;grid-row:1!important;width:292px!important;min-width:292px!important;max-width:292px!important;height:100%!important;overflow:auto!important;background:#030303!important;border-right:1px solid rgba(215,196,155,.13)!important;padding:8px!important;position:relative!important;z-index:20!important}
-.sidebar-right{grid-column:3!important;grid-row:1!important;width:312px!important;min-width:312px!important;max-width:312px!important;height:100%!important;overflow:auto!important;background:#030303!important;border-left:1px solid rgba(215,196,155,.13)!important;padding:8px!important;position:relative!important;z-index:20!important}
+.sidebar-right{grid-column:2!important;grid-row:1!important;width:312px!important;min-width:312px!important;max-width:312px!important;height:100%!important;overflow:auto!important;background:#030303!important;border-left:1px solid rgba(215,196,155,.13)!important;padding:8px!important;position:relative!important;z-index:20!important}
 .sidebar-left.closed,.sidebar-right.closed{display:block!important;visibility:hidden!important;pointer-events:none!important}
 .component-library-shell[style]{display:none!important}
-.canvas-wrap{grid-column:2!important;grid-row:1!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;position:relative!important;background:#000!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.canvas-wrap{grid-column:1!important;grid-row:1!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important;position:relative!important;background:#000!important;display:flex!important;align-items:center!important;justify-content:center!important}
 .canvas-wrap>div:first-child{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;display:flex!important;align-items:center!important;justify-content:center!important}
 .panel-canvas-svg{display:block!important;max-width:none!important;flex:0 0 auto!important}
 .canvas-hud{position:absolute!important;top:10px!important;left:10px!important;z-index:15!important;display:flex!important;gap:6px!important;align-items:center!important;background:transparent!important;border:0!important;padding:4px 8px!important;color:#d8d0c0!important;pointer-events:none!important;opacity:.15}
@@ -383,7 +383,7 @@ html,body,#root{width:100vw!important;height:100vh!important;margin:0!important;
 @media(min-width:901px){
   .canvas-quick-dock{display:none!important}
   .mobile-bottom-sheet,.mobile-sheet-backdrop,.mobile-dock-restore{display:none!important}
-  .workspace{grid-template-columns:292px minmax(0,1fr)312px!important}
+  .workspace{grid-template-columns:minmax(0,1fr)312px!important}
   .canvas-wrap{padding-bottom:0!important}
 }
 
