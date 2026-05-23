@@ -3289,7 +3289,8 @@ input[type="number"],
 
   .sidebar-right.open {
     right: 8px !important;
-    left: auto !important;
+    left: 46px !important;
+    width: auto !important;
   }
 
   .sidebar-left.closed,
