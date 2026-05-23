@@ -4082,7 +4082,7 @@ input[type="number"],
   min-height: 0 !important;
   overflow: auto !important;
   padding-right: 4px !important;
-  grid-template-columns: repeat(auto-fill, minmax(126px, 1fr)) !important;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
   align-items: start;
   grid-auto-rows: max-content;
 }
