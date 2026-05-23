@@ -3774,6 +3774,14 @@ input[type="number"],
     height: calc(100dvh - 42px) !important;
   }
 
+  .canvas-hud {
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    max-width: calc(100% - 100px) !important;
+    text-align: center !important;
+  }
+
 }
 
 /* v-mobile-tool-rail: compact rail on mobile, restore chevron */
