@@ -77,11 +77,12 @@ function Topbar({
       React.createElement(
         "span",
         { className: "app-brand", title: "Panel Designer" },
-        React.createElement(
-          "span",
-          { className: "app-logo app-logo-fallback", "aria-hidden": "true" },
-          "PD",
-        ),
+        React.createElement("img", {
+          src: "cubreak_logo_small.png",
+          className: "app-logo",
+          alt: "",
+          "aria-hidden": "true",
+        }),
         React.createElement(
           "span",
           { className: "app-title" },
