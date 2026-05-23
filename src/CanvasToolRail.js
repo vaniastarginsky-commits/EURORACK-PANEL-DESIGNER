@@ -70,6 +70,21 @@ const ICON = {
       fill: "currentColor",
     }),
   ]),
+  add: toolIcon("M12 8v8M8 12h8", {
+    extra: React.createElement("circle", {
+      key: "c",
+      cx: "12",
+      cy: "12",
+      r: "9",
+    }),
+  }),
+  multi: toolIcon([
+    "M3 3h7v7H3z",
+    "M14 3h7v7h-7z",
+    "M3 14h7v7H3z",
+    "M14 17h7M17 14v7",
+  ]),
+  hide: toolIcon("M15 18l-6-6 6-6"),
 };
 
 function CanvasToolRail({
@@ -88,11 +103,13 @@ function CanvasToolRail({
   onToggleSafeZones,
   onOpenShortcuts,
   onAddText,
+  onOpenComponentLibrary,
 }) {
   const state = useAppState();
   const dispatch = useAppDispatch();
   const [openMenu, setOpenMenu] = useState(null);
   const [menuTop, setMenuTop] = useState(0);
+  const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
     if (!openMenu) return undefined;
@@ -151,6 +168,20 @@ function CanvasToolRail({
     top: Math.max(58, Math.min(menuTop, window.innerHeight - 260)),
   };
 
+  if (collapsed) {
+    return React.createElement(
+      "button",
+      {
+        className: "canvas-tool-rail-restore",
+        onClick: () => setCollapsed(false),
+        onMouseDown: (e) => e.stopPropagation(),
+        onTouchStart: (e) => e.stopPropagation(),
+        title: "Show tools",
+      },
+      "›",
+    );
+  }
+
   return React.createElement(
     React.Fragment,
     null,
@@ -162,8 +193,14 @@ function CanvasToolRail({
         onMouseDown: (e) => e.stopPropagation(),
         onTouchStart: (e) => e.stopPropagation(),
       },
+      command("Add", ICON.add, {
+        onClick: () => {
+          setOpenMenu(null);
+          onOpenComponentLibrary?.();
+        },
+      }),
       command("Left", ICON.left, {
-        className: leftPanelOpen ? "active" : "",
+        className: `canvas-tool-left-btn${leftPanelOpen ? " active" : ""}`,
         onClick: () => {
           setOpenMenu(null);
           onToggleLeftPanel();
@@ -196,10 +233,15 @@ function CanvasToolRail({
         className: touchMode === "edit" ? "active" : "",
         onClick: () => setMode("edit"),
       }),
+      command("Multi", ICON.multi, {
+        className: touchMode === "select" ? "active" : "",
+        onClick: () => setMode(touchMode === "select" ? "edit" : "select"),
+      }),
       command("Ruler", ICON.ruler, {
         className: touchMode === "ruler" ? "active" : "",
         onClick: () => setMode("ruler"),
       }),
+      React.createElement("div", { className: "canvas-tool-separator" }),
       command("Text", ICON.text, {
         onClick: () => {
           setOpenMenu(null);
@@ -242,6 +284,11 @@ function CanvasToolRail({
           setOpenMenu(null);
           onOpenShortcuts();
         },
+      }),
+      React.createElement("div", { className: "canvas-tool-spacer" }),
+      command("Hide", ICON.hide, {
+        className: "canvas-tool-hide-btn",
+        onClick: () => setCollapsed(true),
       }),
     ),
     openMenu &&
