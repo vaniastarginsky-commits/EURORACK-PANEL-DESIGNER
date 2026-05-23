@@ -3986,11 +3986,11 @@ function App() {
               right: 10,
               bottom: isNarrowInitial
                 ? state.selected.length > 0
-                  ? 128
-                  : 62
+                  ? 138
+                  : 72
                 : state.selected.length > 0
-                  ? 82
-                  : 12,
+                  ? 92
+                  : 22,
               zIndex: 1100,
               background: "rgba(18,18,18,0.62)",
               border: "1px solid rgba(210,210,210,0.45)",
@@ -4000,8 +4000,6 @@ function App() {
               display: "flex",
               gap: 5,
               alignItems: "center",
-              maxWidth: "calc(100vw - 20px)",
-              overflowX: "auto",
               touchAction: "pan-x",
               backdropFilter: "blur(4px)",
             },
@@ -4009,35 +4007,12 @@ function App() {
             onTouchStart: (e) => e.stopPropagation(),
           },
           React.createElement(
-            "span",
-            {
-              style: {
-                color: "#e0e0e0",
-                fontSize: 11,
-                whiteSpace: "nowrap",
-                padding: "0 4px",
-                opacity: 0.9,
-              },
-            },
-            "\uD83D\uDCCF ",
-            Math.hypot(
-              ruler.end.x - ruler.start.x,
-              ruler.end.y - ruler.start.y,
-            ).toFixed(2),
-            " mm",
-          ),
-          React.createElement(
             "button",
-            { title: "Clear ruler measurement", onClick: () => setRuler(null) },
+            {
+              title: "Clear ruler measurement",
+              onClick: () => { setRuler(null); setTouchMode("edit"); },
+            },
             "Clear",
-          ),
-          React.createElement(
-            "button",
-            {
-              title: "Return to Edit mode",
-              onClick: () => setTouchMode("edit"),
-            },
-            "Edit",
           ),
         ),
       isNarrowInitial &&
