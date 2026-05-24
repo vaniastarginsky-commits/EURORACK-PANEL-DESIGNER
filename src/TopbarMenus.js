@@ -136,58 +136,46 @@ function AddMenuContent({ onClose }) {
             "Large image — JSON/SVG export may be slow.",
           ),
         React.createElement(
-          "div",
-          { className: "field-row" },
-          React.createElement(
-            "label",
-            null,
-            React.createElement("input", {
-              type: "checkbox",
-              checked: state.clipArtworkToPanel,
-              onChange: (e) =>
-                dispatch({
-                  type: "SET_CLIP_ARTWORK",
-                  value: e.target.checked,
-                }),
-            }),
-            " Clip artwork to panel",
-          ),
+          "label",
+          { className: "app-native-check-row" },
+          React.createElement("input", {
+            type: "checkbox",
+            checked: state.clipArtworkToPanel,
+            onChange: (e) =>
+              dispatch({
+                type: "SET_CLIP_ARTWORK",
+                value: e.target.checked,
+              }),
+          }),
+          "Clip artwork to panel",
         ),
         React.createElement(
-          "div",
-          { className: "field-row" },
-          React.createElement(
-            "label",
-            null,
-            React.createElement("input", {
-              type: "checkbox",
-              checked: state.ignoreLockedArtworkClicks,
-              onChange: (e) =>
-                dispatch({
-                  type: "SET_IGNORE_LOCKED_CLICKS",
-                  value: e.target.checked,
-                }),
-            }),
-            " Ignore locked artwork clicks",
-          ),
+          "label",
+          { className: "app-native-check-row" },
+          React.createElement("input", {
+            type: "checkbox",
+            checked: state.ignoreLockedArtworkClicks,
+            onChange: (e) =>
+              dispatch({
+                type: "SET_IGNORE_LOCKED_CLICKS",
+                value: e.target.checked,
+              }),
+          }),
+          "Ignore locked artwork clicks",
         ),
         React.createElement(
-          "div",
-          { className: "field-row" },
-          React.createElement(
-            "label",
-            null,
-            React.createElement("input", {
-              type: "checkbox",
-              checked: state.showArtworkInDrillView,
-              onChange: (e) =>
-                dispatch({
-                  type: "SET_SHOW_ARTWORK_IN_DRILL",
-                  value: e.target.checked,
-                }),
-            }),
-            " Show artwork in drill view",
-          ),
+          "label",
+          { className: "app-native-check-row" },
+          React.createElement("input", {
+            type: "checkbox",
+            checked: state.showArtworkInDrillView,
+            onChange: (e) =>
+              dispatch({
+                type: "SET_SHOW_ARTWORK_IN_DRILL",
+                value: e.target.checked,
+              }),
+          }),
+          "Show artwork in drill view",
         ),
         state.showArtworkInDrillView &&
           React.createElement(
@@ -208,22 +196,18 @@ function AddMenuContent({ onClose }) {
             }),
           ),
         React.createElement(
-          "div",
-          { className: "field-row" },
-          React.createElement(
-            "label",
-            null,
-            React.createElement("input", {
-              type: "checkbox",
-              checked: allVisible,
-              onChange: () =>
-                dispatch({
-                  type: "SET_ALL_ARTWORK_VISIBLE",
-                  visible: !allVisible,
-                }),
-            }),
-            " Show all artwork",
-          ),
+          "label",
+          { className: "app-native-check-row" },
+          React.createElement("input", {
+            type: "checkbox",
+            checked: allVisible,
+            onChange: () =>
+              dispatch({
+                type: "SET_ALL_ARTWORK_VISIBLE",
+                visible: !allVisible,
+              }),
+          }),
+          "Show all artwork",
         ),
         state.artworks.map((a) =>
           React.createElement(
