@@ -49,6 +49,7 @@
       state.style,
       state.overrides,
       state.glow,
+      state.accentHue ?? null,
     );
   }
 
@@ -114,6 +115,69 @@
     return seg;
   }
 
+  function buildAccentStrip() {
+    const section = document.createElement("div");
+
+    const label = document.createElement("span");
+    label.className = "appearance-section-label";
+    label.textContent = "Accent";
+    section.appendChild(label);
+
+    const row = document.createElement("div");
+    row.className = "appearance-accent-row";
+
+    const strip = document.createElement("div");
+    strip.className = "appearance-accent-strip";
+
+    const cursor = document.createElement("div");
+    cursor.className = "appearance-accent-cursor";
+    if (state.accentHue != null) {
+      cursor.style.left = `${(state.accentHue / 360) * 100}%`;
+    } else {
+      cursor.style.display = "none";
+    }
+    strip.appendChild(cursor);
+
+    function pickHue(e) {
+      const rect = strip.getBoundingClientRect();
+      const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+      state.accentHue = Math.round((x / rect.width) * 360) % 360;
+      applyAndSave();
+      refreshUI();
+    }
+
+    strip.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      pickHue(e);
+      const onMove = (ev) => pickHue(ev);
+      const onUp = () => {
+        window.removeEventListener("mousemove", onMove);
+        window.removeEventListener("mouseup", onUp);
+      };
+      window.addEventListener("mousemove", onMove);
+      window.addEventListener("mouseup", onUp);
+    });
+
+    const defaultBtn = document.createElement("button");
+    defaultBtn.type = "button";
+    defaultBtn.className =
+      "toolbar-menu-trigger" + (state.accentHue == null ? " active" : "");
+    defaultBtn.style.cssText =
+      "font-size:11px;min-height:unset;padding:3px 8px";
+    defaultBtn.textContent = "Default";
+    defaultBtn.addEventListener("click", () => {
+      state.accentHue = null;
+      applyAndSave();
+      refreshUI();
+    });
+
+    row.appendChild(strip);
+    row.appendChild(defaultBtn);
+    section.appendChild(row);
+
+    return section;
+  }
+
   function buildBody() {
     const body = document.createElement("div");
     body.className = "appearance-modal-body";
@@ -126,6 +190,9 @@
     presetsSection.appendChild(presetsLabel);
     presetsSection.appendChild(buildPresetCards());
     body.appendChild(presetsSection);
+
+    // Accent
+    body.appendChild(buildAccentStrip());
 
     // Shape
     const shapeSection = document.createElement("div");
