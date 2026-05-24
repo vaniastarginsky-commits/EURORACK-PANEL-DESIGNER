@@ -130,7 +130,7 @@ const states = [
 
   ["mobile-default", mobile, async () => {}],
   ["mobile-right-drawer", mobile, async page => {
-    await page.locator(".canvas-tool-rail button[title='Right']").click();
+    await page.locator("button[title='Toggle right panel']").click();
     await page.locator(".sidebar-right").waitFor({ state: "visible" });
   }],
 
