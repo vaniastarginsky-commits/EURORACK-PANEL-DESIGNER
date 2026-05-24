@@ -232,6 +232,26 @@ h3, h4 {
   padding: 4px 0;
 }
 
+.field-row {
+  display: grid;
+  grid-template-columns: 98px minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  margin: 5px 0;
+}
+
+.field-row label {
+  min-width: 0;
+  color: var(--ui-muted);
+}
+
+.field-row input,
+.field-row select,
+.field-row textarea {
+  width: 100%;
+  min-width: 0;
+}
+
 .tabs,
 .tab-row,
 .segmented {
