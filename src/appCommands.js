@@ -23,4 +23,8 @@ const AppCommands = Object.freeze({
   openMobileQuickLabelEdit() {
     window.dispatchEvent(new Event("mobile-quick-label-edit"));
   },
+
+  openAppearance() {
+    window.dispatchEvent(new Event("panel-designer:open-appearance"));
+  },
 });

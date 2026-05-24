@@ -664,6 +664,16 @@ function HelpMenuContent({ onClose, onOpenShortcuts, onOpenProductionCheck }) {
         },
         "Production check",
       ),
+      React.createElement(
+        "button",
+        {
+          onClick: () => {
+            AppCommands.openAppearance();
+            onClose();
+          },
+        },
+        "Appearance",
+      ),
     ),
   );
 }
