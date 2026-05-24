@@ -95,15 +95,14 @@ function PropertiesPanel() {
       { className: "section-title" },
       isMultiEdit ? `${selComps.length} × ${shortPartName(c)}` : c.name,
     ),
-    isMultiEdit
-      ? React.createElement(
-          "div",
-          { className: "multi-edit-note ok" },
-          "Multi-edit mode: changes are applied to all ",
-          selComps.length,
-          " selected matching components.",
-        )
-      : React.createElement(ComponentSourceCard, { c: c }),
+    isMultiEdit &&
+      React.createElement(
+        "div",
+        { className: "multi-edit-note ok" },
+        "Multi-edit mode: changes are applied to all ",
+        selComps.length,
+        " selected matching components.",
+      ),
     React.createElement(
       "div",
       { className: "field-pair" },
@@ -317,25 +316,25 @@ function PropertiesPanel() {
     ),
     React.createElement(
       "div",
-      { className: "field-triple" },
+      { className: "field-pair" },
       React.createElement(NumField, {
-        label: "X",
+        label: "X (mm)",
         value: c.x,
         onChange: (v) => patch({ x: v }),
       }),
       React.createElement(NumField, {
-        label: "Y",
+        label: "Y (mm)",
         value: c.y,
         onChange: (v) => patch({ y: v }),
       }),
-      React.createElement(NumField, {
-        label: "\u00B0",
-        value: c.rotation,
-        step: 5,
-        min: -360,
-        onChange: (v) => patch({ rotation: v }),
-      }),
     ),
+    React.createElement(NumField, {
+      label: "Rotation (\u00B0)",
+      value: c.rotation,
+      step: 5,
+      min: -360,
+      onChange: (v) => patch({ rotation: v }),
+    }),
     React.createElement(
       "div",
       { className: "section-title", style: { marginTop: 8 } },
@@ -421,18 +420,19 @@ function PropertiesPanel() {
               value: topColor(c),
               onChange: (e) => patch({ topColor: e.target.value }),
             }),
-            React.createElement(
-              "div",
-              { className: "btn-row" },
-              TOP_COLOR_PRESETS.map((col) =>
-                React.createElement("button", {
-                  key: col,
-                  className: "top-color-preset",
-                  title: col,
-                  onClick: () => patch({ topColor: col }),
-                  style: { "--preset-color": col },
-                }),
-              ),
+          ),
+        c.knobEnabled &&
+          React.createElement(
+            "div",
+            { className: "color-presets-row" },
+            TOP_COLOR_PRESETS.map((col) =>
+              React.createElement("button", {
+                key: col,
+                className: "top-color-preset",
+                title: col,
+                onClick: () => patch({ topColor: col }),
+                style: { backgroundColor: col },
+              }),
             ),
           ),
         React.createElement(
@@ -522,18 +522,19 @@ function PropertiesPanel() {
               value: topColor(c),
               onChange: (e) => patch({ topColor: e.target.value }),
             }),
-            React.createElement(
-              "div",
-              { className: "btn-row", style: { marginTop: 4 } },
-              TOP_COLOR_PRESETS.map((col) =>
-                React.createElement("button", {
-                  key: col,
-                  className: "top-color-preset",
-                  title: col,
-                  onClick: () => patch({ topColor: col }),
-                  style: { "--preset-color": col },
-                }),
-              ),
+          ),
+        showColorControls &&
+          React.createElement(
+            "div",
+            { className: "color-presets-row" },
+            TOP_COLOR_PRESETS.map((col) =>
+              React.createElement("button", {
+                key: col,
+                className: "top-color-preset",
+                title: col,
+                onClick: () => patch({ topColor: col }),
+                style: { backgroundColor: col },
+              }),
             ),
           ),
         showFaderControls &&

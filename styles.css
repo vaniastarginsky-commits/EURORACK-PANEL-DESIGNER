@@ -4612,27 +4612,12 @@ input[type=color]::-webkit-color-swatch {
   margin-bottom: 2px !important;
 }
 
-/* field-triple: compact 3-column position row (X / Y / °) */
-.sidebar-right [data-component-properties="true"] .field-triple {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 5px;
-  min-width: 0;
-}
-.sidebar-right [data-component-properties="true"] .field-triple .field-row {
-  grid-template-columns: 1fr !important;
-  grid-template-rows: auto auto;
-  row-gap: 3px !important;
-  column-gap: 0 !important;
-  align-items: start !important;
-}
-.sidebar-right [data-component-properties="true"] .field-triple .field-row label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: .10em;
-}
-.sidebar-right [data-component-properties="true"] .field-triple .field-row input {
-  text-align: center;
+/* color-presets-row: small swatches outside field-row to avoid grid stretching */
+.sidebar-right [data-component-properties="true"] .color-presets-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 3px 0 5px;
 }
 
 /* advanced-disclosure toggle (div, not button — avoids global button rules) */
