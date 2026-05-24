@@ -1,0 +1,40 @@
+<h2>Что делаем с styles.css?</h2>
+<p class="subtitle">Удалили 1984 строк с !important из 4905 — осталось 2921. Приложение сломано. Три пути дальше:</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Полный переписать с нуля</h3>
+      <p>Выбросить текущий styles.css. Написать чистый CSS с нуля — по доменам: переменные, reset, layout, компоненты, мобайл. Никаких v422/v448 блоков. ~800–1200 строк без !important.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Плюсы</h4><ul><li>Идеальная архитектура</li><li>Никакого legacy мусора</li><li>Легко поддерживать</li></ul></div>
+        <div class="cons"><h4>Минусы</h4><ul><li>Высокий риск — можно пропустить edge-cases</li><li>Долго (неделя+)</li><li>21 screenshot-тест нужно пересмотреть</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Восстановить + вычистить !important</h3>
+      <p>Вернуть бэкап. Систематически убирать !important — переписывать правила с правильной специфичностью вместо патча. Постепенно, поверхность за поверхностью.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Плюсы</h4><ul><li>Меньший риск — работаем с проверенной базой</li><li>Можно проверять каждый шаг</li><li>Тесты продолжают работать</li></ul></div>
+        <div class="cons"><h4>Минусы</h4><ul><li>Всё равно много работы</li><li>Patch-блоки v422..v508 останутся</li><li>Архитектура так и не улучшится</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Гибрид: взять stripped + дописать без !important</h3>
+      <p>Оставить текущие 2921 строк. Добавить обратно нужные свойства из удалённых строк — но уже без !important, с правильной специфичностью. Реорганизовать по доменам.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Плюсы</h4><ul><li>Уже убрали 1984 строк-мусора</li><li>Каждое добавление — осознанный выбор</li><li>Хорошая база для чистой архитектуры</li></ul></div>
+        <div class="cons"><h4>Минусы</h4><ul><li>Нужно вручную разобрать 1984 удалённых строк</li><li>Некоторые дубли всё ещё в файле</li><li>Риск пропустить что-то важное</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>
