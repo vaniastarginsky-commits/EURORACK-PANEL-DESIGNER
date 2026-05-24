@@ -598,10 +598,15 @@ function PropertiesPanel() {
       onChange: (v) => patch({ rearDepth: v }),
     }),
     React.createElement(
-      "button",
+      "div",
       {
         className: "advanced-disclosure-toggle",
+        role: "button",
+        tabIndex: 0,
         onClick: () => setAdvancedOpen((o) => !o),
+        onKeyDown: (e) => {
+          if (e.key === "Enter" || e.key === " ") setAdvancedOpen((o) => !o);
+        },
       },
       React.createElement(
         "span",
