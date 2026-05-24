@@ -183,7 +183,7 @@
 
     backdrop = document.createElement("div");
     backdrop.className = "appearance-modal-backdrop";
-    backdrop.hidden = true;
+    backdrop.style.display = "none";
 
     const card = document.createElement("div");
     card.className = "appearance-modal-card";
@@ -239,11 +239,11 @@
     const b = ensureBackdrop();
     const oldBody = b.querySelector(".appearance-modal-body");
     if (oldBody) oldBody.replaceWith(buildBody());
-    b.hidden = false;
+    b.style.display = "";
   }
 
   function close() {
-    if (backdrop) backdrop.hidden = true;
+    if (backdrop) backdrop.style.display = "none";
   }
 
   window.AppearanceModal = { open, close };
