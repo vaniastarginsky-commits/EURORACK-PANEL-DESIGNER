@@ -4471,6 +4471,19 @@ html.pd-contrast-on::after {
     display: none !important;
   }
 
+  /* Help and Right panel moved to topbar on mobile — hide from the rail */
+  .canvas-tool-rail .rail-help-btn,
+  .canvas-tool-rail .rail-right-btn {
+    display: none !important;
+  }
+
+  /* Compact icon-only buttons in mobile topbar */
+  .global-topbar .topbar-icon-btn {
+    min-width: 34px !important;
+    width: 34px !important;
+    padding: 0 !important;
+  }
+
   /* v-mobile-bar-stretch: context bar buttons fill width equally */
   .mobile-selection-actions.v267-context-bar {
     display: flex !important;

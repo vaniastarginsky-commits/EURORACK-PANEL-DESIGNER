@@ -1759,7 +1759,6 @@ function App() {
       if (!isDesktopMouse) {
         e.preventDefault();
         dispatch({ type: "DESELECT_ALL" });
-        showMobileToast("Selection cleared");
         setPendingMarquee(null);
         setMarqueeSelection(null);
         resetCanvasInteractionMode();
@@ -3490,10 +3489,9 @@ function App() {
       onOpenLocalProjects: () => setShowLocalProjectsDialog(true),
       onOpenProductionCheck: () => setShowProductionCheck(true),
       onOpenShortcuts: () => setShowShortcutHelp(true),
-      rightPanelOpen: !isNarrowInitial ? rightPanelOpen : undefined,
-      onToggleRightPanel: !isNarrowInitial
-        ? () => setRightPanelOpen((v) => !v)
-        : undefined,
+      isNarrow: isNarrowInitial,
+      rightPanelOpen: rightPanelOpen,
+      onToggleRightPanel: () => setRightPanelOpen((v) => !v),
     }),
     showCommandPalette &&
       React.createElement(CommandPalette, {
@@ -4454,7 +4452,6 @@ function App() {
                           dispatch({ type: "DESELECT_ALL" });
                           setShowMobileSelectionMore(false);
                           setShowMobileNudge(false);
-                          showMobileToast("Selection cleared");
                         },
                       },
                       "Clear selection",

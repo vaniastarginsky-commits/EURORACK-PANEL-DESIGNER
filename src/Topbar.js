@@ -6,6 +6,7 @@ function Topbar({
   onOpenLocalProjects,
   onOpenProductionCheck,
   onOpenShortcuts,
+  isNarrow,
   rightPanelOpen,
   onToggleRightPanel,
 }) {
@@ -173,44 +174,105 @@ function Topbar({
           menuButton("templates", "Templates"),
           menuButton("file", "File"),
         ),
-        React.createElement(
-          "button",
-          {
-            className: `toolbar-menu-trigger toolbar-help-trigger ${openMenu === "help" ? "active" : ""}`,
-            onClick: (e) => toggleMenu("help", e),
-            title: "Help, shortcuts and manufacturing notes",
-          },
-          "Help",
-        ),
-        onToggleRightPanel &&
-          React.createElement(
-            "button",
-            {
-              className: `toolbar-menu-trigger topbar-inspect-btn ${rightPanelOpen ? "active" : ""}`,
-              onClick: onToggleRightPanel,
-              title: "Toggle inspector panel (→)",
-            },
-            React.createElement(
-              "span",
-              { className: "topbar-inspect-label" },
-              "Sidebar",
-            ),
-            React.createElement(
-              "svg",
+        isNarrow
+          ? React.createElement(
+              "button",
               {
-                width: 14,
-                height: 14,
-                viewBox: "0 0 24 24",
-                fill: "none",
-                stroke: "currentColor",
-                strokeWidth: 2,
-                strokeLinecap: "round",
-                strokeLinejoin: "round",
-                "aria-hidden": "true",
+                className: "toolbar-menu-trigger topbar-icon-btn",
+                onClick: () => onOpenShortcuts?.(),
+                title: "Help & shortcuts",
               },
-              React.createElement("path", { d: "M9 18l6-6-6-6" }),
+              React.createElement(
+                "svg",
+                {
+                  width: 16,
+                  height: 16,
+                  viewBox: "0 0 24 24",
+                  fill: "none",
+                  stroke: "currentColor",
+                  strokeWidth: 1.7,
+                  strokeLinecap: "round",
+                  strokeLinejoin: "round",
+                  "aria-hidden": "true",
+                },
+                React.createElement("path", {
+                  d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3",
+                }),
+                React.createElement("circle", {
+                  cx: "12",
+                  cy: "17",
+                  r: "0.5",
+                  fill: "currentColor",
+                }),
+              ),
+            )
+          : React.createElement(
+              "button",
+              {
+                className: `toolbar-menu-trigger toolbar-help-trigger ${openMenu === "help" ? "active" : ""}`,
+                onClick: (e) => toggleMenu("help", e),
+                title: "Help, shortcuts and manufacturing notes",
+              },
+              "Help",
             ),
-          ),
+        isNarrow
+          ? onToggleRightPanel &&
+            React.createElement(
+              "button",
+              {
+                className: `toolbar-menu-trigger topbar-icon-btn ${rightPanelOpen ? "active" : ""}`,
+                onClick: onToggleRightPanel,
+                title: "Toggle right panel",
+              },
+              React.createElement(
+                "svg",
+                {
+                  width: 16,
+                  height: 16,
+                  viewBox: "0 0 24 24",
+                  fill: "none",
+                  stroke: "currentColor",
+                  strokeWidth: 1.7,
+                  strokeLinecap: "round",
+                  strokeLinejoin: "round",
+                  "aria-hidden": "true",
+                },
+                React.createElement("path", {
+                  d: "M21 3H3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z",
+                }),
+                React.createElement("path", { d: "M15 3v18" }),
+                React.createElement("path", { d: "M19 10l3 2-3 2" }),
+              ),
+            )
+          : onToggleRightPanel &&
+            React.createElement(
+              "button",
+              {
+                className: `toolbar-menu-trigger topbar-inspect-btn ${rightPanelOpen ? "active" : ""}`,
+                onClick: onToggleRightPanel,
+                title: "Toggle inspector panel (→)",
+              },
+              React.createElement(
+                "span",
+                { className: "topbar-inspect-label" },
+                "Sidebar",
+              ),
+              React.createElement(
+                "svg",
+                {
+                  width: 14,
+                  height: 14,
+                  viewBox: "0 0 24 24",
+                  fill: "none",
+                  stroke: "currentColor",
+                  strokeWidth: 2,
+                  strokeLinecap: "round",
+                  strokeLinejoin: "round",
+                  "aria-hidden": "true",
+                },
+                React.createElement("path", { d: "M9 18l6-6-6-6" }),
+              ),
+            ),
       ),
     ),
     openMenu &&

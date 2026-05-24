@@ -282,6 +282,7 @@ function CanvasToolRail({
         },
       }),
       command("Help", ICON.help, {
+        className: "rail-help-btn",
         onClick: () => {
           setOpenMenu(null);
           onOpenShortcuts();
