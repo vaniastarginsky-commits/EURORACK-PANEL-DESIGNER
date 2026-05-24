@@ -4611,6 +4611,10 @@ html[data-preset="synthwave"] {
   background:
     radial-gradient(ellipse at 50% 55%, rgba(160,40,220,.35) 0%, rgba(100,10,180,.18) 30%, transparent 58%)}
 
+/* SVG gets a solid dark bg so the gradient doesn't bleed through the SVG padding area */
+[data-preset="synthwave"] .panel-canvas-svg {
+  background: #08010f}
+
 [data-preset="synthwave"] .canvas-wrap > div:first-child {
   z-index: 1;
   filter: drop-shadow(0 0 18px rgba(120,30,200,.45))}
