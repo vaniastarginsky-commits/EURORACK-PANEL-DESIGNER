@@ -4835,6 +4835,37 @@ html[data-style="glass"] .mobile-topbar {
   .appearance-modal-card { width: 100%; max-height: calc(100vh - 20px); }
 }
 
+.appearance-accent-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.appearance-accent-strip {
+  flex: 1;
+  height: 14px;
+  border-radius: 7px;
+  background: linear-gradient(to right,
+    hsl(0,78%,58%),hsl(20,78%,58%),hsl(40,78%,58%),hsl(60,78%,58%),
+    hsl(80,78%,58%),hsl(100,78%,58%),hsl(120,78%,58%),hsl(140,78%,58%),
+    hsl(160,78%,58%),hsl(180,78%,58%),hsl(200,78%,58%),hsl(220,78%,58%),
+    hsl(240,78%,58%),hsl(260,78%,58%),hsl(280,78%,58%),hsl(300,78%,58%),
+    hsl(320,78%,58%),hsl(340,78%,58%),hsl(360,78%,58%)
+  );
+  position: relative;
+  cursor: crosshair;
+}
+.appearance-accent-cursor {
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.9);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 1px 4px rgba(0,0,0,.7);
+  pointer-events: none;
+}
+
 /* === Synthwave preset atmosphere ========================================= */
 
 [data-preset="synthwave"] .canvas-wrap {
