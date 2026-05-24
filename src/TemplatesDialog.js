@@ -960,54 +960,54 @@ function TemplatesDialog({ onClose, onPlaceBlock }) {
               ),
             ),
           ),
-        templateLoadPending &&
+      ),
+      templateLoadPending &&
+        React.createElement(
+          "div",
+          {
+            className: "inline-modal-layer",
+            onPointerDown: (e) => {
+              if (e.target === e.currentTarget) setTemplateLoadPending(null);
+            },
+          },
           React.createElement(
             "div",
-            {
-              className: "inline-modal-layer",
-              onPointerDown: (e) => {
-                if (e.target === e.currentTarget) setTemplateLoadPending(null);
-              },
-            },
+            { className: "inline-modal-card" },
             React.createElement(
               "div",
-              { className: "inline-modal-card" },
+              { className: "inline-modal-title" },
+              "Load panel template",
+            ),
+            React.createElement(
+              "div",
+              { className: "inline-modal-subtitle" },
+              "This replaces the current layout with the selected panel template. Custom parts are preserved/merged.",
+            ),
+            React.createElement(
+              "div",
+              { className: "delete-confirm-name" },
+              "\u201C",
+              templateLoadPending.template.name,
+              "\u201D \u00B7 ",
+              templateLoadPending.template.hp,
+              "HP",
+            ),
+            React.createElement(
+              "div",
+              { className: "inline-modal-actions" },
               React.createElement(
-                "div",
-                { className: "inline-modal-title" },
-                "Load panel template",
+                "button",
+                { onClick: () => setTemplateLoadPending(null) },
+                "Cancel",
               ),
               React.createElement(
-                "div",
-                { className: "inline-modal-subtitle" },
-                "This replaces the current layout with the selected panel template. Custom parts are preserved/merged.",
-              ),
-              React.createElement(
-                "div",
-                { className: "delete-confirm-name" },
-                "\u201C",
-                templateLoadPending.template.name,
-                "\u201D \u00B7 ",
-                templateLoadPending.template.hp,
-                "HP",
-              ),
-              React.createElement(
-                "div",
-                { className: "inline-modal-actions" },
-                React.createElement(
-                  "button",
-                  { onClick: () => setTemplateLoadPending(null) },
-                  "Cancel",
-                ),
-                React.createElement(
-                  "button",
-                  { className: "primary", onClick: confirmTemplateLoad },
-                  "Load template",
-                ),
+                "button",
+                { className: "primary", onClick: confirmTemplateLoad },
+                "Load template",
               ),
             ),
           ),
-      ),
+        ),
     ),
     document.body,
   );

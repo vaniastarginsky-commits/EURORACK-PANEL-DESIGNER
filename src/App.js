@@ -3801,6 +3801,7 @@ function App() {
         showSafeZones: showSafeZones,
         editingTextId: editingTextId,
         onSVGDoubleClick: onSVGDoubleClick,
+        onZoomChange: setZoom,
       }),
       editingTextId &&
         (() => {

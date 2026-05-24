@@ -191,6 +191,11 @@ function Topbar({
               title: "Toggle inspector panel (→)",
             },
             React.createElement(
+              "span",
+              { className: "topbar-inspect-label" },
+              "Sidebar",
+            ),
+            React.createElement(
               "svg",
               {
                 width: 14,

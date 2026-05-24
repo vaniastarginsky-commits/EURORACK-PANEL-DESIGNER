@@ -2740,6 +2740,7 @@ function SVGCanvas({
   showSafeZones = false,
   editingTextId,
   onSVGDoubleClick,
+  onZoomChange,
 }) {
   const state = useAppState();
   const dispatch = useAppDispatch();
@@ -3494,6 +3495,34 @@ function SVGCanvas({
             "div",
             { className: "coord-readout" },
             coordReadout,
+          ),
+        onZoomChange &&
+          React.createElement(
+            "div",
+            {
+              className: "zoom-hud-control",
+              onMouseDown: (e) => e.stopPropagation(),
+              onTouchStart: (e) => e.stopPropagation(),
+            },
+            React.createElement(
+              "span",
+              {
+                className: "zoom-hud-value",
+                onClick: () => onZoomChange(1),
+                title: "Reset zoom to 100%",
+              },
+              Math.round(zoom * 100),
+              "%",
+            ),
+            React.createElement("input", {
+              type: "range",
+              className: "zoom-hud-slider",
+              min: 0.25,
+              max: 6,
+              step: 0.05,
+              value: zoom,
+              onChange: (e) => onZoomChange(parseFloat(e.target.value)),
+            }),
           ),
       ),
       React.createElement(
