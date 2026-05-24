@@ -13,7 +13,7 @@ textarea{resize:vertical}
 label{display:block;color:#928b7d}
 .app-shell,.designer-shell,.workspace-shell,.main-shell,.layout-shell{height:100%;min-height:0}
 .app-shell,.designer-shell,.workspace-shell{display:grid!important;grid-template-rows:auto 1fr!important;background:#020202}
-.topbar,.top-bar,.app-topbar,.toolbar-main{height:auto;min-height:42px;display:flex!important;align-items:center!important;gap:6px!important;padding:4px 8px!important;border-bottom:1px solid rgba(var(--ui-line-rgb),.12)!important;background:#050505;white-space:nowrap;overflow:hidden}
+.topbar,.top-bar,.app-topbar,.toolbar-main{height:auto;min-height:42px;display:flex!important;align-items:center!important;gap:6px!important;padding:4px 8px!important;border-bottom:1px solid rgba(var(--ui-line-rgb),.12)!important;background:var(--ui-topbar-bg);white-space:nowrap;overflow:hidden}
 .topbar .brand,.brand,.logo-title{display:flex!important;align-items:center!important;gap:8px!important;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
 .main,.editor-layout,.panel-designer-layout{height:100%;min-height:0;display:grid!important;grid-template-columns:280px minmax(0,1fr)300px!important;grid-template-rows:1fr!important;overflow:hidden!important}
 .left-sidebar,.left-panel,.drawer-left{min-width:0;height:100%;overflow:auto!important;border-right:1px solid rgba(var(--ui-line-rgb),.12)!important;background:#030303;padding:8px!important}
