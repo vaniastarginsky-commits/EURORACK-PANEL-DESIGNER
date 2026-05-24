@@ -230,37 +230,7 @@ function Topbar({
             ),
           ),
         isNarrow
-          ? React.createElement(
-              "button",
-              {
-                className: "toolbar-menu-trigger topbar-icon-btn",
-                onClick: () => onOpenShortcuts?.(),
-                title: "Help & shortcuts",
-              },
-              React.createElement(
-                "svg",
-                {
-                  width: 16,
-                  height: 16,
-                  viewBox: "0 0 24 24",
-                  fill: "none",
-                  stroke: "currentColor",
-                  strokeWidth: 1.7,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                  "aria-hidden": "true",
-                },
-                React.createElement("path", {
-                  d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3",
-                }),
-                React.createElement("circle", {
-                  cx: "12",
-                  cy: "17",
-                  r: "0.5",
-                  fill: "currentColor",
-                }),
-              ),
-            )
+          ? null
           : React.createElement(
               "button",
               {

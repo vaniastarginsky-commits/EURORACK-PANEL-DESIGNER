@@ -88,6 +88,22 @@ function App() {
   const [showMobileNudge, setShowMobileNudge] = useState(false);
   const [showMobileSelectionMore, setShowMobileSelectionMore] = useState(false);
   const [showMobileArrange, setShowMobileArrange] = useState(false);
+  useEffect(() => {
+    function onRequestMore() {
+      setShowMobileNudge(false);
+      setShowMobileSelectionMore(true);
+    }
+    function onRequestNudge() {
+      setShowMobileSelectionMore(false);
+      setShowMobileNudge(true);
+    }
+    window.addEventListener("panel-designer:request-selection-more", onRequestMore);
+    window.addEventListener("panel-designer:request-nudge-mode", onRequestNudge);
+    return () => {
+      window.removeEventListener("panel-designer:request-selection-more", onRequestMore);
+      window.removeEventListener("panel-designer:request-nudge-mode", onRequestNudge);
+    };
+  }, []);
   const [showTouchHitboxes, setShowTouchHitboxes] = useState(false);
   const [showSafeZones, setShowSafeZones] = useState(false);
   const [mobileFineMode, setMobileFineMode] = useState(false);
