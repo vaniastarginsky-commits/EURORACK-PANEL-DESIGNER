@@ -3195,7 +3195,7 @@ input[type="number"],
   .canvas-tool-button.active {
     border-color:rgba(var(--ui-gold-rgb),.76);
     background:var(--ui-btn-active-bg);
-    box-shadow: inset 0 0 0 1px rgba(214, 170, 88, .42)}
+    box-shadow: inset 0 0 0 1px rgba(var(--ui-gold-rgb), .42)}
 
   .view-contrast-panel {
     position: fixed ;
@@ -3509,10 +3509,10 @@ html.pd-contrast-on::after {
   width: var(--pd-rail-button, 64px);
   padding: 8px 0;
   overflow: hidden;
-  border: 1px solid rgba(215, 196, 155, .25);
+  border: 1px solid rgba(var(--ui-line-rgb), .25);
   background:
-    linear-gradient(180deg, rgba(20, 16, 9, .84), rgba(4, 4, 4, .95)),
-    repeating-linear-gradient(0deg, rgba(215, 196, 155, .045), rgba(215, 196, 155, .045) 1px, transparent 1px, transparent 8px);
+    linear-gradient(180deg, color-mix(in srgb, var(--ui-panel) 84%, transparent), color-mix(in srgb, var(--ui-bg) 95%, transparent)),
+    repeating-linear-gradient(0deg, rgba(var(--ui-line-rgb), .045), rgba(var(--ui-line-rgb), .045) 1px, transparent 1px, transparent 8px);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .018)}
 
 .canvas-tool-separator {
@@ -3536,14 +3536,14 @@ html.pd-contrast-on::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #e9dcc4;
+  color: var(--ui-text-soft);
   line-height: 1}
 
 .canvas-tool-label {
   display: block;
   max-width: 100%;
   overflow: hidden;
-  color: #b4aa96;
+  color: var(--ui-muted);
   font-size: 8.5px;
   font-weight: 760;
   letter-spacing: .10em;
@@ -3651,8 +3651,8 @@ html.pd-contrast-on::after {
     z-index: 1210;
     width: 24px;
     height: 60px;
-    background: linear-gradient(180deg, rgba(20, 16, 9, .93), rgba(4, 4, 4, .97));
-    border: 1px solid rgba(215, 196, 155, .22);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--ui-panel) 93%, transparent), color-mix(in srgb, var(--ui-bg) 97%, transparent));
+    border: 1px solid rgba(var(--ui-line-rgb), .22);
     border-radius: 3px;
     display: flex;
     align-items: center;
