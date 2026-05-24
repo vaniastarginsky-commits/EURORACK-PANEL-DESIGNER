@@ -306,21 +306,11 @@ function ComponentHoverTooltip({ component, warnings, x, y }) {
     ["Status", status],
   ];
   const cardW = 260;
-  const cardH = related.length > 0 || component.locked ? 236 : 210;
-  const margin = 10;
-  const gap = 12;
-  const vw = window.innerWidth || document.documentElement.clientWidth || 1024;
-  const vh = window.innerHeight || document.documentElement.clientHeight || 768;
-  let left = x + gap;
-  let top = y - cardH / 2;
-  if (left + cardW + margin > vw) left = x - cardW - gap;
-  left = Math.max(margin, Math.min(left, vw - cardW - margin));
-  top = Math.max(margin, Math.min(top, vh - cardH - margin));
   return React.createElement(
     "div",
     {
       className: `component-hover-card ${hard ? "has-errors" : warn ? "has-warnings" : ""}`,
-      style: { left, top, width: cardW },
+      style: { width: cardW },
     },
     React.createElement(
       "div",
