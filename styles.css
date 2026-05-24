@@ -146,6 +146,14 @@ canvas, svg { max-width: none; }
   text-transform: uppercase;
 }
 
+.app-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+
 .topbar-history-group,
 .topbar-inspect-btn {
   display: flex;
@@ -215,12 +223,13 @@ h3, h4 {
 }
 
 .kv,
-.status-row {
+.status-row,
+.measurement-row {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  gap: 12px;
   border-bottom: 1px solid rgba(var(--ui-line-rgb), .08);
-  padding: 3px 0;
+  padding: 4px 0;
 }
 
 .tabs,
