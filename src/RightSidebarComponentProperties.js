@@ -585,30 +585,6 @@ function PropertiesPanel() {
       ),
     React.createElement(
       "div",
-      { className: "section-title", style: { marginTop: 8 } },
-      "Rear Body",
-    ),
-    React.createElement(
-      "div",
-      { className: "front-compact-grid" },
-      React.createElement(NumFieldCompact, {
-        label: "Width",
-        value: c.rearBodyW,
-        onChange: (v) => patch({ rearBodyW: v }),
-      }),
-      React.createElement(NumFieldCompact, {
-        label: "Height",
-        value: c.rearBodyH,
-        onChange: (v) => patch({ rearBodyH: v }),
-      }),
-      React.createElement(NumFieldCompact, {
-        label: "Depth",
-        value: c.rearDepth,
-        onChange: (v) => patch({ rearDepth: v }),
-      }),
-    ),
-    React.createElement(
-      "div",
       {
         className: "advanced-disclosure-toggle",
         role: "button",
@@ -629,6 +605,30 @@ function PropertiesPanel() {
       React.createElement(
         "div",
         { className: "advanced-disclosure-content" },
+        React.createElement(
+          "div",
+          { className: "section-title", style: { marginTop: 4 } },
+          "Rear Body",
+        ),
+        React.createElement(
+          "div",
+          { className: "front-compact-grid" },
+          React.createElement(NumFieldCompact, {
+            label: "Width",
+            value: c.rearBodyW,
+            onChange: (v) => patch({ rearBodyW: v }),
+          }),
+          React.createElement(NumFieldCompact, {
+            label: "Height",
+            value: c.rearBodyH,
+            onChange: (v) => patch({ rearBodyH: v }),
+          }),
+          React.createElement(NumFieldCompact, {
+            label: "Depth",
+            value: c.rearDepth,
+            onChange: (v) => patch({ rearDepth: v }),
+          }),
+        ),
         React.createElement(
           "div",
           { className: "front-compact-grid" },
