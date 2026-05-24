@@ -203,10 +203,20 @@
     try {
       const raw = localStorage.getItem(KEY);
       if (!raw)
-        return { preset: DEFAULT_PRESET, style: null, overrides: {}, glow: false };
+        return {
+          preset: DEFAULT_PRESET,
+          style: null,
+          overrides: {},
+          glow: false,
+        };
       const p = JSON.parse(raw);
       if (!p.preset || !PRESETS[p.preset])
-        return { preset: DEFAULT_PRESET, style: null, overrides: {}, glow: false };
+        return {
+          preset: DEFAULT_PRESET,
+          style: null,
+          overrides: {},
+          glow: false,
+        };
       const defaultGlow = PRESETS[p.preset].defaultGlow ?? false;
       return {
         preset: p.preset,
@@ -215,7 +225,12 @@
         glow: p.glow != null ? p.glow : defaultGlow,
       };
     } catch {
-      return { preset: DEFAULT_PRESET, style: null, overrides: {}, glow: false };
+      return {
+        preset: DEFAULT_PRESET,
+        style: null,
+        overrides: {},
+        glow: false,
+      };
     }
   }
 

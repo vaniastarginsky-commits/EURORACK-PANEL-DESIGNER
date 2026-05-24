@@ -36,11 +36,20 @@
   }
 
   function getActiveGlow() {
-    return state.glow ?? (window.ThemeEngine.PRESETS[state.preset]?.defaultGlow ?? false);
+    return (
+      state.glow ??
+      window.ThemeEngine.PRESETS[state.preset]?.defaultGlow ??
+      false
+    );
   }
 
   function applyAndSave() {
-    window.ThemeEngine.save(state.preset, state.style, state.overrides, state.glow);
+    window.ThemeEngine.save(
+      state.preset,
+      state.style,
+      state.overrides,
+      state.glow,
+    );
   }
 
   function buildPresetCards() {
@@ -184,9 +193,14 @@
       glowSection.appendChild(glowLabel);
       glowSection.appendChild(
         buildSegControl(
-          [{ label: "Off", value: false }, { label: "On", value: true }],
+          [
+            { label: "Off", value: false },
+            { label: "On", value: true },
+          ],
           getActiveGlow,
-          (v) => { state.glow = v; },
+          (v) => {
+            state.glow = v;
+          },
         ),
       );
       body.appendChild(glowSection);
