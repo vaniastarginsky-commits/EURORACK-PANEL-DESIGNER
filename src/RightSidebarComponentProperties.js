@@ -316,25 +316,25 @@ function PropertiesPanel() {
     ),
     React.createElement(
       "div",
-      { className: "field-pair" },
-      React.createElement(NumField, {
+      { className: "front-compact-grid" },
+      React.createElement(NumFieldCompact, {
         label: "X (mm)",
         value: c.x,
         onChange: (v) => patch({ x: v }),
       }),
-      React.createElement(NumField, {
+      React.createElement(NumFieldCompact, {
         label: "Y (mm)",
         value: c.y,
         onChange: (v) => patch({ y: v }),
       }),
+      React.createElement(NumFieldCompact, {
+        label: "Rotation (\u00B0)",
+        value: c.rotation,
+        step: 5,
+        min: -360,
+        onChange: (v) => patch({ rotation: v }),
+      }),
     ),
-    React.createElement(NumField, {
-      label: "Rotation (\u00B0)",
-      value: c.rotation,
-      step: 5,
-      min: -360,
-      onChange: (v) => patch({ rotation: v }),
-    }),
     React.createElement(
       "div",
       { className: "section-title", style: { marginTop: 8 } },
