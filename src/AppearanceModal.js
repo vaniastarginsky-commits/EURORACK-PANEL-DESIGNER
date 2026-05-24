@@ -32,9 +32,7 @@
 
   function getActiveStyle() {
     if (state.style != null) return state.style;
-    return (
-      window.ThemeEngine.PRESETS[state.preset]?.defaultStyle ?? "flat"
-    );
+    return window.ThemeEngine.PRESETS[state.preset]?.defaultStyle ?? "flat";
   }
 
   function applyAndSave() {
@@ -165,13 +163,9 @@
     styleLabel.textContent = "Visual Style";
     styleSection.appendChild(styleLabel);
     styleSection.appendChild(
-      buildSegControl(
-        window.ThemeEngine.STYLE_OPTIONS,
-        getActiveStyle,
-        (v) => {
-          state.style = v;
-        },
-      ),
+      buildSegControl(window.ThemeEngine.STYLE_OPTIONS, getActiveStyle, (v) => {
+        state.style = v;
+      }),
     );
     body.appendChild(styleSection);
 
