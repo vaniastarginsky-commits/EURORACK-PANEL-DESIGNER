@@ -4583,9 +4583,24 @@ html[data-style="glass"] .mobile-topbar {
 
 /* === Synthwave preset atmosphere ========================================= */
 
-[data-preset="synthwave"] .canvas-wrap {
-  background: var(--ui-bg)}
+/* Full-screen gradient — set on html element so it underlays everything */
+html[data-preset="synthwave"] {
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 29px, rgba(120,50,210,.07) 29px, rgba(120,50,210,.07) 30px),
+    repeating-linear-gradient(90deg, transparent, transparent 29px, rgba(120,50,210,.07) 29px, rgba(120,50,210,.07) 30px),
+    radial-gradient(ellipse at 50% 78%, rgba(140,30,210,.72) 0%, rgba(90,10,155,.44) 28%, rgba(40,5,80,.22) 52%, transparent 72%),
+    #08010f}
 
+/* Make containers transparent so html gradient shows through */
+[data-preset="synthwave"] body,
+[data-preset="synthwave"] #root,
+[data-preset="synthwave"] .app-shell,
+[data-preset="synthwave"] .designer-shell,
+[data-preset="synthwave"] .workspace-shell,
+[data-preset="synthwave"] .canvas-wrap {
+  background: transparent}
+
+/* Lighter local canvas accent — html gradient already provides the main glow */
 [data-preset="synthwave"] .canvas-wrap::after {
   content: '';
   display: block;
@@ -4594,12 +4609,15 @@ html[data-style="glass"] .mobile-topbar {
   z-index: 0;
   pointer-events: none;
   background:
-    repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,.10) 3px, rgba(0,0,0,.10) 4px),
-    radial-gradient(ellipse at 50% 55%, rgba(160,40,220,.75) 0%, rgba(100,10,180,.50) 25%, rgba(40,5,80,.28) 55%, transparent 75%)}
+    radial-gradient(ellipse at 50% 55%, rgba(160,40,220,.35) 0%, rgba(100,10,180,.18) 30%, transparent 58%)}
 
 [data-preset="synthwave"] .canvas-wrap > div:first-child {
   z-index: 1;
   filter: drop-shadow(0 0 18px rgba(120,30,200,.45))}
+
+/* Brand title: neon pink always in synthwave (glow adds text-shadow on top) */
+[data-preset="synthwave"] .app-title {
+  color: #ff2878}
 
 [data-preset="synthwave"][data-glow="on"] .app-title {
   text-shadow: 0 0 14px rgba(200,60,220,.9), 0 0 28px rgba(160,40,220,.5)}
