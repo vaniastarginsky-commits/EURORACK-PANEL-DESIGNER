@@ -4600,16 +4600,6 @@ html[data-preset="synthwave"] {
 [data-preset="synthwave"] .canvas-wrap {
   background: transparent}
 
-/* Lighter local canvas accent — html gradient already provides the main glow */
-[data-preset="synthwave"] .canvas-wrap::after {
-  content: '';
-  display: block;
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse at 50% 55%, rgba(160,40,220,.35) 0%, rgba(100,10,180,.18) 30%, transparent 58%)}
 
 [data-preset="synthwave"] .canvas-wrap > div:first-child {
   z-index: 1;
