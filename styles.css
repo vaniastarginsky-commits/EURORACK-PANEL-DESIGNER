@@ -169,7 +169,7 @@ canvas, svg { max-width: none; }
   height: 100%;
   overflow: auto;
   border-right: 1px solid rgba(var(--ui-line-rgb), .12);
-  background: #030303;
+  background: var(--ui-panel);
   padding: 8px;
 }
 
@@ -181,7 +181,7 @@ canvas, svg { max-width: none; }
   height: 100%;
   overflow: auto;
   border-left: 1px solid rgba(var(--ui-line-rgb), .12);
-  background: #030303;
+  background: var(--ui-panel);
   padding: 8px;
 }
 
@@ -382,14 +382,14 @@ h3, h4 {
 }
 
 .shortcut-help-backdrop{position:fixed;inset:0;z-index:2147483300;background:rgba(0,0,0,.72);display:grid;place-items:center;padding:24px;overflow:auto}
-.shortcut-help{position:relative;width:min(1180px,calc(100vw - 48px));max-height:calc(100vh - 48px);overflow:auto;background:#080807;border:1px solid rgba(var(--ui-line-rgb),.30);box-shadow:0 28px 90px rgba(0,0,0,.86);padding:18px;color:#d8d0c0}
+.shortcut-help{position:relative;width:min(1180px,calc(100vw - 48px));max-height:calc(100vh - 48px);overflow:auto;background:var(--ui-panel);border:1px solid rgba(var(--ui-line-rgb),.30);box-shadow:0 28px 90px rgba(0,0,0,.86);padding:18px;color:var(--ui-text-soft)}
 .shortcut-help-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
-.shortcut-help-head h2,.shortcut-help h2{margin:0;color:#eee7da;font-size:20px;letter-spacing:-.02em}
+.shortcut-help-head h2,.shortcut-help h2{margin:0;color:var(--ui-text);font-size:20px;letter-spacing:-.02em}
 .shortcut-help-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.shortcut-help-card{background:#050505;border:1px solid rgba(var(--ui-line-rgb),.16);padding:12px;min-height:160px}
+.shortcut-help-card{background:var(--ui-surface);border:1px solid rgba(var(--ui-line-rgb),.16);padding:12px;min-height:160px}
 .shortcut-help-card h3{margin:0 0 10px;color:#7ee7f1;font-size:12px;font-weight:900;letter-spacing:.18em;text-transform:uppercase}
 .shortcut-help-card .shortcut-row,.shortcut-help-card div{line-height:1.25}
-.shortcut-help-card kbd,.shortcut-help-card code{display:inline-block;margin:2px 8px 2px 0;padding:3px 7px;background:#11110f;border:1px solid rgba(var(--ui-line-rgb),.20);color:#eee7da;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+.shortcut-help-card kbd,.shortcut-help-card code{display:inline-block;margin:2px 8px 2px 0;padding:3px 7px;background:var(--ui-bg);border:1px solid rgba(var(--ui-line-rgb),.20);color:var(--ui-text);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
 .shortcut-help button{position:sticky;top:0;float:right;z-index:2}
 
 .component-library-popover{position:fixed;left:50%;bottom:58px;transform:translateX(-50%);z-index:2147482500;width:min(1180px,calc(100vw - 32px));max-height:min(58vh,620px);overflow:auto;background:var(--ui-panel);border:1px solid rgba(var(--ui-line-rgb),.24);box-shadow:0 24px 80px rgba(0,0,0,.82);padding:12px;color:var(--ui-text)}
@@ -2734,9 +2734,27 @@ h3, h4 {
 
 /* ux-polish: focus, density, and dialog readability */
 :root {
-  --ux-focus: #f0c36b;
+  --ux-focus: var(--ui-gold-2, #f0c36b);
   --ux-panel-raise: rgba(255, 255, 255, .035);
-  --ux-line: rgba(215, 196, 155, .18)}
+  --ux-line: rgba(var(--ui-line-rgb), .18);
+  --ui-sidebar-bg: var(--ui-surface);
+  --ui-sidebar-label: var(--ui-muted);
+  --ui-sidebar-text: var(--ui-text-soft);
+  --ui-section-header-bg: var(--ui-surface);
+  --ui-topbar-bg: var(--ui-panel);
+  --ui-input-bg: var(--ui-surface);
+  --ui-input-border: rgba(var(--ui-line-rgb), .22);
+  --ui-input-text: var(--ui-text);
+  --ui-hi-rgb: var(--ui-line-rgb);
+  --ui-btn-bg: var(--ui-surface);
+  --ui-btn-text: var(--ui-text-soft);
+  --ui-btn-hover-bg: var(--ui-surface-hover);
+  --ui-btn-active-bg: rgba(var(--ui-gold-rgb), .12);
+  --ui-btn-active-border: rgba(var(--ui-gold-rgb), .76);
+  --ui-btn-active-text: var(--ui-gold-2);
+  --ui-btn-danger-bg: rgba(200, 60, 60, .18);
+  --ui-btn-danger-text: #ff6b6b;
+  --ui-danger-rgb: 200, 60, 60}
 
 button:focus-visible,
 input:focus-visible,
@@ -2785,8 +2803,8 @@ textarea:focus-visible,
 input,
 select,
 textarea {
-  background-color: rgba(12, 14, 17, .72);
-  border-color: rgba(215, 196, 155, .22)}
+  background-color: var(--ui-input-bg);
+  border-color: rgba(var(--ui-line-rgb), .22)}
 
 input[type="number"],
 .numeric-input,
@@ -2799,7 +2817,7 @@ input[type="number"],
 .export-dialog-panel,
 .template-manager-panel,
 .mobile-bottom-sheet {
-  border: 1px solid rgba(215, 196, 155, .22);
+  border: 1px solid rgba(var(--ui-line-rgb), .22);
   box-shadow: 0 22px 80px rgba(0, 0, 0, .38), inset 0 1px 0 rgba(255, 255, 255, .04)}
 
 .modal-header,
