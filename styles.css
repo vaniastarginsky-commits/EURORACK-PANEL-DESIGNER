@@ -137,13 +137,22 @@ canvas, svg { max-width: none; }
 
 .topbar .brand,
 .brand,
-.logo-title {
+.logo-title,
+.app-brand {
   display: flex;
   align-items: center;
   gap: 8px;
   font-weight: 900;
   letter-spacing: .16em;
   text-transform: uppercase;
+}
+
+.app-title {
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .app-logo {
@@ -366,6 +375,8 @@ h3, h4 {
 .app-number-input{width:100%;min-height:42px;text-align:center;font-size:16px}
 .danger-title{color:#e1a09a}
 .delete-confirm-name{margin-top:12px;padding:10px;border:1px solid rgba(var(--ui-danger-rgb),.40);background:rgba(var(--ui-danger-rgb),.08);color:#e8ddc9;font-size:12px;word-break:break-all}
+.workspace-overlay{position:absolute;inset:0;z-index:16;pointer-events:none}
+.workspace-overlay .hud-zone{position:absolute;pointer-events:auto}
 /* ===== 9. Components ===== */
 
 .sidebar-right{font-size:13px;line-height:1.28}
@@ -1874,7 +1885,15 @@ h3, h4 {
 
 /* Keep it below the main status HUD */
 .canvas-hud{
-  z-index:60}
+  position:absolute;
+  top:10px;
+  left:10px;
+  z-index:60;
+  display:flex;
+  gap:6px;
+  align-items:center;
+  pointer-events:none;
+  color:#d8d0c0}
 @media(max-width:900px){
   .component-info-tooltip,
   .component-tooltip,
