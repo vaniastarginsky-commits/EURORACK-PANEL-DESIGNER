@@ -340,51 +340,60 @@ function PropertiesPanel() {
       { className: "section-title", style: { marginTop: 8 } },
       "Front",
     ),
-    React.createElement(
-      "div",
-      { className: hasNutWasherHardware(c) ? "field-pair" : "field-row" },
-      React.createElement(NumField, {
-        label: "Hole \u00D8 (mm)",
-        value: c.holeDiameter,
-        onChange: (v) => patch({ holeDiameter: v }),
-      }),
-      hasNutWasherHardware(c) &&
-        React.createElement(NumField, {
-          label: "Nut \u00D8 (mm)",
-          value: c.nutDiameter ?? c.holeDiameter + 2,
-          onChange: (v) => patch({ nutDiameter: v }),
-        }),
-    ),
+    hasNutWasherHardware(c)
+      ? React.createElement(
+          "div",
+          { className: "front-compact-grid" },
+          React.createElement(NumFieldCompact, {
+            label: "Hole \u00D8",
+            value: c.holeDiameter,
+            onChange: (v) => patch({ holeDiameter: v }),
+          }),
+          React.createElement(NumFieldCompact, {
+            label: "Nut \u00D8",
+            value: c.nutDiameter ?? c.holeDiameter + 2,
+            onChange: (v) => patch({ nutDiameter: v }),
+          }),
+          React.createElement(NumFieldCompact, {
+            label: "Washer \u00D8",
+            value: c.washerDiameter ?? c.frontDiameter,
+            onChange: (v) => patch({ washerDiameter: v, frontDiameter: v }),
+          }),
+          React.createElement(NumFieldCompact, {
+            label: "Min spacing",
+            value: c.minSpacing,
+            onChange: (v) => patch({ minSpacing: v }),
+          }),
+        )
+      : React.createElement(
+          React.Fragment,
+          null,
+          React.createElement(NumField, {
+            label: "Hole \u00D8 (mm)",
+            value: c.holeDiameter,
+            onChange: (v) => patch({ holeDiameter: v }),
+          }),
+          React.createElement(NumField, {
+            label: "Min spacing (mm)",
+            value: c.minSpacing,
+            onChange: (v) => patch({ minSpacing: v }),
+          }),
+        ),
     c.holeType === "rect" &&
       React.createElement(
         "div",
-        { className: "field-pair" },
-        React.createElement(NumField, {
-          label: "Hole W (mm)",
+        { className: "front-compact-grid" },
+        React.createElement(NumFieldCompact, {
+          label: "Hole W",
           value: c.holeW ?? c.frontW ?? c.holeDiameter,
           onChange: (v) => patch({ holeW: v, frontW: v, frontShape: "rect" }),
         }),
-        React.createElement(NumField, {
-          label: "Hole H (mm)",
+        React.createElement(NumFieldCompact, {
+          label: "Hole H",
           value: c.holeH ?? c.frontH ?? c.holeDiameter,
           onChange: (v) => patch({ holeH: v, frontH: v, frontShape: "rect" }),
         }),
       ),
-    React.createElement(
-      "div",
-      { className: hasNutWasherHardware(c) ? "field-pair" : "field-row" },
-      hasNutWasherHardware(c) &&
-        React.createElement(NumField, {
-          label: "Washer \u00D8 (mm)",
-          value: c.washerDiameter ?? c.frontDiameter,
-          onChange: (v) => patch({ washerDiameter: v, frontDiameter: v }),
-        }),
-      React.createElement(NumField, {
-        label: "Min spacing (mm)",
-        value: c.minSpacing,
-        onChange: (v) => patch({ minSpacing: v }),
-      }),
-    ),
     showKnobControls &&
       React.createElement(
         React.Fragment,
@@ -581,23 +590,23 @@ function PropertiesPanel() {
     ),
     React.createElement(
       "div",
-      { className: "field-pair" },
-      React.createElement(NumField, {
-        label: "Width (mm)",
+      { className: "front-compact-grid" },
+      React.createElement(NumFieldCompact, {
+        label: "Width",
         value: c.rearBodyW,
         onChange: (v) => patch({ rearBodyW: v }),
       }),
-      React.createElement(NumField, {
-        label: "Height (mm)",
+      React.createElement(NumFieldCompact, {
+        label: "Height",
         value: c.rearBodyH,
         onChange: (v) => patch({ rearBodyH: v }),
       }),
+      React.createElement(NumFieldCompact, {
+        label: "Depth",
+        value: c.rearDepth,
+        onChange: (v) => patch({ rearDepth: v }),
+      }),
     ),
-    React.createElement(NumField, {
-      label: "Depth (mm)",
-      value: c.rearDepth,
-      onChange: (v) => patch({ rearDepth: v }),
-    }),
     React.createElement(
       "div",
       {
@@ -622,27 +631,23 @@ function PropertiesPanel() {
         { className: "advanced-disclosure-content" },
         React.createElement(
           "div",
-          { className: "field-pair" },
-          React.createElement(NumField, {
-            label: "Panel min (mm)",
+          { className: "front-compact-grid" },
+          React.createElement(NumFieldCompact, {
+            label: "Panel min",
             value: c.panelThicknessMin ?? 0,
             onChange: (v) => patch({ panelThicknessMin: v }),
           }),
-          React.createElement(NumField, {
-            label: "Panel max (mm)",
+          React.createElement(NumFieldCompact, {
+            label: "Panel max",
             value: c.panelThicknessMax ?? 0,
             onChange: (v) => patch({ panelThicknessMax: v }),
           }),
-        ),
-        React.createElement(
-          "div",
-          { className: "field-pair" },
-          React.createElement(NumField, {
+          React.createElement(NumFieldCompact, {
             label: "Pin KO W",
             value: c.pinKeepoutW ?? 0,
             onChange: (v) => patch({ pinKeepoutW: v }),
           }),
-          React.createElement(NumField, {
+          React.createElement(NumFieldCompact, {
             label: "Pin KO H",
             value: c.pinKeepoutH ?? 0,
             onChange: (v) => patch({ pinKeepoutH: v }),
@@ -655,14 +660,14 @@ function PropertiesPanel() {
         ),
         React.createElement(
           "div",
-          { className: "field-pair" },
-          React.createElement(NumField, {
-            label: "KO Width (mm)",
+          { className: "front-compact-grid" },
+          React.createElement(NumFieldCompact, {
+            label: "KO Width",
             value: c.keepoutW,
             onChange: (v) => patch({ keepoutW: v }),
           }),
-          React.createElement(NumField, {
-            label: "KO Height (mm)",
+          React.createElement(NumFieldCompact, {
+            label: "KO Height",
             value: c.keepoutH,
             onChange: (v) => patch({ keepoutH: v }),
           }),

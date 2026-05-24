@@ -3,6 +3,33 @@
 
 // Shared field/card helpers for right sidebar panels.
 
+function NumFieldCompact({ label, value, onChange, step = 0.1, min = 0 }) {
+  const [draft, setDraft] = useState("");
+  return React.createElement(
+    "div",
+    { className: "compact-field" },
+    React.createElement("span", { className: "compact-field-label" }, label),
+    React.createElement("input", {
+      type: "number",
+      step: step,
+      min: min,
+      value: draft !== "" ? draft : value.toFixed(2),
+      onChange: (e) => setDraft(e.target.value),
+      onBlur: () => {
+        const v = parseFloat(draft);
+        if (!isNaN(v)) onChange(v);
+        setDraft("");
+      },
+      onKeyDown: (e) => {
+        if (e.key === "Enter") {
+          const v = parseFloat(draft);
+          if (!isNaN(v)) onChange(v);
+          setDraft("");
+        }
+      },
+    }),
+  );
+}
 function NumField({ label, value, onChange, step = 0.1, min = 0 }) {
   const [draft, setDraft] = useState("");
   return React.createElement(

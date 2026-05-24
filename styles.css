@@ -4612,6 +4612,31 @@ input[type=color]::-webkit-color-swatch {
   margin-bottom: 2px !important;
 }
 
+/* front-compact-grid: 2-column compact numeric fields (label above, input below) */
+.sidebar-right [data-component-properties="true"] .front-compact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px 8px;
+  margin: 3px 0;
+}
+.sidebar-right [data-component-properties="true"] .compact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.sidebar-right [data-component-properties="true"] .compact-field-label {
+  font-size: 10px;
+  color: #928b7d;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.sidebar-right [data-component-properties="true"] .compact-field input {
+  width: 100%;
+  text-align: center;
+}
+
 /* color-presets-row: small swatches outside field-row to avoid grid stretching */
 .sidebar-right [data-component-properties="true"] .color-presets-row {
   display: flex;
