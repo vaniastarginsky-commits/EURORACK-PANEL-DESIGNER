@@ -11,6 +11,7 @@
       swatchBg: "#020202",
       swatchAccent: "rgb(214,170,88)",
       defaultStyle: "flat",
+      defaultGlow: false,
       vars: {
         "--ui-bg": "#020202",
         "--ui-bg-2": "#050505",
@@ -42,6 +43,7 @@
       swatchBg: "#0a0a0a",
       swatchAccent: "rgb(180,180,180)",
       defaultStyle: "flat",
+      defaultGlow: false,
       vars: {
         "--ui-bg": "#0a0a0a",
         "--ui-bg-2": "#0e0e0e",
@@ -73,6 +75,7 @@
       swatchBg: "#050800",
       swatchAccent: "rgb(80,230,100)",
       defaultStyle: "flat",
+      defaultGlow: false,
       vars: {
         "--ui-bg": "#050800",
         "--ui-bg-2": "#080b00",
@@ -104,6 +107,7 @@
       swatchBg: "#f2f0ec",
       swatchAccent: "rgb(160,100,30)",
       defaultStyle: "flat",
+      defaultGlow: false,
       vars: {
         "--ui-bg": "#f2f0ec",
         "--ui-bg-2": "#ede9e3",
@@ -135,6 +139,7 @@
       swatchBg: "#08010f",
       swatchAccent: "rgb(200,60,220)",
       defaultStyle: "glass",
+      defaultGlow: true,
       vars: {
         "--ui-bg": "#08010f",
         "--ui-bg-2": "#0d0218",
@@ -197,23 +202,27 @@
   function load() {
     try {
       const raw = localStorage.getItem(KEY);
-      if (!raw) return { preset: DEFAULT_PRESET, style: null, overrides: {} };
+      if (!raw)
+        return { preset: DEFAULT_PRESET, style: null, overrides: {}, glow: false };
       const p = JSON.parse(raw);
       if (!p.preset || !PRESETS[p.preset])
-        return { preset: DEFAULT_PRESET, style: null, overrides: {} };
+        return { preset: DEFAULT_PRESET, style: null, overrides: {}, glow: false };
+      const defaultGlow = PRESETS[p.preset].defaultGlow ?? false;
       return {
         preset: p.preset,
         style: p.style || null,
         overrides: p.overrides || {},
+        glow: p.glow != null ? p.glow : defaultGlow,
       };
     } catch {
-      return { preset: DEFAULT_PRESET, style: null, overrides: {} };
+      return { preset: DEFAULT_PRESET, style: null, overrides: {}, glow: false };
     }
   }
 
-  function apply(presetKey, style, overrides) {
+  function apply(presetKey, style, overrides, glow) {
     const preset = PRESETS[presetKey] || PRESETS[DEFAULT_PRESET];
     const resolvedStyle = style || preset.defaultStyle || "flat";
+    const resolvedGlow = glow != null ? glow : (preset.defaultGlow ?? false);
 
     const merged = Object.assign({}, preset.vars, overrides);
 
@@ -232,18 +241,20 @@
     }
 
     root.dataset.style = resolvedStyle;
+    root.dataset.preset = presetKey;
+    root.dataset.glow = resolvedGlow ? "on" : "off";
   }
 
-  function save(presetKey, style, overrides) {
-    apply(presetKey, style, overrides);
+  function save(presetKey, style, overrides, glow) {
+    apply(presetKey, style, overrides, glow);
     localStorage.setItem(
       KEY,
-      JSON.stringify({ preset: presetKey, style, overrides }),
+      JSON.stringify({ preset: presetKey, style, overrides, glow }),
     );
   }
 
   function reset() {
-    save(DEFAULT_PRESET, null, {});
+    save(DEFAULT_PRESET, null, {}, false);
   }
 
   window.ThemeEngine = {
@@ -264,5 +275,5 @@
   });
 
   const initial = load();
-  apply(initial.preset, initial.style, initial.overrides);
+  apply(initial.preset, initial.style, initial.overrides, initial.glow);
 })();
