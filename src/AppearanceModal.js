@@ -35,8 +35,12 @@
     return window.ThemeEngine.PRESETS[state.preset]?.defaultStyle ?? "flat";
   }
 
+  function getActiveGlow() {
+    return state.glow ?? (window.ThemeEngine.PRESETS[state.preset]?.defaultGlow ?? false);
+  }
+
   function applyAndSave() {
-    window.ThemeEngine.save(state.preset, state.style, state.overrides);
+    window.ThemeEngine.save(state.preset, state.style, state.overrides, state.glow);
   }
 
   function buildPresetCards() {
@@ -70,6 +74,7 @@
         state.preset = key;
         state.style = null;
         state.overrides = {};
+        state.glow = window.ThemeEngine.PRESETS[key].defaultGlow ?? false;
         applyAndSave();
         refreshUI();
       });
@@ -168,6 +173,24 @@
       }),
     );
     body.appendChild(styleSection);
+
+    // Glow Effects — only for presets that support it (e.g. Synthwave)
+    const currentPreset = window.ThemeEngine.PRESETS[state.preset];
+    if (currentPreset && currentPreset.defaultGlow) {
+      const glowSection = document.createElement("div");
+      const glowLabel = document.createElement("span");
+      glowLabel.className = "appearance-section-label";
+      glowLabel.textContent = "Glow Effects";
+      glowSection.appendChild(glowLabel);
+      glowSection.appendChild(
+        buildSegControl(
+          [{ label: "Off", value: false }, { label: "On", value: true }],
+          getActiveGlow,
+          (v) => { state.glow = v; },
+        ),
+      );
+      body.appendChild(glowSection);
+    }
 
     return body;
   }
