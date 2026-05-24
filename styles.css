@@ -1893,7 +1893,8 @@ h3, h4 {
   gap:6px;
   align-items:center;
   pointer-events:none;
-  color:#d8d0c0}
+  color:#d8d0c0;
+  opacity:.5}
 @media(max-width:900px){
   .component-info-tooltip,
   .component-tooltip,
