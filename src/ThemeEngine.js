@@ -199,6 +199,20 @@
     { label: "Glass", value: "glass" },
   ];
 
+  function hslToRgb(h, s, l) {
+    s /= 100;
+    l /= 100;
+    const k = (n) => (n + h / 30) % 12;
+    const a = s * Math.min(l, 1 - l);
+    const f = (n) =>
+      l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+    return [
+      Math.round(f(0) * 255),
+      Math.round(f(8) * 255),
+      Math.round(f(4) * 255),
+    ];
+  }
+
   function load() {
     try {
       const raw = localStorage.getItem(KEY);
@@ -208,6 +222,7 @@
           style: null,
           overrides: {},
           glow: false,
+          accentHue: null,
         };
       const p = JSON.parse(raw);
       if (!p.preset || !PRESETS[p.preset])
@@ -216,6 +231,7 @@
           style: null,
           overrides: {},
           glow: false,
+          accentHue: null,
         };
       const defaultGlow = PRESETS[p.preset].defaultGlow ?? false;
       return {
@@ -223,6 +239,7 @@
         style: p.style || null,
         overrides: p.overrides || {},
         glow: p.glow != null ? p.glow : defaultGlow,
+        accentHue: p.accentHue != null ? p.accentHue : null,
       };
     } catch {
       return {
@@ -230,11 +247,12 @@
         style: null,
         overrides: {},
         glow: false,
+        accentHue: null,
       };
     }
   }
 
-  function apply(presetKey, style, overrides, glow) {
+  function apply(presetKey, style, overrides, glow, accentHue) {
     const preset = PRESETS[presetKey] || PRESETS[DEFAULT_PRESET];
     const resolvedStyle = style || preset.defaultStyle || "flat";
     const resolvedGlow = glow != null ? glow : (preset.defaultGlow ?? false);
@@ -251,6 +269,25 @@
         "rgba(var(--ui-line-rgb)," + (base * 3).toFixed(2) + ")";
     }
 
+    if (accentHue != null) {
+      const isLight = presetKey === "light";
+      const [s1, l1] = isLight ? [60, 38] : [78, 58];
+      const [s2, l2] = isLight ? [65, 48] : [83, 67];
+      const [s3, l3] = isLight ? [50, 28] : [68, 45];
+      const [r, g, b] = hslToRgb(accentHue, s1, l1);
+      const [r2, g2, b2] = hslToRgb(accentHue, s2, l2);
+      const [ra, ga, ba] = hslToRgb(accentHue, s3, l3);
+      merged["--ui-gold"] = `rgb(${r},${g},${b})`;
+      merged["--ui-gold-2"] = `rgb(${r2},${g2},${b2})`;
+      merged["--ui-gold-rgb"] = `${r},${g},${b}`;
+      merged["--ui-gold-alt-rgb"] = `${ra},${ga},${ba}`;
+    }
+
+    const goldRgb = merged["--ui-gold-rgb"];
+    if (goldRgb) {
+      merged["--ui-gold-soft"] = `rgba(${goldRgb},.13)`;
+    }
+
     for (const [k, v] of Object.entries(merged)) {
       root.style.setProperty(k, v);
     }
@@ -260,16 +297,16 @@
     root.dataset.glow = resolvedGlow ? "on" : "off";
   }
 
-  function save(presetKey, style, overrides, glow) {
-    apply(presetKey, style, overrides, glow);
+  function save(presetKey, style, overrides, glow, accentHue) {
+    apply(presetKey, style, overrides, glow, accentHue);
     localStorage.setItem(
       KEY,
-      JSON.stringify({ preset: presetKey, style, overrides, glow }),
+      JSON.stringify({ preset: presetKey, style, overrides, glow, accentHue }),
     );
   }
 
   function reset() {
-    save(DEFAULT_PRESET, null, {}, false);
+    save(DEFAULT_PRESET, null, {}, false, null);
   }
 
   window.ThemeEngine = {
@@ -290,5 +327,11 @@
   });
 
   const initial = load();
-  apply(initial.preset, initial.style, initial.overrides, initial.glow);
+  apply(
+    initial.preset,
+    initial.style,
+    initial.overrides,
+    initial.glow,
+    initial.accentHue,
+  );
 })();
