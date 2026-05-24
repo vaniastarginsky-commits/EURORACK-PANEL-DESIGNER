@@ -4578,6 +4578,7 @@ input[type=color]::-webkit-color-swatch {
   cursor: pointer !important;
 }
 .top-color-preset:hover {
+  background: var(--preset-color) ;
   border-color: rgba(214,170,88,.78) ;
   outline: 1px solid rgba(214,170,88,.46) !important;
   outline-offset: 1px !important;
@@ -4609,4 +4610,66 @@ input[type=color]::-webkit-color-swatch {
 .sidebar-right [data-component-properties="true"] .field-row {
   margin-top: 2px !important;
   margin-bottom: 2px !important;
+}
+
+/* field-triple: compact 3-column position row (X / Y / °) */
+.sidebar-right [data-component-properties="true"] .field-triple {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+}
+.sidebar-right [data-component-properties="true"] .field-triple .field-row {
+  grid-template-columns: 1fr !important;
+  grid-template-rows: auto auto !important;
+  row-gap: 3px !important;
+  column-gap: 0 !important;
+  align-items: start !important;
+}
+.sidebar-right [data-component-properties="true"] .field-triple .field-row label {
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: .10em !important;
+}
+.sidebar-right [data-component-properties="true"] .field-triple .field-row input {
+  width: 100% !important;
+  text-align: center !important;
+}
+
+/* advanced-disclosure toggle button */
+.sidebar-right [data-component-properties="true"] .advanced-disclosure-toggle {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-top: 1px solid rgba(215,196,155,.08) !important;
+  color: #928b7d !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+  padding: 7px 0 !important;
+  width: 100% !important;
+  cursor: pointer !important;
+  margin-top: 8px !important;
+  min-height: 0 !important;
+}
+.sidebar-right [data-component-properties="true"] .advanced-disclosure-toggle:hover {
+  color: #c8bfae !important;
+}
+.sidebar-right [data-component-properties="true"] .adv-caret {
+  font-size: 8px !important;
+  display: inline-block !important;
+  transition: transform .15s ease !important;
+  transform: rotate(0deg) !important;
+  color: rgba(214,170,88,.72) !important;
+}
+.sidebar-right [data-component-properties="true"] .adv-caret.open {
+  transform: rotate(90deg) !important;
+}
+
+/* advanced-disclosure content area */
+.sidebar-right [data-component-properties="true"] .advanced-disclosure-content {
+  padding-top: 2px !important;
 }
