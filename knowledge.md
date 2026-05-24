@@ -71,6 +71,103 @@ What is still risky or worth checking later.
 
 ---
 
+## Finding — 2026-05-24 — Two-layer semantic token system for appearance presets
+
+### Status
+Confirmed
+
+### Symptom
+Appearance presets (Industrial, Minimal, Retro, Light, Synthwave) and the accent hue picker had no visible effect on buttons, tabs, inputs, sidebar, popovers, dialogs, and canvas tool rail. All presets looked like Industrial regardless of selection.
+
+### Root cause
+`styles.css` contained ~396 hardcoded hex/rgba values (e.g. `#f1e4cd`, `#050505`, `rgba(28,22,13,.82)`) copied from the Industrial preset palette. ThemeEngine correctly set CSS primitives (`--ui-gold-rgb`, `--ui-surface`, etc.) on `:root`, but CSS rules read hardcoded values instead of those variables.
+
+### Files / selectors
+- `styles.css` — all button, tab, input, sidebar, topbar, modal, popover, canvas-tool-rail rules
+- `ThemeEngine.js` — NOT touched; primitives already correct
+- Spec: `docs/superpowers/specs/2026-05-24-semantic-token-system-design.md`
+- Plan: `docs/superpowers/plans/2026-05-24-semantic-token-system.md`
+
+### Architecture: Two-layer token system
+**Layer 1 — Primitives** (ThemeEngine sets per preset, already existed):
+```
+--ui-bg / --ui-bg-2 / --ui-panel / --ui-panel-2
+--ui-surface / --ui-surface-hover
+--ui-text / --ui-text-soft / --ui-muted
+--ui-gold / --ui-gold-2 / --ui-gold-rgb / --ui-gold-alt-rgb / --ui-gold-soft
+--ui-line-rgb / --ui-danger / --ui-danger-rgb
+--theme-radius / --theme-font / --theme-tracking / etc.
+```
+
+**Layer 2 — Semantic tokens** (new, added to CSS `:root` as computed references):
+```css
+--ui-btn-bg:            var(--ui-panel)
+--ui-btn-text:          var(--ui-text-soft)
+--ui-btn-active-bg:     rgba(var(--ui-gold-rgb), .10)
+--ui-btn-active-text:   var(--ui-text)
+--ui-btn-active-border: rgba(var(--ui-gold-rgb), .58)
+--ui-btn-disabled-bg:   var(--ui-bg-2)
+--ui-btn-disabled-text: var(--ui-muted)
+--ui-btn-danger-bg:     rgba(var(--ui-danger-rgb), .12)
+--ui-btn-danger-text:   var(--ui-text-soft)
+--ui-input-bg:          var(--ui-bg-2)
+--ui-input-text:        var(--ui-text)
+--ui-input-focus-border:var(--ui-gold-2)
+--ui-sidebar-bg:        var(--ui-panel)
+--ui-sidebar-text:      var(--ui-text-soft)
+--ui-sidebar-label:     var(--ui-muted)
+--ui-section-header-bg: var(--ui-panel-2)
+--ui-topbar-bg:         var(--ui-panel)
+--ui-topbar-text:       var(--ui-text-soft)
+```
+
+### Hardcoded → token mapping (key patterns)
+| Hardcoded | Token |
+|-----------|-------|
+| `rgba(28,22,13,.82)`, `#17120a` | `var(--ui-btn-active-bg)` |
+| `#f1e4cd`, `#efe7d8`, `#eee7da` | `var(--ui-btn-active-text)` |
+| `#050505`, `#070707` (btn bg) | `var(--ui-btn-bg)` |
+| `#4c4943` | `var(--ui-btn-disabled-text)` |
+| `#170807`, `#160504` | `var(--ui-btn-danger-bg)` |
+| `#efc2bc`, `#f1c7c1` | `var(--ui-btn-danger-text)` |
+| `rgba(214,170,88,.76)` (rail) | `rgba(var(--ui-gold-rgb),.76)` |
+| `rgba(35,25,11,.92)` (rail) | `var(--ui-btn-active-bg)` |
+| `rgba(189,140,63,.035)` (hover) | `rgba(var(--ui-gold-rgb),.035)` |
+| `--export-gold:#c99a4a` | `var(--ui-gold)` |
+
+### Areas cleaned (0 hardcoded hex remaining)
+- Buttons / tabs / segmented controls
+- Inputs / select / textarea / checkbox / radio
+- Sidebar / inspector / layer-manager
+- Topbar
+- Canvas tool rail active state
+- Template dialog, export dialog, local projects dialog
+- Inline modals, popovers (toolbar dropdowns)
+
+### Cascade / ownership notes
+- ThemeEngine sets Layer 1 primitives via `element.style.setProperty()` on `document.documentElement` — highest specificity, overrides `:root`
+- Semantic Layer 2 tokens in `:root` cascade from primitives automatically
+- Accent hue picker overrides `--ui-gold`, `--ui-gold-2`, `--ui-gold-rgb` at runtime → all semantic tokens that use `--ui-gold-rgb` respond instantly
+- `[data-preset=synthwave]` atmosphere CSS (canvas glow, scanlines) intentionally uses hardcoded values — leave as-is
+
+### Fix
+- Added 28 semantic token definitions to `:root` in `styles.css`
+- Replaced all hardcoded hex/rgba in targeted CSS rules with semantic var() references
+- Used Python context-aware regex replacement to avoid false positives in minified CSS
+- `--export-gold` and `--export-muted` custom props inside export-dialog now reference `var(--ui-gold)` / `var(--ui-muted)`
+
+### Verification
+- `npm run verify`: pre-existing failure (test seeks `.canvas-tool-rail button[title='Right']` removed in session 13 — unrelated)
+- No new `!important` added
+- Python audit: 0 hardcoded HEX in button/tab/input/sidebar/topbar/modal rules
+
+### Follow-up
+- `styles.css` still has ~270+ hardcoded values in canvas drawing, HUD, mobile nav, status bar, ruler — these are outside the UI theme scope and intentionally fixed (component type colors, overlay backdrops)
+- `data-style="glass"` backdrop `rgba(8,8,6,.60)` is intentional — glass style override
+- If new UI areas are added, use semantic tokens from Layer 2, never hardcode hex
+
+---
+
 ## Finding — 2026-05-23 — clientToMM / ruler placement depends on zoom
 
 ### Status
