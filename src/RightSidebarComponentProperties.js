@@ -45,7 +45,7 @@ function PropertiesPanel() {
       ),
       React.createElement(
         "div",
-        { style: { color: "#788b92", fontSize: 11, marginTop: 6 } },
+        { style: { color: "var(--ui-muted)", fontSize: 11, marginTop: 6 } },
         "Selected: ",
         types,
         selComps.length > 4 ? "…" : "",

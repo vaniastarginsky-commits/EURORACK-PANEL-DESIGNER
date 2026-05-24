@@ -116,7 +116,12 @@ const HPGuideLayer = React.memo(function HPGuideLayer({ widthHP, heightMM }) {
   if (hpCount <= 0 || hpCount > 80) return null;
   return React.createElement(
     "g",
-    { style: { pointerEvents: "none" }, opacity: 0.68 },
+    {
+      style: {
+        pointerEvents: "none",
+        opacity: "var(--hp-grid-opacity, 0.68)",
+      },
+    },
     Array.from({ length: hpCount + 1 }, (_, i) => {
       const x = i * HP_TO_MM;
       const edge = i === 0 || i === hpCount;

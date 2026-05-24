@@ -30,6 +30,15 @@
     );
   }
 
+  function getActiveHpGrid() {
+    const v = state.overrides["--hp-grid-opacity"];
+    if (v != null) return v;
+    return (
+      window.ThemeEngine.PRESETS[state.preset]?.vars["--hp-grid-opacity"] ??
+      "0.40"
+    );
+  }
+
   function getActiveStyle() {
     if (state.style != null) return state.style;
     return window.ThemeEngine.PRESETS[state.preset]?.defaultStyle ?? "flat";
@@ -249,6 +258,23 @@
       }),
     );
     body.appendChild(styleSection);
+
+    // HP Grid visibility
+    const hpSection = document.createElement("div");
+    const hpLabel = document.createElement("span");
+    hpLabel.className = "appearance-section-label";
+    hpLabel.textContent = "HP Grid";
+    hpSection.appendChild(hpLabel);
+    hpSection.appendChild(
+      buildSegControl(
+        window.ThemeEngine.HPGRID_OPTIONS,
+        getActiveHpGrid,
+        (v) => {
+          state.overrides["--hp-grid-opacity"] = v;
+        },
+      ),
+    );
+    body.appendChild(hpSection);
 
     // Glow Effects — only for presets that support it (e.g. Synthwave)
     const currentPreset = window.ThemeEngine.PRESETS[state.preset];

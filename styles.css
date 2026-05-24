@@ -7,7 +7,8 @@ html, body, #root {
   overflow: hidden;
   background: var(--ui-bg);
   color: var(--ui-text);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--theme-font, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+  letter-spacing: var(--theme-letter-spacing, normal);
 }
 
 * { box-sizing: border-box; }
@@ -18,7 +19,8 @@ button {
   background: var(--ui-btn-bg);
   color: var(--ui-btn-text);
   border: 1px solid rgba(var(--ui-line-rgb), .20);
-  min-height: 28px;
+  border-radius: var(--theme-radius, 0);
+  min-height: var(--theme-btn-height, 28px);
   padding: 5px 10px;
   cursor: pointer;
 }
@@ -32,8 +34,9 @@ input, select, textarea {
   background: var(--ui-input-bg);
   color: var(--ui-input-text);
   border: 1px solid var(--ui-input-border);
+  border-radius: var(--theme-radius, 0);
   padding: 5px 8px;
-  min-height: 28px;
+  min-height: var(--theme-btn-height, 28px);
 }
 textarea { resize: vertical; }
 label { display: block; color: #928b7d; }
@@ -387,7 +390,7 @@ h3, h4 {
 .sidebar-left textarea,
 .sidebar-right input:not([type="checkbox"]):not([type="radio"]),
 .sidebar-right select,
-.sidebar-right textarea{height:30px;min-height:30px;border:1px solid rgba(var(--ui-line-rgb),.13);background:var(--ui-input-bg);color:var(--ui-input-text)}
+.sidebar-right textarea{height:var(--theme-btn-height,30px);min-height:var(--theme-btn-height,30px);border:1px solid rgba(var(--ui-line-rgb),.13);background:var(--ui-input-bg);color:var(--ui-input-text);border-radius:var(--theme-radius,0)}
 .sidebar-left textarea,.sidebar-right textarea{height:auto;min-height:54px}
 .sidebar-left input[type="checkbox"],
 .sidebar-left input[type="radio"],
@@ -408,12 +411,12 @@ h3, h4 {
 .sidebar-left .field-row input,.sidebar-left .field-row select{font-size:13px}
 .sidebar-left .measurement-row{font-size:13px}
 .sidebar-left .measurement-row span:last-child{color:var(--ui-gold-2);font-variant-numeric:tabular-nums}
-.sidebar-left .btn-row button,.sidebar-left .section>button,.sidebar-right .btn-row button{height:30px;min-height:30px;padding:4px 8px}
+.sidebar-left .btn-row button,.sidebar-left .section>button,.sidebar-right .btn-row button{height:var(--theme-btn-height,30px);min-height:var(--theme-btn-height,30px);padding:4px 8px;border-radius:var(--theme-radius,0)}
 .component-library-shell .part-icon{width:22px;height:22px;margin-right:8px}
 .section.component-library-shell button,.component-library-shell button{display:flex;align-items:center;justify-content:flex-start;width:100%;text-align:left}
 .canvas-hud span{white-space:nowrap}
 .dfm-status-main,.selection-measure-float,.coord-readout{font-size:12px;color:#eee7da}
-.canvas-quick-dock button{height:32px;min-height:32px;padding:5px 12px}
+.canvas-quick-dock button{height:var(--theme-btn-height,32px);min-height:var(--theme-btn-height,32px);padding:5px 12px;border-radius:var(--theme-radius,0)}
 .right-tab-strip button.active,.toolbar button.active,.canvas-quick-dock button.active{border-color:var(--ui-btn-active-border);background:var(--ui-btn-active-bg);color:var(--ui-btn-active-text)}
 @supports not selector(:has(*)){
   .sidebar-left input[type="checkbox"],.sidebar-left input[type="radio"],
@@ -427,7 +430,7 @@ h3, h4 {
 .toolbar-popover .menu-title{color:var(--ui-gold-2);font-size:12px;font-weight:900;letter-spacing:.22em;text-transform:uppercase;margin:0 0 8px;padding-bottom:7px;border-bottom:1px solid rgba(var(--ui-line-rgb),.14)}
 .toolbar-popover .menu-grid{display:grid;grid-template-columns:1fr;gap:6px}
 .toolbar-popover .menu-grid.two{grid-template-columns:1fr 1fr}
-.toolbar-popover .menu-grid button,.toolbar-popover button{width:100%;min-height:30px;text-align:left;justify-content:flex-start;background:var(--ui-btn-bg);color:var(--ui-btn-text);border:1px solid rgba(var(--ui-line-rgb),.16);padding:6px 9px}
+.toolbar-popover .menu-grid button,.toolbar-popover button{width:100%;min-height:var(--theme-btn-height,30px);text-align:left;justify-content:flex-start;background:var(--ui-btn-bg);color:var(--ui-btn-text);border:1px solid rgba(var(--ui-line-rgb),.16);padding:6px 9px;border-radius:var(--theme-radius,0)}
 .toolbar-popover .menu-grid button:hover,.toolbar-popover button:hover{border-color:rgba(var(--ui-gold-alt-rgb),.65);background:var(--ui-btn-hover-bg)}
 .toolbar-popover button.active{border-color:var(--ui-btn-active-border);background:var(--ui-btn-active-bg);color:var(--ui-btn-active-text)}
 .toolbar-popover .menu-note{margin-top:8px;color:var(--ui-muted);font-size:12px;line-height:1.35;border-top:1px solid rgba(var(--ui-line-rgb),.10);padding-top:8px}
@@ -2833,7 +2836,12 @@ h3, h4 {
   --ui-btn-active-text: var(--ui-gold-2);
   --ui-btn-danger-bg: rgba(200, 60, 60, .18);
   --ui-btn-danger-text: #ff6b6b;
-  --ui-danger-rgb: 200, 60, 60}
+  --ui-danger-rgb: 200, 60, 60;
+  --ui-success-rgb: 92, 188, 96;
+  --ui-warn-rgb: 232, 168, 56;
+  --ui-success: rgb(var(--ui-success-rgb));
+  --ui-warn: rgb(var(--ui-warn-rgb));
+  --ui-danger: rgb(var(--ui-danger-rgb))}
 
 button:focus-visible,
 input:focus-visible,
@@ -3278,7 +3286,7 @@ input[type="number"],
     --pd-rail-left: 300px;
     --pd-rail-top: 66px;
     --pd-rail-width: 78px;
-    --pd-rail-button: 64px}
+    --pd-rail-button: 54px}
 
   .app.left-panel-closed {
     --pd-rail-left: 10px}
@@ -3366,7 +3374,7 @@ input[type="number"],
   :root {
     --pd-rail-left: 292px;
     --pd-rail-width: 74px;
-    --pd-rail-button: 60px}
+    --pd-rail-button: 51px}
 
   .workspace .canvas-wrap {
     padding-left: 86px}
@@ -3597,34 +3605,32 @@ html.pd-contrast-on::after {
   position: fixed;
   left: calc(var(--pd-rail-left, 300px) + 7px);
   top: var(--pd-rail-top, 66px);
-  bottom: 16px;
   z-index: 1210;
   display: flex;
   flex-direction: column;
   align-content: start;
   gap: 4px;
-  width: var(--pd-rail-button, 64px);
-  padding: 8px 0;
-  overflow: hidden;
-  border: 1px solid rgba(var(--ui-line-rgb), .25);
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--ui-panel) 84%, transparent), color-mix(in srgb, var(--ui-bg) 95%, transparent)),
-    repeating-linear-gradient(0deg, rgba(var(--ui-line-rgb), .045), rgba(var(--ui-line-rgb), .045) 1px, transparent 1px, transparent 8px);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .018)}
+  width: var(--pd-rail-button, 54px);
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  box-shadow: none}
 
 .canvas-tool-separator {
   height: 4px}
 
 .canvas-tool-button {
   display: grid ;
-  grid-template-rows: 22px 11px ;
+  grid-template-rows: 1fr auto ;
   align-items: center ;
   justify-items: center ;
-  width: 100% ;
+  aspect-ratio: 1 / 1 ;
+  width: var(--pd-rail-button, 54px) ;
   min-width: 0 ;
-  height: 42px ;
-  min-height: 42px ;
-  padding: 4px 0 3px ;
+  height: var(--pd-rail-button, 54px) ;
+  min-height: 0 ;
+  padding: 6px 0 5px ;
   overflow: hidden ;
   font-size: 0 ;
   line-height: 1}
@@ -4290,8 +4296,8 @@ html.pd-contrast-on::after {
   display: flex ;
   align-items: center ;
   gap: 7px ;
-  background: rgba(5,5,5,.88) ;
-  border: 1px solid rgba(var(--ui-line-rgb),.13) ;
+  background: transparent ;
+  border: 0 ;
   padding: 4px 8px ;
   pointer-events: auto}
 .zoom-hud-value {
@@ -4303,14 +4309,18 @@ html.pd-contrast-on::after {
   font-variant-numeric: tabular-nums ;
   user-select: none}
 .zoom-hud-value:hover {
-  color: #d6aa58}
+  color: var(--ui-gold-2)}
 .zoom-hud-slider {
   width: 80px ;
   cursor: ew-resize ;
   background: transparent ;
   border: 0 ;
   padding: 0 ;
-  min-height: 0}
+  min-height: 0 ;
+  accent-color: var(--ui-gold)}
+input[type="range"] {
+  accent-color: var(--ui-gold);
+}
 @media (max-width: 860px), (pointer: coarse) {
   .zoom-hud-control {
     display: none}
@@ -4453,7 +4463,7 @@ html[data-style="glass"] .mobile-topbar {
   backdrop-filter: blur(6px) saturate(.72) brightness(.72);
   -webkit-backdrop-filter: blur(6px) saturate(.72) brightness(.72)}
 .appearance-modal-card {
-  width: min(540px, 100%);
+  width: min(620px, 100%);
   max-height: 90vh;
   overflow-y: auto;
   background: linear-gradient(135deg,rgba(11,11,10,.97),rgba(4,4,4,.97));
@@ -4487,7 +4497,7 @@ html[data-style="glass"] .mobile-topbar {
   margin-bottom: 8px}
 .appearance-preset-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px}
 .appearance-preset-btn {
   display: flex;
@@ -4498,15 +4508,20 @@ html[data-style="glass"] .mobile-topbar {
   border: 1px solid rgba(var(--ui-line-rgb),.14) ;
   background: transparent ;
   cursor: pointer;
-  min-height: unset}
+  min-height: unset;
+  transition: border-color .12s ease, transform .12s ease, box-shadow .12s ease}
+.appearance-preset-btn:hover {
+  border-color: rgba(var(--ui-gold-rgb),.40);
+  transform: translateY(-1px)}
 .appearance-preset-btn.active {
   border-color: rgba(var(--ui-gold-rgb),.70) ;
   box-shadow: 0 0 0 1px rgba(var(--ui-gold-rgb),.30)}
 .appearance-preset-swatch {
-  height: 40px;
+  height: 44px;
   display: flex;
   align-items: flex-end;
-  padding: 4px}
+  padding: 4px;
+  position: relative}
 .appearance-preset-swatch-accent {
   width: 100%;
   height: 3px}
@@ -4552,6 +4567,9 @@ html[data-style="glass"] .mobile-topbar {
   .appearance-preset-grid { grid-template-columns: repeat(3, 1fr)}
   .appearance-modal-card { width: 100%; max-height: calc(100vh - 20px)}
 }
+@media (min-width: 720px) {
+  .appearance-preset-grid { grid-template-columns: repeat(7, 1fr)}
+}
 
 .appearance-accent-row {
   display: flex;
@@ -4583,15 +4601,19 @@ html[data-style="glass"] .mobile-topbar {
 
 /* === Synthwave preset atmosphere ========================================= */
 
-/* Full-screen gradient — set on html element so it underlays everything */
+/* Full-screen sky: purple→magenta→pink, with horizon at ~62% */
 html[data-preset="synthwave"] {
   background:
-    repeating-linear-gradient(0deg, transparent, transparent 29px, rgba(120,50,210,.07) 29px, rgba(120,50,210,.07) 30px),
-    repeating-linear-gradient(90deg, transparent, transparent 29px, rgba(120,50,210,.07) 29px, rgba(120,50,210,.07) 30px),
-    radial-gradient(ellipse at 50% 78%, rgba(140,30,210,.72) 0%, rgba(90,10,155,.44) 28%, rgba(40,5,80,.22) 52%, transparent 72%),
-    #08010f}
+    linear-gradient(to bottom,
+      #150029 0%,
+      #1f0438 40%,
+      #44085e 58%,
+      #a01a6e 62%,
+      #c8267a 64%,
+      #6e1248 80%,
+      #2a0432 100%)}
 
-/* Make containers transparent so html gradient shows through */
+/* Containers transparent so atmosphere shows through */
 [data-preset="synthwave"] body,
 [data-preset="synthwave"] #root,
 [data-preset="synthwave"] .app-shell,
@@ -4600,21 +4622,40 @@ html[data-preset="synthwave"] {
 [data-preset="synthwave"] .canvas-wrap {
   background: transparent}
 
+/* SVG canvas: transparent so atmosphere shows through */
+[data-preset="synthwave"] .panel-canvas-svg {
+  background: transparent}
 
-[data-preset="synthwave"] .canvas-wrap > div:first-child {
-  z-index: 1;
-  filter: drop-shadow(0 0 18px rgba(120,30,200,.45))}
 
-/* Brand title: neon pink always in synthwave (glow adds text-shadow on top) */
+/* Brand title: neon pink always in synthwave */
 [data-preset="synthwave"] .app-title {
-  color: #ff2878}
+  color: #ff2a90}
 
 [data-preset="synthwave"][data-glow="on"] .app-title {
-  text-shadow: 0 0 14px rgba(200,60,220,.9), 0 0 28px rgba(160,40,220,.5)}
+  text-shadow:
+    0 0 6px rgba(255, 60, 200, .85),
+    0 0 14px rgba(255, 60, 200, .45)}
 
+/* Active buttons get a neon ring (cheaper, 2 layers instead of 4) */
 [data-preset="synthwave"][data-glow="on"] button.active,
 [data-preset="synthwave"][data-glow="on"] .canvas-tool-btn.active {
-  box-shadow: 0 0 10px rgba(var(--ui-gold-rgb),.55), 0 0 20px rgba(var(--ui-gold-rgb),.25)}
+  box-shadow:
+    0 0 0 1px rgba(var(--ui-gold-rgb), .8),
+    0 0 14px rgba(var(--ui-gold-rgb), .4)}
+
+/* Section labels with subtle neon edge */
+[data-preset="synthwave"] .section-title,
+[data-preset="synthwave"] .sidebar-title,
+[data-preset="synthwave"] summary,
+[data-preset="synthwave"] h3,
+[data-preset="synthwave"] h4 {
+  color: #ff7ac7}
+
+/* HUD pill with cyan edge */
+[data-preset="synthwave"] .canvas-wrap > .canvas-hud {
+  border-color: rgba(120, 220, 255, .26)}
+[data-preset="synthwave"] .canvas-wrap > .canvas-hud > .hud-main {
+  color: #00e5ff}
 
 .toolbar-popover .app-native-check-row {
   margin-top: 3px;
@@ -4719,4 +4760,527 @@ html[data-preset="synthwave"] {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+
+/* ===== 12. v452 polish — extends existing tokens ===== */
+
+/* Component library cards: hover/active affordance using semantic tokens */
+.component-library-popover .component-icon-card {
+  transition: border-color .14s ease, background .14s ease, transform .12s ease, box-shadow .14s ease;
+  border-radius: var(--theme-radius, 0);
+}
+.component-library-popover .component-icon-card:hover {
+  border-color: rgba(var(--ui-gold-rgb), .42);
+  background: rgba(var(--ui-gold-rgb), .04);
+}
+.component-library-popover .component-icon-card:focus-visible {
+  outline: none;
+  border-color: rgba(var(--ui-gold-rgb), .65);
+  box-shadow: 0 0 0 1px rgba(var(--ui-gold-rgb), .35);
+}
+.component-library-popover .component-icon-card.active,
+.component-library-popover .component-icon-card[aria-pressed="true"] {
+  border-color: rgba(var(--ui-gold-rgb), .80);
+  background: rgba(var(--ui-gold-rgb), .07);
+  box-shadow: 0 0 0 1px rgba(var(--ui-gold-rgb), .28);
+}
+
+/* Slight breathing room for icon name (was bottom:16px), keep meta at 4 */
+.component-library-popover .component-icon-name {
+  bottom: 18px;
+  letter-spacing: .02em;
+  font-weight: 600;
+  color: var(--ui-text-soft);
+}
+.component-library-popover .component-icon-meta {
+  color: var(--ui-muted);
+  letter-spacing: .04em;
+}
+
+/* Library head: stronger title rhythm + accent rule under controls */
+.component-library-popover-head h2,
+.component-library-popover-head strong {
+  letter-spacing: var(--theme-tracking, .14em);
+  font-weight: var(--theme-weight-brand, 850);
+  text-transform: uppercase;
+  color: var(--ui-text);
+}
+.component-library-popover-controls {
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(var(--ui-line-rgb), .10);
+}
+
+/* Inspector section-title typographic uplift (no new important, scoped) */
+.sidebar-right [data-component-properties="true"] .field-row > label {
+  color: var(--ui-muted);
+  font-size: 11px;
+  letter-spacing: .04em;
+}
+
+/* Inspector — better breathing between sections */
+.sidebar-right [data-component-properties="true"] .component-source-card {
+  padding-bottom: 4px;
+  border-bottom: 1px dashed rgba(var(--ui-line-rgb), .08);
+}
+
+/* Canvas HUD — reactive to accent so themes are felt at a glance */
+.canvas-wrap .canvas-hud,
+.canvas-wrap .canvas-status-pill {
+  border-color: rgba(var(--ui-line-rgb), .14);
+}
+
+/* Blueprint preset: subtle grid background on canvas-wrap for CAD vibe */
+html[data-preset="blueprint"] .canvas-wrap {
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0, transparent 19px, rgba(95,184,255,.05) 19px, rgba(95,184,255,.05) 20px),
+    repeating-linear-gradient(90deg, transparent 0, transparent 19px, rgba(95,184,255,.05) 19px, rgba(95,184,255,.05) 20px);
+}
+
+/* Graphite preset: warm linen-paper feel on app background */
+html[data-preset="graphite"] body {
+  background:
+    radial-gradient(ellipse at 30% 12%, rgba(232,97,42,.04), transparent 55%),
+    var(--ui-bg);
+}
+
+/* Preset card swatch: render preset accent as second hit of color (already inline-styled) */
+.appearance-preset-btn[data-preset-key="industrial"] .appearance-preset-label { font-family: Inter, sans-serif; }
+.appearance-preset-btn[data-preset-key="graphite"] .appearance-preset-label { font-family: Inter, sans-serif; }
+.appearance-preset-btn[data-preset-key="blueprint"] .appearance-preset-label { font-family: "JetBrains Mono", monospace; letter-spacing: 0; }
+.appearance-preset-btn[data-preset-key="minimal"] .appearance-preset-label { font-family: Inter, sans-serif; }
+.appearance-preset-btn[data-preset-key="retro"] .appearance-preset-label { font-family: ui-monospace, "Fira Code", monospace; letter-spacing: 0; }
+.appearance-preset-btn[data-preset-key="light"] .appearance-preset-label { font-family: Inter, sans-serif; }
+.appearance-preset-btn[data-preset-key="synthwave"] .appearance-preset-label { font-family: Inter, sans-serif; letter-spacing: .04em; font-size: 9px; }
+.appearance-preset-label { font-variant-numeric: tabular-nums; }
+
+
+/* ===== 13. v452 readability polish ===== */
+
+/* Section-title with inline status badge: prevent wrap, give label flex,
+   pin badge right. Works whether display is block (no effect) or flex (inline-style). */
+.section-title {
+  gap: 12px;
+  align-items: baseline;
+}
+.section-title > span:first-child {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.section-title > span:last-child {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  letter-spacing: .04em;
+  text-transform: none;
+  font-weight: 700;
+}
+
+/* Measurement/status rows: tabular nums on the value column */
+.status-row > span:last-child,
+.measurement-row > span:last-child {
+  font-variant-numeric: tabular-nums;
+  color: var(--ui-text);
+}
+.status-row > span:first-child,
+.measurement-row > span:first-child {
+  color: var(--ui-muted);
+}
+
+/* Canvas HUD: cleaner top-left pill — extends existing 1890 block */
+.canvas-wrap > .canvas-hud {
+  gap: 0;
+  opacity: 1;
+  color: var(--ui-text-soft);
+  font-size: 11px;
+  letter-spacing: .04em;
+  background: rgba(0, 0, 0, .28);
+  border: 1px solid rgba(var(--ui-line-rgb), .10);
+  border-radius: var(--theme-radius, 0);
+  padding: 5px 9px;
+  backdrop-filter: blur(6px) saturate(.8);
+  -webkit-backdrop-filter: blur(6px) saturate(.8);
+}
+.canvas-wrap > .canvas-hud > span {
+  padding: 0 9px;
+  border-right: 1px solid rgba(var(--ui-line-rgb), .12);
+}
+.canvas-wrap > .canvas-hud > span:last-child {
+  border-right: 0;
+}
+.canvas-wrap > .canvas-hud > span:first-child {
+  padding-left: 0;
+}
+.canvas-wrap > .canvas-hud > .hud-main {
+  color: var(--ui-gold-2);
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+/* DFM status pill: keep accent color but improve typography */
+.dfm-status-main {
+  letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+  flex-wrap: nowrap;
+}
+.dfm-status-main > strong {
+  letter-spacing: .12em;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+.dfm-status-main > span {
+  white-space: nowrap;
+}
+.dfm-status-float.ok .dfm-status-main > strong {
+  color: var(--ui-success);
+}
+.dfm-status-float.warn .dfm-status-main > strong {
+  color: var(--ui-warn);
+}
+.dfm-status-float.error .dfm-status-main > strong {
+  color: var(--ui-danger);
+}
+
+/* Tab strips in right inspector: prevent wrap by allowing tabs to shrink */
+.right-tab-strip {
+  flex-wrap: nowrap;
+  gap: 4px;
+}
+.right-tab-strip button {
+  min-width: 0;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+/* Inspector: prevent dense panel from feeling cramped */
+.sidebar-right .section + .section {
+  margin-top: 0;
+  padding-top: 12px;
+  border-top: 1px solid rgba(var(--ui-line-rgb), .08);
+}
+
+
+/* ===== 14. v452 Layers panel — flat compact pill grid ===== */
+
+.compact-layer-manager .section-title {
+  margin-bottom: 8px;
+}
+
+.layer-compact-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 10px;
+}
+.layer-compact-presets button {
+  flex: 0 0 auto;
+  min-width: 0;
+  height: 28px;
+  min-height: 28px;
+  padding: 0 12px;
+  font-size: 11px;
+  letter-spacing: .04em;
+  font-weight: 600;
+  color: var(--ui-text-soft);
+  background: var(--ui-btn-bg);
+  border: 1px solid rgba(var(--ui-line-rgb), .14);
+  border-radius: var(--theme-radius, 0);
+}
+.layer-compact-presets button:hover {
+  border-color: rgba(var(--ui-gold-rgb), .50);
+  color: var(--ui-text);
+  background: var(--ui-btn-hover-bg);
+}
+
+.layer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.layer-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 8px;
+  margin: 0;
+  background: var(--ui-bg-2);
+  border: 1px solid rgba(var(--ui-line-rgb), .12);
+  border-radius: var(--theme-radius, 0);
+  cursor: pointer;
+  user-select: none;
+  transition: border-color .12s ease, background .12s ease;
+  min-height: 28px;
+  min-width: 0;
+}
+.layer-pill:hover {
+  border-color: rgba(var(--ui-gold-rgb), .35);
+  background: var(--ui-surface);
+}
+.layer-pill input[type="checkbox"] {
+  flex: 0 0 auto;
+  margin: 0;
+}
+.layer-pill span {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--ui-text-soft);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.layer-pill.on {
+  border-color: rgba(var(--ui-gold-rgb), .35);
+}
+.layer-pill.on span {
+  color: var(--ui-text);
+}
+.layer-pill.off {
+  opacity: .55;
+}
+.layer-pill.off span {
+  color: var(--ui-muted);
+}
+
+.compact-layer-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0 0;
+  font-size: 11px;
+  color: var(--ui-muted);
+}
+.compact-layer-topline .perf-toggle.compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  margin: 0;
+  cursor: pointer;
+  color: var(--ui-text-soft);
+}
+.compact-layer-topline .perf-toggle.compact input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+}
+
+
+/* ===== 15. v452 Export dialog — theme-aware + compact ===== */
+
+/* Reduce preview footprint so the body has room (was 260px → 160px) */
+.export-dialog-panel {
+  grid-template-rows: 64px 160px 44px minmax(0, 1fr);
+  background: var(--ui-panel);
+  min-height: 540px;
+}
+.export-dialog-header {
+  height: 64px;
+  background: var(--ui-panel-2);
+  border-bottom-color: rgba(var(--ui-line-rgb), .14);
+  flex-wrap: nowrap;
+}
+.export-dialog-header > div {
+  min-width: 0;
+  overflow: hidden;
+}
+.export-dialog-title {
+  font-size: 16px;
+}
+.export-dialog-subtitle {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  margin-top: 6px;
+}
+.export-preview-card {
+  height: 160px;
+  max-height: 160px;
+  background: var(--ui-bg-2);
+  padding: 8px 12px 0;
+}
+.export-preview-card svg {
+  max-height: 116px;
+}
+
+/* Stats row — fix the mashed text. Each item is strong+span; give them gap. */
+.export-preview-stats {
+  gap: 18px;
+  padding: 0 4px;
+}
+.export-preview-stats > * {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+}
+.export-preview-stats strong {
+  color: var(--ui-text);
+  font-weight: 700;
+  letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+}
+.export-preview-stats span {
+  color: var(--ui-muted);
+  font-weight: 500;
+  letter-spacing: .02em;
+}
+.export-preview-stats .ok strong {
+  color: var(--ui-success);
+}
+
+/* Tabs row */
+.export-tabs {
+  background: var(--ui-bg);
+}
+.export-tabs button {
+  border-radius: 0;
+}
+
+/* Body */
+.export-tab-body {
+  background: var(--ui-bg);
+  /* Single column at all widths: KiCad layout fragmenting was caused by the
+     two-column grid trying to place 7 row siblings across cells. */
+  grid-template-columns: minmax(0, 1fr);
+}
+.export-tab-body h3,
+.export-tab-body h4,
+.export-tab-body .section-title {
+  color: var(--ui-text);
+}
+.export-tab-body p,
+.export-tab-body small,
+.export-tab-body li {
+  color: var(--ui-muted);
+}
+
+/* Cards */
+.export-package-card,
+.export-recommended-banner,
+.runtime-diagnostics-card,
+.export-sanity,
+.export-tab-body .card,
+.export-tab-body fieldset {
+  background: var(--ui-bg-2);
+  border-color: rgba(var(--ui-line-rgb), .14);
+}
+
+/* KiCad preset row: subtle buttons in a normal flex row */
+.kicad-preset-row {
+  gap: 6px;
+  justify-content: flex-start;
+}
+.kicad-preset-row button {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 120px;
+  background: var(--ui-btn-bg);
+  border: 1px solid rgba(var(--ui-line-rgb), .14);
+  color: var(--ui-text-soft);
+  padding: 5px 14px;
+  border-radius: var(--theme-radius, 0);
+}
+.kicad-preset-row button:hover {
+  border-color: rgba(var(--ui-gold-rgb), .50);
+  background: var(--ui-btn-hover-bg);
+}
+
+/* KiCad checkbox grid stays 2 col */
+.kicad-export-grid {
+  grid-template-columns: 1fr 1fr;
+  column-gap: 18px;
+}
+.kicad-export-grid .export-option-row,
+.kicad-export-grid .checklist-row {
+  min-height: 30px;
+  padding: 5px 0;
+}
+
+/* Dialog actions — proper right-aligned button group */
+.export-dialog-actions {
+  background: var(--ui-panel-2);
+  border-top-color: rgba(var(--ui-line-rgb), .14);
+  padding: 10px 18px;
+}
+.export-dialog-actions button {
+  flex: 0 0 auto;
+  min-width: 110px;
+  max-width: 220px;
+  border-radius: var(--theme-radius, 0);
+}
+.export-dialog-actions button.primary {
+  background: rgba(var(--ui-gold-rgb), .12);
+  border-color: rgba(var(--ui-gold-rgb), .58);
+  color: var(--ui-gold-2);
+}
+.export-dialog-actions button.primary:hover {
+  background: rgba(var(--ui-gold-rgb), .18);
+}
+.export-dialog-actions button.primary:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+/* Export inline action grids inside tabs (Cancel/Export at bottom of body) */
+.export-action-grid {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin: 14px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid rgba(var(--ui-line-rgb), .10);
+}
+.export-action-grid button {
+  flex: 0 0 auto;
+  min-width: 128px;
+  max-width: 240px;
+  height: 34px;
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: var(--theme-radius, 0);
+}
+.export-action-grid button.primary {
+  background: rgba(var(--ui-gold-rgb), .14);
+  border-color: rgba(var(--ui-gold-rgb), .60);
+  color: var(--ui-gold-2);
+  font-weight: 600;
+}
+.export-action-grid button.primary:hover {
+  background: rgba(var(--ui-gold-rgb), .22);
+}
+.export-action-grid button.primary:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+/* Tighten warning items inside Export */
+.export-tab-body .warning-item {
+  padding: 8px 10px;
+  background: rgba(var(--ui-line-rgb), .04);
+  border: 1px solid rgba(var(--ui-line-rgb), .10);
+  color: var(--ui-text-soft);
+  margin-bottom: 8px;
+  border-radius: var(--theme-radius, 0);
+}
+.export-tab-body .warning-item.warn {
+  background: rgba(var(--ui-warn-rgb), .07);
+  border-color: rgba(var(--ui-warn-rgb), .30);
+  color: var(--ui-text-soft);
+}
+.export-tab-body .warning-item.bad {
+  background: rgba(var(--ui-danger-rgb), .08);
+  border-color: rgba(var(--ui-danger-rgb), .35);
+  color: var(--ui-text-soft);
+}
+
+/* Origin row tightening */
+.kicad-origin-row {
+  grid-template-columns: 80px minmax(180px, 360px);
+  margin-bottom: 12px;
+}
+.kicad-origin-row select {
+  border-radius: var(--theme-radius, 0);
 }

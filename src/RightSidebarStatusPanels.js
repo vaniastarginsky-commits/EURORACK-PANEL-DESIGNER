@@ -132,9 +132,9 @@ function SelfCheckPanel({ warnings }) {
             style:
               item.level === "ok"
                 ? {
-                    color: "#8ee88e",
-                    borderColor: "rgba(80,220,80,0.35)",
-                    background: "rgba(80,220,80,0.08)",
+                    color: "var(--ui-success)",
+                    borderColor: "rgba(var(--ui-success-rgb), .35)",
+                    background: "rgba(var(--ui-success-rgb), .08)",
                   }
                 : undefined,
           },
@@ -161,7 +161,7 @@ function WarningsPanel({ warnings }) {
       React.createElement("div", { className: "section-title" }, "Warnings"),
       React.createElement(
         "div",
-        { style: { color: "#3a7a3a", fontSize: 11 } },
+        { style: { color: "var(--ui-success)", fontSize: 11 } },
         "\u2713 No collisions detected",
       ),
     );
@@ -209,7 +209,7 @@ function LayoutStatusPanel({ warnings, components }) {
   const maxDepth = computeMaxDepth(components);
   const status = errors > 0 ? "Collision" : warns > 0 ? "Warning" : "OK";
   const statusColor =
-    errors > 0 ? "#ff3333" : warns > 0 ? "#ffa000" : "#3a7a3a";
+    errors > 0 ? "var(--ui-danger)" : warns > 0 ? "var(--ui-warn)" : "var(--ui-success)";
   return React.createElement(
     "div",
     { className: "section" },
@@ -232,7 +232,7 @@ function LayoutStatusPanel({ warnings, components }) {
       React.createElement("span", null, "Hard collisions"),
       React.createElement(
         "span",
-        { style: { color: errors > 0 ? "#ff3333" : "#3a7a3a" } },
+        { style: { color: errors > 0 ? "var(--ui-danger)" : "var(--ui-success)" } },
         errors,
       ),
     ),
@@ -242,7 +242,7 @@ function LayoutStatusPanel({ warnings, components }) {
       React.createElement("span", null, "Warnings"),
       React.createElement(
         "span",
-        { style: { color: warns > 0 ? "#ffa000" : "#3a7a3a" } },
+        { style: { color: warns > 0 ? "var(--ui-warn)" : "var(--ui-success)" } },
         warns,
       ),
     ),

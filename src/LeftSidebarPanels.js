@@ -460,7 +460,7 @@ function ComponentLibraryPanel({
           "div",
           {
             className: "component-library-popover",
-            style: { left: popoverPos.left, top: popoverPos.top },
+            style: { top: popoverPos.top },
             onPointerDown: (e) => e.stopPropagation(),
             onClick: (e) => e.stopPropagation(),
             onWheel: (e) => e.stopPropagation(),

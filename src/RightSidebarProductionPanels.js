@@ -293,7 +293,7 @@ function ManufacturingCheckPanel({ warnings }) {
     ? "#ff7777"
     : status.startsWith("OK FOR MOCKUP")
       ? "#ffaa44"
-      : "#55dd88";
+      : "var(--ui-success)";
   return React.createElement(
     "div",
     { className: "section" },
@@ -340,7 +340,7 @@ function ManufacturingCheckPanel({ warnings }) {
           )
         : React.createElement(
             "div",
-            { style: { color: "#55dd88", fontSize: 11 } },
+            { style: { color: "var(--ui-success)", fontSize: 11 } },
             "\u2713 No DFM issues detected",
           ),
     ),

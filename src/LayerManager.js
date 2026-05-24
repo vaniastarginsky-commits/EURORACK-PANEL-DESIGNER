@@ -4,39 +4,99 @@ function LayersPanel() {
   const state = useAppState();
   const dispatch = useAppDispatch();
   const labels = [
-    ["grid", "Grid", "visible grid + HP guide"],
-    ["panelOutline", "Panel", "panel border / edge"],
-    ["mountingHoles", "Mount", "mounting holes"],
-    ["artwork", "Artwork", "imported images"],
-    ["text", "Text", "labels and scales"],
-    ["labels", "Labels", "component labels"],
-    ["componentHoles", "Holes", "drill/cut holes"],
-    ["frontShapes", "Front", "front visible shapes"],
-    ["topHardware", "Hardware", "knobs, jacks, caps"],
-    ["rearBodies", "Bodies", "rear physical bodies"],
-    ["rearKeepouts", "Keepout", "rear keepout zones"],
-    ["pcb", "PCB", "PCB outline"],
+    ["grid", "Grid"],
+    ["panelOutline", "Panel"],
+    ["mountingHoles", "Mount"],
+    ["artwork", "Art"],
+    ["text", "Text"],
+    ["labels", "Labels"],
+    ["componentHoles", "Holes"],
+    ["frontShapes", "Front"],
+    ["topHardware", "Hardware"],
+    ["rearBodies", "Bodies"],
+    ["rearKeepouts", "Keepouts"],
+    ["pcb", "PCB"],
   ];
   const visibleCount = labels.filter(([k]) => state.layerVisibility[k]).length;
-  const exportEnabled = (k) => state.layerExport?.[k] !== false;
-  const opacity = (k) => state.layerOpacity?.[k] ?? 1;
   function setAll(value) {
     const patch = {};
     labels.forEach(([k]) => (patch[k] = value));
     dispatch({ type: "SET_LAYER_VISIBILITY_BULK", patch });
   }
-  function solo(k) {
-    const patch = {};
-    labels.forEach(([key]) => (patch[key] = key === k));
-    dispatch({ type: "SET_LAYER_VISIBILITY_BULK", patch });
-  }
   return React.createElement(
     "div",
     { className: "section compact-layer-manager" },
-    React.createElement("div", { className: "section-title" }, "Layer Manager"),
+    React.createElement("div", { className: "section-title" }, "Layers"),
     React.createElement(
       "div",
-      { className: "field-row compact-render-row" },
+      { className: "layer-compact-presets" },
+      React.createElement(
+        "button",
+        {
+          title: "Visual view: artwork, labels, text, top hardware",
+          onClick: () =>
+            dispatch({ type: "APPLY_LAYER_PRESET", preset: "visual" }),
+        },
+        "Visual",
+      ),
+      React.createElement(
+        "button",
+        {
+          title: "Mechanical view: holes, rear bodies, keepouts, PCB",
+          onClick: () =>
+            dispatch({ type: "APPLY_LAYER_PRESET", preset: "mechanical" }),
+        },
+        "Mech",
+      ),
+      React.createElement(
+        "button",
+        {
+          title: "Production view: outline and cut/drill geometry only",
+          onClick: () =>
+            dispatch({ type: "APPLY_LAYER_PRESET", preset: "production" }),
+        },
+        "Prod",
+      ),
+      React.createElement(
+        "button",
+        { onClick: () => setAll(true), title: "Show all" },
+        "All",
+      ),
+      React.createElement(
+        "button",
+        { onClick: () => setAll(false), title: "Hide all" },
+        "None",
+      ),
+    ),
+    React.createElement(
+      "div",
+      { className: "layer-grid" },
+      labels.map(([k, l]) => {
+        const visible = !!state.layerVisibility[k];
+        return React.createElement(
+          "label",
+          {
+            key: k,
+            className: `layer-pill ${visible ? "on" : "off"}`,
+            title: visible ? `${l} — visible` : `${l} — hidden`,
+          },
+          React.createElement("input", {
+            type: "checkbox",
+            checked: visible,
+            onChange: (e) =>
+              dispatch({
+                type: "SET_LAYER_VISIBILITY",
+                key: k,
+                value: e.target.checked,
+              }),
+          }),
+          React.createElement("span", null, l),
+        );
+      }),
+    ),
+    React.createElement(
+      "div",
+      { className: "field-row compact-render-row", style: { marginTop: 10 } },
       React.createElement("label", null, "Hardware render"),
       React.createElement(
         "select",
@@ -85,7 +145,7 @@ function LayersPanel() {
               value: e.target.checked,
             }),
         }),
-        " Performance",
+        " Performance mode",
       ),
       React.createElement(
         "span",
@@ -95,127 +155,6 @@ function LayersPanel() {
         labels.length,
         " visible",
       ),
-    ),
-    React.createElement(
-      "div",
-      { className: "layer-compact-presets" },
-      React.createElement(
-        "button",
-        {
-          title: "Mechanical view: holes, rear bodies, keepouts, PCB",
-          onClick: () =>
-            dispatch({ type: "APPLY_LAYER_PRESET", preset: "mechanical" }),
-        },
-        "Mech",
-      ),
-      React.createElement(
-        "button",
-        {
-          title: "Visual view: artwork, labels, text, top hardware",
-          onClick: () =>
-            dispatch({ type: "APPLY_LAYER_PRESET", preset: "visual" }),
-        },
-        "Visual",
-      ),
-      React.createElement(
-        "button",
-        {
-          title: "Production view: outline and cut/drill geometry only",
-          onClick: () =>
-            dispatch({ type: "APPLY_LAYER_PRESET", preset: "production" }),
-        },
-        "Prod",
-      ),
-      React.createElement("button", { onClick: () => setAll(true) }, "All"),
-      React.createElement("button", { onClick: () => setAll(false) }, "None"),
-    ),
-    React.createElement(
-      "div",
-      { className: "layer-compact-table" },
-      labels.map(([k, l, hint]) =>
-        React.createElement(
-          "div",
-          {
-            key: k,
-            className: `layer-compact-row ${state.layerVisibility[k] ? "on" : "off"}`,
-          },
-          React.createElement(
-            "div",
-            { className: "layer-compact-top" },
-            React.createElement("b", null, l),
-            React.createElement("input", {
-              className: "layer-compact-slider",
-              type: "range",
-              min: 0.1,
-              max: 1,
-              step: 0.05,
-              value: opacity(k),
-              onChange: (e) =>
-                dispatch({
-                  type: "SET_LAYER_OPACITY",
-                  key: k,
-                  value: +e.target.value,
-                }),
-            }),
-          ),
-          React.createElement(
-            "div",
-            { className: "layer-compact-bottom" },
-            React.createElement("small", null, hint),
-            React.createElement(
-              "div",
-              { className: "layer-compact-actions" },
-              React.createElement(
-                "label",
-                { className: "layer-compact-toggle", title: "Show layer" },
-                React.createElement("span", null, "Show"),
-                React.createElement("input", {
-                  type: "checkbox",
-                  checked: state.layerVisibility[k],
-                  onChange: (e) =>
-                    dispatch({
-                      type: "SET_LAYER_VISIBILITY",
-                      key: k,
-                      value: e.target.checked,
-                    }),
-                }),
-              ),
-              React.createElement(
-                "label",
-                {
-                  className: "layer-compact-toggle",
-                  title: "Export include/exclude",
-                },
-                React.createElement("span", null, "Exp"),
-                React.createElement("input", {
-                  type: "checkbox",
-                  checked: exportEnabled(k),
-                  onChange: (e) =>
-                    dispatch({
-                      type: "SET_LAYER_EXPORT",
-                      key: k,
-                      value: e.target.checked,
-                    }),
-                }),
-              ),
-              React.createElement(
-                "button",
-                {
-                  className: "layer-compact-solo",
-                  title: `Show only ${l}`,
-                  onClick: () => solo(k),
-                },
-                "Solo",
-              ),
-            ),
-          ),
-        ),
-      ),
-    ),
-    React.createElement(
-      "div",
-      { className: "menu-note compact-note" },
-      "Visibility/opacity affect editor immediately. Export flags are saved in project JSON.",
     ),
   );
 }
