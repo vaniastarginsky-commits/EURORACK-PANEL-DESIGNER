@@ -85,6 +85,34 @@ const ICON = {
     "M14 17h7M17 14v7",
   ]),
   hide: toolIcon("M15 18l-6-6 6-6"),
+  nudge: toolIcon([
+    "M12 4v16",
+    "M4 12h16",
+    "M9 7l3-3 3 3",
+    "M9 17l3 3 3-3",
+    "M7 9l-3 3 3 3",
+    "M17 9l3 3-3 3",
+  ]),
+  dup: toolIcon([
+    "M8 8h12v12H8z",
+    "M4 16V4h12",
+  ]),
+  lock: toolIcon([
+    "M5 11h14v10H5z",
+    "M8 11V7a4 4 0 0 1 8 0v4",
+  ]),
+  del: toolIcon([
+    "M4 7h16",
+    "M10 11v6",
+    "M14 11v6",
+    "M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13",
+    "M9 7V4h6v3",
+  ]),
+  more: toolIcon([
+    "M5 12h.01",
+    "M12 12h.01",
+    "M19 12h.01",
+  ]),
 };
 
 function CanvasToolRail({
@@ -274,13 +302,57 @@ function CanvasToolRail({
           onToggleSafeZones();
         },
       }),
-      command("Clr", ICON.clr, {
-        className: clearanceMode ? "active" : "",
-        onClick: () => {
-          setOpenMenu(null);
-          onToggleClearanceMode();
-        },
-      }),
+      React.createElement("div", { className: "canvas-tool-separator" }),
+      (() => {
+        const selected = state.selected || [];
+        const hasSel = selected.length > 0;
+        const selectedComponents = (state.components || []).filter((c) => selected.includes(c.id));
+        const allLocked = selectedComponents.length > 0 && selectedComponents.every((c) => !!c.locked);
+        return React.createElement(
+          React.Fragment,
+          null,
+          command("Nudge", ICON.nudge, {
+            disabled: !hasSel,
+            className: "canvas-tool-mobile-only",
+            onClick: () => {
+              setOpenMenu(null);
+              window.dispatchEvent(new Event("panel-designer:request-nudge-mode"));
+            },
+          }),
+          command("Dup", ICON.dup, {
+            disabled: !hasSel,
+            className: "canvas-tool-mobile-only",
+            onClick: () => {
+              setOpenMenu(null);
+              dispatch({ type: "DUPLICATE_SELECTED" });
+            },
+          }),
+          command(allLocked ? "Unlock" : "Lock", ICON.lock, {
+            disabled: !hasSel,
+            className: `canvas-tool-mobile-only${allLocked ? " active" : ""}`,
+            onClick: () => {
+              setOpenMenu(null);
+              dispatch({ type: "LOCK_SELECTED", locked: !allLocked });
+            },
+          }),
+          command("Del", ICON.del, {
+            disabled: !hasSel,
+            className: "canvas-tool-mobile-only danger",
+            onClick: () => {
+              setOpenMenu(null);
+              dispatch({ type: "DELETE_SELECTED" });
+            },
+          }),
+          command("More", ICON.more, {
+            disabled: !hasSel,
+            className: "canvas-tool-mobile-only",
+            onClick: () => {
+              setOpenMenu(null);
+              window.dispatchEvent(new Event("panel-designer:request-selection-more"));
+            },
+          }),
+        );
+      })(),
       command("Help", ICON.help, {
         className: "rail-help-btn",
         onClick: () => {

@@ -3226,7 +3226,7 @@ input[type="number"],
 
   .sidebar-right.open {
     right: 8px ;
-    left: 58px ;
+    left: calc(3px + var(--pd-rail-button, 54px) + 8px) ;
     width: auto ;
     overflow-x: hidden}
 
@@ -4852,6 +4852,7 @@ html[data-preset="graphite"] body {
 .appearance-preset-btn[data-preset-key="retro"] .appearance-preset-label { font-family: ui-monospace, "Fira Code", monospace; letter-spacing: 0; }
 .appearance-preset-btn[data-preset-key="light"] .appearance-preset-label { font-family: Inter, sans-serif; }
 .appearance-preset-btn[data-preset-key="synthwave"] .appearance-preset-label { font-family: Inter, sans-serif; letter-spacing: .04em; font-size: 9px; }
+.appearance-preset-btn[data-preset-key="sakura"] .appearance-preset-label { font-family: Inter, sans-serif; }
 .appearance-preset-label { font-variant-numeric: tabular-nums; }
 
 
@@ -5284,3 +5285,101 @@ html[data-preset="graphite"] body {
 .kicad-origin-row select {
   border-radius: var(--theme-radius, 0);
 }
+
+@media (max-width: 900px), (pointer: coarse) {
+  .canvas-wrap > .canvas-hud { display: none; }
+}
+
+.mobile-selection-actions.v267-context-bar { display: none; }
+
+/* Mobile: place coord-readout + selection-info-strip in bottom-right */
+@media (max-width: 900px), (pointer: coarse) {
+  .hud-bottom-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    position: absolute;
+    right: 8px;
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    left: auto;
+    top: auto;
+    z-index: 64;
+    gap: 4px;
+    pointer-events: none;
+    background: transparent;
+    border: 0;
+    padding: 0;
+  }
+  .hud-bottom-right > .coord-readout,
+  .hud-bottom-right > .selection-info-strip {
+    background: rgba(0, 0, 0, .55);
+    padding: 4px 8px;
+    border-radius: var(--theme-radius, 0);
+    font-variant-numeric: tabular-nums;
+    pointer-events: auto;
+  }
+}
+
+/* canvas-tool-mobile-only: selection-action buttons (Nudge/Dup/Lock/Del/More) hidden on desktop */
+@media (min-width: 901px) {
+  .canvas-tool-rail .canvas-tool-mobile-only { display: none; }
+}
+
+/* Appearance modal: close button compact square, accent strip visible on mobile */
+.appearance-modal-header > button {
+  flex: 0 0 auto;
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  min-height: 32px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+.appearance-accent-row {
+  min-width: 0;
+}
+.appearance-accent-strip {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+@media (max-width: 560px) {
+  .appearance-accent-row {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .appearance-accent-strip {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+}
+
+/* Appearance accent row: keep strip visible, Default button compact */
+.appearance-accent-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.appearance-accent-strip {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  display: block;
+}
+.appearance-accent-row > button {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 0;
+  padding: 4px 10px;
+}
+
+/* canvas-hud: center relative to canvas (offset by left tool rail) + 50% opacity */
+@media (min-width: 901px) {
+  .canvas-wrap > .canvas-hud {
+    left: calc(50% + (var(--pd-rail-left, 10px) + var(--pd-rail-button, 54px) + 12px) / 2);
+    opacity: 0.5;
+  }
+}
+
+.canvas-wrap > .canvas-hud { display: none; }
