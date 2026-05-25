@@ -4853,6 +4853,12 @@ html[data-preset="graphite"] body {
 .appearance-preset-btn[data-preset-key="light"] .appearance-preset-label { font-family: Inter, sans-serif; }
 .appearance-preset-btn[data-preset-key="synthwave"] .appearance-preset-label { font-family: Inter, sans-serif; letter-spacing: .04em; font-size: 9px; }
 .appearance-preset-btn[data-preset-key="sakura"] .appearance-preset-label { font-family: Inter, sans-serif; }
+.appearance-preset-btn[data-preset-key="amber"] .appearance-preset-label { font-family: "JetBrains Mono", monospace; letter-spacing: 0; }
+.appearance-preset-btn[data-preset-key="brutalist"] .appearance-preset-label { font-family: "Helvetica Neue", Helvetica, sans-serif; font-weight: 900; }
+.appearance-preset-btn[data-preset-key="tape"] .appearance-preset-label { font-family: "IBM Plex Sans", sans-serif; }
+.appearance-preset-btn[data-preset-key="forest"] .appearance-preset-label { font-family: Inter, sans-serif; }
+.appearance-preset-btn[data-preset-key="submarine"] .appearance-preset-label { font-family: "JetBrains Mono", monospace; letter-spacing: 0; }
+.appearance-preset-btn[data-preset-key="solarpunk"] .appearance-preset-label { font-family: "IBM Plex Sans", sans-serif; }
 .appearance-preset-label { font-variant-numeric: tabular-nums; }
 
 
