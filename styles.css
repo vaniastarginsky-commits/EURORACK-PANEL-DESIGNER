@@ -3702,7 +3702,8 @@ html.pd-contrast-on::after {
   .global-topbar {
     height: 42px ;
     min-height: 42px ;
-    max-height: 42px}
+    max-height: 42px ;
+    border-bottom: none}
 
   .global-topbar .app-title {
     display: none}
