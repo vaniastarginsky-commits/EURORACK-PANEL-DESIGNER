@@ -385,6 +385,7 @@ function FileMenuContent({
   onExportSVGClick,
   onRequestProjectFileImport,
   onRequestKiCadPcbImport,
+  onRequestEagleBrdImport,
   onOpenLocalProjects,
 }) {
   const state = useAppState();
@@ -458,6 +459,16 @@ function FileMenuContent({
           },
         },
         "Import KiCad PCB...",
+      ),
+      React.createElement(
+        "button",
+        {
+          onClick: () => {
+            onClose();
+            onRequestEagleBrdImport();
+          },
+        },
+        "Import Eagle .brd...",
       ),
       React.createElement(
         "button",
