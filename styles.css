@@ -4148,7 +4148,7 @@ html.pd-contrast-on::after {
   display: flex;
   flex-direction: column-reverse;
   align-items: stretch;
-  width: 280px;
+  width: max-content;
   max-width: calc(100vw - 20px)}
 .dfm-status-main {
   display: flex;
