@@ -4665,7 +4665,12 @@ html[data-preset="synthwave"] {
 /* ===== 10. Mobile ===== */
 
 @media (max-width: 900px) {
-  html, body, #root { overflow: hidden; }
+  html, body, #root {
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
 
   .main,
   .workspace,
