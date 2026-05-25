@@ -647,14 +647,16 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
                 opacity: hwOpacity,
               },
               _nutEl,
-              React.createElement("line", {
-                x1: cx,
-                y1: cy,
-                x2: cx,
-                y2: cy - 8,
-                stroke: color,
-                strokeWidth: 1.05,
-                strokeLinecap: "round",
+              React.createElement("rect", {
+                x: cx - Math.max(c.holeDiameter * 0.375, 1.25),
+                y: cy - _R * 1.3,
+                width: Math.max(c.holeDiameter * 0.75, 2.5),
+                height: _R * 1.7,
+                rx: Math.max(c.holeDiameter * 0.375, 1.25),
+                fill: color,
+                fillOpacity: 0.85,
+                stroke: "rgba(0,0,0,0.45)",
+                strokeWidth: 0.2,
               }),
             );
           }
@@ -1427,24 +1429,18 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
             c.nutShape ?? (c.type === "toggle2m" ? "hex" : "circle");
           const _R = c.frontDiameter / 2;
           const _holeR = c.holeDiameter / 2 + 0.5;
-          const _leverX2 = cx + 2.1;
-          const _leverY2 = cy - 7.5;
-          const _leverLine = React.createElement("line", {
-            x1: cx,
-            y1: cy + 1.0,
-            x2: _leverX2,
-            y2: _leverY2,
-            stroke: "#242422",
-            strokeWidth: 1.1,
-            strokeLinecap: "round",
-          });
-          const _ball = React.createElement("circle", {
-            cx: _leverX2,
-            cy: _leverY2,
-            r: 1.0,
-            fill: "#343432",
-            stroke: "#565654",
-            strokeWidth: 0.14,
+          const _leverW = Math.max(c.holeDiameter * 0.75, 2.5);
+          const _leverH = _R * 1.7;
+          const _lever = React.createElement("rect", {
+            key: "lever",
+            x: cx - _leverW / 2,
+            y: cy - _R * 1.3,
+            width: _leverW,
+            height: _leverH,
+            rx: _leverW / 2,
+            fill: "#1e1e1c",
+            stroke: "#3c3c3a",
+            strokeWidth: 0.18,
           });
           const _hexPts = (r, startDeg) =>
             [0, 60, 120, 180, 240, 300]
@@ -1517,8 +1513,7 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
               opacity: hwOpacity,
             },
             ..._nutEls,
-            _leverLine,
-            _ball,
+            _lever,
           );
         }
         if (getFrontShape(c) !== "circle") {
