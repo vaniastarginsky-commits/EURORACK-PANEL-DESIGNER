@@ -192,8 +192,10 @@ function CanvasToolRail({
     );
   }
 
+  const _popoverTop = Math.max(58, Math.min(menuTop, window.innerHeight - 260));
   const popoverStyle = {
-    top: Math.max(58, Math.min(menuTop, window.innerHeight - 260)),
+    top: _popoverTop,
+    maxHeight: window.innerHeight - _popoverTop - 8,
   };
 
   if (collapsed) {
