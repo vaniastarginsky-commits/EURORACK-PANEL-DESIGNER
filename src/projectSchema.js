@@ -37,6 +37,9 @@
     ergonomicDiameter: def.ergonomicDiameter,
     ergonomicEnabled: !!def.ergonomicEnabled,
     topColor: def.topColor,
+    nutShape: def.nutShape === "hex" ? "hex" : "circle",
+    switchFunction:
+      typeof def.switchFunction === "string" ? def.switchFunction : "on-off-on",
     topHardwareVisible: def.topHardwareVisible !== false,
     faderHandleW:
       typeof def.faderHandleW === "number" ? def.faderHandleW : undefined,
@@ -190,6 +193,14 @@ function validateAndNormalize(raw) {
         libMatch.ergonomicEnabled ?? false,
       ),
       topColor: typeof r.topColor === "string" ? r.topColor : libMatch.topColor,
+      nutShape:
+        r.nutShape === "hex" || r.nutShape === "circle"
+          ? r.nutShape
+          : (libMatch.nutShape ?? "circle"),
+      switchFunction:
+        r.switchFunction === "on-on" || r.switchFunction === "on-off-on"
+          ? r.switchFunction
+          : (libMatch.switchFunction ?? "on-off-on"),
       topHardwareVisible:
         typeof r.topHardwareVisible === "boolean"
           ? r.topHardwareVisible
