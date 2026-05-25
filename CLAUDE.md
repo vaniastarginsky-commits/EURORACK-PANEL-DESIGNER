@@ -17,6 +17,7 @@ Rules:
 
 - bugfixes only — do not refactor, restructure, or expand scope unless the user asks.
 
-Before fixing a bug, identify the affected surface and touch only its owner file/section.
+Before fixing a bug, read PROJECT_MAP.md / PROJECT_MAP.json for the affected surface.
+Use the `owns` list to identify files to touch and `do_not_touch` to avoid unrelated files.
 Do not edit unrelated owners.
 Run `npm run verify` after any CSS or metadata change.
