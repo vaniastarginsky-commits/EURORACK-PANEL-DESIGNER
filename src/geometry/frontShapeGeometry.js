@@ -47,8 +47,8 @@ function isJoystick(c) {
   return c.type === "joystick";
 }
 function joystickMountOffsets() {
-  // 32.5mm pitch → ±16.25mm on each axis, at 45° corners
-  const offset = 16.25;
+  // 25.5mm pitch → ±12.75mm on each axis, at 45° corners
+  const offset = 12.75;
   return [
     { x: offset, y: offset },
     { x: -offset, y: offset },
