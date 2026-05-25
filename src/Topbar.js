@@ -206,7 +206,8 @@ function Topbar({
           React.createElement(
             "button",
             {
-              className: "toolbar-menu-trigger toolbar-appearance-trigger topbar-icon-btn",
+              className:
+                "toolbar-menu-trigger toolbar-appearance-trigger topbar-icon-btn",
               onClick: () => AppCommands.openAppearance(),
               title: "Appearance settings",
               "aria-label": "Appearance",

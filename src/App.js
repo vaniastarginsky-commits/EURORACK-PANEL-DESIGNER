@@ -97,11 +97,23 @@ function App() {
       setShowMobileSelectionMore(false);
       setShowMobileNudge(true);
     }
-    window.addEventListener("panel-designer:request-selection-more", onRequestMore);
-    window.addEventListener("panel-designer:request-nudge-mode", onRequestNudge);
+    window.addEventListener(
+      "panel-designer:request-selection-more",
+      onRequestMore,
+    );
+    window.addEventListener(
+      "panel-designer:request-nudge-mode",
+      onRequestNudge,
+    );
     return () => {
-      window.removeEventListener("panel-designer:request-selection-more", onRequestMore);
-      window.removeEventListener("panel-designer:request-nudge-mode", onRequestNudge);
+      window.removeEventListener(
+        "panel-designer:request-selection-more",
+        onRequestMore,
+      );
+      window.removeEventListener(
+        "panel-designer:request-nudge-mode",
+        onRequestNudge,
+      );
     };
   }, []);
   const [showTouchHitboxes, setShowTouchHitboxes] = useState(false);

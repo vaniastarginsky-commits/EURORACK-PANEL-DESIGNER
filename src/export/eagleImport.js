@@ -53,9 +53,7 @@ function bestLibraryPartForEagle(name, pkg) {
   const find = (type) =>
     COMPONENT_LIBRARY.find((p) => p.type === type) || COMPONENT_LIBRARY[0];
   if (
-    /thonkiconn|pj398sm|wqp-pj398sm|3\.5mm-jack|jack.*3\.5|3\.5.*jack/.test(
-      hay,
-    )
+    /thonkiconn|pj398sm|wqp-pj398sm|3\.5mm-jack|jack.*3\.5|3\.5.*jack/.test(hay)
   )
     return find("jack");
   if (/slim.*jack|cliff.*fc68|rean.*nys|jack.*6\.35|6\.35.*jack/.test(hay))
