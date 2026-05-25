@@ -30,6 +30,5 @@ Do not replace the current app with it.
 
 Preserve current features while restoring this level of simplicity and ownership.
 
-Before fixing a bug, read PROJECT_MAP.md / PROJECT_MAP.json for the affected surface.
-Use the “Files to touch / Files NOT to touch” section to scope the fix.
+Before fixing a bug, identify the affected surface and touch only its owner file/section.
 Do not edit unrelated owners.

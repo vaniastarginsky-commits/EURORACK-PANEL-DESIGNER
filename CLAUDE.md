@@ -5,28 +5,18 @@ For all CSS, visual polish, redesign, frontend-design, and layout work, read and
 @docs/CSS_DESIGN_POLICY.md
 
 CSS cleanup phase is complete. Do not reintroduce cascade debt.
-## !important reduction policy
+## No-important preservation policy
 
-Before fixing a bug, read PROJECT_MAP.md / PROJECT_MAP.json for the affected surface.
-Use the “Files to touch / Files NOT to touch” section to scope the fix.
+`styles.css` currently has zero `!important` declarations. Keep it that way.
+
+Rules:
+
+- do not add `!important` to any new or existing declaration unless explicitly approved by the user;
+
+- preserve the tokenized/semantic CSS structure (ThemeEngine vars, channel vars, 11-section domain layout);
+
+- bugfixes only — do not refactor, restructure, or expand scope unless the user asks.
+
+Before fixing a bug, identify the affected surface and touch only its owner file/section.
 Do not edit unrelated owners.
-
-Allowed:
-
-- remove dead `!important` declarations when a later canonical rule fully overrides them;
-
-- remove redundant `!important` declarations that set the same value as the winning rule;
-
-- remove `!important` only within the UI surface being fixed;
-
-- report before/after count and run `npm run verify`.
-
-Not allowed:
-
-- global `!important` purge;
-
-- removing unrelated declarations only to improve the count;
-
-- replacing old `!important` with new broader selectors;
-
-- adding new `!important` without explicit approval.
+Run `npm run verify` after any CSS or metadata change.

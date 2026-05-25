@@ -2,7 +2,6 @@
 
 Use this file for reusable project knowledge discovered during debugging and bugfixes.
 
-`PROJECT_MAP.md` explains where things live and who owns what.
 `knowledge.md` records what we learned while investigating bugs.
 
 **Update `knowledge.md` when a finding will help future debugging:**
@@ -20,7 +19,7 @@ Use this file for reusable project knowledge discovered during debugging and bug
 - generic commit summaries
 - vague guesses without status
 - long npm logs
-- information already covered by `PROJECT_MAP.md`
+- information already visible from current code structure
 
 After each non-trivial bugfix, explicitly answer:
 > "Does this fix add reusable knowledge?"
