@@ -61,4 +61,57 @@ Inline styles beat CSS rules, so this always overrides the class-level `max-heig
 
 **Pattern to watch:** Any `position: fixed` popup whose `top` is set dynamically (JS) while `max-height` is static (CSS) will silently clip content without a scrollbar whenever `content_height < css_max_height` but `top + content_height > viewport_height`. Always pair dynamic `top` with a computed `maxHeight = viewport_height - top - padding`.
 
-**Commit:** `ux-polish`.
+**Commit:** `5e3579a` on `ux-polish`.
+
+---
+
+## 2026-05-26 — IIFE модуль без публичного API: паттерн экспорта через window
+
+**Контекст:** `ViewContrast.js` — самодостаточный IIFE (immediately-invoked function expression) без `window.ViewContrast`. Единственный внешний интерфейс — кастомное событие `panel-designer:toggle-view-contrast`. `AppearanceModal.js` нужен был прямой доступ (read/save) без toggle-only API.
+
+**Решение:** В конце IIFE, перед блоком `if (document.readyState === "loading")`, добавить одну строку:
+```js
+window.ViewContrast = { read, save };
+```
+Функции `read` и `save` уже определены внутри IIFE — экспорт не меняет их поведение, только даёт внешний доступ.
+
+**Паттерн:** Когда IIFE нужно открыть для другого модуля — не переписывать в ES-модуль, достаточно добавить `window.MyModule = { publicFn1, publicFn2 }` в самом конце тела IIFE. Существующий код остаётся нетронутым.
+
+---
+
+## 2026-05-26 — user-select: none на mobile не ломает ввод текста
+
+**Факт:** `user-select: none` на `body` (или `html`) в `@media (max-width: 900px)` предотвращает нежелательное выделение текста и SVG при long-press на мобильном. При этом `input`, `select`, `textarea` **не теряют** возможность редактирования — браузер принудительно включает `user-select: text` внутри полей ввода независимо от родительского значения.
+
+**Дополнение:** `-webkit-touch-callout: none` убирает iOS-попап («Копировать», «Выбрать всё», «Поделиться») при long-press на SVG/canvas. Не влияет на ввод текста.
+
+**Место в коде:** §10 Mobile (`styles.css`), блок `html, body, #root`.
+
+**Commit:** `b4fd3ec` on `ux-polish`.
+
+---
+
+## 2026-05-26 — Top hardware потенциометров не вращалась при изменении `rotation`
+
+**Симптом:** При изменении угла поворота (`rotation`) у потенциометра/триммера крутился только корпус (фронтальный слой), а top hardware (ручка с индикаторной линией) оставалась на месте.
+
+**Root cause:** В `Canvas.js`, функция рендера top hardware (`TopHardwareLayer`), все три ветки `isPotLike(c)` — нереалистичная (classic), реалистичный триммер и реалистичный обычный пот — не передавали `transform: rot` в группу `<g>`. Все остальные типы (fader, toggle, dip8socket) передавали `rot` корректно.
+
+**Фикс:** Добавить `transform: rot` в `{ key: c.id, "data-top-hardware-id": c.id, opacity: hwOpacity }` для всех трёх групп (строки ~452, ~975, ~1014).
+
+**Применимость:** Круговая симметрия делает вращение визуально незаметным на circle-shaped элементах (jack, button, led) — поэтому для них `rot` намеренно не применяется. Потенциометр — особый случай: индикаторная линия несимметрична.
+
+---
+
+## 2026-05-26 — Добавление нового типа компонента с несколькими отверстиями
+
+**Паттерн:** Чтобы добавить компонент с несколькими отверстиями (как dip8socket или joystick), нужно затронуть 6 мест:
+1. `componentDefinitions.js` — запись с размерами
+2. `frontShapeGeometry.js` — `isXxx()` type check + `xxxHoles(c, cx, cy)` хелпер для позиций отверстий
+3. `Canvas.js` top hardware — рендер в ветках `!realistic` и realistic
+4. `Canvas.js` front shape — special case в ternary (~строка 1846)
+5. `Canvas.js` componentHoles — special case в ternary (~строка 1915)
+6. `exportHelpers.js` + `exportEngine.js` — export DXF/Eagle/SVG
+7. `componentSorting.js` — порядок в библиотеке
+
+**Joystick-специфика:** `holeDiameter: 30` = центральное вырезанное отверстие (под резиновый чехол); 4 крепёжных M3 отверстия (3.2mm) на радиусе 17.5mm под углами 45°/135°/225°/315°; `frontDiameter: 40` = внешний обод (для collision/selection).

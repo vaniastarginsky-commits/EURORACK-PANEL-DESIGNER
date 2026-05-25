@@ -193,6 +193,14 @@ function exportPNGSVGString(state, opts, cfg) {
         holesLines.push(
           `<circle cx="${p.x.toFixed(3)}"cy="${p.y.toFixed(3)}"r="${(c.holeDiameter / 2).toFixed(3)}"fill="white"stroke="#333"stroke-width="0.3"/>`,
         );
+    } else if (cfg.includeHoles && exportLayer("componentHoles") && isJoystick(c)) {
+      holesLines.push(
+        `<circle cx="${c.x.toFixed(3)}"cy="${c.y.toFixed(3)}"r="${(c.holeDiameter / 2).toFixed(3)}"fill="white"stroke="#333"stroke-width="0.3"/>`,
+      );
+      for (const p of joystickMountHoles(c))
+        holesLines.push(
+          `<circle cx="${p.x.toFixed(3)}"cy="${p.y.toFixed(3)}"r="${p.r.toFixed(3)}"fill="white"stroke="#333"stroke-width="0.3"/>`,
+        );
     } else if (
       cfg.includeHoles &&
       exportLayer("componentHoles") &&

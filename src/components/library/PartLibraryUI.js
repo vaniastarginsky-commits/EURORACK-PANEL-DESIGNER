@@ -108,6 +108,33 @@ function PartIcon({ def }) {
         }),
       );
     }
+    if (isJoystick(def)) {
+      return React.createElement(
+        "svg",
+        { className: "part-icon", viewBox: "0 0 24 24", "aria-hidden": "true" },
+        React.createElement("circle", { cx: "12", cy: "12", r: "7.5", ...common }),
+        React.createElement("circle", { cx: "12", cy: "12", r: "5.1", ...common, strokeWidth: "1.3" }),
+        React.createElement("circle", { cx: "12", cy: "12", r: "2.8", ...common, strokeWidth: "1.0" }),
+        React.createElement("circle", { cx: "12", cy: "12", r: "1.3", fill: "currentColor", opacity: ".55" }),
+        React.createElement("circle", { cx: "17.8", cy: "6.2", r: ".82", fill: "currentColor", opacity: ".55" }),
+        React.createElement("circle", { cx: "6.2", cy: "6.2", r: ".82", fill: "currentColor", opacity: ".55" }),
+        React.createElement("circle", { cx: "6.2", cy: "17.8", r: ".82", fill: "currentColor", opacity: ".55" }),
+        React.createElement("circle", { cx: "17.8", cy: "17.8", r: ".82", fill: "currentColor", opacity: ".55" }),
+      );
+    }
+    if (
+      def.type === "toggle" ||
+      def.type === "toggleSpdt" ||
+      def.type === "toggle2m"
+    ) {
+      return React.createElement(
+        "svg",
+        { className: "part-icon", viewBox: "0 0 24 24", "aria-hidden": "true" },
+        React.createElement("circle", { cx: "12", cy: "15", r: "5.8", ...common }),
+        React.createElement("rect", { x: "10", y: "3.5", width: "4", height: "12", rx: "2", fill: "currentColor", opacity: ".75" }),
+        React.createElement("circle", { cx: "12", cy: "15", r: "2.2", fill: "currentColor", opacity: ".22" }),
+      );
+    }
     return React.createElement(
       "svg",
       { className: "part-icon", viewBox: "0 0 24 24", "aria-hidden": "true" },
@@ -491,6 +518,69 @@ function LibraryPartPreview({ def }) {
                         stroke: "rgba(235,245,248,.70)",
                         strokeWidth: ".22",
                         strokeLinecap: "round",
+                      }),
+                    )
+                  : c.type === "toggle" ||
+                    c.type === "toggleSpdt" ||
+                    c.type === "toggle2m"
+                  ? React.createElement(
+                      "g",
+                      null,
+                      React.createElement("circle", { cx: cx + 0.3, cy: cy + 0.4, r: c.frontDiameter / 2 + 0.35, fill: "rgba(0,0,0,.42)", stroke: "none" }),
+                      React.createElement("rect", {
+                        x: cx - Math.max(c.holeDiameter * 0.375, 1.25),
+                        y: cy - c.frontDiameter / 2 * 1.28,
+                        width: Math.max(c.holeDiameter * 0.75, 2.5),
+                        height: c.frontDiameter / 2 * 1.72,
+                        rx: Math.max(c.holeDiameter * 0.375, 1.25),
+                        fill: "#1e1e1c",
+                        stroke: "#3c3c3a",
+                        strokeWidth: ".2",
+                      }),
+                      c.nutShape === "hex"
+                        ? React.createElement("polygon", {
+                            points: [0, 60, 120, 180, 240, 300]
+                              .map((deg) => {
+                                const a = (deg * Math.PI) / 180;
+                                return `${cx + (c.frontDiameter / 2) * Math.cos(a)},${cy + (c.frontDiameter / 2) * Math.sin(a)}`;
+                              })
+                              .join(" "),
+                            fill: "#86888a",
+                            stroke: "rgba(0,0,0,.55)",
+                            strokeWidth: ".32",
+                          })
+                        : React.createElement("circle", { cx, cy, r: c.frontDiameter / 2, fill: "#86888a", stroke: "rgba(0,0,0,.55)", strokeWidth: ".32" }),
+                      React.createElement("circle", { cx, cy, r: c.frontDiameter / 2 * 0.72, fill: "#9ea0a2", stroke: "rgba(0,0,0,.2)", strokeWidth: ".18" }),
+                      React.createElement("circle", { cx, cy, r: c.holeDiameter / 2 * 0.62, fill: "#090b0c", stroke: "rgba(255,255,255,.22)", strokeWidth: ".18" }),
+                      React.createElement("ellipse", { cx: cx - c.frontDiameter / 2 * 0.22, cy: cy - c.frontDiameter / 2 * 0.26, rx: c.frontDiameter / 2 * 0.32, ry: c.frontDiameter / 2 * 0.2, fill: "rgba(255,255,255,.22)", stroke: "none" }),
+                    )
+                  : isJoystick(c)
+                  ? React.createElement(
+                      "g",
+                      null,
+                      React.createElement("circle", { cx: cx + 0.5, cy: cy + 0.5, r: c.frontDiameter / 2 + 0.4, fill: "rgba(0,0,0,.52)", stroke: "none" }),
+                      React.createElement("circle", { cx, cy, r: c.frontDiameter / 2, fill: "#1a1c1e", stroke: "none" }),
+                      React.createElement("circle", { cx, cy, r: c.frontDiameter / 2, fill: "none", stroke: "rgba(255,255,255,.18)", strokeWidth: ".5" }),
+                      React.createElement("circle", { cx, cy, r: c.frontDiameter / 2 - 0.3, fill: "none", stroke: "rgba(0,0,0,.65)", strokeWidth: ".5" }),
+                      React.createElement("circle", { cx, cy, r: 14.6, fill: "none", stroke: "rgba(0,0,0,.75)", strokeWidth: "1.2" }),
+                      React.createElement("circle", { cx, cy, r: 14.0, fill: "#090b0c", stroke: "none" }),
+                      ...[14.0, 12.0, 9.5, 7.5, 5.5, 4.0].flatMap((r, i) => [
+                        React.createElement("circle", { key: `bsh${i}`, cx: cx + 0.22, cy: cy + 0.22, r, fill: "none", stroke: "rgba(0,0,0,.42)", strokeWidth: ".45" }),
+                        React.createElement("circle", { key: `brd${i}`, cx, cy, r, fill: "none", stroke: "#050607", strokeWidth: i < 2 ? "1.1" : ".8" }),
+                        React.createElement("circle", { key: `brh${i}`, cx, cy, r, fill: "none", stroke: "rgba(255,255,255,.05)", strokeWidth: ".22" }),
+                      ]),
+                      React.createElement("circle", { cx, cy, r: "4.0", fill: "#060708", stroke: "rgba(0,0,0,.55)", strokeWidth: ".4" }),
+                      React.createElement("circle", { cx, cy, r: "3.5", fill: "#111415", stroke: "#282a2c", strokeWidth: ".2" }),
+                      React.createElement("ellipse", { cx: cx - 1.1, cy: cy - 1.3, rx: "1.3", ry: ".9", fill: "rgba(255,255,255,.13)", stroke: "none" }),
+                      React.createElement("circle", { cx, cy, r: ".65", fill: "#222426", stroke: "rgba(255,255,255,.28)", strokeWidth: ".1" }),
+                      ...[[1, 1], [-1, 1], [-1, -1], [1, -1]].flatMap(([ox, oy], i) => {
+                        const sx = cx + ox * 16.25;
+                        const sy = cy + oy * 16.25;
+                        return [
+                          React.createElement("circle", { key: `ssh${i}`, cx: sx, cy: sy, r: "1.55", fill: "#252729", stroke: "#4a4c4f", strokeWidth: ".14" }),
+                          React.createElement("line", { key: `sc1${i}`, x1: sx - 0.85, y1: sy, x2: sx + 0.85, y2: sy, stroke: "#0a0b0c", strokeWidth: ".28", strokeLinecap: "round" }),
+                          React.createElement("line", { key: `sc2${i}`, x1: sx, y1: sy - 0.85, x2: sx, y2: sy + 0.85, stroke: "#0a0b0c", strokeWidth: ".28", strokeLinecap: "round" }),
+                        ];
                       }),
                     )
                   : React.createElement(

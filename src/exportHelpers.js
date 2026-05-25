@@ -547,6 +547,12 @@ function exportDXF(state) {
       dip8SocketHoleCenters(c).forEach((p) => {
         out += dxfCircle(p.x, p.y, c.holeDiameter / 2, "DRILL");
       });
+    else if (isJoystick(c)) {
+      out += dxfCircle(c.x, c.y, c.holeDiameter / 2, "CUT");
+      joystickMountHoles(c).forEach((p) => {
+        out += dxfCircle(p.x, p.y, p.r, "DRILL");
+      });
+    }
     else if (c.holeType === "rect")
       out += dxfRect(
         c.x,
@@ -630,6 +636,11 @@ function exportEagleSCR(state) {
     if (isDip8Socket(c)) {
       for (const p of dip8SocketHoleCenters(c)) {
         out.push(`HOLE ${c.holeDiameter.toFixed(3)} (${ex(p.x)} ${ey(p.y)});`);
+      }
+    } else if (isJoystick(c)) {
+      out.push(`HOLE ${c.holeDiameter.toFixed(3)} (${ex(c.x)} ${ey(c.y)});`);
+      for (const p of joystickMountHoles(c)) {
+        out.push(`HOLE ${(p.r * 2).toFixed(3)} (${ex(p.x)} ${ey(p.y)});`);
       }
     } else if (c.holeType === "slot") {
       const sl = c.slotLength ?? c.holeDiameter;

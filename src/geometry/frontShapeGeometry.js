@@ -43,6 +43,32 @@ function getFrontBounds(c) {
 function isDip8Socket(c) {
   return c.type === "dip8socket";
 }
+function isJoystick(c) {
+  return c.type === "joystick";
+}
+function joystickMountOffsets() {
+  // 32.5mm pitch → ±16.25mm on each axis, at 45° corners
+  const offset = 16.25;
+  return [
+    { x: offset, y: offset },
+    { x: -offset, y: offset },
+    { x: -offset, y: -offset },
+    { x: offset, y: -offset },
+  ];
+}
+function joystickMountHoles(c, cx, cy) {
+  const x0 = cx ?? c.x ?? 0;
+  const y0 = cy ?? c.y ?? 0;
+  const rot = ((c.rotation || 0) * Math.PI) / 180;
+  const ca = Math.cos(rot),
+    sa = Math.sin(rot);
+  const holeR = (c.mountHoleDiameter ?? 3.2) / 2;
+  return joystickMountOffsets().map((o) => ({
+    x: x0 + o.x * ca - o.y * sa,
+    y: y0 + o.x * sa + o.y * ca,
+    r: holeR,
+  }));
+}
 function dip8SocketPinOffsets() {
   const row = 7.62 / 2;
   const pitch = 2.54;
