@@ -137,6 +137,7 @@ function App() {
   }
   const projectFileInputRef = useRef(null);
   const kicadPcbInputRef = useRef(null);
+  const eagleBrdInputRef = useRef(null);
   const pendingFileOpenRef = useRef(false);
   const [showLocalProjectsDialog, setShowLocalProjectsDialog] = useState(false);
   const [showTemplatesDialog, setShowTemplatesDialog] = useState(false);
@@ -2880,6 +2881,17 @@ function App() {
     input.value = "";
     input.click();
   }
+  function requestEagleBrdImport() {
+    const input =
+      eagleBrdInputRef.current ||
+      document.getElementById("eagle-brd-file-input");
+    if (!input) {
+      setAutosaveStatus("Eagle .brd file input unavailable");
+      return;
+    }
+    input.value = "";
+    input.click();
+  }
   function onKiCadPcbImport(e) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -2923,6 +2935,56 @@ function App() {
       if (result.boardOutline)
         msg.push(
           `Edge.Cuts: ${result.boardOutline.width.toFixed(2)} × ${result.boardOutline.height.toFixed(2)} mm.`,
+        );
+      if (result.warnings.length) msg.push("", ...result.warnings);
+      window.appNotify(msg.join("\n"), { timeout: 12000 });
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  }
+  function onEagleBrdImport(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (ev) => {
+      const src = String(ev.target?.result || "");
+      const hasProjectData =
+        state.components.length > 0 ||
+        state.artworks.length > 0 ||
+        state.textItems.length > 0 ||
+        state.scaleItems.length > 0;
+      if (hasProjectData) {
+        const ok = await appConfirm({
+          title: "Import Eagle .brd",
+          message:
+            "Replace the current project layout with the Eagle .brd import? This clears old text, scales and artwork.",
+          confirmText: "Import Eagle",
+        });
+        if (!ok) return;
+      }
+      const result = parseEagleBrdToPanel(src, panelWidthMM(state.panel));
+      if (!result.components.length) {
+        alert(
+          `Eagle import found no components.\n${result.warnings.join("\n")}`,
+        );
+        return;
+      }
+      dispatch({
+        type: "LOAD_KICAD_IMPORT",
+        components: result.components,
+        panelWidthMM: result.panelWidthMM,
+        boardOutline: result.boardOutline,
+      });
+      dispatch({ type: "SET_VIEW_MODE", mode: "front" });
+      setAutosaveStatus(
+        `Imported Eagle .brd · ${result.components.length} parts`,
+      );
+      const msg = [
+        `Imported ${result.components.length} parts from Eagle .brd.`,
+      ];
+      if (result.boardOutline)
+        msg.push(
+          `Board outline: ${result.boardOutline.width.toFixed(2)} × ${result.boardOutline.height.toFixed(2)} mm.`,
         );
       if (result.warnings.length) msg.push("", ...result.warnings);
       window.appNotify(msg.join("\n"), { timeout: 12000 });
@@ -2987,6 +3049,12 @@ function App() {
       label: "Import KiCad PCB…",
       hint: "Read .kicad_pcb footprint positions into the front-panel layout",
       run: () => requestKiCadPcbImport(),
+    },
+    {
+      id: "import-eagle-brd",
+      label: "Import Eagle .brd…",
+      hint: "Read Eagle 6+ board element positions into the front-panel layout",
+      run: () => requestEagleBrdImport(),
     },
     {
       id: "shortcuts",
@@ -3502,6 +3570,7 @@ function App() {
       onExportSVGClick: () => setShowExportDialog(true),
       onRequestProjectFileImport: requestProjectFileImport,
       onRequestKiCadPcbImport: requestKiCadPcbImport,
+      onRequestEagleBrdImport: requestEagleBrdImport,
       onOpenLocalProjects: () => setShowLocalProjectsDialog(true),
       onOpenProductionCheck: () => setShowProductionCheck(true),
       onOpenShortcuts: () => setShowShortcutHelp(true),
@@ -3561,6 +3630,22 @@ function App() {
         opacity: 0,
       },
       onChange: onKiCadPcbImport,
+    }),
+    React.createElement("input", {
+      id: "eagle-brd-file-input",
+      ref: eagleBrdInputRef,
+      type: "file",
+      accept: ".brd",
+      tabIndex: -1,
+      style: {
+        position: "fixed",
+        left: -10000,
+        top: 0,
+        width: 1,
+        height: 1,
+        opacity: 0,
+      },
+      onChange: onEagleBrdImport,
     }),
     showLocalProjectsDialog &&
       React.createElement(LocalProjectsDialog, {
