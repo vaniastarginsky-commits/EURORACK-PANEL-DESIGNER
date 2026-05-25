@@ -4196,7 +4196,7 @@ function App() {
                     React.createElement(
                       "button",
                       { onClick: () => setShowMobileNudge(false) },
-                      "Done",
+                      "✓",
                     ),
                   ),
                   React.createElement(
@@ -4220,7 +4220,7 @@ function App() {
                         className: mobileFineMode ? "active" : "",
                         onClick: () => setMobileFineMode((v) => !v),
                       },
-                      mobileFineMode ? "Fine" : "Normal",
+                      mobileFineMode ? "⊕" : "○",
                     ),
                     React.createElement(
                       "button",

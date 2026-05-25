@@ -3242,42 +3242,68 @@ input[type="number"],
   .panel-canvas {
     max-height: calc(100dvh - 176px)}
 
-  /* nudge mode sheet — floats above selection-actions bar */
+  /* nudge mode sheet — pinned to very bottom, compact */
   .mobile-nudge-mode-sheet {
-    position: absolute;
-    right: 8px;
-    bottom: calc(66px + env(safe-area-inset-bottom, 0px));
-    left: 8px;
-    z-index: 65;
-    padding: 12px}
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(220px, calc(100% - 16px));
+    z-index: 70;
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+    background: rgba(5, 5, 5, .93);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(var(--ui-line-rgb), .18)}
 
   .mobile-nudge-mode-head {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 10px}
+    gap: 8px;
+    margin-bottom: 6px}
 
   .mobile-nudge-mode-head strong {
     flex: 1;
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: #d6aa58}
 
   .mobile-nudge-mode-head span {
-    font-size: 11px;
+    font-size: 10px;
     color: #928b7d}
+
+  .mobile-nudge-mode-head button {
+    min-height: 28px;
+    height: 28px;
+    padding: 0 10px;
+    font-size: 15px}
 
   .mobile-nudge-mode-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 6px;
-    margin-bottom: 8px}
+    gap: 4px;
+    margin-bottom: 4px}
+
+  .mobile-nudge-mode-grid button {
+    min-height: 36px;
+    height: 36px;
+    padding: 0;
+    font-size: 16px}
 
   .mobile-nudge-mode-presets {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 6px}
+    gap: 4px}
+
+  .mobile-nudge-mode-presets button {
+    min-height: 32px;
+    height: 32px;
+    padding: 0;
+    font-size: 12px}
+
+  .hud-bottom-right > .coord-readout,
+  .hud-bottom-right > .selection-info-strip {
+    display: none}
 }
 
 /* desktop tool rail layout variables and shared tone panel */
