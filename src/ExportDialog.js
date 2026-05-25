@@ -316,6 +316,14 @@ function ExportDialog({
         React.createElement(
           "button",
           {
+            className: tab === "eagle" ? "active" : "",
+            onClick: () => setTab("eagle"),
+          },
+          "Eagle",
+        ),
+        React.createElement(
+          "button",
+          {
             className: tab === "package" ? "active" : "",
             onClick: () => setTab("package"),
           },
@@ -822,6 +830,34 @@ function ExportDialog({
                 onClick: onExportKiCad,
               },
               "Export KiCad PCB",
+            ),
+          ),
+        ),
+      tab === "eagle" &&
+        React.createElement(
+          "div",
+          { className: "export-tab-body" },
+          React.createElement(
+            "div",
+            { className: "section-title" },
+            "Eagle board script",
+          ),
+          React.createElement(
+            "div",
+            {
+              className: "warning-item warn",
+              style: { fontSize: 10, marginBottom: 10 },
+            },
+            "Generates a .scr script with panel outline (Layer 20 Dimension) and all drill/cut holes (HOLE + Layer 46 Milling). Execute in Eagle via File → Execute Script.",
+          ),
+          React.createElement(
+            "div",
+            { className: "export-dialog-actions" },
+            React.createElement("button", { onClick: onCancel }, "Cancel"),
+            React.createElement(
+              "button",
+              { className: "primary", onClick: onExportEagle },
+              "Export Eagle SCR",
             ),
           ),
         ),

@@ -436,6 +436,100 @@ function exportDXF(state) {
   a.click();
   URL.revokeObjectURL(url);
 }
+function exportEagleSCR(state) {
+  const W = panelWidthMM(state.panel);
+  const H = PANEL_HEIGHT_MM;
+  function ex(x) {
+    return x.toFixed(3);
+  }
+  function ey(y) {
+    return (H - y).toFixed(3);
+  }
+  function eagleCorners(cx, cy, hw, hh, rot) {
+    const a = degToRad(rot || 0),
+      co = Math.cos(a),
+      si = Math.sin(a);
+    return [
+      [-hw, -hh],
+      [hw, -hh],
+      [hw, hh],
+      [-hw, hh],
+    ].map(([dx, dy]) => [cx + dx * co - dy * si, cy + dx * si + dy * co]);
+  }
+  function wireRect(corners) {
+    const pts = [...corners, corners[0]];
+    return "WIRE " + pts.map(([x, y]) => `(${ex(x)} ${ey(y)})`).join(" ") + ";";
+  }
+  const out = [];
+  out.push("GRID MM;");
+  out.push("SET WIRE_BEND 2;");
+  out.push("");
+  out.push("LAYER 20 Dimension;");
+  out.push(
+    `WIRE (0.000 0.000) (${ex(W)} 0.000) (${ex(W)} ${ex(H)}) (0.000 ${ex(H)}) (0.000 0.000);`,
+  );
+  out.push("");
+  if (state.mountingHoles.enabled) {
+    for (const mh of state.mountingHoles.holes) {
+      if (state.mountingHoles.holeShape === "oval") {
+        const ow = Math.max(
+          state.mountingHoles.ovalLength ?? 4.8,
+          MOUNTING_HOLE_DIAMETER_MM,
+        );
+        const off = Math.max(0, (ow - MOUNTING_HOLE_DIAMETER_MM) / 2);
+        out.push(
+          `HOLE ${MOUNTING_HOLE_DIAMETER_MM.toFixed(3)} (${ex(mh.x)} ${(H - mh.y - off).toFixed(3)});`,
+        );
+        out.push(
+          `HOLE ${MOUNTING_HOLE_DIAMETER_MM.toFixed(3)} (${ex(mh.x)} ${(H - mh.y + off).toFixed(3)});`,
+        );
+        out.push("LAYER 46 Milling;");
+        out.push(
+          wireRect(eagleCorners(mh.x, mh.y, MOUNTING_HOLE_DIAMETER_MM / 2, ow / 2, 0)),
+        );
+      } else {
+        out.push(
+          `HOLE ${MOUNTING_HOLE_DIAMETER_MM.toFixed(3)} (${ex(mh.x)} ${ey(mh.y)});`,
+        );
+      }
+    }
+    out.push("");
+  }
+  for (const c of state.components) {
+    if (isDip8Socket(c)) {
+      for (const p of dip8SocketHoleCenters(c)) {
+        out.push(`HOLE ${c.holeDiameter.toFixed(3)} (${ex(p.x)} ${ey(p.y)});`);
+      }
+    } else if (c.holeType === "slot") {
+      const sl = c.slotLength ?? c.holeDiameter;
+      const a = degToRad(c.rotation || 0);
+      const off = Math.max(0, (sl - c.holeDiameter) / 2);
+      const p1x = c.x - off * Math.sin(a);
+      const p1y = c.y + off * Math.cos(a);
+      const p2x = c.x + off * Math.sin(a);
+      const p2y = c.y - off * Math.cos(a);
+      out.push(`HOLE ${c.holeDiameter.toFixed(3)} (${ex(p1x)} ${ey(p1y)});`);
+      out.push(`HOLE ${c.holeDiameter.toFixed(3)} (${ex(p2x)} ${ey(p2y)});`);
+      out.push("LAYER 46 Milling;");
+      out.push(
+        wireRect(eagleCorners(c.x, c.y, c.holeDiameter / 2, sl / 2, c.rotation || 0)),
+      );
+    } else if (c.holeType === "rect") {
+      const rw = c.holeW ?? c.frontW ?? c.holeDiameter;
+      const rh = c.holeH ?? c.frontH ?? c.holeDiameter;
+      out.push("LAYER 46 Milling;");
+      out.push(wireRect(eagleCorners(c.x, c.y, rw / 2, rh / 2, c.rotation || 0)));
+    } else {
+      out.push(`HOLE ${c.holeDiameter.toFixed(3)} (${ex(c.x)} ${ey(c.y)});`);
+    }
+  }
+  out.push("");
+  const base = safeProjectFileName(state.projectMeta?.name || "panel-layout").replace(
+    /\.json$/i,
+    "",
+  );
+  downloadTextFile(`${base}__eagle.scr`, out.join("\n"), "text/plain");
+}
 function getManufacturingIssues(state, warnings) {
   const issues = [];
   const profile = DFM_PROFILES[state.dfmProfile || "generic"];

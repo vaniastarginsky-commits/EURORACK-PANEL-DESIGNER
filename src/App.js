@@ -3670,6 +3670,10 @@ function App() {
           exportKiCadPCB(state, exportOptions);
           setShowExportDialog(false);
         },
+        onExportEagle: () => {
+          exportEagleSCR(state);
+          setShowExportDialog(false);
+        },
         onExportPrintTemplate: () => {
           exportPrintableTemplate(state);
           setShowExportDialog(false);
