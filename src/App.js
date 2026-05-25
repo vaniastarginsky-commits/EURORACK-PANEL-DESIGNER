@@ -3662,6 +3662,14 @@ function App() {
           downloadExportPackage(state, warnings);
           setShowExportDialog(false);
         },
+        onExportPrintTemplatePDF: () => {
+          exportPrintTemplatePDF(state);
+          setShowExportDialog(false);
+        },
+        onExportDocumentationPDF: () => {
+          exportDocumentationPDF(state, warnings);
+          setShowExportDialog(false);
+        },
         onExportCSV: () => {
           exportCSVDrillTable(state, warnings);
           setShowExportDialog(false);

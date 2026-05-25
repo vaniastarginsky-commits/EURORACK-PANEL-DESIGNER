@@ -332,6 +332,14 @@ function ExportDialog({
         React.createElement(
           "button",
           {
+            className: tab === "pdf" ? "active" : "",
+            onClick: () => setTab("pdf"),
+          },
+          "PDF",
+        ),
+        React.createElement(
+          "button",
+          {
             className: tab === "report" ? "active" : "",
             onClick: () => setTab("report"),
           },
@@ -937,6 +945,38 @@ function ExportDialog({
               "button",
               { onClick: () => exportJSON(state) },
               "Save Project JSON",
+            ),
+          ),
+        ),
+      tab === "pdf" &&
+        React.createElement(
+          "div",
+          { className: "export-tab-body" },
+          React.createElement(
+            "div",
+            { className: "section-title" },
+            "PDF export",
+          ),
+          React.createElement(
+            "div",
+            {
+              className: "warning-item warn",
+              style: { fontSize: 10, marginBottom: 10 },
+            },
+            'Opens browser print dialog — select “Save as PDF” as destination.',
+          ),
+          React.createElement(
+            "div",
+            { className: "export-action-grid" },
+            React.createElement(
+              "button",
+              { onClick: onExportPrintTemplatePDF },
+              "1:1 Print Template",
+            ),
+            React.createElement(
+              "button",
+              { onClick: onExportDocumentationPDF },
+              "Documentation PDF",
             ),
           ),
         ),

@@ -252,6 +252,137 @@ function exportPrintableTemplate(state) {
   a.click();
   URL.revokeObjectURL(url);
 }
+function exportPrintTemplatePDF(state) {
+  const widthMM = panelWidthMM(state.panel);
+  const H = PANEL_HEIGHT_MM;
+  const svgContent = exportSVGString(state, {
+    drillOnly: false,
+    labels: true,
+    includeArtwork: true,
+    centerMarks: true,
+    mountingKeepouts: false,
+    rearKeepout: false,
+    rearBody: false,
+  });
+  const pageW = (widthMM + 20).toFixed(1);
+  const pageH = (H + 30).toFixed(1);
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: ${pageW}mm ${pageH}mm; margin: 8mm; }
+  body { margin: 0; font: 8pt sans-serif; }
+  .note { margin-bottom: 3mm; color: #555; }
+  svg { width: ${widthMM.toFixed(1)}mm; height: ${H.toFixed(1)}mm; display: block; }
+  .ruler { margin-top: 4mm; border-top: 0.4pt solid black; width: 100mm; }
+  .ruler-label { font: 7pt sans-serif; color: #555; margin-top: 1mm; }
+</style>
+</head>
+<body>
+<p class="note">1:1 Eurorack panel template &mdash; ${widthMM.toFixed(2)}&nbsp;&times;&nbsp;${H}&nbsp;mm &mdash; verify scale with ruler</p>
+${svgContent}
+<div class="ruler"></div>
+<p class="ruler-label">100&nbsp;mm calibration ruler above &mdash; measure before printing</p>
+<script>window.print();</script>
+</body>
+</html>`;
+  const blob = new Blob([html], { type: "text/html" });
+  const url = URL.createObjectURL(blob);
+  window.open(url);
+}
+function exportDocumentationPDF(state, warnings) {
+  const widthMM = panelWidthMM(state.panel);
+  const H = PANEL_HEIGHT_MM;
+  const projectName = state.projectMeta?.name || "Eurorack Panel";
+  const panelSVG = exportSVGString(state, {
+    drillOnly: false,
+    labels: true,
+    includeArtwork: true,
+    centerMarks: false,
+    mountingKeepouts: false,
+    rearKeepout: false,
+    rearBody: false,
+  });
+  const rows = drillTableRows(state, warnings);
+  const tableHeaders = [
+    "Ref", "Label", "Type", "Name", "X mm", "Y mm",
+    "Rot°", "Hole type", "Ø/W mm", "H mm", "Status", "Warn",
+  ];
+  function escHtml(v) {
+    return String(v ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+  // drillTableRows columns: 0=ref,1=label,2=type,3=name,6=verification,
+  // 7=x,8=y,9=rot,10=holeType,11=holeW,12=holeH,20=warnCount
+  const tableRows = rows
+    .map(
+      (r) =>
+        `<tr>${[r[0], r[1], r[2], r[3], r[7], r[8], r[9], r[10], r[11], r[12], r[6], r[20]]
+          .map((v) => `<td>${escHtml(v)}</td>`)
+          .join("")}</tr>`,
+    )
+    .join("\n");
+  const hard = warnings.filter((w) => w.severity === "error").length;
+  const warn = warnings.filter((w) => w.severity !== "error").length;
+  const warningRows = warnings
+    .map(
+      (w) =>
+        `<tr class="${w.severity}"><td>${escHtml(w.severity)}</td><td>${escHtml(w.message)}</td></tr>`,
+    )
+    .join("\n");
+  const warningsSection =
+    warnings.length > 0
+      ? `<div class="section page-break">
+<h2>DFM status &mdash; ${hard} errors, ${warn} warnings</h2>
+<table><thead><tr><th>Level</th><th>Message</th></tr></thead>
+<tbody>${warningRows}</tbody></table>
+</div>`
+      : "";
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>${escHtml(projectName)}</title>
+<style>
+  @page { size: A4 landscape; margin: 12mm; }
+  body { margin: 0; font: 9pt sans-serif; }
+  h1 { font-size: 13pt; margin: 0 0 3mm; }
+  h2 { font-size: 11pt; margin: 0 0 3mm; }
+  .panel-section { text-align: center; page-break-after: always; }
+  .panel-section svg { max-width: 100%; height: auto; }
+  .page-break { page-break-before: always; }
+  table { border-collapse: collapse; width: 100%; font-size: 8pt; }
+  th, td { border: 1px solid #ccc; padding: 1.5pt 3pt; text-align: left; }
+  th { background: #f0f0f0; font-weight: bold; }
+  tr.error td { color: #c00; }
+  tr.warn td { color: #a60; }
+  .meta { color: #555; font-size: 8pt; margin-bottom: 4mm; }
+</style>
+</head>
+<body>
+<div class="panel-section">
+  <h1>${escHtml(projectName)}</h1>
+  <p class="meta">${state.panel.widthHP}HP &mdash; ${widthMM.toFixed(2)}&times;${H}&nbsp;mm &mdash; ${state.components.length} components</p>
+  ${panelSVG}
+</div>
+<div class="page-break">
+  <h2>Component table</h2>
+  <table>
+    <thead><tr>${tableHeaders.map((h) => `<th>${escHtml(h)}</th>`).join("")}</tr></thead>
+    <tbody>${tableRows}</tbody>
+  </table>
+</div>
+${warningsSection}
+<script>window.print();</script>
+</body>
+</html>`;
+  const blob = new Blob([html], { type: "text/html" });
+  const url = URL.createObjectURL(blob);
+  window.open(url);
+}
 function drillTableRows(state, warnings) {
   return state.components.map((c) => {
     const warnCount = warnings.filter((w) => w.ids.includes(c.id)).length;
