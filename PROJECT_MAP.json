@@ -6,7 +6,7 @@
       "surface": "canvas",
       "description": "SVG panel render — grid, components, text, artwork, rulers, zoom/pan, selection, drag.",
       "owns": ["src/Canvas.js"],
-      "css_section": "§6 Canvas",
+      "css_section": "§6 Canvas Area",
       "shared": false,
       "do_not_touch": [
         { "file": "src/App.js", "reason": "owns canvas event wiring and clientToMM — edit via app-state surface" },
@@ -17,7 +17,7 @@
       "surface": "canvas-overlays",
       "description": "Canvas overlay React components: scale layer, component hover tooltip, snap feedback badge, DFM status float.",
       "owns": ["src/canvasOverlays.js"],
-      "css_section": "§6 Canvas",
+      "css_section": "§6 Canvas Area",
       "shared": false,
       "do_not_touch": [
         { "file": "src/Canvas.js", "reason": "separate surface" },
@@ -33,7 +33,7 @@
         "src/components/library/PartLibraryUI.js",
         "src/ux/partHistory.js"
       ],
-      "css_section": "§8 Canvas Tool Rail",
+      "css_section": "§7 Canvas Rails & HUD",
       "shared": false,
       "do_not_touch": [
         { "file": "src/App.js", "reason": "shared orchestrator" },
@@ -48,7 +48,7 @@
         "src/TopbarMenus.js",
         "src/LeftSidebarPanels.js"
       ],
-      "css_section": "§5 Topbar",
+      "css_section": "§4 Topbar",
       "shared": false,
       "do_not_touch": [
         { "file": "src/App.js", "reason": "shared orchestrator" },
@@ -68,7 +68,7 @@
         "src/RightSidebarWorkflowPanels.js",
         "src/RightSidebarStatusPanels.js"
       ],
-      "css_section": "§4 Right Sidebar",
+      "css_section": "§5 Sidebars, §9 Components",
       "shared": false,
       "do_not_touch": [
         { "file": "src/App.js", "reason": "shared orchestrator" },
@@ -79,7 +79,7 @@
       "surface": "mobile-dock",
       "description": "Mobile bottom bar — mode switch, sheet triggers (edit/properties). Nudge/edit controls live in canvas-tool-rail (.canvas-tool-mobile-only).",
       "owns": ["src/MobileDock.js"],
-      "css_section": "§7 Mobile",
+      "css_section": "§10 Mobile",
       "shared": false,
       "do_not_touch": [
         { "file": "src/CanvasToolRail.js", "reason": "owns mobile nudge/edit controls" },
@@ -90,7 +90,7 @@
       "surface": "layer-manager",
       "description": "Layer visibility panel rendered inside a right sidebar tab.",
       "owns": ["src/LayerManager.js"],
-      "css_section": "§4 Right Sidebar",
+      "css_section": "§5 Sidebars, §14 v452 Layers panel",
       "shared": false,
       "do_not_touch": [
         { "file": "src/RightSidebar.js", "reason": "right-sidebar surface" },
@@ -110,7 +110,7 @@
         "src/export/zipUtils.js",
         "src/export/downloadHelpers.js"
       ],
-      "css_section": "§11 Export Dialog",
+      "css_section": "§8 Modals & Dialogs, §15 v452 Export dialog",
       "shared": false,
       "do_not_touch": [
         { "file": "src/App.js", "reason": "shared orchestrator" },
@@ -128,7 +128,7 @@
         "src/templates/templateDefaults.js",
         "src/templates/templateSavePrompt.js"
       ],
-      "css_section": "§10 Dialogs",
+      "css_section": "§8 Modals & Dialogs",
       "shared": false,
       "do_not_touch": [
         { "file": "src/App.js", "reason": "shared orchestrator" },
@@ -143,10 +143,10 @@
         "src/AppearanceModal.js",
         "src/ViewContrast.js"
       ],
-      "css_section": "§2 Theme tokens",
+      "css_section": "none",
       "shared": false,
       "do_not_touch": [
-        { "file": "styles.css §2", "reason": "vars are set at runtime by ThemeEngine — read ThemeEngine.js before touching" },
+        { "file": "styles.css :root vars", "reason": "ThemeEngine.js is the sole setter — never set CSS custom properties manually" },
         { "file": "src/App.js", "reason": "shared orchestrator" }
       ]
     },
@@ -161,7 +161,7 @@
         "src/NativeDialogs.js",
         "src/PresetLayouts.js"
       ],
-      "css_section": "§9 Overlays / Modals",
+      "css_section": "§2 App Shell, §8 Modals & Dialogs",
       "shared": true,
       "do_not_touch": []
     },
@@ -212,10 +212,10 @@
       "surface": "workspace-shell",
       "description": "CSS grid layout wrapper. Sets --left-col / --right-col vars. Never set grid-column manually on .sidebar-right or .canvas-wrap.",
       "owns": ["src/WorkspaceShell.js"],
-      "css_section": "§1 Workspace / Layout",
+      "css_section": "§2 App Shell, §3 Workspace Layout",
       "shared": false,
       "do_not_touch": [
-        { "file": "styles.css §1", "reason": "read WorkspaceShell.js first; grid vars are set here" }
+        { "file": "styles.css §2-§3", "reason": "read WorkspaceShell.js first; grid vars are set here" }
       ]
     },
     {
@@ -232,7 +232,7 @@
         "src/runtime/ErrorBoundary.js",
         "src/diagnostics/runtimeSelfTest.js"
       ],
-      "css_section": "§11 Bootstrap",
+      "css_section": "§1 Reset & Base, §11 Utilities & Scrollbars",
       "shared": false,
       "do_not_touch": [
         { "file": "index.html script order", "reason": "load order IS the dependency graph — do not reorder without tracing deps" }

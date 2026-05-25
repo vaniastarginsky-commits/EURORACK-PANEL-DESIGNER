@@ -12,7 +12,7 @@
 **Owns:**
 - `src/Canvas.js`
 
-**CSS section:** §6 Canvas
+**CSS section:** §6 Canvas Area
 
 **Shared:** false
 
@@ -29,7 +29,7 @@
 **Owns:**
 - `src/canvasOverlays.js`
 
-**CSS section:** §6 Canvas
+**CSS section:** §6 Canvas Area
 
 **Shared:** false
 
@@ -49,7 +49,7 @@
 - `src/components/library/PartLibraryUI.js`
 - `src/ux/partHistory.js`
 
-**CSS section:** §8 Canvas Tool Rail
+**CSS section:** §7 Canvas Rails & HUD
 
 **Shared:** false
 
@@ -68,7 +68,7 @@
 - `src/TopbarMenus.js`
 - `src/LeftSidebarPanels.js`
 
-**CSS section:** §5 Topbar
+**CSS section:** §4 Topbar
 
 **Shared:** false
 
@@ -92,7 +92,7 @@
 - `src/RightSidebarWorkflowPanels.js`
 - `src/RightSidebarStatusPanels.js`
 
-**CSS section:** §4 Right Sidebar
+**CSS section:** §5 Sidebars, §9 Components
 
 **Shared:** false
 
@@ -109,7 +109,7 @@
 **Owns:**
 - `src/MobileDock.js`
 
-**CSS section:** §7 Mobile
+**CSS section:** §10 Mobile
 
 **Shared:** false
 
@@ -126,7 +126,7 @@
 **Owns:**
 - `src/LayerManager.js`
 
-**CSS section:** §4 Right Sidebar
+**CSS section:** §5 Sidebars, §14 v452 Layers panel
 
 **Shared:** false
 
@@ -150,7 +150,7 @@
 - `src/export/zipUtils.js`
 - `src/export/downloadHelpers.js`
 
-**CSS section:** §11 Export Dialog
+**CSS section:** §8 Modals & Dialogs, §15 v452 Export dialog
 
 **Shared:** false
 
@@ -172,7 +172,7 @@
 - `src/templates/templateDefaults.js`
 - `src/templates/templateSavePrompt.js`
 
-**CSS section:** §10 Dialogs
+**CSS section:** §8 Modals & Dialogs
 
 **Shared:** false
 
@@ -191,12 +191,12 @@
 - `src/AppearanceModal.js`
 - `src/ViewContrast.js`
 
-**CSS section:** §2 Theme tokens
+**CSS section:** none (ThemeEngine.js sets vars at runtime via JS — no dedicated CSS section)
 
 **Shared:** false
 
 **Do not touch:**
-- `styles.css` §2 directly — read ThemeEngine.js first; vars are set at runtime
+- `styles.css` `:root` vars directly — ThemeEngine.js is the sole setter; changes there break all presets
 - `src/App.js` — shared orchestrator
 
 ---
@@ -213,7 +213,7 @@
 - `src/NativeDialogs.js`
 - `src/PresetLayouts.js`
 
-**CSS section:** §9 Overlays / Modals
+**CSS section:** §2 App Shell, §8 Modals & Dialogs
 
 **Shared:** true
 
@@ -286,12 +286,12 @@
 **Owns:**
 - `src/WorkspaceShell.js`
 
-**CSS section:** §1 Workspace / Layout
+**CSS section:** §2 App Shell, §3 Workspace Layout
 
 **Shared:** false
 
 **Do not touch:**
-- `styles.css` §1 directly without reading WorkspaceShell.js first
+- `styles.css` §2-§3 directly without reading WorkspaceShell.js first
 
 ---
 
@@ -310,7 +310,7 @@
 - `src/runtime/ErrorBoundary.js`
 - `src/diagnostics/runtimeSelfTest.js`
 
-**CSS section:** §11 Bootstrap
+**CSS section:** §1 Reset & Base, §11 Utilities & Scrollbars
 
 **Shared:** false
 
@@ -341,19 +341,22 @@
 
 ## CSS section index
 
-| § | Section name | Surfaces |
+| § | Section name in styles.css | Surfaces |
 |---|---|---|
-| §1 | Workspace / Layout | `workspace-shell` |
-| §2 | Theme tokens | `theme` |
-| §3 | Left Sidebar | dead — keep for reference only |
-| §4 | Right Sidebar | `right-sidebar`, `layer-manager` |
-| §5 | Topbar | `topbar` |
-| §6 | Canvas | `canvas`, `canvas-overlays` |
-| §7 | Mobile | `mobile-dock` |
-| §8 | Canvas Tool Rail | `canvas-tool-rail` |
-| §9 | Overlays / Modals | `app-state` |
-| §10 | Dialogs | `templates` |
-| §11 | Export Dialog / Bootstrap | `export`, `bootstrap` |
+| §1 | Reset & Base | `bootstrap` |
+| §2 | App Shell | `workspace-shell`, `app-state` |
+| §3 | Workspace Layout | `workspace-shell` |
+| §4 | Topbar | `topbar` |
+| §5 | Sidebars | `right-sidebar`, `layer-manager` |
+| §6 | Canvas Area | `canvas`, `canvas-overlays` |
+| §7 | Canvas Rails & HUD | `canvas-tool-rail`, `mobile-dock` |
+| §8 | Modals & Dialogs | `app-state`, `templates`, `export` |
+| §9 | Components | `right-sidebar` (sidebar field styles) |
+| §10 | Mobile | `mobile-dock` |
+| §11 | Utilities & Scrollbars | `bootstrap` |
+| §12–§13 | v452 polish / readability | various — not yet integrated into domain sections |
+| §14 | v452 Layers panel | `layer-manager` |
+| §15 | v452 Export dialog | `export` |
 
 ---
 
