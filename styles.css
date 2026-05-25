@@ -3215,11 +3215,12 @@ input[type="number"],
   .sidebar-right {
     position: fixed ;
     top: 42px ;
-    bottom: env(safe-area-inset-bottom, 0px) ;
-    height: auto ;
+    bottom: 0 ;
+    height: calc(100dvh - 42px) ;
     width: calc(100vw - 16px) ;
     max-width: calc(100vw - 16px) ;
     overflow: auto ;
+    padding-bottom: env(safe-area-inset-bottom, 0px) ;
     z-index: 200}
 
   .sidebar-left.open {
