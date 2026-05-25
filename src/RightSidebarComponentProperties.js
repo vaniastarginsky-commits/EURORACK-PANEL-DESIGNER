@@ -83,9 +83,7 @@ function PropertiesPanel() {
     isButtonLike(c) ||
     isLedLike(c);
   const isToggleLike =
-    c.type === "toggle" ||
-    c.type === "toggleSpdt" ||
-    c.type === "toggle2m";
+    c.type === "toggle" || c.type === "toggleSpdt" || c.type === "toggle2m";
   const applyToSameType = (patchObj) =>
     dispatch({ type: "APPLY_TO_SAME_TYPE", sourceId: c.id, patch: patchObj });
   return React.createElement(
@@ -552,7 +550,11 @@ function PropertiesPanel() {
                 onChange: (e) => patch({ switchFunction: e.target.value }),
               },
               React.createElement("option", { value: "on-on" }, "ON-ON"),
-              React.createElement("option", { value: "on-off-on" }, "ON-OFF-ON"),
+              React.createElement(
+                "option",
+                { value: "on-off-on" },
+                "ON-OFF-ON",
+              ),
             ),
           ),
         showColorControls &&

@@ -112,7 +112,7 @@ const COMPONENT_LIBRARY = [
     category: "switch",
     verificationStatus: "datasheet",
     verification:
-      "Dailywell 2M Sub-Miniature toggle switch. 2MS1T1B1M2QES datasheet: 10/48 UNS-2A bushing thread (#10 = 0.190\" = 4.83mm), bushing hex flat-to-flat 8.13mm (0.320\"), bushing OD 6.00mm (0.236\"), epoxy-sealed IP67, rear body/depth ~8.0mm from PC mounting side view, terminal pitch 2.54mm (0.100\"), 3 terminals SPDT. Switch function: 2MS1 = ON-NONE-ON (ON-OFF-ON) per datasheet switch function table; ON-ON 2-position variant also available in same physical package. Panel hole modeled as 4.83mm nominal thread OD; verify panel thickness, nut/washer stack before production.",
+      'Dailywell 2M Sub-Miniature toggle switch. 2MS1T1B1M2QES datasheet: 10/48 UNS-2A bushing thread (#10 = 0.190" = 4.83mm), bushing hex flat-to-flat 8.13mm (0.320"), bushing OD 6.00mm (0.236"), epoxy-sealed IP67, rear body/depth ~8.0mm from PC mounting side view, terminal pitch 2.54mm (0.100"), 3 terminals SPDT. Switch function: 2MS1 = ON-NONE-ON (ON-OFF-ON) per datasheet switch function table; ON-ON 2-position variant also available in same physical package. Panel hole modeled as 4.83mm nominal thread OD; verify panel thickness, nut/washer stack before production.',
   },
   {
     type: "led3mm",
