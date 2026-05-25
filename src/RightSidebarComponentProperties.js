@@ -82,6 +82,10 @@ function PropertiesPanel() {
     isJackLike(c) ||
     isButtonLike(c) ||
     isLedLike(c);
+  const isToggleLike =
+    c.type === "toggle" ||
+    c.type === "toggleSpdt" ||
+    c.type === "toggle2m";
   const applyToSameType = (patchObj) =>
     dispatch({ type: "APPLY_TO_SAME_TYPE", sourceId: c.id, patch: patchObj });
   return React.createElement(
@@ -521,6 +525,36 @@ function PropertiesPanel() {
           }),
           "Show visual hardware only",
         ),
+        isToggleLike &&
+          React.createElement(
+            "div",
+            { className: "field-row" },
+            React.createElement("label", null, "Nut shape"),
+            React.createElement(
+              "select",
+              {
+                value: c.nutShape ?? (c.type === "toggle2m" ? "hex" : "circle"),
+                onChange: (e) => patch({ nutShape: e.target.value }),
+              },
+              React.createElement("option", { value: "circle" }, "Circle"),
+              React.createElement("option", { value: "hex" }, "Hex"),
+            ),
+          ),
+        c.type === "toggle2m" &&
+          React.createElement(
+            "div",
+            { className: "field-row" },
+            React.createElement("label", null, "Switch function"),
+            React.createElement(
+              "select",
+              {
+                value: c.switchFunction ?? "on-off-on",
+                onChange: (e) => patch({ switchFunction: e.target.value }),
+              },
+              React.createElement("option", { value: "on-on" }, "ON-ON"),
+              React.createElement("option", { value: "on-off-on" }, "ON-OFF-ON"),
+            ),
+          ),
         showColorControls &&
           React.createElement(
             "div",
