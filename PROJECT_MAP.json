@@ -1,0 +1,256 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-05-25",
+  "surfaces": [
+    {
+      "surface": "canvas",
+      "description": "SVG panel render — grid, components, text, artwork, rulers, zoom/pan, selection, drag.",
+      "owns": ["src/Canvas.js"],
+      "css_section": "§6 Canvas",
+      "shared": false,
+      "do_not_touch": [
+        { "file": "src/App.js", "reason": "owns canvas event wiring and clientToMM — edit via app-state surface" },
+        { "file": "src/canvasOverlays.js", "reason": "separate surface" }
+      ]
+    },
+    {
+      "surface": "canvas-overlays",
+      "description": "Canvas overlay React components: scale layer, component hover tooltip, snap feedback badge, DFM status float.",
+      "owns": ["src/canvasOverlays.js"],
+      "css_section": "§6 Canvas",
+      "shared": false,
+      "do_not_touch": [
+        { "file": "src/Canvas.js", "reason": "separate surface" },
+        { "file": "src/App.js", "reason": "shared orchestrator" }
+      ]
+    },
+    {
+      "surface": "canvas-tool-rail",
+      "description": "Left tool rail — desktop controls, mobile nudge/edit/delete (.canvas-tool-mobile-only), component library picker (Add button). Renders on both desktop and mobile.",
+      "owns": [
+        "src/CanvasToolRail.js",
+        "src/CanvasToolMenus.js",
+        "src/components/library/PartLibraryUI.js",
+        "src/ux/partHistory.js"
+      ],
+      "css_section": "§8 Canvas Tool Rail",
+      "shared": false,
+      "do_not_touch": [
+        { "file": "src/App.js", "reason": "shared orchestrator" },
+        { "file": "src/MobileDock.js", "reason": "separate mobile surface" }
+      ]
+    },
+    {
+      "surface": "topbar",
+      "description": "Header bar — brand, project/panel/text dropdown menus (ProjectPanel, PanelSettings, TextPanel), Templates, File, Help.",
+      "owns": [
+        "src/Topbar.js",
+        "src/TopbarMenus.js",
+        "src/LeftSidebarPanels.js"
+      ],
+      "css_section": "§5 Topbar",
+      "shared": false,
+      "do_not_touch": [
+        { "file": "src/App.js", "reason": "shared orchestrator" },
+        { "file": "src/appCommands.js", "reason": "storage surface" }
+      ]
+    },
+    {
+      "surface": "right-sidebar",
+      "description": "Right panel — inspector tabs for component properties, object properties, production, workflow, status, warnings.",
+      "owns": [
+        "src/RightSidebar.js",
+        "src/RightSidebarPanels.js",
+        "src/RightSidebarFields.js",
+        "src/RightSidebarComponentProperties.js",
+        "src/RightSidebarObjectProperties.js",
+        "src/RightSidebarProductionPanels.js",
+        "src/RightSidebarWorkflowPanels.js",
+        "src/RightSidebarStatusPanels.js"
+      ],
+      "css_section": "§4 Right Sidebar",
+      "shared": false,
+      "do_not_touch": [
+        { "file": "src/App.js", "reason": "shared orchestrator" },
+        { "file": "src/LayerManager.js", "reason": "separate surface" }
+      ]
+    },
+    {
+      "surface": "mobile-dock",
+      "description": "Mobile bottom bar — mode switch, sheet triggers (edit/properties). Nudge/edit controls live in canvas-tool-rail (.canvas-tool-mobile-only).",
+      "owns": ["src/MobileDock.js"],
+      "css_section": "§7 Mobile",
+      "shared": false,
+      "do_not_touch": [
+        { "file": "src/CanvasToolRail.js", "reason": "owns mobile nudge/edit controls" },
+        { "file": "src/App.js", "reason": "shared orchestrator" }
+      ]
+    },
+    {
+      "surface": "layer-manager",
+      "description": "Layer visibility panel rendered inside a right sidebar tab.",
+      "owns": ["src/LayerManager.js"],
+      "css_section": "§4 Right Sidebar",
+      "shared": false,
+      "do_not_touch": [
+        { "file": "src/RightSidebar.js", "reason": "right-sidebar surface" },
+        { "file": "src/App.js", "reason": "shared orchestrator" }
+      ]
+    },
+    {
+      "surface": "export",
+      "description": "SVG / DXF / PSD / ZIP / KiCad export engine, dialog, and format helpers.",
+      "owns": [
+        "src/exportEngine.js",
+        "src/exportHelpers.js",
+        "src/ExportDialog.js",
+        "src/export/kiCadExport.js",
+        "src/export/kiCadImport.js",
+        "src/export/psdExport.js",
+        "src/export/zipUtils.js",
+        "src/export/downloadHelpers.js"
+      ],
+      "css_section": "§11 Export Dialog",
+      "shared": false,
+      "do_not_touch": [
+        { "file": "src/App.js", "reason": "shared orchestrator" },
+        { "file": "src/projectStorage.js", "reason": "storage surface" }
+      ]
+    },
+    {
+      "surface": "templates",
+      "description": "Factory templates, user template storage, templates dialog.",
+      "owns": [
+        "src/TemplatesDialog.js",
+        "src/FactoryTemplates.js",
+        "src/templateStorage.js",
+        "src/templates/factoryTemplateData.js",
+        "src/templates/templateDefaults.js",
+        "src/templates/templateSavePrompt.js"
+      ],
+      "css_section": "§10 Dialogs",
+      "shared": false,
+      "do_not_touch": [
+        { "file": "src/App.js", "reason": "shared orchestrator" },
+        { "file": "src/projectStorage.js", "reason": "storage surface" }
+      ]
+    },
+    {
+      "surface": "theme",
+      "description": "Appearance presets, accent hue, view contrast. ThemeEngine is the sole owner of CSS custom property vars.",
+      "owns": [
+        "src/ThemeEngine.js",
+        "src/AppearanceModal.js",
+        "src/ViewContrast.js"
+      ],
+      "css_section": "§2 Theme tokens",
+      "shared": false,
+      "do_not_touch": [
+        { "file": "styles.css §2", "reason": "vars are set at runtime by ThemeEngine — read ThemeEngine.js before touching" },
+        { "file": "src/App.js", "reason": "shared orchestrator" }
+      ]
+    },
+    {
+      "surface": "app-state",
+      "description": "React context, reducer, app-wide constants and pure utilities. Shared by all surfaces — edit with care.",
+      "owns": [
+        "src/appState.js",
+        "src/core.js",
+        "src/App.js",
+        "src/AppOverlays.js",
+        "src/NativeDialogs.js",
+        "src/PresetLayouts.js"
+      ],
+      "css_section": "§9 Overlays / Modals",
+      "shared": true,
+      "do_not_touch": []
+    },
+    {
+      "surface": "component-library",
+      "description": "Built-in part definitions, sort order, type predicates, visual geometry helpers. Pure data and pure functions — no React, no state.",
+      "owns": [
+        "src/components/library/componentDefinitions.js",
+        "src/components/library/componentSorting.js",
+        "src/componentLibrary.js",
+        "src/componentHelpers.js"
+      ],
+      "css_section": "none",
+      "shared": true,
+      "do_not_touch": [
+        { "file": "src/appState.js", "reason": "state is app-state surface" },
+        { "file": "src/core.js", "reason": "app-state surface" }
+      ]
+    },
+    {
+      "surface": "geometry",
+      "description": "Pure math — OBB collision detection, front shape geometry, measurement helpers. No React, no state, no DOM.",
+      "owns": [
+        "src/geometry/obbMath.js",
+        "src/geometry/frontShapeGeometry.js",
+        "src/geometry/measurementHelpers.js"
+      ],
+      "css_section": "none",
+      "shared": false,
+      "do_not_touch": []
+    },
+    {
+      "surface": "storage",
+      "description": "localStorage project I/O, schema validation/normalization, app command bridge (window events).",
+      "owns": [
+        "src/projectStorage.js",
+        "src/projectSchema.js",
+        "src/appCommands.js"
+      ],
+      "css_section": "none",
+      "shared": false,
+      "do_not_touch": [
+        { "file": "src/appState.js", "reason": "state is app-state surface" },
+        { "file": "src/templateStorage.js", "reason": "templates surface" }
+      ]
+    },
+    {
+      "surface": "workspace-shell",
+      "description": "CSS grid layout wrapper. Sets --left-col / --right-col vars. Never set grid-column manually on .sidebar-right or .canvas-wrap.",
+      "owns": ["src/WorkspaceShell.js"],
+      "css_section": "§1 Workspace / Layout",
+      "shared": false,
+      "do_not_touch": [
+        { "file": "styles.css §1", "reason": "read WorkspaceShell.js first; grid vars are set here" }
+      ]
+    },
+    {
+      "surface": "bootstrap",
+      "description": "Page initialization, CDN error handling, device classification, toast, React error boundary, runtime self-test. All files load before React is used.",
+      "owns": [
+        "src/main.js",
+        "src/startup-error.js",
+        "src/still-loading.js",
+        "src/runtime-errors.js",
+        "src/device-classes.js",
+        "src/toast.js",
+        "src/canvas-browser-guards.js",
+        "src/runtime/ErrorBoundary.js",
+        "src/diagnostics/runtimeSelfTest.js"
+      ],
+      "css_section": "§11 Bootstrap",
+      "shared": false,
+      "do_not_touch": [
+        { "file": "index.html script order", "reason": "load order IS the dependency graph — do not reorder without tracing deps" }
+      ]
+    }
+  ],
+  "dead_files": [
+    {
+      "file": "src/LeftSidebar.js",
+      "reason": "Left sidebar removed from all layouts (desktop and mobile). File not rendered anywhere. Do not edit. Do not delete without explicit instruction."
+    }
+  ],
+  "cross_surface_rules": [
+    "src/App.js — only edit from app-state surface. Never touch from canvas, sidebar, topbar, or export surfaces.",
+    "src/core.js — shared constants; changes affect every surface. Always read before editing.",
+    "src/ThemeEngine.js — sole owner of CSS vars. Never set CSS custom properties manually outside ThemeEngine.",
+    "styles.css — do not add !important. Do not hardcode hex values; use semantic tokens (var(--ui-*)).",
+    "index.html — script load order is the dependency graph. Do not reorder without understanding load deps.",
+    "src/LeftSidebar.js — dead code. Do not edit, do not delete without explicit instruction."
+  ]
+}
