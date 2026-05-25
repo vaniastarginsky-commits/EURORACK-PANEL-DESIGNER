@@ -1418,7 +1418,96 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
             }),
           );
         }
-        if (c.type === "toggle" || c.type === "toggleSpdt") {
+        if (
+          c.type === "toggle" ||
+          c.type === "toggleSpdt" ||
+          c.type === "toggle2m"
+        ) {
+          const _nutShape =
+            c.nutShape ?? (c.type === "toggle2m" ? "hex" : "circle");
+          const _R = c.frontDiameter / 2;
+          const _holeR = c.holeDiameter / 2 + 0.5;
+          const _leverX2 = cx + 2.1;
+          const _leverY2 = cy - 7.5;
+          const _leverLine = React.createElement("line", {
+            x1: cx,
+            y1: cy + 1.0,
+            x2: _leverX2,
+            y2: _leverY2,
+            stroke: "#242422",
+            strokeWidth: 1.1,
+            strokeLinecap: "round",
+          });
+          const _ball = React.createElement("circle", {
+            cx: _leverX2,
+            cy: _leverY2,
+            r: 1.0,
+            fill: "#343432",
+            stroke: "#565654",
+            strokeWidth: 0.14,
+          });
+          const _hexPts = (r, startDeg) =>
+            [0, 60, 120, 180, 240, 300]
+              .map((d) => {
+                const rad = ((d + startDeg) * Math.PI) / 180;
+                return `${cx + r * Math.cos(rad)},${cy + r * Math.sin(rad)}`;
+              })
+              .join(" ");
+          const _nutEls =
+            _nutShape === "hex"
+              ? [
+                  React.createElement("polygon", {
+                    key: "hex-outer",
+                    points: _hexPts(_R + 0.45, 0),
+                    fill: "#dddbd6",
+                    stroke: "#6a6860",
+                    strokeWidth: 0.22,
+                  }),
+                  React.createElement("polygon", {
+                    key: "hex-inner",
+                    points: _hexPts(_R - 0.45, 30),
+                    fill: "#eceae4",
+                    stroke: "none",
+                  }),
+                  React.createElement("circle", {
+                    key: "bushing",
+                    cx: cx,
+                    cy: cy,
+                    r: _holeR,
+                    fill: "#b4b8bc",
+                    stroke: "#888a88",
+                    strokeWidth: 0.15,
+                  }),
+                ]
+              : [
+                  React.createElement("circle", {
+                    key: "nut-outer",
+                    cx: cx,
+                    cy: cy,
+                    r: _R + 0.45,
+                    fill: "#e8eae4",
+                    stroke: "#484846",
+                    strokeWidth: 0.2,
+                  }),
+                  React.createElement("circle", {
+                    key: "nut-ring",
+                    cx: cx,
+                    cy: cy,
+                    r: _R - 0.5,
+                    fill: "#c8cac4",
+                    stroke: "#d8dad4",
+                    strokeWidth: 0.14,
+                  }),
+                  React.createElement("circle", {
+                    key: "bushing",
+                    cx: cx,
+                    cy: cy,
+                    r: _holeR,
+                    fill: "#a8acae",
+                    stroke: "#8a8e8e",
+                    strokeWidth: 0.12,
+                  }),
+                ];
           return React.createElement(
             "g",
             {
@@ -1427,39 +1516,9 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
               transform: rot,
               opacity: hwOpacity,
             },
-            React.createElement("circle", {
-              cx: cx,
-              cy: cy,
-              r: c.frontDiameter / 2 + 0.45,
-              fill: "#f0f0ec",
-              stroke: "#0b0b0b",
-              strokeWidth: 0.18,
-            }),
-            React.createElement("circle", {
-              cx: cx,
-              cy: cy,
-              r: c.frontDiameter / 2 - 0.35,
-              fill: "#bfc5c8",
-              stroke: "#ffffff",
-              strokeWidth: 0.16,
-            }),
-            React.createElement("line", {
-              x1: cx,
-              y1: cy + 1.2,
-              x2: cx + 2.1,
-              y2: cy - 8.2,
-              stroke: "#dce2e6",
-              strokeWidth: 1.15,
-              strokeLinecap: "round",
-            }),
-            React.createElement("circle", {
-              cx: cx + 2.1,
-              cy: cy - 8.2,
-              r: 1.05,
-              fill: "#dce2e6",
-              stroke: "#f8f8f4",
-              strokeWidth: 0.16,
-            }),
+            ..._nutEls,
+            _leverLine,
+            _ball,
           );
         }
         if (getFrontShape(c) !== "circle") {
