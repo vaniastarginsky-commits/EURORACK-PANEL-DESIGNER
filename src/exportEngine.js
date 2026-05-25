@@ -107,6 +107,27 @@ function exportLayeredSVGPackage(state, opts) {
   ).replace(/\.json$/i, "");
   downloadBlobFile(`${base}__layered-svg-package.zip`, createZipBlob(files));
 }
+function exportInkscapeSVG(state, opts) {
+  const selected = [
+    opts.svgLayeredPanelBase,
+    opts.svgLayeredArtwork,
+    opts.svgLayeredHoles,
+    opts.svgLayeredComponents,
+    opts.svgLayeredText,
+  ].some(Boolean);
+  if (!selected) {
+    alert("Select at least one layered SVG layer.");
+    return;
+  }
+  const base = safeProjectFileName(
+    state.projectMeta?.name || "panel-layout",
+  ).replace(/\.json$/i, "");
+  downloadTextFile(
+    `${base}__inkscape.svg`,
+    exportLayeredSVGString(state, opts),
+    "image/svg+xml",
+  );
+}
 function exportPNGSVGString(state, opts, cfg) {
   const widthMM = panelWidthMM(state.panel);
   const heightMM = PANEL_HEIGHT_MM;

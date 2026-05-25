@@ -681,5 +681,9 @@ function exportLayeredSVGString(state, opts) {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <!-- Eurorack Panel Designer layered SVG export -->
 <!-- Panel: ${state.panel.widthHP}HP = ${widthMM.toFixed(2)}mm x ${heightMM}mm -->
-<svg xmlns="http:${groups.join("\n")}</svg>`;
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+  viewBox="0 0 ${widthMM.toFixed(3)} ${heightMM.toFixed(3)}"
+  width="${widthMM.toFixed(3)}mm" height="${heightMM.toFixed(3)}mm">
+${groups.join("\n")}
+</svg>`;
 }

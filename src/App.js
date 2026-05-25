@@ -3650,6 +3650,10 @@ function App() {
           exportLayeredSVGPackage(state, exportOptions);
           setShowExportDialog(false);
         },
+        onExportInkscape: () => {
+          exportInkscapeSVG(state, exportOptions);
+          setShowExportDialog(false);
+        },
         onExportMode: (mode) => {
           exportSVGMode(state, mode, warnings);
           setShowExportDialog(false);

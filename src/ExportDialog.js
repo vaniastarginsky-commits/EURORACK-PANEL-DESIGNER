@@ -124,6 +124,7 @@ function ExportDialog({
   onExportPSD,
   onExportLayeredSVG,
   onExportLayeredSVGPackage,
+  onExportInkscape,
   onExportMode,
   onExportPackage,
   onExportCSV,
@@ -131,6 +132,9 @@ function ExportDialog({
   onExportPrintTemplate,
   onExportDXF,
   onExportReport,
+  onExportEagle,
+  onExportPrintTemplatePDF,
+  onExportDocumentationPDF,
   onCancel,
 }) {
   const rows = [
@@ -458,6 +462,11 @@ function ExportDialog({
               "button",
               { onClick: onExportLayeredSVG },
               "Export layered SVG",
+            ),
+            React.createElement(
+              "button",
+              { onClick: onExportInkscape },
+              "Export Inkscape SVG",
             ),
             React.createElement(
               "button",
