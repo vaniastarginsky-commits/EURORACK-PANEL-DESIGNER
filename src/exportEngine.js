@@ -553,13 +553,7 @@ function downloadExportPackageLooseFiles(state, warnings) {
     window.setTimeout(() => downloadTextFile(name, content, mime), idx * 180);
   });
 }
-function exportSVG(state, opts) {
-  downloadTextFile(
-    "panel-export.svg",
-    exportSVGString(state, opts),
-    "image/svg+xml",
-  );
-  return;
+function exportSVGString(state, opts) {
   const widthMM = panelWidthMM(state.panel);
   const heightMM = PANEL_HEIGHT_MM;
   function escapeXml(s) {
@@ -713,7 +707,7 @@ function exportSVG(state, opts) {
   const topHardwareLines = !opts.drillOnly
     ? buildTopHardwareSVGLines(state.components)
     : [];
-  const svg = `<?xml version="1.0" encoding="UTF-8"?>
+  return `<?xml version="1.0" encoding="UTF-8"?>
 <!-- Eurorack Panel Designer export -->
 <!-- Panel: ${state.panel.widthHP}HP = ${widthMM.toFixed(2)}mm x ${heightMM}mm -->
 <!-- WARNING: Dimensions are planning estimates. Verify all parts with datasheets/calipers before manufacturing. -->
@@ -724,11 +718,11 @@ function exportSVG(state, opts) {
 ${bgArtLines.join("\n")}${bgArtLines.length ? "\n" : ""}${bgTextLines.join("\n")}${bgTextLines.length ? "\n" : ""}${bgScaleLines.join("\n")}${bgScaleLines.length ? "\n" : ""}  <rect x="0" y="0" width="${widthMM.toFixed(3)}" height="${heightMM.toFixed(3)}" fill="none" stroke="black" stroke-width="0.5"/>
 ${lines.join("\n")}
 ${fgTextLines.length ? fgTextLines.join("\n") + "\n" : ""}${fgArtLines.length ? fgArtLines.join("\n") + "\n" : ""}</svg>`;
-  const blob = new Blob([svg], { type: "image/svg+xml" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "panel.svg";
-  a.click();
-  URL.revokeObjectURL(url);
+}
+function exportSVG(state, opts) {
+  downloadTextFile(
+    "panel-export.svg",
+    exportSVGString(state, opts),
+    "image/svg+xml",
+  );
 }
