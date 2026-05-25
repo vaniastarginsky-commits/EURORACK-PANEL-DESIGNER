@@ -4659,14 +4659,14 @@ html[data-preset="synthwave"] {
 [data-preset="synthwave"] .app-title {
   color: #ff2a90}
 
-[data-preset="synthwave"][data-glow="on"] .app-title {
+[data-glow="on"] .app-title {
   text-shadow:
-    0 0 6px rgba(255, 60, 200, .85),
-    0 0 14px rgba(255, 60, 200, .45)}
+    0 0 6px rgba(var(--ui-gold-rgb), .85),
+    0 0 14px rgba(var(--ui-gold-rgb), .45)}
 
 /* Active buttons get a neon ring (cheaper, 2 layers instead of 4) */
-[data-preset="synthwave"][data-glow="on"] button.active,
-[data-preset="synthwave"][data-glow="on"] .canvas-tool-btn.active {
+[data-glow="on"] button.active,
+[data-glow="on"] .canvas-tool-btn.active {
   box-shadow:
     0 0 0 1px rgba(var(--ui-gold-rgb), .8),
     0 0 14px rgba(var(--ui-gold-rgb), .4)}
