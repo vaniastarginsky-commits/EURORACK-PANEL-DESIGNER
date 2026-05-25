@@ -29,6 +29,7 @@ function defaultTopColor(c) {
   if (
     c.type === "toggle" ||
     c.type === "toggleSpdt" ||
+    c.type === "toggle2m" ||
     c.type === "toggleSplash" ||
     c.type === "slideSwitchMini" ||
     c.type === "slideSwitch8pos"
