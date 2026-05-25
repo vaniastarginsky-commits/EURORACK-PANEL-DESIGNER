@@ -304,28 +304,25 @@
     );
     body.appendChild(contrastSection);
 
-    // Glow Effects — only for presets that support it (e.g. Synthwave)
-    const currentPreset = window.ThemeEngine.PRESETS[state.preset];
-    if (currentPreset && currentPreset.defaultGlow) {
-      const glowSection = document.createElement("div");
-      const glowLabel = document.createElement("span");
-      glowLabel.className = "appearance-section-label";
-      glowLabel.textContent = "Glow Effects";
-      glowSection.appendChild(glowLabel);
-      glowSection.appendChild(
-        buildSegControl(
-          [
-            { label: "Off", value: false },
-            { label: "On", value: true },
-          ],
-          getActiveGlow,
-          (v) => {
-            state.glow = v;
-          },
-        ),
-      );
-      body.appendChild(glowSection);
-    }
+    // Glow Effects — available on all presets
+    const glowSection = document.createElement("div");
+    const glowLabel = document.createElement("span");
+    glowLabel.className = "appearance-section-label";
+    glowLabel.textContent = "Glow Effects";
+    glowSection.appendChild(glowLabel);
+    glowSection.appendChild(
+      buildSegControl(
+        [
+          { label: "Off", value: false },
+          { label: "On", value: true },
+        ],
+        getActiveGlow,
+        (v) => {
+          state.glow = v;
+        },
+      ),
+    );
+    body.appendChild(glowSection);
 
     return body;
   }
