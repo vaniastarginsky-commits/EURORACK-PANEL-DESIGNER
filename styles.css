@@ -1781,8 +1781,8 @@ h3, h4 {
   overflow:hidden;
   pointer-events:none;
   opacity:.52;
-  background:rgba(5,5,5,.58);
-  color:#eee7da;
+  background:var(--ui-panel);
+  color:var(--ui-text);
   border:1px solid rgba(var(--ui-line-rgb),.22);
   box-shadow:0 12px 32px rgba(0,0,0,.46);
   backdrop-filter:blur(4px);
@@ -1829,7 +1829,7 @@ h3, h4 {
 .component-hover-card strong,
 .canvas-component-info strong,
 .selection-info-card strong{
-  color:#f2dfb2;
+  color:var(--ui-gold);
   font-weight:800}
 
 /* Common generated rows if present */
@@ -1846,7 +1846,7 @@ h3, h4 {
 .component-info-label,
 .tooltip-label,
 .part-info-label{
-  color:#928b7d;
+  color:var(--ui-text-soft);
   min-width:0;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -1854,7 +1854,7 @@ h3, h4 {
 .component-info-value,
 .tooltip-value,
 .part-info-value{
-  color:#eee7da;
+  color:var(--ui-text);
   min-width:0;
   overflow:hidden;
   text-overflow:ellipsis;
