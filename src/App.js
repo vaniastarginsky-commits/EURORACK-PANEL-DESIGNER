@@ -1442,8 +1442,8 @@ function App() {
     const right = document.querySelector(".sidebar-right");
     if (!right) return null;
     right.scrollLeft = 0;
-    right.style.left = "auto";
-    right.style.right = "0px";
+    right.style.left = "";
+    right.style.right = "";
     return right;
   }
   function openComponentPropertiesPanel() {
@@ -3831,8 +3831,8 @@ function App() {
                 const r = document.querySelector(".sidebar-right");
                 if (r) {
                   r.scrollLeft = 0;
-                  r.style.left = "auto";
-                  r.style.right = "0px";
+                  r.style.left = "";
+                  r.style.right = "";
                 }
               }, 0);
             }
