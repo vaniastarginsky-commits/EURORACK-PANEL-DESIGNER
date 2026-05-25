@@ -55,7 +55,10 @@ const ICON = {
     "M12 18v3",
   ]),
   fit: toolIcon(["M15 3h6v6", "M9 21H3v-6", "M21 3l-7 7", "M3 21l7-7"]),
-  tone: toolIcon("M12 2a10 10 0 0 0 0 20V2z", { fill: "currentColor" }),
+  rotate: toolIcon([
+    "M20.49 9A9 9 0 1 1 5.64 5.64",
+    "M23 4L23 10L17 10",
+  ]),
   safe: toolIcon(
     "M12 2l8 4v5c0 4.6-3.2 8.9-8 10.4C7.2 19.9 4 15.6 4 11V6l8-4z",
   ),
@@ -280,6 +283,13 @@ function CanvasToolRail({
           onAddText?.();
         },
       }),
+      command("Rotate", ICON.rotate, {
+        disabled: !(state.selected && state.selected.length > 0),
+        onClick: () => {
+          setOpenMenu(null);
+          dispatch({ type: "ROTATE_SELECTED", degrees: 90 });
+        },
+      }),
       command("View", ICON.view, {
         className: openMenu === "view" ? "active" : "",
         onClick: (e) => toggleMenu("view", e),
@@ -293,9 +303,6 @@ function CanvasToolRail({
           setOpenMenu(null);
           onFitView();
         },
-      }),
-      command("Tone", ICON.tone, {
-        onClick: () => AppCommands.toggleViewContrast(),
       }),
       command("Safe", ICON.safe, {
         className: showSafeZones ? "active" : "",

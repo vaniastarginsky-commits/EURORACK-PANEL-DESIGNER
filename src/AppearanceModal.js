@@ -276,6 +276,34 @@
     );
     body.appendChild(hpSection);
 
+    // View Contrast
+    const contrastSection = document.createElement("div");
+    const contrastLabel = document.createElement("span");
+    contrastLabel.className = "appearance-section-label";
+    contrastLabel.textContent = "View Contrast";
+    contrastSection.appendChild(contrastLabel);
+    contrastSection.appendChild(
+      buildSegControl(
+        [
+          { label: "Off", value: 0 },
+          { label: "Soft", value: 0.2 },
+          { label: "Medium", value: 0.45 },
+          { label: "Light", value: 0.7 },
+        ],
+        () => {
+          const v = window.ViewContrast ? window.ViewContrast.read() : 0;
+          const closest = [0, 0.2, 0.45, 0.7].reduce((a, b) =>
+            Math.abs(b - v) < Math.abs(a - v) ? b : a,
+          );
+          return closest;
+        },
+        (v) => {
+          if (window.ViewContrast) window.ViewContrast.save(v);
+        },
+      ),
+    );
+    body.appendChild(contrastSection);
+
     // Glow Effects — only for presets that support it (e.g. Synthwave)
     const currentPreset = window.ThemeEngine.PRESETS[state.preset];
     if (currentPreset && currentPreset.defaultGlow) {

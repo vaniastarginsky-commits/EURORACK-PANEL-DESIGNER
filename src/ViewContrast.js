@@ -119,6 +119,8 @@
     window.addEventListener("resize", syncRailPosition, { passive: true });
   }
 
+  window.ViewContrast = { read, save };
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", boot);
   } else {
