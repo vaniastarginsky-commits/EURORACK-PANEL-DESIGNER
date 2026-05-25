@@ -3,6 +3,7 @@ function Topbar({
   onExportSVGClick,
   onRequestProjectFileImport,
   onRequestKiCadPcbImport,
+  onRequestEagleBrdImport,
   onOpenLocalProjects,
   onOpenProductionCheck,
   onOpenShortcuts,
@@ -332,6 +333,7 @@ function Topbar({
               onExportSVGClick,
               onRequestProjectFileImport,
               onRequestKiCadPcbImport,
+              onRequestEagleBrdImport,
               onOpenLocalProjects,
             }),
           openMenu === "help" &&
