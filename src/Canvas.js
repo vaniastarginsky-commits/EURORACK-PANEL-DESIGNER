@@ -664,7 +664,7 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
             const R = (c.frontDiameter ?? 40.4) / 2;
             const Rid = 14.0;
             const Rcap = R * 0.175;
-            const screwOff = 16.25;
+            const screwOff = 12.75;
             const screwCorners = [[1,1],[-1,1],[-1,-1],[1,-1]];
             return React.createElement(
               "g",
@@ -1571,14 +1571,13 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
           const R = (c.frontDiameter ?? 40.4) / 2;
           const Rid = 14.0;
           const Rcap = 3.5;
-          const screwOff = 16.25;
+          const screwOff = 12.75;
           const screwCorners = [[1,1],[-1,1],[-1,-1],[1,-1]];
           const bootRidges = [Rid, Rid * 0.857, Rid * 0.679, Rid * 0.536, Rid * 0.393, Rid * 0.286];
           const sl = 0.85;
           return React.createElement(
             "g",
             { key: c.id, "data-top-hardware-id": c.id, transform: rot, opacity: hwOpacity },
-            React.createElement("circle", { cx: cx + 0.5, cy: cy + 0.5, r: R + 0.4, fill: "rgba(0,0,0,0.55)", stroke: "none" }),
             React.createElement("circle", { cx, cy, r: R, fill: "#1a1c1e", stroke: "none" }),
             React.createElement("circle", { cx, cy, r: R, fill: "none", stroke: "rgba(255,255,255,0.18)", strokeWidth: 0.5 }),
             React.createElement("circle", { cx, cy, r: R - 0.3, fill: "none", stroke: "rgba(0,0,0,0.65)", strokeWidth: 0.5 }),
