@@ -609,7 +609,35 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
               }),
             );
           }
-          if (c.type === "toggle" || c.type === "toggleSpdt") {
+          if (
+            c.type === "toggle" ||
+            c.type === "toggleSpdt" ||
+            c.type === "toggle2m"
+          ) {
+            const _nutShape =
+              c.nutShape ?? (c.type === "toggle2m" ? "hex" : "circle");
+            const _R = c.frontDiameter / 2;
+            const _nutEl =
+              _nutShape === "hex"
+                ? React.createElement("polygon", {
+                    points: [0, 60, 120, 180, 240, 300]
+                      .map((deg) => {
+                        const rad = (deg * Math.PI) / 180;
+                        return `${cx + _R * Math.cos(rad)},${cy + _R * Math.sin(rad)}`;
+                      })
+                      .join(" "),
+                    fill: color,
+                    stroke: "rgba(0,0,0,0.55)",
+                    strokeWidth: 0.25,
+                  })
+                : React.createElement("circle", {
+                    cx: cx,
+                    cy: cy,
+                    r: _R,
+                    fill: color,
+                    stroke: "rgba(0,0,0,0.55)",
+                    strokeWidth: 0.25,
+                  });
             return React.createElement(
               "g",
               {
@@ -618,14 +646,7 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
                 transform: rot,
                 opacity: hwOpacity,
               },
-              React.createElement("circle", {
-                cx: cx,
-                cy: cy,
-                r: c.frontDiameter / 2,
-                fill: color,
-                stroke: "rgba(0,0,0,0.55)",
-                strokeWidth: 0.25,
-              }),
+              _nutEl,
               React.createElement("line", {
                 x1: cx,
                 y1: cy,
