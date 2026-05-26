@@ -1791,6 +1791,16 @@ function CanvasQuickAddDock({
                   ),
                   React.createElement(
                     "button",
+                    {
+                      onClick: () => {
+                        setMobileSheet(null);
+                        window.setTimeout(() => AppCommands.openAppearance(), 80);
+                      },
+                    },
+                    "Appearance",
+                  ),
+                  React.createElement(
+                    "button",
                     { onClick: () => openSheet("add") },
                     "Component picker",
                   ),
