@@ -3706,6 +3706,10 @@ html.pd-contrast-on::after {
     max-height: 42px ;
     border-bottom: none}
 
+  .topbar.global-topbar {
+    border-bottom: none;
+    box-shadow: none}
+
   .global-topbar .app-title {
     display: none}
 
