@@ -61,8 +61,9 @@ function bestLibraryPartForEagle(name, pkg) {
   if (/alpha-16mm|rd901f.*16|16mm.*pot|rv16/.test(hay)) return find("pot16mm");
   if (/alpha-9mm|rd901f|9mm.*pot|rv09/.test(hay)) return find("pot9mm");
   if (/ec12|pec11|encoder.*12|rotary.*enc/.test(hay)) return find("encoder");
-  if (/fader.*45|ra.*slide.*45/.test(hay)) return find("fader45");
-  if (/fader.*35|ra.*slide.*35/.test(hay)) return find("fader35");
+  if (/fader.*45|ra.*slide.*45|ra4543/.test(hay)) return find("fader45");
+  if (/fader.*30|fader.*35|ra.*slide.*(?:30|35)|ra3043/.test(hay))
+    return find("fader35");
   if (/fader.*20.*led/.test(hay)) return find("fader20led");
   if (/fader.*20|slide.*pot/.test(hay)) return find("fader20");
   if (/led.*5mm|5mm.*led|tact.*led|thonk.*sw.*lp.*led/.test(hay))

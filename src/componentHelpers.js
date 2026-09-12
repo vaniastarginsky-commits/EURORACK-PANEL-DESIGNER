@@ -123,6 +123,7 @@ function visualKnobDiameter(c) {
 function visualButtonRadius(c) {
   if (c.type === "tact6mm") return 3.5 / 2;
   if (c.type === "tactled") return 5.5 / 2;
+  if (c.type === "momentary12") return c.frontDiameter / 2;
   return Math.max(c.frontDiameter / 2, c.holeDiameter / 2 + 1.2);
 }
 function ergonomicDiameter(c) {

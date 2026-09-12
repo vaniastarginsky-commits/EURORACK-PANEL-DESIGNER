@@ -415,6 +415,8 @@ function bestLibraryPartForKiCad(ref, fp, pads) {
   const slot = pads.find((p) => p.oval || Math.abs(p.drillW - p.drillH) > 1.0);
   const find = (type) =>
     COMPONENT_LIBRARY.find((p) => p.type === type) || COMPONENT_LIBRARY[0];
+  if (/ra4543/i.test(hay)) return find("fader45");
+  if (/ra3043/i.test(hay)) return find("fader35");
   if (
     /fader|slider|slidepot|ra2045|rs?09|ptl/i.test(hay) ||
     (slot && Math.max(slot.drillW, slot.drillH) > 12)

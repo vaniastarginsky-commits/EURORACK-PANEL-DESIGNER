@@ -276,12 +276,13 @@ function shortPartName(def) {
   if (t === "led3mm") return "3mm CVD LED";
   if (t === "tactled") return "LED Button 7.5";
   if (t === "tact6mm") return "6mm Tact";
-  if (t === "momentary12") return "12mm Button";
+  if (t === "momentary12") return "PV0 Button 12mm";
   if (t === "encoder") return "Encoder EC12";
   if (t === "fader20led") return "LED Fader 20mm";
   if (t === "fader20") return "Fader 20mm";
-  if (t === "fader35") return "Fader 35mm";
-  if (t === "fader45") return "Fader 45mm";
+  // Keep the legacy type key for saved-project compatibility.
+  if (t === "fader35") return "RA3043F Fader 30mm";
+  if (t === "fader45") return "RA4543F Fader 45mm";
   if (t === "customrect") return "Rect Cutout";
   if (t === "custom") return "Custom Hole";
   return def.name

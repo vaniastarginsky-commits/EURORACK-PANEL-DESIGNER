@@ -86,6 +86,105 @@
   }
   return normalizeLegacyJackGeometry(base);
 }
+const LEGACY_BUILT_IN_GEOMETRY = {
+  fader35: {
+    name: "Alps Fader 35mm",
+    geometry: {
+      holeDiameter: 4,
+      frontDiameter: 9,
+      rearBodyW: 6.7,
+      rearBodyH: 55,
+      rearDepth: 15,
+      keepoutW: 9,
+      keepoutH: 58,
+      minSpacing: 2,
+      holeType: "slot",
+      slotLength: 41,
+      frontShape: "slot",
+      frontW: 9,
+      frontH: 55,
+      faderHandleW: 10.5,
+      faderHandleH: 5,
+    },
+  },
+  fader45: {
+    name: "Alps Fader 45mm",
+    geometry: {
+      holeDiameter: 4,
+      frontDiameter: 9,
+      rearBodyW: 6.7,
+      rearBodyH: 65,
+      rearDepth: 15,
+      keepoutW: 9,
+      keepoutH: 68,
+      minSpacing: 2,
+      holeType: "slot",
+      slotLength: 51,
+      frontShape: "slot",
+      frontW: 9,
+      frontH: 65,
+      faderHandleW: 10.5,
+      faderHandleH: 5,
+    },
+  },
+  momentary12: {
+    name: "Momentary 12mm",
+    geometry: {
+      holeDiameter: 12,
+      frontDiameter: 16,
+      rearBodyW: 12,
+      rearBodyH: 12,
+      rearDepth: 20,
+      keepoutW: 16,
+      keepoutH: 16,
+      minSpacing: 2,
+    },
+  },
+};
+const BUILT_IN_GEOMETRY_FIELDS = [
+  "name",
+  "holeDiameter",
+  "frontDiameter",
+  "rearBodyW",
+  "rearBodyH",
+  "rearDepth",
+  "keepoutW",
+  "keepoutH",
+  "minSpacing",
+  "holeType",
+  "slotLength",
+  "frontShape",
+  "frontW",
+  "frontH",
+  "faderHandleW",
+  "faderHandleH",
+  "manufacturer",
+  "partNumber",
+  "datasheetUrl",
+  "category",
+  "panelThicknessMin",
+  "panelThicknessMax",
+  "verificationStatus",
+  "verification",
+];
+function normalizeLegacyBuiltInGeometry(component, raw, libraryPart) {
+  const legacy = LEGACY_BUILT_IN_GEOMETRY[component.type];
+  if (
+    !legacy ||
+    raw.partNumber ||
+    raw.manufacturer ||
+    raw.datasheetUrl ||
+    (raw.name && raw.name !== legacy.name) ||
+    (raw.verificationStatus && raw.verificationStatus !== "approximate") ||
+    Object.entries(legacy.geometry).some(([key, value]) => raw[key] !== value)
+  )
+    return component;
+  const normalized = { ...component };
+  for (const key of BUILT_IN_GEOMETRY_FIELDS)
+    normalized[key] = libraryPart[key];
+  if (raw.label === legacy.name) normalized.label = libraryPart.name;
+  return normalized;
+}
 function validateAndNormalize(raw) {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
     return { ok: false, error: "Root must be a JSON object." };
@@ -273,7 +372,13 @@ function validateAndNormalize(raw) {
       comp.knobEnabled = false;
       comp.knobDiameter = undefined;
     }
-    components.push(normalizeLegacyJackGeometry(comp));
+    components.push(
+      normalizeLegacyBuiltInGeometry(
+        normalizeLegacyJackGeometry(comp),
+        r,
+        libMatch,
+      ),
+    );
   }
   function objOrDefault(key, fallback) {
     return obj[key] && typeof obj[key] === "object" && !Array.isArray(obj[key])
