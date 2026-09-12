@@ -1417,24 +1417,40 @@ function App() {
     setDrawerCloseSwipe(null);
   }
   function duplicateComponentFromMenu(id) {
-    dispatch({ type: "DUPLICATE_COMPONENT", id });
+    dispatch({
+      type:
+        state.selected.length > 1 && state.selected.includes(id)
+          ? "DUPLICATE_SELECTED"
+          : "DUPLICATE_COMPONENT",
+      id,
+    });
     setComponentMenu(null);
     clearComponentLongPress();
   }
   function rotateComponentFromMenu(id) {
     const comp = state.components.find((c) => c.id === id);
     if (!comp) return;
-    dispatch({
-      type: "UPDATE_COMPONENT",
-      id,
-      patch: { rotation: ((comp.rotation || 0) + 90) % 360 },
-    });
-    dispatch({ type: "SELECT", ids: [id], additive: false });
+    if (state.selected.length > 1 && state.selected.includes(id)) {
+      dispatch({ type: "ROTATE_SELECTED", degrees: 90 });
+    } else {
+      dispatch({
+        type: "UPDATE_COMPONENT",
+        id,
+        patch: { rotation: ((comp.rotation || 0) + 90) % 360 },
+      });
+      dispatch({ type: "SELECT", ids: [id], additive: false });
+    }
     setComponentMenu(null);
     clearComponentLongPress();
   }
   function deleteComponentFromMenu(id) {
-    dispatch({ type: "DELETE_COMPONENT", id });
+    dispatch({
+      type:
+        state.selected.length > 1 && state.selected.includes(id)
+          ? "DELETE_SELECTED"
+          : "DELETE_COMPONENT",
+      id,
+    });
     setComponentMenu(null);
     clearComponentLongPress();
   }
@@ -1521,7 +1537,9 @@ function App() {
       return;
     }
     const id = group.getAttribute("data-id");
-    dispatch({ type: "SELECT", ids: [id], additive: false });
+    if (!state.selected.includes(id)) {
+      dispatch({ type: "SELECT", ids: [id], additive: false });
+    }
     setComponentMenu({ id, x: e.clientX, y: e.clientY });
   }
   function onSVGMouseDown(e) {
@@ -4718,6 +4736,13 @@ function App() {
         (() => {
           const comp = state.components.find((c) => c.id === componentMenu.id);
           if (!comp) return null;
+          const appliesToSelection =
+            state.selected.length > 1 && state.selected.includes(comp.id);
+          const allTargetsLocked = appliesToSelection
+            ? state.components
+                .filter((c) => state.selected.includes(c.id))
+                .every((c) => c.locked)
+            : comp.locked;
           const left = Math.min(
             Math.max(8, componentMenu.x),
             window.innerWidth - 190,
@@ -4757,7 +4782,9 @@ function App() {
                   textOverflow: "ellipsis",
                 },
               },
-              comp.label || comp.name,
+              appliesToSelection
+                ? `${state.selected.length} selected`
+                : comp.label || comp.name,
             ),
             React.createElement(
               "div",
@@ -4822,15 +4849,22 @@ function App() {
                 "button",
                 {
                   onClick: () => {
-                    dispatch({
-                      type: "SET_COMPONENT_LOCKED",
-                      id: comp.id,
-                      locked: !comp.locked,
-                    });
+                    dispatch(
+                      appliesToSelection
+                        ? {
+                            type: "LOCK_SELECTED",
+                            locked: !allTargetsLocked,
+                          }
+                        : {
+                            type: "SET_COMPONENT_LOCKED",
+                            id: comp.id,
+                            locked: !comp.locked,
+                          },
+                    );
                     setComponentMenu(null);
                   },
                 },
-                comp.locked ? "Unlock" : "Lock",
+                allTargetsLocked ? "Unlock" : "Lock",
               ),
               React.createElement(
                 "button",
