@@ -132,3 +132,64 @@ function ergonomicDiameter(c) {
     return c.knobDiameter;
   return 0;
 }
+
+// Thonk PJ301M-12 / PJ398SM drawing (mm, viewed along the panel axis):
+// https://www.thonk.co.uk/wp-content/uploads/2014/02/Thonkiconn_Jack_Datasheet.pdf
+// Housing: x +/-4.5, y -6..4.5. Sleeve/GND pin 1: y=6.48, 1.3 x 0.6.
+function normalizeLegacyJackGeometry(c) {
+  if (c.type !== "jack" || c.rearBodyW !== 8.5 || c.rearBodyH !== 10.5)
+    return c;
+  return {
+    ...c,
+    rearBodyW: 9,
+    keepoutW: c.keepoutW === 10.5 ? 11 : c.keepoutW,
+    keepoutH: c.keepoutH === 12.5 ? 14.8 : c.keepoutH,
+  };
+}
+function getRearBodyRects(c) {
+  if (c.type !== "jack")
+    return [
+      {
+        x: -c.rearBodyW / 2,
+        y: -c.rearBodyH / 2,
+        width: c.rearBodyW,
+        height: c.rearBodyH,
+        name: "Housing",
+      },
+    ];
+  // Preserve explicitly customized housing sizes by scaling the drawing.
+  const sx = c.rearBodyW / 9,
+    sy = c.rearBodyH / 10.5;
+  return [
+    { x: -4.5, y: -6, width: 9, height: 10.5, name: "Housing" },
+    { x: -0.4, y: 4.5, width: 0.8, height: 1.98, name: "GND lead" },
+    { x: -0.65, y: 6.18, width: 1.3, height: 0.6, name: "1 · GND / Sleeve" },
+    { x: -0.75, y: 3.08, width: 1.5, height: 0.6, name: "2 · Normal" },
+    { x: -0.75, y: -5.17, width: 1.5, height: 0.5, name: "3 · Tip" },
+  ].map((r) => ({
+    ...r,
+    x: r.x * sx,
+    y: r.y * sy,
+    width: r.width * sx,
+    height: r.height * sy,
+  }));
+}
+function getRearBodyBounds(c) {
+  const rects = getRearBodyRects(c);
+  const x = Math.min(...rects.map((r) => r.x));
+  const y = Math.min(...rects.map((r) => r.y));
+  const width = Math.max(...rects.map((r) => r.x + r.width)) - x;
+  const height = Math.max(...rects.map((r) => r.y + r.height)) - y;
+  return { x, y, width, height };
+}
+function getRearKeepoutBounds(c) {
+  const body = getRearBodyBounds(c);
+  const cx = c.type === "jack" ? body.x + body.width / 2 : 0;
+  const cy = c.type === "jack" ? body.y + body.height / 2 : 0;
+  return {
+    x: cx - c.keepoutW / 2,
+    y: cy - c.keepoutH / 2,
+    width: c.keepoutW,
+    height: c.keepoutH,
+  };
+}

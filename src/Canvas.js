@@ -1804,8 +1804,8 @@ const ComponentsLayer = React.memo(function ComponentsLayer({
             "g",
             { transform: `rotate(${c.rotation}, ${cx}, ${cy})` },
             React.createElement("rect", {
-              x: cx - c.keepoutW / 2,
-              y: cy - c.keepoutH / 2,
+              x: cx + getRearKeepoutBounds(c).x,
+              y: cy + getRearKeepoutBounds(c).y,
               width: c.keepoutW,
               height: c.keepoutH,
               fill: isErr ? "rgba(255,50,50,0.25)" : "rgba(255,160,0,0.2)",
@@ -1821,15 +1821,19 @@ const ComponentsLayer = React.memo(function ComponentsLayer({
           React.createElement(
             "g",
             { transform: `rotate(${c.rotation}, ${cx}, ${cy})` },
-            React.createElement("rect", {
-              x: cx - c.rearBodyW / 2,
-              y: cy - c.rearBodyH / 2,
-              width: c.rearBodyW,
-              height: c.rearBodyH,
-              fill: isErr ? "rgba(255,50,50,0.5)" : "rgba(255,100,0,0.5)",
-              stroke: isErr ? "#ff3333" : "#ff6400",
-              strokeWidth: 0.3,
-            }),
+            getRearBodyRects(c).map((r) =>
+              React.createElement("rect", {
+                key: r.name,
+                "data-rear-part": r.name,
+                x: cx + r.x,
+                y: cy + r.y,
+                width: r.width,
+                height: r.height,
+                fill: isErr ? "rgba(255,50,50,0.5)" : "rgba(255,100,0,0.5)",
+                stroke: isErr ? "#ff3333" : "#ff6400",
+                strokeWidth: r.name === "Housing" ? 0.3 : 0.15,
+              }, React.createElement("title", null, r.name)),
+            ),
           ),
         !useCheapDragShape &&
           layers.frontShapes &&

@@ -43,42 +43,31 @@ function obbEdgeExtents(o) {
   const extY = o.hh * cos + o.hw * sin;
   return { x1: o.cx - extX, x2: o.cx + extX, y1: o.cy - extY, y2: o.cy + extY };
 }
-function makeBodyOBB(c) {
+function rearBoundsOBB(c, bounds, x = c.x, y = c.y) {
+  const dx = bounds.x + bounds.width / 2;
+  const dy = bounds.y + bounds.height / 2;
+  const r = degToRad(c.rotation);
   return {
-    cx: c.x,
-    cy: c.y,
-    hw: c.rearBodyW / 2,
-    hh: c.rearBodyH / 2,
+    cx: x + dx * Math.cos(r) - dy * Math.sin(r),
+    cy: y + dx * Math.sin(r) + dy * Math.cos(r),
+    hw: bounds.width / 2,
+    hh: bounds.height / 2,
     angle: c.rotation,
   };
 }
+function makeBodyOBB(c) {
+  // Conservative envelope includes the projecting sleeve contact.
+  return rearBoundsOBB(c, getRearBodyBounds(c));
+}
 function makeKeepoutOBB(c) {
-  return {
-    cx: c.x,
-    cy: c.y,
-    hw: c.keepoutW / 2,
-    hh: c.keepoutH / 2,
-    angle: c.rotation,
-  };
+  return rearBoundsOBB(c, getRearKeepoutBounds(c));
 }
 function makeRearBodyFootprintOBBAt(c, x, y) {
   if (c.rearBodyW > 0 && c.rearBodyH > 0) {
-    return {
-      cx: x,
-      cy: y,
-      hw: c.rearBodyW / 2,
-      hh: c.rearBodyH / 2,
-      angle: c.rotation,
-    };
+    return rearBoundsOBB(c, getRearBodyBounds(c), x, y);
   }
   if (c.keepoutW > 0 && c.keepoutH > 0 && c.type !== "customrect") {
-    return {
-      cx: x,
-      cy: y,
-      hw: c.keepoutW / 2,
-      hh: c.keepoutH / 2,
-      angle: c.rotation,
-    };
+    return rearBoundsOBB(c, getRearKeepoutBounds(c), x, y);
   }
   const b = getFrontBounds(c);
   return {

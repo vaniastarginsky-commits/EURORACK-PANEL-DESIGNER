@@ -193,7 +193,11 @@ function exportPNGSVGString(state, opts, cfg) {
         holesLines.push(
           `<circle cx="${p.x.toFixed(3)}"cy="${p.y.toFixed(3)}"r="${(c.holeDiameter / 2).toFixed(3)}"fill="white"stroke="#333"stroke-width="0.3"/>`,
         );
-    } else if (cfg.includeHoles && exportLayer("componentHoles") && isJoystick(c)) {
+    } else if (
+      cfg.includeHoles &&
+      exportLayer("componentHoles") &&
+      isJoystick(c)
+    ) {
       holesLines.push(
         `<circle cx="${c.x.toFixed(3)}"cy="${c.y.toFixed(3)}"r="${(c.holeDiameter / 2).toFixed(3)}"fill="white"stroke="#333"stroke-width="0.3"/>`,
       );
@@ -633,7 +637,7 @@ function exportSVGString(state, opts) {
           `  <g transform="rotate(${c.rotation}, ${c.x.toFixed(3)}, ${c.y.toFixed(3)})">`,
         );
         lines.push(
-          `    <rect x="${(c.x - c.keepoutW / 2).toFixed(3)}" y="${(c.y - c.keepoutH / 2).toFixed(3)}" width="${c.keepoutW.toFixed(3)}" height="${c.keepoutH.toFixed(3)}" fill="none" stroke="#f80" stroke-width="0.2" stroke-dasharray="1 0.5"/>`,
+          `    <rect x="${(c.x + getRearKeepoutBounds(c).x).toFixed(3)}" y="${(c.y + getRearKeepoutBounds(c).y).toFixed(3)}" width="${c.keepoutW.toFixed(3)}" height="${c.keepoutH.toFixed(3)}" fill="none" stroke="#f80" stroke-width="0.2" stroke-dasharray="1 0.5"/>`,
         );
         lines.push(`  </g>`);
       }
@@ -641,9 +645,11 @@ function exportSVGString(state, opts) {
         lines.push(
           `  <g transform="rotate(${c.rotation}, ${c.x.toFixed(3)}, ${c.y.toFixed(3)})">`,
         );
-        lines.push(
-          `    <rect x="${(c.x - c.rearBodyW / 2).toFixed(3)}" y="${(c.y - c.rearBodyH / 2).toFixed(3)}" width="${c.rearBodyW.toFixed(3)}" height="${c.rearBodyH.toFixed(3)}" fill="none" stroke="#f60" stroke-width="0.3"/>`,
-        );
+        for (const r of getRearBodyRects(c)) {
+          lines.push(
+            `    <rect x="${(c.x + r.x).toFixed(3)}" y="${(c.y + r.y).toFixed(3)}" width="${r.width.toFixed(3)}" height="${r.height.toFixed(3)}" fill="none" stroke="#f60" stroke-width="0.3"><title>${escapeXml(r.name)}</title></rect>`,
+          );
+        }
         lines.push(`  </g>`);
       }
       if (getFrontShape(c) !== "circle") {

@@ -84,7 +84,7 @@
     base.knobEnabled = false;
     base.knobDiameter = undefined;
   }
-  return base;
+  return normalizeLegacyJackGeometry(base);
 }
 function validateAndNormalize(raw) {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
@@ -273,7 +273,7 @@ function validateAndNormalize(raw) {
       comp.knobEnabled = false;
       comp.knobDiameter = undefined;
     }
-    components.push(comp);
+    components.push(normalizeLegacyJackGeometry(comp));
   }
   function objOrDefault(key, fallback) {
     return obj[key] && typeof obj[key] === "object" && !Array.isArray(obj[key])
