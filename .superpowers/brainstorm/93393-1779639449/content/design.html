@@ -1,0 +1,79 @@
+<h2>Дизайн нового styles.css</h2>
+<p class="subtitle">Домен-организованный файл ~1000–1400 строк. Без !important. Без версионных блоков.</p>
+
+<div class="section">
+  <h3>Структура файла</h3>
+  <div class="mockup">
+    <div class="mockup-header">styles.css — 11 секций</div>
+    <div class="mockup-body" style="font-family:monospace;font-size:12px;line-height:2">
+      <div><span style="color:#7db87d">/* ===== 1. Reset &amp; Base ===== */</span> &nbsp;<span style="color:#928b7d">html, body, #root, *, button, input, label</span></div>
+      <div><span style="color:#7db87d">/* ===== 2. App Shell ===== */</span> &nbsp;<span style="color:#928b7d">.app-shell → grid-template-rows: auto 1fr ← КРИТИЧНО</span></div>
+      <div><span style="color:#7db87d">/* ===== 3. Workspace Layout ===== */</span> &nbsp;<span style="color:#928b7d">.workspace → grid-template-columns: 280px 1fr 280px</span></div>
+      <div><span style="color:#7db87d">/* ===== 4. Topbar ===== */</span> &nbsp;<span style="color:#928b7d">.topbar, .brand, кнопки, группы</span></div>
+      <div><span style="color:#7db87d">/* ===== 5. Sidebars ===== */</span> &nbsp;<span style="color:#928b7d">.sidebar-left/right + overflow:auto ← КРИТИЧНО</span></div>
+      <div><span style="color:#7db87d">/* ===== 6. Canvas Area ===== */</span> &nbsp;<span style="color:#928b7d">.canvas-wrap, overflow:hidden, grid overlay</span></div>
+      <div><span style="color:#7db87d">/* ===== 7. Canvas Rails &amp; HUD ===== */</span> &nbsp;<span style="color:#928b7d">.canvas-tool-rail, .component-info-hud</span></div>
+      <div><span style="color:#7db87d">/* ===== 8. Modals &amp; Dialogs ===== */</span> &nbsp;<span style="color:#928b7d">generic → export → templates → confirm</span></div>
+      <div><span style="color:#7db87d">/* ===== 9. Components ===== */</span> &nbsp;<span style="color:#928b7d">cards, tabs, form rows, popovers, dropdowns</span></div>
+      <div><span style="color:#7db87d">/* ===== 10. Mobile ===== */</span> &nbsp;<span style="color:#928b7d">@media (max-width: 900px) — весь мобайл в одном месте</span></div>
+      <div><span style="color:#7db87d">/* ===== 11. Utilities ===== */</span> &nbsp;<span style="color:#928b7d">scrollbars, animations, .sr-only</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Ключевые архитектурные решения</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px">
+    <div style="background:rgba(125,184,125,0.08);border:1px solid rgba(125,184,125,0.3);border-radius:8px;padding:16px">
+      <h4 style="color:#7db87d;margin:0 0 10px">Что остаётся из stripped</h4>
+      <ul style="margin:0;padding-left:18px;line-height:1.8;font-size:13px">
+        <li>Reset (html, *, button, input)</li>
+        <li>Весь export modal (v439 — хорошо написан)</li>
+        <li>Layer manager layout (v440)</li>
+        <li>Modal centering (v441)</li>
+        <li>HUD card (v442)</li>
+        <li>Скроллбары и утилиты</li>
+      </ul>
+    </div>
+    <div style="background:rgba(184,125,125,0.08);border:1px solid rgba(184,125,125,0.3);border-radius:8px;padding:16px">
+      <h4 style="color:#d87a7a;margin:0 0 10px">Что добавляется (из backup)</h4>
+      <ul style="margin:0;padding-left:18px;line-height:1.8;font-size:13px">
+        <li><strong>App shell grid-template-rows</strong></li>
+        <li><strong>Workspace grid-template-columns</strong></li>
+        <li><strong>Sidebars overflow:auto</strong></li>
+        <li>Collapsed sidebar vars (v448)</li>
+        <li>Mobile dock layout</li>
+        <li>Topbar consolidated</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Процесс</h3>
+  <div style="font-size:13px;line-height:2;background:rgba(255,255,255,0.04);border-radius:8px;padding:16px;font-family:monospace">
+    <div>1. Написать новый styles.css по 11 секциям (за один проход)</div>
+    <div>2. Референс: stripped-файл (что есть) + backup (что было удалено)</div>
+    <div>3. Запустить <strong>npm run verify</strong></div>
+    <div>4. Починить регрессии если найдутся</div>
+    <div>5. Коммит</div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Ожидаемый результат</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;font-size:13px;text-align:center">
+    <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:16px">
+      <div style="font-size:24px;font-weight:900;color:#7db87d">~1200</div>
+      <div style="color:#928b7d">строк (было 4905)</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:16px">
+      <div style="font-size:24px;font-weight:900;color:#7db87d">0</div>
+      <div style="color:#928b7d">!important</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:16px">
+      <div style="font-size:24px;font-weight:900;color:#7db87d">0</div>
+      <div style="color:#928b7d">patch-блоков v422–v508</div>
+    </div>
+  </div>
+</div>

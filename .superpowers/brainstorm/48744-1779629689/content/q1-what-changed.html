@@ -1,0 +1,61 @@
+<h2>Что не так с текущим результатом?</h2>
+<p class="subtitle">Посмотрим на конкретные визуальные отличия между референсом и тем что есть сейчас</p>
+
+<div class="split" style="gap: 24px; margin-bottom: 32px;">
+  <div class="mockup" style="flex:1">
+    <div class="mockup-header" style="background: #2d1b4e; color: #e879f9;">Референс (хотели)</div>
+    <div class="mockup-body" style="background: #0d0820; padding: 16px; min-height: 220px; position: relative; overflow: hidden;">
+      <!-- Purple gradient bg -->
+      <div style="position:absolute;inset:0; background: radial-gradient(ellipse at 50% 60%, rgba(139,60,200,0.55) 0%, rgba(80,20,130,0.3) 40%, transparent 70%); pointer-events:none;"></div>
+      <!-- Canvas panel mockup -->
+      <div style="position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; padding-top:12px;">
+        <div style="width:60px; height:120px; background:#404040; border:1px solid #555; border-radius:2px; box-shadow: 0 0 20px rgba(139,60,200,0.4);"></div>
+      </div>
+      <div style="position:absolute; bottom:8px; left:8px; font-size:11px; color:#e879f9; font-family:monospace;">✦ драматичный фон</div>
+    </div>
+  </div>
+
+  <div class="mockup" style="flex:1">
+    <div class="mockup-header" style="background: #1a1a1a; color: #888;">Сейчас</div>
+    <div class="mockup-body" style="background: #000; padding: 16px; min-height: 220px; position: relative; overflow: hidden;">
+      <!-- Black bg - minimal -->
+      <div style="position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; padding-top:12px;">
+        <div style="width:60px; height:120px; background:#404040; border:1px solid #555; border-radius:2px;"></div>
+      </div>
+      <div style="position:absolute; bottom:8px; left:8px; font-size:11px; color:#555; font-family:monospace;">— чёрный фон, минималистично</div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-bottom: 16px;">Что хочется исправить в первую очередь?</p>
+
+<div class="options" data-multiselect>
+  <div class="option" data-choice="bg" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Фон холста</h3>
+      <p>Тёмный пурпурный/фиолетовый градиент за панелью — главное что создаёт атмосферу</p>
+    </div>
+  </div>
+  <div class="option" data-choice="topbar" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Топбар / брендинг</h3>
+      <p>Крупнее название, другая цветовая схема топбара, расположение кнопок</p>
+    </div>
+  </div>
+  <div class="option" data-choice="rail" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Левый рейл</h3>
+      <p>Цветные иконки, другой стиль кнопок, меньше пунктов</p>
+    </div>
+  </div>
+  <div class="option" data-choice="overall" onclick="toggleSelect(this)">
+    <div class="letter">D</div>
+    <div class="content">
+      <h3>Всё сразу</h3>
+      <p>Полный визуальный сдвиг — сделать так, чтобы ощущение совпадало с референсом</p>
+    </div>
+  </div>
+</div>
