@@ -459,6 +459,85 @@ const states = [
         throw new Error("Narrow-panel mounting holes must be at X=7.5mm");
     },
   ],
+  [
+    "desktop-eagle-mechanical-faceplate",
+    desktop,
+    async (page) => {
+      const board = `<?xml version="1.0" encoding="utf-8"?>
+        <eagle version="9.6.2"><drawing><board><plain>
+          <wire x1="0" y1="0" x2="40.3" y2="0" width="0" layer="20"/>
+          <wire x1="40.3" y1="0" x2="40.3" y2="128.5" width="0" layer="20"/>
+          <wire x1="40.3" y1="128.5" x2="0" y2="128.5" width="0" layer="20"/>
+          <wire x1="0" y1="128.5" x2="0" y2="0" width="0" layer="20"/>
+          <hole x="7.33" y="125.5" drill="3.2"/>
+          <hole x="7.33" y="3" drill="3.2"/>
+          <hole x="14" y="82" drill="7.2"/>
+          <circle x="27" y="46" radius="3.05" width="0" layer="46"/>
+        </plain><elements/></board></drawing></eagle>`;
+      await page.locator("#eagle-brd-file-input").setInputFiles({
+        name: "mechanical-faceplate.brd",
+        mimeType: "application/xml",
+        buffer: Buffer.from(board),
+      });
+      await page.waitForFunction(
+        () => document.querySelectorAll(".component-node").length === 2,
+      );
+      if (
+        (await page
+          .locator(".mounting-holes-layer > [data-mounting-hole-id]")
+          .count()) !== 2
+      )
+        throw new Error("Eagle rail holes duplicated automatic mounting holes");
+      const cutoutLabels = await page
+        .locator(".component-node")
+        .evaluateAll((nodes) => nodes.map((node) => node.textContent || ""));
+      if (!cutoutLabels.some((label) => label.includes("Ø7.20")))
+        throw new Error("Eagle <hole> cutout was not imported");
+      if (!cutoutLabels.some((label) => label.includes("Ø6.10")))
+        throw new Error("Eagle milling circle cutout was not imported");
+    },
+  ],
+  [
+    "desktop-kicad-mechanical-faceplate",
+    desktop,
+    async (page) => {
+      const npth = (x, y, drill) => `
+        (footprint "MountingHole:MountingHole_${drill}mm"
+          (at ${x} ${y})
+          (property "Reference" "H")
+          (property "Value" "MountingHole")
+          (pad "" np_thru_hole circle (at 0 0) (size ${drill} ${drill}) (drill ${drill}) (layers "*.Cu" "*.Mask"))
+        )`;
+      const board = `(kicad_pcb
+        (gr_rect (start 0 0) (end 40.64 128.5) (layer "Edge.Cuts"))
+        ${npth(7.5, 3, 3.2)}
+        ${npth(7.5, 125.5, 3.2)}
+        ${npth(14, 48, 7.2)}
+        (gr_circle (center 27 82) (end 30.05 82) (layer "Edge.Cuts"))
+      )`;
+      await page.locator("#kicad-pcb-file-input").setInputFiles({
+        name: "mechanical-faceplate.kicad_pcb",
+        mimeType: "text/plain",
+        buffer: Buffer.from(board),
+      });
+      await page.waitForFunction(
+        () => document.querySelectorAll(".component-node").length === 2,
+      );
+      if (
+        (await page
+          .locator(".mounting-holes-layer > [data-mounting-hole-id]")
+          .count()) !== 2
+      )
+        throw new Error("KiCad rail holes duplicated automatic mounting holes");
+      const cutoutLabels = await page
+        .locator(".component-node")
+        .evaluateAll((nodes) => nodes.map((node) => node.textContent || ""));
+      if (!cutoutLabels.some((label) => label.includes("Ø7.20")))
+        throw new Error("KiCad NPTH cutout was not imported");
+      if (!cutoutLabels.some((label) => label.includes("Ø6.10")))
+        throw new Error("KiCad Edge.Cuts circle was not imported");
+    },
+  ],
 
   ["mobile-default", mobile, async () => {}],
   [

@@ -3189,9 +3189,9 @@ function App() {
         if (!ok) return;
       }
       const result = parseKiCadPcbToPanel(src, panelWidthMM(state.panel));
-      if (!result.components.length) {
+      if (!result.components.length && !result.boardOutline) {
         alert(
-          `KiCad import found no components.\n${result.warnings.join("\n")}`,
+          `KiCad import found no panel geometry.\n${result.warnings.join("\n")}`,
         );
         return;
       }
@@ -3203,10 +3203,10 @@ function App() {
       });
       dispatch({ type: "SET_VIEW_MODE", mode: "front" });
       setAutosaveStatus(
-        `Imported KiCad PCB · ${result.components.length} parts`,
+        `Imported KiCad PCB · ${result.components.length} panel features`,
       );
       const msg = [
-        `Imported ${result.components.length} parts from KiCad PCB.`,
+        `Imported KiCad panel with ${result.components.length} panel features.`,
       ];
       if (result.boardOutline)
         msg.push(
@@ -3239,9 +3239,9 @@ function App() {
         if (!ok) return;
       }
       const result = parseEagleBrdToPanel(src, panelWidthMM(state.panel));
-      if (!result.components.length) {
+      if (!result.components.length && !result.boardOutline) {
         alert(
-          `Eagle import found no components.\n${result.warnings.join("\n")}`,
+          `Eagle import found no panel geometry.\n${result.warnings.join("\n")}`,
         );
         return;
       }
@@ -3253,10 +3253,10 @@ function App() {
       });
       dispatch({ type: "SET_VIEW_MODE", mode: "front" });
       setAutosaveStatus(
-        `Imported Eagle .brd · ${result.components.length} parts`,
+        `Imported Eagle .brd · ${result.components.length} panel features`,
       );
       const msg = [
-        `Imported ${result.components.length} parts from Eagle .brd.`,
+        `Imported Eagle panel with ${result.components.length} panel features.`,
       ];
       if (result.boardOutline)
         msg.push(

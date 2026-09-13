@@ -146,7 +146,7 @@ function appReducer(state, action) {
       });
     }
     case "LOAD_KICAD_IMPORT": {
-      if (action.components.length === 0) return state;
+      if (action.components.length === 0 && !action.boardOutline) return state;
       const importedWidth =
         action.panelWidthMM && action.panelWidthMM > 5
           ? action.panelWidthMM

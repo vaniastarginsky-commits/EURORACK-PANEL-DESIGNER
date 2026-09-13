@@ -171,6 +171,7 @@ function parseKiCadPads(block) {
         atX: at ? +at[1] : 0,
         atY: at ? +at[2] : 0,
         atRot: at && at[3] ? +at[3] : 0,
+        npth: /^\(pad\s+(?:"[^"]*"|[^\s\)]+)\s+np_thru_hole\b/.test(p),
       };
     })
     .filter((p) => p.drillW > 0 || p.sizeW > 0 || p.sizeH > 0);
@@ -366,6 +367,31 @@ function kiCadFootprintGeometry(pads, graphics, hay = "") {
     rearBodyH: Math.max(padSpanH, maxPad, d + 2),
   };
 }
+function boardCutoutsFromKiCad(src) {
+  return sexprBlocks(src, "gr_circle")
+    .filter((block) => /\(layer\s+"?Edge\.Cuts"?\)/i.test(block))
+    .map((block) => {
+      const center = block.match(
+        /\(center\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\)/,
+      );
+      const end = block.match(
+        /\(end\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\)/,
+      );
+      if (!center || !end) return null;
+      const x = +center[1];
+      const y = +center[2];
+      const radius = Math.hypot(+end[1] - x, +end[2] - y);
+      if (!(radius > 0)) return null;
+      return {
+        x,
+        y,
+        holeDiameter: radius * 2,
+        rotation: 0,
+        source: "board Edge.Cuts circle",
+      };
+    })
+    .filter(Boolean);
+}
 function boardOutlineFromKiCad(src) {
   const pts = [];
   const edgeBlocks = [
@@ -479,6 +505,7 @@ function parseKiCadPcbToPanel(src, currentPanelWidthMM) {
   const outline = boardOutlineFromKiCad(src);
   const footprints = sexprBlocks(src, "footprint");
   const raw = [];
+  const mechanicalCutouts = boardCutoutsFromKiCad(src);
   let skippedNonPanelCount = 0;
   for (const fpBlock of footprints) {
     const at = parseAt(fpBlock);
@@ -488,44 +515,69 @@ function parseKiCadPcbToPanel(src, currentPanelWidthMM) {
     const value = parseFpValue(fpBlock);
     const description = parseFpDescription(fpBlock);
     const pads = parseKiCadPads(fpBlock);
-    const isDip8Footprint =
-      /DIP-8|DIODE_SOCKET|Package_DIP:DIP-8|Socket.*8/i.test(
-        `${fp} ${ref} ${value}`,
-      );
     const graphics = parseKiCadGraphicPrimitives(fpBlock);
-    const hasPanelGraphic =
-      graphics.circles.some(
-        (c) => isPanelGeometryLayer(c.layer) && c.r >= 1.0,
-      ) ||
-      graphics.rects.some(
-        (r) => isPanelGeometryLayer(r.layer) && r.w >= 1 && r.h >= 1,
-      );
-    if (
-      !pads.length &&
-      !hasPanelGraphic &&
-      !/^(RV|R?POT|J|SW|S|D|LED|ENC|FDR|SL)/i.test(ref)
-    ) {
-      skippedNonPanelCount++;
-      continue;
-    }
-    if (
-      !isDip8Footprint &&
-      !hasPanelGraphic &&
-      pads.length >= 4 &&
-      /conn|header|pin|socket/i.test(`${fp} ${value}`) &&
-      !/jack|pj398|audio/i.test(`${fp} ${value}`)
-    ) {
-      skippedNonPanelCount++;
-      continue;
-    }
     const def = bestLibraryPartForKiCad(`${ref} ${value}`, fp, pads);
-    if (!def) {
-      skippedNonPanelCount++;
+    if (def) {
+      raw.push({ ref, value, description, fp, fpBlock, at, pads, def });
       continue;
     }
-    raw.push({ ref, value, description, fp, fpBlock, at, pads, def });
+    const footprintCutouts = [];
+    for (const pad of pads.filter((item) => item.npth && item.drillW > 0)) {
+      const offset = rotateKiCadLocalOffset(
+        pad.atX || 0,
+        pad.atY || 0,
+        at.rot || 0,
+      );
+      const isSlot =
+        pad.oval || Math.abs((pad.drillW || 0) - (pad.drillH || 0)) > 0.01;
+      footprintCutouts.push({
+        x: at.x + offset.x,
+        y: at.y + offset.y,
+        holeType: isSlot ? "slot" : undefined,
+        holeDiameter: Math.min(pad.drillW, pad.drillH),
+        slotLength: isSlot ? Math.max(pad.drillW, pad.drillH) : undefined,
+        rotation: isSlot
+          ? kiCadRotationToPanelRotation(
+              at.rot || 0,
+              (pad.atRot || 0) + (pad.drillW >= pad.drillH ? 90 : 0),
+            )
+          : 0,
+        source: `NPTH pad in ${fp}`,
+      });
+    }
+    for (const circle of graphics.circles.filter((item) =>
+      /^Edge\.Cuts$/i.test(item.layer),
+    )) {
+      const offset = rotateKiCadLocalOffset(circle.cx, circle.cy, at.rot || 0);
+      footprintCutouts.push({
+        x: at.x + offset.x,
+        y: at.y + offset.y,
+        holeDiameter: circle.r * 2,
+        rotation: 0,
+        source: `Edge.Cuts circle in ${fp}`,
+      });
+    }
+    for (const rect of graphics.rects.filter((item) =>
+      /^Edge\.Cuts$/i.test(item.layer),
+    )) {
+      const centerX = rect.x + rect.w / 2;
+      const centerY = rect.y + rect.h / 2;
+      const offset = rotateKiCadLocalOffset(centerX, centerY, at.rot || 0);
+      footprintCutouts.push({
+        x: at.x + offset.x,
+        y: at.y + offset.y,
+        holeType: "rect",
+        holeDiameter: Math.min(rect.w, rect.h),
+        holeW: rect.w,
+        holeH: rect.h,
+        rotation: kiCadRotationToPanelRotation(at.rot || 0),
+        source: `Edge.Cuts rectangle in ${fp}`,
+      });
+    }
+    if (footprintCutouts.length) mechanicalCutouts.push(...footprintCutouts);
+    else skippedNonPanelCount++;
   }
-  if (!raw.length) {
+  if (!raw.length && !mechanicalCutouts.length && !outline) {
     const skippedMessage = skippedNonPanelCount
       ? `Ignored ${skippedNonPanelCount} footprints that are not recognized front-panel parts.`
       : "";
@@ -542,24 +594,22 @@ function parseKiCadPcbToPanel(src, currentPanelWidthMM) {
     warnings.push(
       `Ignored ${skippedNonPanelCount} footprints that are not recognized front-panel parts.`,
     );
-  const minX = outline?.x ?? Math.min(...raw.map((r) => r.at.x));
-  const minY = outline?.y ?? Math.min(...raw.map((r) => r.at.y));
+  const sourceXs = [
+    ...raw.map((record) => record.at.x),
+    ...mechanicalCutouts.map((cutout) => cutout.x),
+  ];
+  const sourceYs = [
+    ...raw.map((record) => record.at.y),
+    ...mechanicalCutouts.map((cutout) => cutout.y),
+  ];
+  const minX = outline?.x ?? Math.min(...sourceXs);
+  const minY = outline?.y ?? Math.min(...sourceYs);
   const width =
     outline?.width ??
-    Math.max(
-      10,
-      Math.max(...raw.map((r) => r.at.x)) -
-        Math.min(...raw.map((r) => r.at.x)) +
-        20,
-    );
+    Math.max(10, Math.max(...sourceXs) - Math.min(...sourceXs) + 20);
   const height =
     outline?.height ??
-    Math.max(
-      10,
-      Math.max(...raw.map((r) => r.at.y)) -
-        Math.min(...raw.map((r) => r.at.y)) +
-        20,
-    );
+    Math.max(10, Math.max(...sourceYs) - Math.min(...sourceYs) + 20);
   const roundedPanel =
     outline?.width && outline.width > 5
       ? roundKiCadPanelWidthToEurorackHP(outline.width)
@@ -684,6 +734,81 @@ function parseKiCadPcbToPanel(src, currentPanelWidthMM) {
     }
     return comp;
   });
+  const automaticMountingHoles = mountingHolesForPreset(
+    targetWidth,
+    "autoOval",
+  );
+  let standardMountingHoleCount = 0;
+  let importedCutoutCount = 0;
+  mechanicalCutouts.forEach((cutout, idx) => {
+    const x = cutout.x - minX + xOffset;
+    const y = cutout.y - minY + yOffset;
+    if (
+      automaticMountingHoles.some(
+        (mountingHole) =>
+          Math.hypot(x - mountingHole.x, y - mountingHole.y) <= 1.25,
+      )
+    ) {
+      standardMountingHoleCount++;
+      return;
+    }
+    const diameter = Math.max(0.1, cutout.holeDiameter || 0.1);
+    const def = sanitizePart({
+      type: "custom",
+      name: `KiCad cutout ${cutout.holeType === "rect" ? `${(cutout.holeW || diameter).toFixed(2)} × ${(cutout.holeH || diameter).toFixed(2)} mm` : cutout.holeType === "slot" ? `${diameter.toFixed(2)} × ${(cutout.slotLength || diameter).toFixed(2)} mm` : `Ø${diameter.toFixed(2)} mm`}`,
+      holeDiameter: diameter,
+      frontDiameter: diameter,
+      rearBodyW: 0,
+      rearBodyH: 0,
+      rearDepth: 0,
+      keepoutW:
+        Math.max(cutout.holeW || 0, cutout.slotLength || 0, diameter) + 2,
+      keepoutH:
+        Math.max(cutout.holeH || 0, cutout.slotLength || 0, diameter) + 2,
+      minSpacing: 1,
+      category: "custom",
+      topHardwareVisible: false,
+      verificationStatus: "measured",
+    });
+    const component = {
+      ...def,
+      id: crypto.randomUUID(),
+      ref: `CUT${importedCutoutCount + 1}`,
+      label:
+        cutout.holeType === "rect"
+          ? `${(cutout.holeW || diameter).toFixed(2)}×${(cutout.holeH || diameter).toFixed(2)}`
+          : cutout.holeType === "slot"
+            ? `${diameter.toFixed(2)}×${(cutout.slotLength || diameter).toFixed(2)}`
+            : `Ø${diameter.toFixed(2)}`,
+      x: Math.round(x * 1000) / 1000,
+      y: Math.round(y * 1000) / 1000,
+      rotation: cutout.rotation || 0,
+      notes: `Imported from KiCad mechanical ${cutout.source}.`,
+      locked: false,
+    };
+    if (cutout.holeType === "slot") {
+      component.holeType = "slot";
+      component.slotLength = cutout.slotLength;
+      component.frontShape = "slot";
+      component.frontW = diameter;
+      component.frontH = cutout.slotLength;
+    } else if (cutout.holeType === "rect") {
+      component.holeType = "rect";
+      component.holeW = cutout.holeW;
+      component.holeH = cutout.holeH;
+      component.frontShape = "rect";
+      component.frontW = cutout.holeW;
+      component.frontH = cutout.holeH;
+    }
+    components.push(component);
+    importedCutoutCount++;
+  });
+  if (importedCutoutCount)
+    warnings.push(`Imported ${importedCutoutCount} mechanical panel cutouts.`);
+  if (standardMountingHoleCount)
+    warnings.push(
+      `Matched ${standardMountingHoleCount} rail holes to automatic Eurorack mounting holes without duplicating them.`,
+    );
   const offsetCount = components.filter((c) =>
     /Aperture offset:/i.test(c.notes || ""),
   ).length;
