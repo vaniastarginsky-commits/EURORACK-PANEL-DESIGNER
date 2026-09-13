@@ -474,6 +474,7 @@ const states = [
           <hole x="14" y="82" drill="7.2"/>
           <circle x="27" y="46" radius="3.05" width="0" layer="46"/>
           <rectangle x1="4" y1="20" x2="36" y2="108" layer="1"/>
+          <circle x="20" y="64" radius="5" width="1" layer="1"/>
           <wire x1="8" y1="24" x2="32" y2="104" width="1.2" layer="29"/>
           <circle x="20" y="64" radius="8" width="1.2" layer="29"/>
           <text x="9" y="32" size="3" layer="29">MASK ART</text>
@@ -509,6 +510,9 @@ const states = [
       const artworkHref = await artworkImage.getAttribute("href");
       if (!artworkHref?.startsWith("data:image/svg+xml"))
         throw new Error("Eagle front artwork should remain vector SVG");
+      const artworkSvg = decodeURIComponent(artworkHref.split(",", 2)[1]);
+      if (!artworkSvg.includes('r="5" fill="none" stroke="#c99a4a"'))
+        throw new Error("Eagle copper circles must remain stroked outlines");
     },
   ],
   [
