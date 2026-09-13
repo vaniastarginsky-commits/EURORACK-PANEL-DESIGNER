@@ -68,6 +68,179 @@ function kicadGrText(text, x, y, size = 1.2, rot = 0, layer = "F.SilkS") {
     (effects (font (size ${kicadNum(s)} ${kicadNum(s)}) (thickness ${kicadNum(Math.max(0.08, s * 0.12))})))
   )`;
 }
+function decodeSvgArtworkData(dataUrl) {
+  if (!String(dataUrl || "").startsWith("data:image/svg+xml")) return "";
+  const comma = dataUrl.indexOf(",");
+  if (comma < 0) return "";
+  const payload = dataUrl.slice(comma + 1);
+  try {
+    return dataUrl.slice(0, comma).includes(";base64")
+      ? atob(payload)
+      : decodeURIComponent(payload);
+  } catch {
+    return "";
+  }
+}
+function kicadArtworkLine(x1, y1, x2, y2, layer, width) {
+  return `  (gr_line (start ${kicadNum(x1)} ${kicadNum(y1)}) (end ${kicadNum(x2)} ${kicadNum(y2)}) (stroke (width ${kicadNum(Math.max(0.01, width))}) (type solid)) (layer ${kicadStr(layer)}) (tstamp ${crypto.randomUUID()}))`;
+}
+function kicadArtworkCircle(cx, cy, radius, layer, width) {
+  return `  (gr_circle (center ${kicadNum(cx)} ${kicadNum(cy)}) (end ${kicadNum(cx + radius)} ${kicadNum(cy)}) (stroke (width ${kicadNum(Math.max(0.01, width))}) (type solid)) (fill none) (layer ${kicadStr(layer)}) (tstamp ${crypto.randomUUID()}))`;
+}
+function kicadArtworkPolygon(points, layer) {
+  return `  (gr_poly (pts ${points.map((point) => `(xy ${kicadNum(point.x)} ${kicadNum(point.y)})`).join(" ")}) (stroke (width 0.01) (type solid)) (fill solid) (layer ${kicadStr(layer)}) (tstamp ${crypto.randomUUID()}))`;
+}
+function svgPathLinePoints(pathData) {
+  const tokens = String(pathData || "").match(
+    /[ML]|-?(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?/gi,
+  );
+  if (!tokens) return [];
+  const points = [];
+  for (let i = 0; i < tokens.length; ) {
+    const command = tokens[i++];
+    if (command !== "M" && command !== "L") return [];
+    const x = Number(tokens[i++]);
+    const y = Number(tokens[i++]);
+    if (!Number.isFinite(x) || !Number.isFinite(y)) return [];
+    points.push({ x, y });
+  }
+  return points;
+}
+function artworkSvgTransform(artwork, viewBox) {
+  const sx = artwork.width / viewBox.width;
+  const sy = artwork.height / viewBox.height;
+  const left = artwork.x - artwork.width / 2;
+  const top = artwork.y - artwork.height / 2;
+  return {
+    strokeScale: (Math.abs(sx) + Math.abs(sy)) / 2,
+    point(x, y) {
+      const panelPoint = {
+        x: left + (x - viewBox.x) * sx,
+        y: top + (y - viewBox.y) * sy,
+      };
+      return rotatePointAround(
+        panelPoint.x,
+        panelPoint.y,
+        artwork.x,
+        artwork.y,
+        artwork.rotation || 0,
+      );
+    },
+  };
+}
+function artworkElementLayer(element) {
+  const explicit = element.getAttribute("data-kicad-layer");
+  if (["F.Cu", "F.Mask", "F.SilkS"].includes(explicit)) return explicit;
+  if (element.closest("mask")) return "F.Mask";
+  if (element.closest('g[mask*="eagle-top-stop"]')) return "F.Cu";
+  return "F.SilkS";
+}
+function kicadGraphicsFromSvgArtwork(artwork, tx, ty) {
+  if (!artwork?.visible) return [];
+  const svgText = decodeSvgArtworkData(artwork.imageDataUrl);
+  if (!svgText) return [];
+  const doc = new DOMParser().parseFromString(svgText, "image/svg+xml");
+  if (doc.querySelector("parsererror")) return [];
+  const svg = doc.documentElement;
+  const viewBoxValues = String(svg.getAttribute("viewBox") || "")
+    .trim()
+    .split(/[ ,]+/)
+    .map(Number);
+  const viewBox =
+    viewBoxValues.length === 4 && viewBoxValues.every(Number.isFinite)
+      ? {
+          x: viewBoxValues[0],
+          y: viewBoxValues[1],
+          width: viewBoxValues[2],
+          height: viewBoxValues[3],
+        }
+      : { x: 0, y: 0, width: artwork.naturalW, height: artwork.naturalH };
+  if (!(viewBox.width > 0) || !(viewBox.height > 0)) return [];
+  const transform = artworkSvgTransform(artwork, viewBox);
+  const outputPoint = (x, y) => {
+    const point = transform.point(x, y);
+    return { x: tx(point.x), y: ty(point.y) };
+  };
+  const graphics = [];
+  for (const element of svg.querySelectorAll("path,circle,rect,text")) {
+    if (
+      element.closest("mask") &&
+      element.tagName === "rect" &&
+      element.getAttribute("fill") === "black"
+    )
+      continue;
+    const layer = artworkElementLayer(element);
+    const width =
+      Math.max(0.01, Number(element.getAttribute("stroke-width")) || 0.1) *
+      transform.strokeScale;
+    if (element.tagName === "path") {
+      const points = svgPathLinePoints(element.getAttribute("d"));
+      for (let i = 1; i < points.length; i++) {
+        const start = outputPoint(points[i - 1].x, points[i - 1].y);
+        const end = outputPoint(points[i].x, points[i].y);
+        graphics.push(
+          kicadArtworkLine(start.x, start.y, end.x, end.y, layer, width),
+        );
+      }
+    } else if (element.tagName === "circle") {
+      const cx = Number(element.getAttribute("cx"));
+      const cy = Number(element.getAttribute("cy"));
+      const radius = Number(element.getAttribute("r"));
+      if (![cx, cy, radius].every(Number.isFinite) || radius <= 0) continue;
+      const center = outputPoint(cx, cy);
+      graphics.push(
+        kicadArtworkCircle(
+          center.x,
+          center.y,
+          radius * transform.strokeScale,
+          layer,
+          width,
+        ),
+      );
+    } else if (element.tagName === "rect") {
+      const x = Number(element.getAttribute("x"));
+      const y = Number(element.getAttribute("y"));
+      const rectWidth = Number(element.getAttribute("width"));
+      const rectHeight = Number(element.getAttribute("height"));
+      if (![x, y, rectWidth, rectHeight].every(Number.isFinite)) continue;
+      graphics.push(
+        kicadArtworkPolygon(
+          [
+            outputPoint(x, y),
+            outputPoint(x + rectWidth, y),
+            outputPoint(x + rectWidth, y + rectHeight),
+            outputPoint(x, y + rectHeight),
+          ],
+          layer,
+        ),
+      );
+    } else if (element.tagName === "text") {
+      const svgTransform = element.getAttribute("transform") || "";
+      const translate = svgTransform.match(
+        /translate\(\s*(-?[\d.]+)(?:[ ,]+(-?[\d.]+))?\s*\)/i,
+      );
+      const rotate = svgTransform.match(/rotate\(\s*(-?[\d.]+)/i);
+      const x = Number(element.getAttribute("x")) + Number(translate?.[1] || 0);
+      const y = Number(element.getAttribute("y")) + Number(translate?.[2] || 0);
+      const point = outputPoint(x, y);
+      graphics.push(
+        kicadGrText(
+          element.textContent || "",
+          point.x,
+          point.y,
+          Math.max(
+            0.3,
+            (Number(element.getAttribute("font-size")) || 1.2) *
+              transform.strokeScale,
+          ),
+          Number(rotate?.[1] || 0) + (artwork.rotation || 0),
+          layer,
+        ),
+      );
+    }
+  }
+  return graphics;
+}
 function kicadNPTHFootprint(
   ref,
   name,
@@ -114,6 +287,7 @@ function exportKiCadPCB(state, options = DEFAULT_EXPORT_OPTIONS) {
   const includeMountingHoles = options.kicadMountingHoles !== false;
   const includeComponentHoles = options.kicadComponentHoles !== false;
   const includeRectCutouts = options.kicadRectCutouts !== false;
+  const includeArtwork = options.kicadArtwork !== false;
   const includeVisualOutlines = !!options.kicadVisualOutlines;
   const includeKeepoutHints = !!options.kicadKeepoutHints;
   const includeRefs = !!options.kicadRefs;
@@ -345,6 +519,10 @@ function exportKiCadPCB(state, options = DEFAULT_EXPORT_OPTIONS) {
         ),
       );
     }
+  }
+  if (includeArtwork) {
+    for (const artwork of state.artworks || [])
+      graphics.push(...kicadGraphicsFromSvgArtwork(artwork, tx, ty));
   }
   const board = `(kicad_pcb
   (version 20221018)

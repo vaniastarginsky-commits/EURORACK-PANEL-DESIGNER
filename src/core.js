@@ -67,6 +67,7 @@ const DEFAULT_EXPORT_OPTIONS = {
   kicadMountingHoles: true,
   kicadComponentHoles: true,
   kicadRectCutouts: true,
+  kicadArtwork: true,
   kicadVisualOutlines: false,
   kicadKeepoutHints: false,
   kicadRefs: false,

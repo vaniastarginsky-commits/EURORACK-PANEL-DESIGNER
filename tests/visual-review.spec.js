@@ -513,6 +513,24 @@ const states = [
       const artworkSvg = decodeURIComponent(artworkHref.split(",", 2)[1]);
       if (!artworkSvg.includes('r="5" fill="none" stroke="#c99a4a"'))
         throw new Error("Eagle copper circles must remain stroked outlines");
+      await clickButton(page, "File ▾");
+      await clickButton(page, "Export...");
+      const artworkOption = page
+        .locator(".kicad-export-grid")
+        .getByText("Artwork / F.Cu, F.Mask, F.SilkS")
+        .locator("..");
+      if (!(await artworkOption.locator('input[type="checkbox"]').isChecked()))
+        throw new Error("KiCad artwork export must be enabled by default");
+      const downloadPromise = page.waitForEvent("download");
+      await page.getByRole("button", { name: "Export KiCad PCB" }).click();
+      const download = await downloadPromise;
+      const exportedBoard = await readFile(await download.path(), "utf8");
+      if (!/\(gr_(?:poly|circle).*\(layer "F\.Cu"\)/.test(exportedBoard))
+        throw new Error("KiCad export omitted Eagle top-copper artwork");
+      if (!/\(gr_(?:line|circle).*\(layer "F\.Mask"\)/.test(exportedBoard))
+        throw new Error("KiCad export omitted Eagle solder-mask artwork");
+      if (!/\(gr_line.*\(layer "F\.SilkS"\)/.test(exportedBoard))
+        throw new Error("KiCad export omitted Eagle silkscreen artwork");
     },
   ],
   [

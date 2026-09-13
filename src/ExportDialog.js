@@ -152,6 +152,7 @@ function ExportDialog({
     ["kicadMountingHoles", "Mounting holes"],
     ["kicadComponentHoles", "Component round/slot holes"],
     ["kicadRectCutouts", "Rectangular cutouts"],
+    ["kicadArtwork", "Artwork / F.Cu, F.Mask, F.SilkS"],
     ["kicadVisualOutlines", "Visual front outlines / Dwgs.User"],
     ["kicadKeepoutHints", "Keepout hints / Cmts.User"],
     ["kicadRefs", "Reference labels"],
@@ -221,6 +222,7 @@ function ExportDialog({
     if (preset === "holes") {
       onChange({
         ...base,
+        kicadArtwork: false,
         kicadVisualOutlines: false,
         kicadKeepoutHints: false,
         kicadRefs: false,
@@ -229,6 +231,7 @@ function ExportDialog({
     } else if (preset === "refs") {
       onChange({
         ...base,
+        kicadArtwork: true,
         kicadVisualOutlines: false,
         kicadKeepoutHints: false,
         kicadRefs: true,
@@ -237,6 +240,7 @@ function ExportDialog({
     } else {
       onChange({
         ...base,
+        kicadArtwork: true,
         kicadVisualOutlines: true,
         kicadKeepoutHints: true,
         kicadRefs: true,
@@ -760,7 +764,7 @@ function ExportDialog({
           React.createElement(
             "div",
             { className: "section-title" },
-            "KiCad PCB mechanical export",
+            "KiCad PCB export",
           ),
           React.createElement(
             "div",
@@ -816,7 +820,7 @@ function ExportDialog({
               style: { fontSize: 10, marginBottom: 10 },
             },
             kicadEnabledCount
-              ? `Mechanical export only · ${kicadEnabledCount} KiCad layer groups enabled · ${state.components.length} components · ${state.mountingHoles.enabled ? state.mountingHoles.holes.length : 0} mounting holes.`
+              ? `KiCad export · ${kicadEnabledCount} layer groups enabled · ${state.components.length} components · ${state.artworks.filter((artwork) => artwork.visible).length} artwork · ${state.mountingHoles.enabled ? state.mountingHoles.holes.length : 0} mounting holes.`
               : "Nothing selected for KiCad export.",
           ),
           React.createElement(
@@ -825,7 +829,7 @@ function ExportDialog({
               className: "warning-item warn",
               style: { fontSize: 10, marginBottom: 10 },
             },
-            "Default is clean: panel Edge.Cuts plus real NPTH holes/slots/cutouts. Visual outlines/refs/text are optional debug layers.",
+            "The default includes panel Edge.Cuts, real NPTH holes/slots/cutouts and compatible vector artwork on fabrication layers.",
           ),
           React.createElement(
             "div",

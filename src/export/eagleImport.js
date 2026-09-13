@@ -125,25 +125,27 @@ function eaglePrimitiveSvg(element, outline, mode) {
   );
   const color =
     mode === "mask" ? "white" : mode === "silk" ? "#f2f0e9" : "#c99a4a";
+  const kicadLayer =
+    mode === "mask" ? "F.Mask" : mode === "silk" ? "F.SilkS" : "F.Cu";
   if (element.tagName === "wire") {
     const points = eagleWirePoints(element);
     if (points.length < 2) return "";
     const d = points
       .map((point, index) => `${index ? "L" : "M"}${x(point.x)} ${y(point.y)}`)
       .join(" ");
-    return `<path d="${d}" fill="none" stroke="${color}" stroke-width="${eagleSvgNumber(width)}" stroke-linecap="round" stroke-linejoin="round"/>`;
+    return `<path data-kicad-layer="${kicadLayer}" d="${d}" fill="none" stroke="${color}" stroke-width="${eagleSvgNumber(width)}" stroke-linecap="round" stroke-linejoin="round"/>`;
   }
   if (element.tagName === "circle") {
     const radius = parseFloat(element.getAttribute("radius"));
     if (!Number.isFinite(radius) || radius <= 0) return "";
-    return `<circle cx="${x(element.getAttribute("x"))}" cy="${y(element.getAttribute("y"))}" r="${eagleSvgNumber(radius)}" fill="none" stroke="${color}" stroke-width="${eagleSvgNumber(width)}"/>`;
+    return `<circle data-kicad-layer="${kicadLayer}" cx="${x(element.getAttribute("x"))}" cy="${y(element.getAttribute("y"))}" r="${eagleSvgNumber(radius)}" fill="none" stroke="${color}" stroke-width="${eagleSvgNumber(width)}"/>`;
   }
   if (element.tagName === "rectangle") {
     const x1 = x(element.getAttribute("x1"));
     const x2 = x(element.getAttribute("x2"));
     const y1 = y(element.getAttribute("y1"));
     const y2 = y(element.getAttribute("y2"));
-    return `<rect x="${Math.min(x1, x2)}" y="${Math.min(y1, y2)}" width="${eagleSvgNumber(Math.abs(x2 - x1))}" height="${eagleSvgNumber(Math.abs(y2 - y1))}" fill="${color}" stroke="none"/>`;
+    return `<rect data-kicad-layer="${kicadLayer}" x="${Math.min(x1, x2)}" y="${Math.min(y1, y2)}" width="${eagleSvgNumber(Math.abs(x2 - x1))}" height="${eagleSvgNumber(Math.abs(y2 - y1))}" fill="${color}" stroke="none"/>`;
   }
   if (element.tagName === "text") {
     const size = Math.max(
@@ -161,7 +163,7 @@ function eaglePrimitiveSvg(element, outline, mode) {
     ]
       .filter(Boolean)
       .join(" ");
-    return `<text transform="${transform}" x="0" y="0" fill="${color}" stroke="none" font-family="Arial, sans-serif" font-size="${eagleSvgNumber(size)}" dominant-baseline="alphabetic">${escapeEagleSvgText(element.textContent)}</text>`;
+    return `<text data-kicad-layer="${kicadLayer}" transform="${transform}" x="0" y="0" fill="${color}" stroke="none" font-family="Arial, sans-serif" font-size="${eagleSvgNumber(size)}" dominant-baseline="alphabetic">${escapeEagleSvgText(element.textContent)}</text>`;
   }
   return "";
 }
