@@ -5394,6 +5394,9 @@ html[data-preset="graphite"] body {
 @media (max-width:900px),(pointer:coarse){
   .selection-action-toolbar,.topbar-project-status{display:none}
 }
+@media (max-width:900px){
+  .canvas-empty-state{left:calc(50% + 32px);width:min(410px,calc(100vw - 82px))}
+}
 @media (min-width:901px) and (pointer:fine){
   .hud-bottom-center{display:flex;position:absolute;left:50%;bottom:12px;z-index:64;transform:translateX(-50%);visibility:visible;pointer-events:none}
 }
