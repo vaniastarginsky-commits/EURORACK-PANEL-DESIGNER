@@ -50,6 +50,77 @@ function appConfirm(opts) {
     }, 0);
   });
 }
+function appImportPreview(opts) {
+  return new Promise((resolve) => {
+    const backdrop = document.createElement("div");
+    backdrop.className = "app-native-modal-backdrop";
+    backdrop.innerHTML = `
+      <div class="app-native-modal-card app-import-preview-card" role="dialog" aria-modal="true">
+        <div class="app-native-modal-title"></div>
+        <div class="app-native-modal-subtitle"></div>
+        <div class="app-import-preview-options"></div>
+        <div class="app-native-modal-actions">
+          <button class="app-native-modal-cancel">Cancel</button>
+          <button class="app-native-modal-confirm primary">Import</button>
+        </div>
+      </div>
+    `;
+    backdrop.querySelector(".app-native-modal-title").textContent =
+      `Import ${opts.format} preview`;
+    backdrop.querySelector(".app-native-modal-subtitle").textContent =
+      `${opts.replace ? "The current layout will be replaced. " : ""}Choose the panel data to import.`;
+    const choices = [
+      ["outline", "Panel outline", opts.outline ? 1 : 0],
+      ["components", "Panel components", opts.components || 0],
+      ["cutouts", "Mechanical cutouts", opts.cutouts || 0],
+      ["artwork", "Front artwork", opts.artwork || 0],
+    ];
+    const options = backdrop.querySelector(".app-import-preview-options");
+    choices.forEach(([key, label, count]) => {
+      const row = document.createElement("label");
+      row.className = "export-option-row";
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.dataset.importChoice = key;
+      input.checked = count > 0;
+      input.disabled = count === 0;
+      const text = document.createElement("span");
+      text.textContent = `${label} · ${count}`;
+      row.append(input, text);
+      options.append(row);
+    });
+    const cancel = backdrop.querySelector(".app-native-modal-cancel");
+    const confirm = backdrop.querySelector(".app-native-modal-confirm");
+    let done = false;
+    const close = (value) => {
+      if (done) return;
+      done = true;
+      backdrop.classList.add("leaving");
+      window.setTimeout(() => {
+        backdrop.remove();
+        resolve(value);
+      }, 130);
+    };
+    const submit = () => {
+      const selected = {};
+      backdrop.querySelectorAll("[data-import-choice]").forEach((input) => {
+        selected[input.dataset.importChoice] = input.checked;
+      });
+      close(selected);
+    };
+    backdrop.addEventListener("pointerdown", (event) => {
+      if (event.target === backdrop) close(null);
+    });
+    cancel.addEventListener("click", () => close(null));
+    confirm.addEventListener("click", submit);
+    backdrop.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") close(null);
+      if (event.key === "Enter") submit();
+    });
+    document.body.appendChild(backdrop);
+    window.setTimeout(() => confirm.focus(), 0);
+  });
+}
 function appNumberPrompt(opts) {
   return new Promise((resolve) => {
     const backdrop = document.createElement("div");

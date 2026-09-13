@@ -89,6 +89,7 @@ function isLedLike(c) {
   return c.type === "led3mm" || c.type === "tactled";
 }
 function isFaderLike(c) {
+  if (c.type === "cutout") return false;
   return (
     c.type === "fader20" ||
     c.type === "fader20led" ||

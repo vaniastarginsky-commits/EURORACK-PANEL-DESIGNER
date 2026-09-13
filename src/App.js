@@ -479,8 +479,9 @@ function App() {
         widthMM,
         state.mountingHoles,
         state.pcb,
+        state.artworks,
       ),
-    [state.components, widthMM, state.mountingHoles, state.pcb],
+    [state.components, widthMM, state.mountingHoles, state.pcb, state.artworks],
   );
   const selectedIdSet = useMemo(
     () => new Set(state.selected),
@@ -3174,32 +3175,58 @@ function App() {
     const reader = new FileReader();
     reader.onload = async (ev) => {
       const src = String(ev.target?.result || "");
-      const hasProjectData =
-        state.components.length > 0 ||
-        state.artworks.length > 0 ||
-        state.textItems.length > 0 ||
-        state.scaleItems.length > 0;
-      if (hasProjectData) {
-        const ok = await appConfirm({
-          title: "Import KiCad PCB",
-          message:
-            "Replace the current project layout with the KiCad PCB import? This clears old text, scales and artwork.",
-          confirmText: "Import KiCad",
-        });
-        if (!ok) return;
-      }
       const result = parseKiCadPcbToPanel(src, panelWidthMM(state.panel));
-      if (!result.components.length && !result.boardOutline) {
+      if (
+        !result.components.length &&
+        !result.boardOutline &&
+        !result.artworks?.length
+      ) {
         alert(
           `KiCad import found no panel geometry.\n${result.warnings.join("\n")}`,
         );
         return;
       }
+      const hasProjectData =
+        state.components.length > 0 ||
+        state.artworks.length > 0 ||
+        state.textItems.length > 0 ||
+        state.scaleItems.length > 0;
+      const cutouts = result.components.filter(
+        (item) => item.type === "cutout",
+      );
+      const panelComponents = result.components.filter(
+        (item) => item.type !== "cutout",
+      );
+      const choices = await appImportPreview({
+        format: "KiCad PCB",
+        replace: hasProjectData,
+        outline: !!result.boardOutline,
+        components: panelComponents.length,
+        cutouts: cutouts.length,
+        artwork: result.artworks?.length || 0,
+      });
+      if (!choices) return;
+      const importedComponents = [
+        ...(choices.components ? panelComponents : []),
+        ...(choices.cutouts ? cutouts : []),
+      ];
+      const importedArtwork = choices.artwork ? result.artworks || [] : [];
+      const importedOutline = choices.outline ? result.boardOutline : null;
+      if (
+        !importedComponents.length &&
+        !importedArtwork.length &&
+        !importedOutline
+      )
+        return;
       dispatch({
         type: "LOAD_KICAD_IMPORT",
-        components: result.components,
+        components: importedComponents,
+        artworks: importedArtwork,
+        panelOutlineGeometry: choices.outline
+          ? result.panelOutlineGeometry
+          : null,
         panelWidthMM: result.panelWidthMM,
-        boardOutline: result.boardOutline,
+        boardOutline: importedOutline,
       });
       dispatch({ type: "SET_VIEW_MODE", mode: "front" });
       setAutosaveStatus(
@@ -3224,33 +3251,58 @@ function App() {
     const reader = new FileReader();
     reader.onload = async (ev) => {
       const src = String(ev.target?.result || "");
-      const hasProjectData =
-        state.components.length > 0 ||
-        state.artworks.length > 0 ||
-        state.textItems.length > 0 ||
-        state.scaleItems.length > 0;
-      if (hasProjectData) {
-        const ok = await appConfirm({
-          title: "Import Eagle .brd",
-          message:
-            "Replace the current project layout with the Eagle .brd import? This clears old text, scales and artwork.",
-          confirmText: "Import Eagle",
-        });
-        if (!ok) return;
-      }
       const result = parseEagleBrdToPanel(src, panelWidthMM(state.panel));
-      if (!result.components.length && !result.boardOutline) {
+      if (
+        !result.components.length &&
+        !result.boardOutline &&
+        !result.artworks?.length
+      ) {
         alert(
           `Eagle import found no panel geometry.\n${result.warnings.join("\n")}`,
         );
         return;
       }
+      const hasProjectData =
+        state.components.length > 0 ||
+        state.artworks.length > 0 ||
+        state.textItems.length > 0 ||
+        state.scaleItems.length > 0;
+      const cutouts = result.components.filter(
+        (item) => item.type === "cutout",
+      );
+      const panelComponents = result.components.filter(
+        (item) => item.type !== "cutout",
+      );
+      const choices = await appImportPreview({
+        format: "Eagle .brd",
+        replace: hasProjectData,
+        outline: !!result.boardOutline,
+        components: panelComponents.length,
+        cutouts: cutouts.length,
+        artwork: result.artworks?.length || 0,
+      });
+      if (!choices) return;
+      const importedComponents = [
+        ...(choices.components ? panelComponents : []),
+        ...(choices.cutouts ? cutouts : []),
+      ];
+      const importedArtwork = choices.artwork ? result.artworks || [] : [];
+      const importedOutline = choices.outline ? result.boardOutline : null;
+      if (
+        !importedComponents.length &&
+        !importedArtwork.length &&
+        !importedOutline
+      )
+        return;
       dispatch({
         type: "LOAD_KICAD_IMPORT",
-        components: result.components,
-        artworks: result.artworks,
+        components: importedComponents,
+        artworks: importedArtwork,
+        panelOutlineGeometry: choices.outline
+          ? result.panelOutlineGeometry
+          : null,
         panelWidthMM: result.panelWidthMM,
-        boardOutline: result.boardOutline,
+        boardOutline: importedOutline,
       });
       dispatch({ type: "SET_VIEW_MODE", mode: "front" });
       setAutosaveStatus(

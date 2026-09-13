@@ -237,6 +237,55 @@ const PCBLayer = React.memo(function PCBLayer({ pcb }) {
 });
 
 // ArtworksLayer
+const artworkPreviewUrlCache = new Map();
+function artworkPreviewUrl(artwork, mode) {
+  if (!mode || mode === "composite") return artwork.imageDataUrl;
+  const key = `${mode}:${artwork.imageDataUrl}`;
+  if (artworkPreviewUrlCache.has(key)) return artworkPreviewUrlCache.get(key);
+  const transparent =
+    "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E";
+  if (mode === "material") return transparent;
+  if (!String(artwork.imageDataUrl || "").startsWith("data:image/svg+xml"))
+    return mode === "silkscreen" ? artwork.imageDataUrl : transparent;
+  try {
+    const comma = artwork.imageDataUrl.indexOf(",");
+    const source = artwork.imageDataUrl.slice(0, comma).includes(";base64")
+      ? atob(artwork.imageDataUrl.slice(comma + 1))
+      : decodeURIComponent(artwork.imageDataUrl.slice(comma + 1));
+    const doc = new DOMParser().parseFromString(source, "image/svg+xml");
+    const root = doc.documentElement;
+    const wanted =
+      mode === "copper" ? "F.Cu" : mode === "mask" ? "F.Mask" : "F.SilkS";
+    const layerFor = (element) => {
+      const explicit = element.getAttribute("data-kicad-layer");
+      if (explicit) return explicit;
+      if (element.closest("mask")) return "F.Mask";
+      if (element.closest('g[mask*="top-stop"],g[mask*="front-mask"]'))
+        return "F.Cu";
+      return "F.SilkS";
+    };
+    const shapes = [...root.querySelectorAll("path,circle,rect,polygon,text")]
+      .filter(
+        (element) =>
+          layerFor(element) === wanted &&
+          !(
+            element.closest("mask") &&
+            element.tagName === "rect" &&
+            element.getAttribute("fill") === "black"
+          ),
+      )
+      .map((element) => element.outerHTML)
+      .join("");
+    const viewBox = root.getAttribute("viewBox") || "0 0 100 100";
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}">${shapes}</svg>`;
+    const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+    if (artworkPreviewUrlCache.size > 40) artworkPreviewUrlCache.clear();
+    artworkPreviewUrlCache.set(key, url);
+    return url;
+  } catch {
+    return transparent;
+  }
+}
 const ArtworksLayer = React.memo(function ArtworksLayer({
   artworks,
   layer,
@@ -250,6 +299,7 @@ const ArtworksLayer = React.memo(function ArtworksLayer({
   showInDrill,
   drillOpacity,
   artworkResizePreview,
+  previewMode,
 }) {
   if (viewMode === "rear") return null;
   if (viewMode === "drill" && !showInDrill) return null;
@@ -299,7 +349,7 @@ const ArtworksLayer = React.memo(function ArtworksLayer({
             },
           },
           React.createElement("image", {
-            href: a.imageDataUrl,
+            href: artworkPreviewUrl(a, previewMode),
             x: cx - w / 2,
             y: cy - h / 2,
             width: w,
@@ -2058,6 +2108,7 @@ const ComponentsLayer = React.memo(function ComponentsLayer({
         !useCheapDragShape &&
           layers.frontShapes &&
           (viewMode === "front" || viewMode === "combined") &&
+          c.type !== "cutout" &&
           (isJoystick(c)
             ? React.createElement(
                 "g",
@@ -2271,6 +2322,7 @@ const ComponentsLayer = React.memo(function ComponentsLayer({
         !useCheapDragShape &&
           layers.labels &&
           viewMode === "rear" &&
+          c.type !== "cutout" &&
           React.createElement(
             "text",
             {
@@ -3383,6 +3435,7 @@ function SVGCanvas({
             ignoreLockedClicks: state.ignoreLockedArtworkClicks,
             showInDrill: state.showArtworkInDrillView,
             drillOpacity: state.drillArtworkOpacity,
+            previewMode: state.artworkPreviewMode,
           }),
         state.layerVisibility.mountingHoles &&
           React.createElement(
@@ -3762,6 +3815,7 @@ function SVGCanvas({
             ignoreLockedClicks: state.ignoreLockedArtworkClicks,
             showInDrill: state.showArtworkInDrillView,
             drillOpacity: state.drillArtworkOpacity,
+            previewMode: state.artworkPreviewMode,
           }),
         React.createElement(RearBodySnapFootprintLayer, {
           components: state.components,

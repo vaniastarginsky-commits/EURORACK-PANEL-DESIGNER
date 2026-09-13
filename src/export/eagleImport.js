@@ -33,6 +33,70 @@ function parseEagleBrdOutline(doc) {
     maxY: yMax,
   };
 }
+function largestConnectedWireGroup(wires) {
+  const remaining = new Set(wires.map((_, index) => index));
+  const groups = [];
+  const key = (x, y) =>
+    `${Math.round(x * 100) / 100}:${Math.round(y * 100) / 100}`;
+  while (remaining.size) {
+    const seed = remaining.values().next().value;
+    remaining.delete(seed);
+    const group = [wires[seed]];
+    const endpoints = new Set([
+      key(wires[seed].x1, wires[seed].y1),
+      key(wires[seed].x2, wires[seed].y2),
+    ]);
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const index of [...remaining]) {
+        const wire = wires[index];
+        if (
+          endpoints.has(key(wire.x1, wire.y1)) ||
+          endpoints.has(key(wire.x2, wire.y2))
+        ) {
+          remaining.delete(index);
+          group.push(wire);
+          endpoints.add(key(wire.x1, wire.y1));
+          endpoints.add(key(wire.x2, wire.y2));
+          changed = true;
+        }
+      }
+    }
+    groups.push(group);
+  }
+  const score = (group) => {
+    const xs = group.flatMap((wire) => [wire.x1, wire.x2]);
+    const ys = group.flatMap((wire) => [wire.y1, wire.y2]);
+    return (
+      (Math.max(...xs) - Math.min(...xs)) * (Math.max(...ys) - Math.min(...ys))
+    );
+  };
+  return groups.sort((a, b) => score(b) - score(a))[0] || [];
+}
+function parseEagleOutlineGeometry(doc, outline, xOffset, yOffset) {
+  if (!outline) return null;
+  const source = [...doc.querySelectorAll('plain > wire[layer="20"]')]
+    .map((wire) => ({
+      element: wire,
+      x1: Number(wire.getAttribute("x1")),
+      y1: Number(wire.getAttribute("y1")),
+      x2: Number(wire.getAttribute("x2")),
+      y2: Number(wire.getAttribute("y2")),
+    }))
+    .filter((wire) =>
+      [wire.x1, wire.y1, wire.x2, wire.y2].every(Number.isFinite),
+    );
+  const outer = largestConnectedWireGroup(source);
+  if (!outer.length) return null;
+  return outer.map((wire) => {
+    const points = eagleWirePoints(wire.element).map((point) => ({
+      x: point.x - outline.x + xOffset,
+      y: outline.y + outline.height - point.y + yOffset,
+    }));
+    return { kind: points.length > 2 ? "arc" : "line", points };
+  });
+}
 function parseEaglePlainCutouts(doc) {
   const cutouts = [];
   const add = (x, y, diameter, source) => {
@@ -336,6 +400,12 @@ function parseEagleBrdToPanel(xmlSrc, currentPanelWidthMM) {
     ? Math.max(0, (PANEL_HEIGHT_MM - boardHeight) / 2)
     : (PANEL_HEIGHT_MM - boardHeight) / 2;
   const artworks = parseEagleFrontArtwork(doc, outline, xOffset, yOffset);
+  const panelOutlineGeometry = parseEagleOutlineGeometry(
+    doc,
+    outline,
+    xOffset,
+    yOffset,
+  );
   const usedRefs = new Set();
   const components = [];
   let skippedNonPanelCount = 0;
@@ -397,7 +467,7 @@ function parseEagleBrdToPanel(xmlSrc, currentPanelWidthMM) {
     }
     const diameter = Math.max(0.1, hole.diameter);
     const def = sanitizePart({
-      type: "custom",
+      type: "cutout",
       name: `Eagle cutout Ø${diameter.toFixed(2)} mm`,
       holeDiameter: diameter,
       frontDiameter: diameter,
@@ -407,7 +477,7 @@ function parseEagleBrdToPanel(xmlSrc, currentPanelWidthMM) {
       keepoutW: diameter + 2,
       keepoutH: diameter + 2,
       minSpacing: 1,
-      category: "custom",
+      category: "mechanical",
       topHardwareVisible: false,
       verificationStatus: "measured",
     });
@@ -415,7 +485,7 @@ function parseEagleBrdToPanel(xmlSrc, currentPanelWidthMM) {
       ...def,
       id: crypto.randomUUID(),
       ref: `CUT${importedCutoutCount + 1}`,
-      label: `Ø${diameter.toFixed(2)}`,
+      label: "",
       x: Math.round(panelX * 1000) / 1000,
       y: Math.round(panelY * 1000) / 1000,
       rotation: 0,
@@ -441,6 +511,7 @@ function parseEagleBrdToPanel(xmlSrc, currentPanelWidthMM) {
   return {
     components,
     artworks,
+    panelOutlineGeometry,
     panelWidthMM: targetWidth,
     boardOutline: outline
       ? {

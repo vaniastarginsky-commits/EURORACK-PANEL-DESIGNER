@@ -146,7 +146,12 @@ function appReducer(state, action) {
       });
     }
     case "LOAD_KICAD_IMPORT": {
-      if (action.components.length === 0 && !action.boardOutline) return state;
+      if (
+        action.components.length === 0 &&
+        !action.boardOutline &&
+        !action.artworks?.length
+      )
+        return state;
       const importedWidth =
         action.panelWidthMM && action.panelWidthMM > 5
           ? action.panelWidthMM
@@ -167,6 +172,7 @@ function appReducer(state, action) {
           widthHP: hp,
           customHP: !STANDARD_HP.includes(hp),
         },
+        panelOutlineGeometry: action.panelOutlineGeometry || null,
         pcb: action.boardOutline
           ? {
               ...state.pcb,
@@ -199,6 +205,11 @@ function appReducer(state, action) {
         selectedTexts: [],
       });
     }
+    case "SET_ARTWORK_PREVIEW_MODE":
+      return {
+        ...state,
+        artworkPreviewMode: action.mode || "composite",
+      };
     case "DUPLICATE_COMPONENT": {
       const src = state.components.find((c) => c.id === action.id);
       if (!src) return state;

@@ -178,6 +178,37 @@ const states = [
       await page
         .locator(".compact-layer-manager")
         .waitFor({ state: "visible" });
+      const artworkView = page.locator(".compact-layer-manager select").filter({
+        has: page.locator('option[value="copper"]'),
+      });
+      await artworkView.selectOption("mask");
+      if ((await artworkView.inputValue()) !== "mask")
+        throw new Error("Artwork production-layer preview did not switch");
+    },
+  ],
+
+  [
+    "desktop-import-preview",
+    desktop,
+    async (page) => {
+      const board = `<?xml version="1.0"?><eagle><drawing><board><plain>
+        <wire x1="0" y1="0" x2="20" y2="0" width="0" layer="20"/>
+        <wire x1="20" y1="0" x2="20" y2="128.5" width="0" layer="20"/>
+        <wire x1="20" y1="128.5" x2="0" y2="128.5" width="0" layer="20"/>
+        <wire x1="0" y1="128.5" x2="0" y2="0" width="0" layer="20"/>
+        <hole x="10" y="64" drill="6"/>
+        <rectangle x1="2" y1="2" x2="18" y2="126" layer="1"/>
+        <wire x1="3" y1="3" x2="17" y2="125" width="0.3" layer="29"/>
+      </plain><elements/></board></drawing></eagle>`;
+      await page.locator("#eagle-brd-file-input").setInputFiles({
+        name: "import-preview.brd",
+        mimeType: "application/xml",
+        buffer: Buffer.from(board),
+      });
+      const preview = page.locator(".app-import-preview-card");
+      await preview.getByText("Panel outline · 1").waitFor();
+      await preview.getByText("Mechanical cutouts · 1").waitFor();
+      await preview.getByText("Front artwork · 1").waitFor();
     },
   ],
 
@@ -252,7 +283,26 @@ const states = [
       await placeComponentOnCanvas(page, { xOffset: -14 });
       await placeComponentOnCanvas(page, { xOffset: 14 });
       const components = page.locator(".component-node");
-      await components.nth(0).click();
+      const beforeDrag = await components.nth(0).boundingBox();
+      if (!beforeDrag) throw new Error("Component is not draggable");
+      await page.mouse.move(
+        beforeDrag.x + beforeDrag.width / 2,
+        beforeDrag.y + beforeDrag.height / 2,
+      );
+      await page.mouse.down();
+      await page.mouse.move(
+        beforeDrag.x + beforeDrag.width / 2 - 18,
+        beforeDrag.y + beforeDrag.height / 2 + 12,
+        { steps: 4 },
+      );
+      await page.mouse.up();
+      const afterDrag = await components.nth(0).boundingBox();
+      if (
+        !afterDrag ||
+        Math.hypot(afterDrag.x - beforeDrag.x, afterDrag.y - beforeDrag.y) < 5
+      )
+        throw new Error("Placed component did not move after drag");
+      await components.nth(0).click({ force: true });
       await components.nth(1).click({ modifiers: ["Shift"] });
       await components.nth(1).click({ button: "right" });
       const selectedCount = await page
@@ -439,6 +489,10 @@ const states = [
         mimeType: "text/plain",
         buffer: Buffer.from(board),
       });
+      await page
+        .locator(".app-import-preview-card")
+        .getByRole("button", { name: "Import" })
+        .click();
       await page.waitForFunction(
         () => document.querySelectorAll(".component-node").length === 3,
       );
@@ -465,7 +519,7 @@ const states = [
     async (page) => {
       const board = `<?xml version="1.0" encoding="utf-8"?>
         <eagle version="9.6.2"><drawing><board><plain>
-          <wire x1="0" y1="0" x2="40.3" y2="0" width="0" layer="20"/>
+          <wire x1="0" y1="0" x2="40.3" y2="0" width="0" layer="20" curve="5"/>
           <wire x1="40.3" y1="0" x2="40.3" y2="128.5" width="0" layer="20"/>
           <wire x1="40.3" y1="128.5" x2="0" y2="128.5" width="0" layer="20"/>
           <wire x1="0" y1="128.5" x2="0" y2="0" width="0" layer="20"/>
@@ -476,6 +530,7 @@ const states = [
           <rectangle x1="4" y1="20" x2="36" y2="108" layer="1"/>
           <circle x="20" y="64" radius="5" width="1" layer="1"/>
           <wire x1="8" y1="24" x2="32" y2="104" width="1.2" layer="29"/>
+          <wire x1="12" y1="64" x2="28" y2="64" width="0.8" layer="29" curve="180"/>
           <circle x="20" y="64" radius="8" width="1.2" layer="29"/>
           <text x="9" y="32" size="3" layer="29">MASK ART</text>
           <wire x1="7" y1="116" x2="33" y2="116" width="0.5" layer="21"/>
@@ -485,6 +540,10 @@ const states = [
         mimeType: "application/xml",
         buffer: Buffer.from(board),
       });
+      await page
+        .locator(".app-import-preview-card")
+        .getByRole("button", { name: "Import" })
+        .click();
       await page.waitForFunction(
         () => document.querySelectorAll(".component-node").length === 2,
       );
@@ -494,13 +553,10 @@ const states = [
           .count()) !== 2
       )
         throw new Error("Eagle rail holes duplicated automatic mounting holes");
-      const cutoutLabels = await page
-        .locator(".component-node")
-        .evaluateAll((nodes) => nodes.map((node) => node.textContent || ""));
-      if (!cutoutLabels.some((label) => label.includes("Ø7.20")))
-        throw new Error("Eagle <hole> cutout was not imported");
-      if (!cutoutLabels.some((label) => label.includes("Ø6.10")))
-        throw new Error("Eagle milling circle cutout was not imported");
+      if ((await page.locator("[data-label-component-id]").count()) !== 0)
+        throw new Error(
+          "Mechanical cutouts should not render component labels",
+        );
       const artwork = page.locator("[data-artwork-id]");
       if ((await artwork.count()) !== 1)
         throw new Error(
@@ -531,6 +587,25 @@ const states = [
         throw new Error("KiCad export omitted Eagle solder-mask artwork");
       if (!/\(gr_line.*\(layer "F\.SilkS"\)/.test(exportedBoard))
         throw new Error("KiCad export omitted Eagle silkscreen artwork");
+      if (!/\(gr_arc.*\(layer "F\.Mask"\)/.test(exportedBoard))
+        throw new Error(
+          "Curved Eagle artwork should export as native KiCad arcs",
+        );
+      if (!/\(gr_arc.*\(layer "Edge\.Cuts"\)/.test(exportedBoard))
+        throw new Error(
+          "Curved panel outlines should remain native KiCad arcs",
+        );
+      await page.locator("#kicad-pcb-file-input").setInputFiles({
+        name: "round-trip-panel.kicad_pcb",
+        mimeType: "text/plain",
+        buffer: Buffer.from(exportedBoard),
+      });
+      const roundTripPreview = page.locator(".app-import-preview-card");
+      await roundTripPreview.getByText("Front artwork · 1").waitFor();
+      await roundTripPreview.getByRole("button", { name: "Import" }).click();
+      await page.locator("[data-artwork-id]").waitFor();
+      if ((await page.locator("[data-artwork-id]").count()) !== 1)
+        throw new Error("Eagle → Designer → KiCad → Designer lost artwork");
     },
   ],
   [
@@ -556,6 +631,10 @@ const states = [
         mimeType: "text/plain",
         buffer: Buffer.from(board),
       });
+      await page
+        .locator(".app-import-preview-card")
+        .getByRole("button", { name: "Import" })
+        .click();
       await page.waitForFunction(
         () => document.querySelectorAll(".component-node").length === 2,
       );
@@ -565,13 +644,10 @@ const states = [
           .count()) !== 2
       )
         throw new Error("KiCad rail holes duplicated automatic mounting holes");
-      const cutoutLabels = await page
-        .locator(".component-node")
-        .evaluateAll((nodes) => nodes.map((node) => node.textContent || ""));
-      if (!cutoutLabels.some((label) => label.includes("Ø7.20")))
-        throw new Error("KiCad NPTH cutout was not imported");
-      if (!cutoutLabels.some((label) => label.includes("Ø6.10")))
-        throw new Error("KiCad Edge.Cuts circle was not imported");
+      if ((await page.locator("[data-label-component-id]").count()) !== 0)
+        throw new Error(
+          "Mechanical cutouts should not render component labels",
+        );
     },
   ],
 

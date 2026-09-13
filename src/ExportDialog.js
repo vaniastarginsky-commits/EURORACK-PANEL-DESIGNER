@@ -167,8 +167,15 @@ function ExportDialog({
         exportPanelWidth,
         state.mountingHoles,
         state.pcb,
+        state.artworks,
       ),
-    [state.components, exportPanelWidth, state.mountingHoles, state.pcb],
+    [
+      state.components,
+      exportPanelWidth,
+      state.mountingHoles,
+      state.pcb,
+      state.artworks,
+    ],
   );
   const exportSanity = useMemo(() => {
     const hard = warnings.filter((w) => w.severity === "error").length;

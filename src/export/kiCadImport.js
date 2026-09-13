@@ -417,6 +417,275 @@ function boardOutlineFromKiCad(src) {
   if (!(x2 > x1) || !(y2 > y1)) return null;
   return { x: x1, y: y1, width: x2 - x1, height: y2 - y1 };
 }
+function kiCadGraphicLayer(block) {
+  return block.match(/\(layer\s+"?([^"\)\s]+)"?\)/)?.[1] || "";
+}
+function kiCadGraphicWidth(block) {
+  return Math.max(
+    0.01,
+    Number(block.match(/\(stroke\s+\(width\s+(-?[\d.]+)/)?.[1]) || 0.1,
+  );
+}
+function kiCadArcPolyline(start, mid, end) {
+  const ax = start.x,
+    ay = start.y;
+  const bx = mid.x,
+    by = mid.y;
+  const cx = end.x,
+    cy = end.y;
+  const d = 2 * (ax * (by - cy) + bx * (cy - ay) + cx * (ay - by));
+  if (Math.abs(d) < 1e-8) return [start, end];
+  const ux =
+    ((ax * ax + ay * ay) * (by - cy) +
+      (bx * bx + by * by) * (cy - ay) +
+      (cx * cx + cy * cy) * (ay - by)) /
+    d;
+  const uy =
+    ((ax * ax + ay * ay) * (cx - bx) +
+      (bx * bx + by * by) * (ax - cx) +
+      (cx * cx + cy * cy) * (bx - ax)) /
+    d;
+  const norm = (angle) => {
+    let result = angle % (Math.PI * 2);
+    if (result < 0) result += Math.PI * 2;
+    return result;
+  };
+  const a0 = norm(Math.atan2(ay - uy, ax - ux));
+  const am = norm(Math.atan2(by - uy, bx - ux));
+  const a1 = norm(Math.atan2(cy - uy, cx - ux));
+  const ccwEnd = norm(a1 - a0);
+  const ccwMid = norm(am - a0);
+  const delta = ccwMid <= ccwEnd ? ccwEnd : ccwEnd - Math.PI * 2;
+  const radius = Math.hypot(ax - ux, ay - uy);
+  const segments = Math.max(3, Math.ceil(Math.abs(delta) / (Math.PI / 24)));
+  return Array.from({ length: segments + 1 }, (_, index) => {
+    const angle = a0 + delta * (index / segments);
+    return {
+      x: ux + radius * Math.cos(angle),
+      y: uy + radius * Math.sin(angle),
+    };
+  });
+}
+function parseKiCadBoardArtwork(src, outline, xOffset, yOffset) {
+  if (!outline) return [];
+  const groups = { "F.Cu": [], "F.Mask": [], "F.SilkS": [] };
+  const color = (layer) =>
+    layer === "F.Cu" ? "#c99a4a" : layer === "F.Mask" ? "white" : "#f2f0e9";
+  const localX = (value) => Math.round((value - outline.x) * 100000) / 100000;
+  const localY = (value) => Math.round((value - outline.y) * 100000) / 100000;
+  const attr = (layer) => `data-kicad-layer="${layer}"`;
+  for (const block of sexprBlocks(src, "gr_line")) {
+    const layer = kiCadGraphicLayer(block);
+    if (!groups[layer]) continue;
+    const start = block.match(/\(start\s+(-?[\d.]+)\s+(-?[\d.]+)\)/);
+    const end = block.match(/\(end\s+(-?[\d.]+)\s+(-?[\d.]+)\)/);
+    if (!start || !end) continue;
+    groups[layer].push(
+      `<path ${attr(layer)} d="M${localX(+start[1])} ${localY(+start[2])} L${localX(+end[1])} ${localY(+end[2])}" fill="none" stroke="${color(layer)}" stroke-width="${kiCadGraphicWidth(block)}" stroke-linecap="round"/>`,
+    );
+  }
+  for (const block of sexprBlocks(src, "gr_arc")) {
+    const layer = kiCadGraphicLayer(block);
+    if (!groups[layer]) continue;
+    const parsePoint = (name) => {
+      const match = block.match(
+        new RegExp(`\\(${name}\\s+(-?[\\d.]+)\\s+(-?[\\d.]+)\\)`),
+      );
+      return match ? { x: +match[1], y: +match[2] } : null;
+    };
+    const start = parsePoint("start");
+    const mid = parsePoint("mid");
+    const end = parsePoint("end");
+    if (!start || !mid || !end) continue;
+    const points = kiCadArcPolyline(start, mid, end);
+    const d = points
+      .map(
+        (point, index) =>
+          `${index ? "L" : "M"}${localX(point.x)} ${localY(point.y)}`,
+      )
+      .join(" ");
+    groups[layer].push(
+      `<path ${attr(layer)} data-kicad-native-arc="true" d="${d}" fill="none" stroke="${color(layer)}" stroke-width="${kiCadGraphicWidth(block)}" stroke-linecap="round"/>`,
+    );
+  }
+  for (const block of sexprBlocks(src, "gr_circle")) {
+    const layer = kiCadGraphicLayer(block);
+    if (!groups[layer]) continue;
+    const center = block.match(/\(center\s+(-?[\d.]+)\s+(-?[\d.]+)\)/);
+    const end = block.match(/\(end\s+(-?[\d.]+)\s+(-?[\d.]+)\)/);
+    if (!center || !end) continue;
+    const radius = Math.hypot(+end[1] - +center[1], +end[2] - +center[2]);
+    groups[layer].push(
+      `<circle ${attr(layer)} cx="${localX(+center[1])}" cy="${localY(+center[2])}" r="${radius}" fill="none" stroke="${color(layer)}" stroke-width="${kiCadGraphicWidth(block)}"/>`,
+    );
+  }
+  for (const block of sexprBlocks(src, "gr_rect")) {
+    const layer = kiCadGraphicLayer(block);
+    if (!groups[layer]) continue;
+    const start = block.match(/\(start\s+(-?[\d.]+)\s+(-?[\d.]+)\)/);
+    const end = block.match(/\(end\s+(-?[\d.]+)\s+(-?[\d.]+)\)/);
+    if (!start || !end) continue;
+    const x1 = localX(+start[1]),
+      y1 = localY(+start[2]),
+      x2 = localX(+end[1]),
+      y2 = localY(+end[2]);
+    groups[layer].push(
+      `<rect ${attr(layer)} x="${Math.min(x1, x2)}" y="${Math.min(y1, y2)}" width="${Math.abs(x2 - x1)}" height="${Math.abs(y2 - y1)}" fill="${/\(fill\s+solid\)/.test(block) ? color(layer) : "none"}" stroke="${color(layer)}" stroke-width="${kiCadGraphicWidth(block)}"/>`,
+    );
+  }
+  for (const block of sexprBlocks(src, "gr_poly")) {
+    const layer = kiCadGraphicLayer(block);
+    if (!groups[layer]) continue;
+    const points = [...block.matchAll(/\(xy\s+(-?[\d.]+)\s+(-?[\d.]+)\)/g)];
+    if (points.length < 3) continue;
+    groups[layer].push(
+      `<polygon ${attr(layer)} points="${points.map((point) => `${localX(+point[1])},${localY(+point[2])}`).join(" ")}" fill="${/\(fill\s+solid\)/.test(block) ? color(layer) : "none"}" stroke="${color(layer)}" stroke-width="${kiCadGraphicWidth(block)}"/>`,
+    );
+  }
+  for (const block of sexprBlocks(src, "gr_text")) {
+    const layer = kiCadGraphicLayer(block);
+    if (!groups[layer]) continue;
+    const text = block.match(/^\(gr_text\s+"((?:\\.|[^"\\])*)"/)?.[1];
+    const at = block.match(
+      /\(at\s+(-?[\d.]+)\s+(-?[\d.]+)(?:\s+(-?[\d.]+))?\)/,
+    );
+    const size = block.match(/\(font\s+\(size\s+([\d.]+)/)?.[1];
+    if (text === undefined || !at) continue;
+    groups[layer].push(
+      `<text ${attr(layer)} transform="translate(${localX(+at[1])} ${localY(+at[2])}) rotate(${Number(at[3] || 0)})" x="0" y="0" fill="${color(layer)}" stroke="none" font-family="Arial, sans-serif" font-size="${Number(size || 1.2)}">${text.replaceAll("&", "&amp;").replaceAll("<", "&lt;")}</text>`,
+    );
+  }
+  const copper = groups["F.Cu"].join("");
+  const mask = groups["F.Mask"].join("");
+  const silk = groups["F.SilkS"].join("");
+  if (!copper && !mask && !silk) return [];
+  const composite =
+    copper && mask
+      ? `<defs><mask id="kicad-front-mask" maskUnits="userSpaceOnUse"><rect width="100%" height="100%" fill="black"/>${mask}</mask></defs><g mask="url(#kicad-front-mask)">${copper}</g>`
+      : copper;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${outline.width} ${outline.height}">${composite}${silk}</svg>`;
+  return [
+    {
+      id: crypto.randomUUID(),
+      name: "KiCad front artwork",
+      imageDataUrl: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`,
+      x: xOffset + outline.width / 2,
+      y: yOffset + outline.height / 2,
+      width: outline.width,
+      height: outline.height,
+      naturalW: outline.width,
+      naturalH: outline.height,
+      rotation: 0,
+      opacity: 1,
+      locked: true,
+      visible: true,
+      layer: "background",
+      preserveAspectRatio: false,
+      notes: "Imported from KiCad F.Cu, F.Mask and F.SilkS graphics.",
+    },
+  ];
+}
+function parseKiCadOutlineGeometry(src, outline, xOffset, yOffset) {
+  if (!outline) return null;
+  const point = (x, y) => ({
+    x: x - outline.x + xOffset,
+    y: y - outline.y + yOffset,
+  });
+  const candidates = [];
+  for (const block of sexprBlocks(src, "gr_rect").filter((item) =>
+    /\(layer\s+"?Edge\.Cuts"?\)/.test(item),
+  )) {
+    const start = block.match(/\(start\s+(-?[\d.]+)\s+(-?[\d.]+)\)/);
+    const end = block.match(/\(end\s+(-?[\d.]+)\s+(-?[\d.]+)\)/);
+    if (!start || !end) continue;
+    const x1 = +start[1],
+      y1 = +start[2],
+      x2 = +end[1],
+      y2 = +end[2];
+    const corners = [
+      point(x1, y1),
+      point(x2, y1),
+      point(x2, y2),
+      point(x1, y2),
+    ];
+    candidates.push(
+      corners.map((corner, index) => ({
+        kind: "line",
+        points: [corner, corners[(index + 1) % corners.length]],
+      })),
+    );
+  }
+  const loose = [];
+  for (const block of sexprBlocks(src, "gr_line").filter((item) =>
+    /\(layer\s+"?Edge\.Cuts"?\)/.test(item),
+  )) {
+    const start = block.match(/\(start\s+(-?[\d.]+)\s+(-?[\d.]+)\)/);
+    const end = block.match(/\(end\s+(-?[\d.]+)\s+(-?[\d.]+)\)/);
+    if (start && end)
+      loose.push({
+        kind: "line",
+        points: [point(+start[1], +start[2]), point(+end[1], +end[2])],
+      });
+  }
+  for (const block of sexprBlocks(src, "gr_arc").filter((item) =>
+    /\(layer\s+"?Edge\.Cuts"?\)/.test(item),
+  )) {
+    const get = (name) => {
+      const match = block.match(
+        new RegExp(`\\(${name}\\s+(-?[\\d.]+)\\s+(-?[\\d.]+)\\)`),
+      );
+      return match ? { x: +match[1], y: +match[2] } : null;
+    };
+    const start = get("start"),
+      mid = get("mid"),
+      end = get("end");
+    if (start && mid && end)
+      loose.push({
+        kind: "arc",
+        points: kiCadArcPolyline(start, mid, end).map((item) =>
+          point(item.x, item.y),
+        ),
+      });
+  }
+  const key = (item) =>
+    `${Math.round(item.x * 100) / 100}:${Math.round(item.y * 100) / 100}`;
+  const remaining = new Set(loose.map((_, index) => index));
+  while (remaining.size) {
+    const seed = remaining.values().next().value;
+    remaining.delete(seed);
+    const group = [loose[seed]];
+    const endpoints = new Set([
+      key(loose[seed].points[0]),
+      key(loose[seed].points[loose[seed].points.length - 1]),
+    ]);
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const index of [...remaining]) {
+        const item = loose[index];
+        const first = key(item.points[0]);
+        const last = key(item.points[item.points.length - 1]);
+        if (endpoints.has(first) || endpoints.has(last)) {
+          remaining.delete(index);
+          group.push(item);
+          endpoints.add(first);
+          endpoints.add(last);
+          changed = true;
+        }
+      }
+    }
+    candidates.push(group);
+  }
+  const score = (group) => {
+    const points = group.flatMap((item) => item.points);
+    const xs = points.map((item) => item.x);
+    const ys = points.map((item) => item.y);
+    return (
+      (Math.max(...xs) - Math.min(...xs)) * (Math.max(...ys) - Math.min(...ys))
+    );
+  };
+  return candidates.sort((a, b) => score(b) - score(a))[0] || null;
+}
 function bestLibraryPartForKiCad(ref, fp, pads) {
   const hay = `${ref} ${fp}`.toLowerCase();
   const exactFind = (type) =>
@@ -624,6 +893,13 @@ function parseKiCadPcbToPanel(src, currentPanelWidthMM) {
   const yOffset = outline
     ? Math.max(0, (PANEL_HEIGHT_MM - height) / 2)
     : (PANEL_HEIGHT_MM - height) / 2;
+  const artworks = parseKiCadBoardArtwork(src, outline, xOffset, yOffset);
+  const panelOutlineGeometry = parseKiCadOutlineGeometry(
+    src,
+    outline,
+    xOffset,
+    yOffset,
+  );
   if (roundedPanel.rounded)
     warnings.push(
       `PCB Edge.Cuts width ${width.toFixed(2)} mm = ${roundedPanel.sourceHp.toFixed(2)} HP; rounded front panel to ${roundedPanel.hp} HP and centered imported components by ${xOffset.toFixed(2)} mm.`,
@@ -754,7 +1030,7 @@ function parseKiCadPcbToPanel(src, currentPanelWidthMM) {
     }
     const diameter = Math.max(0.1, cutout.holeDiameter || 0.1);
     const def = sanitizePart({
-      type: "custom",
+      type: "cutout",
       name: `KiCad cutout ${cutout.holeType === "rect" ? `${(cutout.holeW || diameter).toFixed(2)} × ${(cutout.holeH || diameter).toFixed(2)} mm` : cutout.holeType === "slot" ? `${diameter.toFixed(2)} × ${(cutout.slotLength || diameter).toFixed(2)} mm` : `Ø${diameter.toFixed(2)} mm`}`,
       holeDiameter: diameter,
       frontDiameter: diameter,
@@ -766,7 +1042,7 @@ function parseKiCadPcbToPanel(src, currentPanelWidthMM) {
       keepoutH:
         Math.max(cutout.holeH || 0, cutout.slotLength || 0, diameter) + 2,
       minSpacing: 1,
-      category: "custom",
+      category: "mechanical",
       topHardwareVisible: false,
       verificationStatus: "measured",
     });
@@ -774,12 +1050,7 @@ function parseKiCadPcbToPanel(src, currentPanelWidthMM) {
       ...def,
       id: crypto.randomUUID(),
       ref: `CUT${importedCutoutCount + 1}`,
-      label:
-        cutout.holeType === "rect"
-          ? `${(cutout.holeW || diameter).toFixed(2)}×${(cutout.holeH || diameter).toFixed(2)}`
-          : cutout.holeType === "slot"
-            ? `${diameter.toFixed(2)}×${(cutout.slotLength || diameter).toFixed(2)}`
-            : `Ø${diameter.toFixed(2)}`,
+      label: "",
       x: Math.round(x * 1000) / 1000,
       y: Math.round(y * 1000) / 1000,
       rotation: cutout.rotation || 0,
@@ -834,6 +1105,8 @@ function parseKiCadPcbToPanel(src, currentPanelWidthMM) {
     );
   return {
     components,
+    artworks,
+    panelOutlineGeometry,
     panelWidthMM: targetWidth,
     boardOutline: outline,
     warnings,

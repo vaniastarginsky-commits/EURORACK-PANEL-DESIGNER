@@ -530,8 +530,20 @@ function validateAndNormalize(raw) {
   const normalized = {
     projectMeta,
     panel,
+    panelOutlineGeometry: Array.isArray(obj.panelOutlineGeometry)
+      ? obj.panelOutlineGeometry
+      : null,
     components,
     artworks,
+    artworkPreviewMode: [
+      "composite",
+      "copper",
+      "mask",
+      "silkscreen",
+      "material",
+    ].includes(obj.artworkPreviewMode)
+      ? obj.artworkPreviewMode
+      : "composite",
     textItems,
     scaleItems,
     customParts,

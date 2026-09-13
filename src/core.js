@@ -567,8 +567,122 @@ function buildWarningPairCandidateMap(components) {
   for (const list of byStart.values()) list.sort((a, b) => a - b);
   return byStart;
 }
-function computeWarnings(components, widthMM, mountingHoles, pcb) {
+function artworkDfmWarnings(artworks, widthMM) {
   const warnings = [];
+  for (const artwork of artworks || []) {
+    if (!artwork.visible) continue;
+    const left = artwork.x - artwork.width / 2;
+    const right = artwork.x + artwork.width / 2;
+    const top = artwork.y - artwork.height / 2;
+    const bottom = artwork.y + artwork.height / 2;
+    if (
+      left < -0.01 ||
+      right > widthMM + 0.01 ||
+      top < -0.01 ||
+      bottom > PANEL_HEIGHT_MM + 0.01
+    )
+      warnings.push({
+        ids: [],
+        message: `Artwork "${artwork.name || "image"}" extends outside the panel`,
+        severity: "warn",
+      });
+    if (!String(artwork.imageDataUrl || "").startsWith("data:image/svg+xml"))
+      continue;
+    try {
+      const comma = artwork.imageDataUrl.indexOf(",");
+      const svgText = artwork.imageDataUrl.slice(0, comma).includes(";base64")
+        ? atob(artwork.imageDataUrl.slice(comma + 1))
+        : decodeURIComponent(artwork.imageDataUrl.slice(comma + 1));
+      const doc = new DOMParser().parseFromString(svgText, "image/svg+xml");
+      const thinSilk = [
+        ...doc.querySelectorAll('[data-kicad-layer="F.SilkS"]'),
+      ].some(
+        (element) =>
+          Number(element.getAttribute("stroke-width")) > 0 &&
+          Number(element.getAttribute("stroke-width")) < 0.15,
+      );
+      const smallText = [
+        ...doc.querySelectorAll('text[data-kicad-layer="F.SilkS"]'),
+      ].some((element) => Number(element.getAttribute("font-size")) < 0.8);
+      const thinMask = [
+        ...doc.querySelectorAll('[data-kicad-layer="F.Mask"]'),
+      ].some(
+        (element) =>
+          Number(element.getAttribute("stroke-width")) > 0 &&
+          Number(element.getAttribute("stroke-width")) < 0.1,
+      );
+      const viewBox = String(doc.documentElement.getAttribute("viewBox") || "")
+        .split(/[ ,]+/)
+        .map(Number);
+      const copperPoints = [];
+      for (const element of doc.querySelectorAll('[data-kicad-layer="F.Cu"]')) {
+        if (element.tagName === "rect") {
+          const x = Number(element.getAttribute("x"));
+          const y = Number(element.getAttribute("y"));
+          const width = Number(element.getAttribute("width"));
+          const height = Number(element.getAttribute("height"));
+          copperPoints.push([x, y], [x + width, y + height]);
+        } else if (element.tagName === "circle") {
+          const x = Number(element.getAttribute("cx"));
+          const y = Number(element.getAttribute("cy"));
+          const radius = Number(element.getAttribute("r"));
+          copperPoints.push([x - radius, y - radius], [x + radius, y + radius]);
+        } else {
+          const values = String(
+            element.getAttribute("d") || element.getAttribute("points") || "",
+          )
+            .match(/-?(?:\d+\.?\d*|\.\d+)/g)
+            ?.map(Number);
+          for (let index = 0; index + 1 < (values?.length || 0); index += 2)
+            copperPoints.push([values[index], values[index + 1]]);
+        }
+      }
+      const copperAtEdge =
+        viewBox.length === 4 &&
+        copperPoints.some(
+          ([x, y]) =>
+            x - viewBox[0] < 0.25 ||
+            y - viewBox[1] < 0.25 ||
+            viewBox[0] + viewBox[2] - x < 0.25 ||
+            viewBox[1] + viewBox[3] - y < 0.25,
+        );
+      if (thinSilk)
+        warnings.push({
+          ids: [],
+          message: `Artwork "${artwork.name || "image"}" has silkscreen lines below 0.15 mm`,
+          severity: "warn",
+        });
+      if (smallText)
+        warnings.push({
+          ids: [],
+          message: `Artwork "${artwork.name || "image"}" has silkscreen text below 0.8 mm`,
+          severity: "warn",
+        });
+      if (thinMask)
+        warnings.push({
+          ids: [],
+          message: `Artwork "${artwork.name || "image"}" has mask features below 0.10 mm`,
+          severity: "warn",
+        });
+      if (copperAtEdge)
+        warnings.push({
+          ids: [],
+          message: `Artwork "${artwork.name || "image"}" has copper within 0.25 mm of the panel edge`,
+          severity: "warn",
+        });
+    } catch {}
+  }
+  return warnings;
+}
+function computeWarnings(
+  components,
+  widthMM,
+  mountingHoles,
+  pcb,
+  artworks = [],
+) {
+  const warnings = [];
+  warnings.push(...artworkDfmWarnings(artworks, widthMM));
   warnings.push(...pcbHeightWarnings(pcb));
   const pairCandidatesByStart = buildWarningPairCandidateMap(components);
   for (let i = 0; i < components.length; i++) {
@@ -917,8 +1031,10 @@ function makeInitialState() {
       updatedAt: new Date().toISOString(),
     },
     panel,
+    panelOutlineGeometry: null,
     components: [],
     artworks: [],
+    artworkPreviewMode: "composite",
     textItems: [],
     scaleItems: [],
     customParts: [],

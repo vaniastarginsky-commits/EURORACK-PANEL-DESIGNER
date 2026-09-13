@@ -87,6 +87,9 @@ function kicadArtworkLine(x1, y1, x2, y2, layer, width) {
 function kicadArtworkCircle(cx, cy, radius, layer, width) {
   return `  (gr_circle (center ${kicadNum(cx)} ${kicadNum(cy)}) (end ${kicadNum(cx + radius)} ${kicadNum(cy)}) (stroke (width ${kicadNum(Math.max(0.01, width))}) (type solid)) (fill none) (layer ${kicadStr(layer)}) (tstamp ${crypto.randomUUID()}))`;
 }
+function kicadArtworkArc(start, mid, end, layer, width) {
+  return `  (gr_arc (start ${kicadNum(start.x)} ${kicadNum(start.y)}) (mid ${kicadNum(mid.x)} ${kicadNum(mid.y)}) (end ${kicadNum(end.x)} ${kicadNum(end.y)}) (stroke (width ${kicadNum(Math.max(0.01, width))}) (type solid)) (layer ${kicadStr(layer)}) (tstamp ${crypto.randomUUID()}))`;
+}
 function kicadArtworkPolygon(points, layer) {
   return `  (gr_poly (pts ${points.map((point) => `(xy ${kicadNum(point.x)} ${kicadNum(point.y)})`).join(" ")}) (stroke (width 0.01) (type solid)) (fill solid) (layer ${kicadStr(layer)}) (tstamp ${crypto.randomUUID()}))`;
 }
@@ -162,7 +165,7 @@ function kicadGraphicsFromSvgArtwork(artwork, tx, ty) {
     return { x: tx(point.x), y: ty(point.y) };
   };
   const graphics = [];
-  for (const element of svg.querySelectorAll("path,circle,rect,text")) {
+  for (const element of svg.querySelectorAll("path,circle,rect,polygon,text")) {
     if (
       element.closest("mask") &&
       element.tagName === "rect" &&
@@ -175,6 +178,19 @@ function kicadGraphicsFromSvgArtwork(artwork, tx, ty) {
       transform.strokeScale;
     if (element.tagName === "path") {
       const points = svgPathLinePoints(element.getAttribute("d"));
+      if (
+        points.length > 2 &&
+        (element.getAttribute("data-kicad-native-arc") === "true" ||
+          element.closest("svg")?.querySelector('mask[id="eagle-top-stop"]'))
+      ) {
+        const start = outputPoint(points[0].x, points[0].y);
+        const middlePoint = points[Math.floor(points.length / 2)];
+        const mid = outputPoint(middlePoint.x, middlePoint.y);
+        const endPoint = points[points.length - 1];
+        const end = outputPoint(endPoint.x, endPoint.y);
+        graphics.push(kicadArtworkArc(start, mid, end, layer, width));
+        continue;
+      }
       for (let i = 1; i < points.length; i++) {
         const start = outputPoint(points[i - 1].x, points[i - 1].y);
         const end = outputPoint(points[i].x, points[i].y);
@@ -214,6 +230,14 @@ function kicadGraphicsFromSvgArtwork(artwork, tx, ty) {
           layer,
         ),
       );
+    } else if (element.tagName === "polygon") {
+      const points = String(element.getAttribute("points") || "")
+        .trim()
+        .split(/\s+/)
+        .map((pair) => pair.split(",").map(Number))
+        .filter((pair) => pair.length === 2 && pair.every(Number.isFinite))
+        .map(([x, y]) => outputPoint(x, y));
+      if (points.length >= 3) graphics.push(kicadArtworkPolygon(points, layer));
     } else if (element.tagName === "text") {
       const svgTransform = element.getAttribute("transform") || "";
       const translate = svgTransform.match(
@@ -301,10 +325,40 @@ function exportKiCadPCB(state, options = DEFAULT_EXPORT_OPTIONS) {
   const footprints = [];
   const graphics = [];
   if (includePanelOutline) {
-    lines.push(kicadEdgeLine(tx(0), ty(0), tx(widthMM), ty(0)));
-    lines.push(kicadEdgeLine(tx(widthMM), ty(0), tx(widthMM), ty(heightMM)));
-    lines.push(kicadEdgeLine(tx(widthMM), ty(heightMM), tx(0), ty(heightMM)));
-    lines.push(kicadEdgeLine(tx(0), ty(heightMM), tx(0), ty(0)));
+    const importedOutline = state.panelOutlineGeometry;
+    if (Array.isArray(importedOutline) && importedOutline.length) {
+      for (const item of importedOutline) {
+        const points = item.points || [];
+        if (item.kind === "arc" && points.length > 2) {
+          const start = points[0];
+          const mid = points[Math.floor(points.length / 2)];
+          const end = points[points.length - 1];
+          lines.push(
+            kicadArtworkArc(
+              { x: tx(start.x), y: ty(start.y) },
+              { x: tx(mid.x), y: ty(mid.y) },
+              { x: tx(end.x), y: ty(end.y) },
+              "Edge.Cuts",
+              0.1,
+            ),
+          );
+        } else if (points.length >= 2) {
+          lines.push(
+            kicadEdgeLine(
+              tx(points[0].x),
+              ty(points[0].y),
+              tx(points[points.length - 1].x),
+              ty(points[points.length - 1].y),
+            ),
+          );
+        }
+      }
+    } else {
+      lines.push(kicadEdgeLine(tx(0), ty(0), tx(widthMM), ty(0)));
+      lines.push(kicadEdgeLine(tx(widthMM), ty(0), tx(widthMM), ty(heightMM)));
+      lines.push(kicadEdgeLine(tx(widthMM), ty(heightMM), tx(0), ty(heightMM)));
+      lines.push(kicadEdgeLine(tx(0), ty(heightMM), tx(0), ty(0)));
+    }
   }
   if (includeMountingHoles && state.mountingHoles?.enabled) {
     for (let i = 0; i < state.mountingHoles.holes.length; i++) {

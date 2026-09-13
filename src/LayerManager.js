@@ -70,6 +70,35 @@ function LayersPanel() {
     ),
     React.createElement(
       "div",
+      { className: "field-row compact-render-row", style: { marginTop: 10 } },
+      React.createElement("label", null, "Artwork view"),
+      React.createElement(
+        "select",
+        {
+          value: state.artworkPreviewMode || "composite",
+          onChange: (event) =>
+            dispatch({
+              type: "SET_ARTWORK_PREVIEW_MODE",
+              mode: event.target.value,
+            }),
+        },
+        React.createElement("option", { value: "composite" }, "Final"),
+        React.createElement("option", { value: "copper" }, "Copper / F.Cu"),
+        React.createElement(
+          "option",
+          { value: "mask" },
+          "Mask openings / F.Mask",
+        ),
+        React.createElement(
+          "option",
+          { value: "silkscreen" },
+          "Silkscreen / F.SilkS",
+        ),
+        React.createElement("option", { value: "material" }, "Panel material"),
+      ),
+    ),
+    React.createElement(
+      "div",
       { className: "layer-grid" },
       labels.map(([k, l]) => {
         const visible = !!state.layerVisibility[k];
