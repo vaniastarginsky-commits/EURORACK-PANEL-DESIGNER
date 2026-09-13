@@ -222,7 +222,11 @@ function LayoutStatusPanel({ warnings, components }) {
   const maxDepth = computeMaxDepth(components);
   const status = errors > 0 ? "Collision" : warns > 0 ? "Warning" : "OK";
   const statusColor =
-    errors > 0 ? "var(--ui-danger)" : warns > 0 ? "var(--ui-warn)" : "var(--ui-success)";
+    errors > 0
+      ? "var(--ui-danger)"
+      : warns > 0
+        ? "var(--ui-warn)"
+        : "var(--ui-success)";
   return React.createElement(
     "div",
     { className: "section" },
@@ -245,7 +249,11 @@ function LayoutStatusPanel({ warnings, components }) {
       React.createElement("span", null, "Hard collisions"),
       React.createElement(
         "span",
-        { style: { color: errors > 0 ? "var(--ui-danger)" : "var(--ui-success)" } },
+        {
+          style: {
+            color: errors > 0 ? "var(--ui-danger)" : "var(--ui-success)",
+          },
+        },
         errors,
       ),
     ),
@@ -255,7 +263,9 @@ function LayoutStatusPanel({ warnings, components }) {
       React.createElement("span", null, "Warnings"),
       React.createElement(
         "span",
-        { style: { color: warns > 0 ? "var(--ui-warn)" : "var(--ui-success)" } },
+        {
+          style: { color: warns > 0 ? "var(--ui-warn)" : "var(--ui-success)" },
+        },
         warns,
       ),
     ),

@@ -55,10 +55,7 @@ const ICON = {
     "M12 18v3",
   ]),
   fit: toolIcon(["M15 3h6v6", "M9 21H3v-6", "M21 3l-7 7", "M3 21l7-7"]),
-  rotate: toolIcon([
-    "M20 11a8 8 0 1 0-2.34 5.66",
-    "M20 4v7h-7",
-  ]),
+  rotate: toolIcon(["M20 11a8 8 0 1 0-2.34 5.66", "M20 4v7h-7"]),
   safe: toolIcon(
     "M12 2l8 4v5c0 4.6-3.2 8.9-8 10.4C7.2 19.9 4 15.6 4 11V6l8-4z",
   ),
@@ -96,14 +93,8 @@ const ICON = {
     "M7 9l-3 3 3 3",
     "M17 9l3 3-3 3",
   ]),
-  dup: toolIcon([
-    "M8 8h12v12H8z",
-    "M4 16V4h12",
-  ]),
-  lock: toolIcon([
-    "M5 11h14v10H5z",
-    "M8 11V7a4 4 0 0 1 8 0v4",
-  ]),
+  dup: toolIcon(["M8 8h12v12H8z", "M4 16V4h12"]),
+  lock: toolIcon(["M5 11h14v10H5z", "M8 11V7a4 4 0 0 1 8 0v4"]),
   del: toolIcon([
     "M4 7h16",
     "M10 11v6",
@@ -111,11 +102,7 @@ const ICON = {
     "M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13",
     "M9 7V4h6v3",
   ]),
-  more: toolIcon([
-    "M5 12h.01",
-    "M12 12h.01",
-    "M19 12h.01",
-  ]),
+  more: toolIcon(["M5 12h.01", "M12 12h.01", "M19 12h.01"]),
 };
 
 function CanvasToolRail({
@@ -315,8 +302,12 @@ function CanvasToolRail({
       (() => {
         const selected = state.selected || [];
         const hasSel = selected.length > 0;
-        const selectedComponents = (state.components || []).filter((c) => selected.includes(c.id));
-        const allLocked = selectedComponents.length > 0 && selectedComponents.every((c) => !!c.locked);
+        const selectedComponents = (state.components || []).filter((c) =>
+          selected.includes(c.id),
+        );
+        const allLocked =
+          selectedComponents.length > 0 &&
+          selectedComponents.every((c) => !!c.locked);
         return React.createElement(
           React.Fragment,
           null,
@@ -325,7 +316,9 @@ function CanvasToolRail({
             className: "canvas-tool-mobile-only",
             onClick: () => {
               setOpenMenu(null);
-              window.dispatchEvent(new Event("panel-designer:request-nudge-mode"));
+              window.dispatchEvent(
+                new Event("panel-designer:request-nudge-mode"),
+              );
             },
           }),
           command("Dup", ICON.dup, {
@@ -357,7 +350,9 @@ function CanvasToolRail({
             className: "canvas-tool-mobile-only",
             onClick: () => {
               setOpenMenu(null);
-              window.dispatchEvent(new Event("panel-designer:request-selection-more"));
+              window.dispatchEvent(
+                new Event("panel-designer:request-selection-more"),
+              );
             },
           }),
         );

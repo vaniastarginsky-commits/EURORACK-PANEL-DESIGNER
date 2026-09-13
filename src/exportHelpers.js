@@ -306,8 +306,18 @@ function exportDocumentationPDF(state, warnings) {
   });
   const rows = drillTableRows(state, warnings);
   const tableHeaders = [
-    "Ref", "Label", "Type", "Name", "X mm", "Y mm",
-    "Rot°", "Hole type", "Ø/W mm", "H mm", "Status", "Warn",
+    "Ref",
+    "Label",
+    "Type",
+    "Name",
+    "X mm",
+    "Y mm",
+    "Rot°",
+    "Hole type",
+    "Ø/W mm",
+    "H mm",
+    "Status",
+    "Warn",
   ];
   function escHtml(v) {
     return String(v ?? "")
@@ -320,7 +330,20 @@ function exportDocumentationPDF(state, warnings) {
   const tableRows = rows
     .map(
       (r) =>
-        `<tr>${[r[0], r[1], r[2], r[3], r[7], r[8], r[9], r[10], r[11], r[12], r[6], r[20]]
+        `<tr>${[
+          r[0],
+          r[1],
+          r[2],
+          r[3],
+          r[7],
+          r[8],
+          r[9],
+          r[10],
+          r[11],
+          r[12],
+          r[6],
+          r[20],
+        ]
           .map((v) => `<td>${escHtml(v)}</td>`)
           .join("")}</tr>`,
     )
@@ -552,8 +575,7 @@ function exportDXF(state) {
       joystickMountHoles(c).forEach((p) => {
         out += dxfCircle(p.x, p.y, p.r, "DRILL");
       });
-    }
-    else if (c.holeType === "rect")
+    } else if (c.holeType === "rect")
       out += dxfRect(
         c.x,
         c.y,
@@ -622,7 +644,9 @@ function exportEagleSCR(state) {
         );
         out.push("LAYER 46 Milling;");
         out.push(
-          wireRect(eagleCorners(mh.x, mh.y, MOUNTING_HOLE_DIAMETER_MM / 2, ow / 2, 0)),
+          wireRect(
+            eagleCorners(mh.x, mh.y, MOUNTING_HOLE_DIAMETER_MM / 2, ow / 2, 0),
+          ),
         );
       } else {
         out.push(
@@ -654,22 +678,25 @@ function exportEagleSCR(state) {
       out.push(`HOLE ${c.holeDiameter.toFixed(3)} (${ex(p2x)} ${ey(p2y)});`);
       out.push("LAYER 46 Milling;");
       out.push(
-        wireRect(eagleCorners(c.x, c.y, c.holeDiameter / 2, sl / 2, c.rotation || 0)),
+        wireRect(
+          eagleCorners(c.x, c.y, c.holeDiameter / 2, sl / 2, c.rotation || 0),
+        ),
       );
     } else if (c.holeType === "rect") {
       const rw = c.holeW ?? c.frontW ?? c.holeDiameter;
       const rh = c.holeH ?? c.frontH ?? c.holeDiameter;
       out.push("LAYER 46 Milling;");
-      out.push(wireRect(eagleCorners(c.x, c.y, rw / 2, rh / 2, c.rotation || 0)));
+      out.push(
+        wireRect(eagleCorners(c.x, c.y, rw / 2, rh / 2, c.rotation || 0)),
+      );
     } else {
       out.push(`HOLE ${c.holeDiameter.toFixed(3)} (${ex(c.x)} ${ey(c.y)});`);
     }
   }
   out.push("");
-  const base = safeProjectFileName(state.projectMeta?.name || "panel-layout").replace(
-    /\.json$/i,
-    "",
-  );
+  const base = safeProjectFileName(
+    state.projectMeta?.name || "panel-layout",
+  ).replace(/\.json$/i, "");
   downloadTextFile(`${base}__eagle.scr`, out.join("\n"), "text/plain");
 }
 function getManufacturingIssues(state, warnings) {

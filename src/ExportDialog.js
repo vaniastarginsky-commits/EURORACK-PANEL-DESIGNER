@@ -963,7 +963,7 @@ function ExportDialog({
               className: "warning-item warn",
               style: { fontSize: 10, marginBottom: 10 },
             },
-            'Opens browser print dialog — select “Save as PDF” as destination.',
+            "Opens browser print dialog — select “Save as PDF” as destination.",
           ),
           React.createElement(
             "div",

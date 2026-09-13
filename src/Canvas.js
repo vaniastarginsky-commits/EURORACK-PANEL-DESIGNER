@@ -449,7 +449,12 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
             const d = visualKnobDiameter(c);
             return React.createElement(
               "g",
-              { key: c.id, "data-top-hardware-id": c.id, transform: rot, opacity: hwOpacity },
+              {
+                key: c.id,
+                "data-top-hardware-id": c.id,
+                transform: rot,
+                opacity: hwOpacity,
+              },
               React.createElement("circle", {
                 cx: cx,
                 cy: cy,
@@ -665,16 +670,53 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
             const Rid = 14.0;
             const Rcap = R * 0.175;
             const screwOff = 12.75;
-            const screwCorners = [[1,1],[-1,1],[-1,-1],[1,-1]];
+            const screwCorners = [
+              [1, 1],
+              [-1, 1],
+              [-1, -1],
+              [1, -1],
+            ];
             return React.createElement(
               "g",
-              { key: c.id, "data-top-hardware-id": c.id, transform: rot, opacity: hwOpacity },
-              React.createElement("circle", { cx, cy, r: R, fill: "#1e2022", stroke: "rgba(255,255,255,0.14)", strokeWidth: 0.3 }),
-              React.createElement("circle", { cx, cy, r: Rid, fill: "#090b0c" }),
+              {
+                key: c.id,
+                "data-top-hardware-id": c.id,
+                transform: rot,
+                opacity: hwOpacity,
+              },
+              React.createElement("circle", {
+                cx,
+                cy,
+                r: R,
+                fill: "#1e2022",
+                stroke: "rgba(255,255,255,0.14)",
+                strokeWidth: 0.3,
+              }),
+              React.createElement("circle", {
+                cx,
+                cy,
+                r: Rid,
+                fill: "#090b0c",
+              }),
               ...[Rid, Rid * 0.857, Rid * 0.679, Rid * 0.536].map((r, i) =>
-                React.createElement("circle", { key: `br${i}`, cx, cy, r, fill: "none", stroke: "#050607", strokeWidth: 0.6 }),
+                React.createElement("circle", {
+                  key: `br${i}`,
+                  cx,
+                  cy,
+                  r,
+                  fill: "none",
+                  stroke: "#050607",
+                  strokeWidth: 0.6,
+                }),
               ),
-              React.createElement("circle", { cx, cy, r: Rcap, fill: "#111314", stroke: "#2a2c2e", strokeWidth: 0.2 }),
+              React.createElement("circle", {
+                cx,
+                cy,
+                r: Rcap,
+                fill: "#111314",
+                stroke: "#2a2c2e",
+                strokeWidth: 0.2,
+              }),
               ...screwCorners.map(([sx, sy], i) =>
                 React.createElement("circle", {
                   key: `s${i}`,
@@ -1000,7 +1042,12 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
             });
             return React.createElement(
               "g",
-              { key: c.id, "data-top-hardware-id": c.id, transform: rot, opacity: hwOpacity },
+              {
+                key: c.id,
+                "data-top-hardware-id": c.id,
+                transform: rot,
+                opacity: hwOpacity,
+              },
               React.createElement("circle", {
                 cx: cx,
                 cy: cy,
@@ -1039,7 +1086,12 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
           const pointerLen = r * 0.76;
           return React.createElement(
             "g",
-            { key: c.id, "data-top-hardware-id": c.id, transform: rot, opacity: hwOpacity },
+            {
+              key: c.id,
+              "data-top-hardware-id": c.id,
+              transform: rot,
+              opacity: hwOpacity,
+            },
             React.createElement("circle", {
               cx: cx,
               cy: cy,
@@ -1572,16 +1624,60 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
           const Rid = 14.0;
           const Rcap = 3.5;
           const screwOff = 12.75;
-          const screwCorners = [[1,1],[-1,1],[-1,-1],[1,-1]];
-          const bootRidges = [Rid, Rid * 0.857, Rid * 0.679, Rid * 0.536, Rid * 0.393, Rid * 0.286];
+          const screwCorners = [
+            [1, 1],
+            [-1, 1],
+            [-1, -1],
+            [1, -1],
+          ];
+          const bootRidges = [
+            Rid,
+            Rid * 0.857,
+            Rid * 0.679,
+            Rid * 0.536,
+            Rid * 0.393,
+            Rid * 0.286,
+          ];
           const sl = 0.85;
           return React.createElement(
             "g",
-            { key: c.id, "data-top-hardware-id": c.id, transform: rot, opacity: hwOpacity },
-            React.createElement("circle", { cx, cy, r: R, fill: "#1a1c1e", stroke: "none" }),
-            React.createElement("circle", { cx, cy, r: R, fill: "none", stroke: "rgba(255,255,255,0.18)", strokeWidth: 0.5 }),
-            React.createElement("circle", { cx, cy, r: R - 0.3, fill: "none", stroke: "rgba(0,0,0,0.65)", strokeWidth: 0.5 }),
-            React.createElement("circle", { cx, cy, r: Rid + 0.6, fill: "none", stroke: "rgba(0,0,0,0.75)", strokeWidth: 1.2 }),
+            {
+              key: c.id,
+              "data-top-hardware-id": c.id,
+              transform: rot,
+              opacity: hwOpacity,
+            },
+            React.createElement("circle", {
+              cx,
+              cy,
+              r: R,
+              fill: "#1a1c1e",
+              stroke: "none",
+            }),
+            React.createElement("circle", {
+              cx,
+              cy,
+              r: R,
+              fill: "none",
+              stroke: "rgba(255,255,255,0.18)",
+              strokeWidth: 0.5,
+            }),
+            React.createElement("circle", {
+              cx,
+              cy,
+              r: R - 0.3,
+              fill: "none",
+              stroke: "rgba(0,0,0,0.65)",
+              strokeWidth: 0.5,
+            }),
+            React.createElement("circle", {
+              cx,
+              cy,
+              r: Rid + 0.6,
+              fill: "none",
+              stroke: "rgba(0,0,0,0.75)",
+              strokeWidth: 1.2,
+            }),
             React.createElement("ellipse", {
               cx: cx - R * 0.2,
               cy: cy - R * 0.2,
@@ -1591,28 +1687,141 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
               stroke: "none",
               transform: `rotate(-45,${cx},${cy})`,
             }),
-            React.createElement("circle", { cx, cy, r: Rid, fill: "#090b0c", stroke: "none" }),
+            React.createElement("circle", {
+              cx,
+              cy,
+              r: Rid,
+              fill: "#090b0c",
+              stroke: "none",
+            }),
             ...bootRidges.flatMap((r, i) => [
-              React.createElement("circle", { key: `bsh${i}`, cx: cx + 0.22, cy: cy + 0.22, r, fill: "none", stroke: "rgba(0,0,0,0.42)", strokeWidth: 0.45 }),
-              React.createElement("circle", { key: `brd${i}`, cx, cy, r, fill: "none", stroke: "#050607", strokeWidth: i < 2 ? 1.1 : 0.8 }),
-              React.createElement("circle", { key: `brh${i}`, cx, cy, r, fill: "none", stroke: "rgba(255,255,255,0.05)", strokeWidth: 0.22 }),
+              React.createElement("circle", {
+                key: `bsh${i}`,
+                cx: cx + 0.22,
+                cy: cy + 0.22,
+                r,
+                fill: "none",
+                stroke: "rgba(0,0,0,0.42)",
+                strokeWidth: 0.45,
+              }),
+              React.createElement("circle", {
+                key: `brd${i}`,
+                cx,
+                cy,
+                r,
+                fill: "none",
+                stroke: "#050607",
+                strokeWidth: i < 2 ? 1.1 : 0.8,
+              }),
+              React.createElement("circle", {
+                key: `brh${i}`,
+                cx,
+                cy,
+                r,
+                fill: "none",
+                stroke: "rgba(255,255,255,0.05)",
+                strokeWidth: 0.22,
+              }),
             ]),
-            React.createElement("circle", { cx, cy, r: Rcap + 0.5, fill: "#060708", stroke: "rgba(0,0,0,0.55)", strokeWidth: 0.4 }),
-            React.createElement("circle", { cx, cy, r: Rcap, fill: "#111415", stroke: "#282a2c", strokeWidth: 0.2 }),
-            React.createElement("circle", { cx, cy, r: Rcap * 0.65, fill: "none", stroke: "rgba(0,0,0,0.32)", strokeWidth: 0.45 }),
-            React.createElement("ellipse", { cx: cx - Rcap * 0.32, cy: cy - Rcap * 0.38, rx: Rcap * 0.38, ry: Rcap * 0.26, fill: "rgba(255,255,255,0.13)", stroke: "none" }),
-            React.createElement("circle", { cx, cy, r: 0.65, fill: "#222426", stroke: "rgba(255,255,255,0.28)", strokeWidth: 0.1 }),
+            React.createElement("circle", {
+              cx,
+              cy,
+              r: Rcap + 0.5,
+              fill: "#060708",
+              stroke: "rgba(0,0,0,0.55)",
+              strokeWidth: 0.4,
+            }),
+            React.createElement("circle", {
+              cx,
+              cy,
+              r: Rcap,
+              fill: "#111415",
+              stroke: "#282a2c",
+              strokeWidth: 0.2,
+            }),
+            React.createElement("circle", {
+              cx,
+              cy,
+              r: Rcap * 0.65,
+              fill: "none",
+              stroke: "rgba(0,0,0,0.32)",
+              strokeWidth: 0.45,
+            }),
+            React.createElement("ellipse", {
+              cx: cx - Rcap * 0.32,
+              cy: cy - Rcap * 0.38,
+              rx: Rcap * 0.38,
+              ry: Rcap * 0.26,
+              fill: "rgba(255,255,255,0.13)",
+              stroke: "none",
+            }),
+            React.createElement("circle", {
+              cx,
+              cy,
+              r: 0.65,
+              fill: "#222426",
+              stroke: "rgba(255,255,255,0.28)",
+              strokeWidth: 0.1,
+            }),
             React.createElement("circle", { cx, cy, r: 0.22, fill: "#0d0e0f" }),
             ...screwCorners.flatMap(([ox, oy], i) => {
               const sx = cx + ox * screwOff;
               const sy = cy + oy * screwOff;
               return [
-                React.createElement("circle", { key: `ssd${i}`, cx: sx + 0.14, cy: sy + 0.14, r: 1.6, fill: "rgba(0,0,0,0.38)", stroke: "none" }),
-                React.createElement("circle", { key: `ssh${i}`, cx: sx, cy: sy, r: 1.55, fill: "#252729", stroke: "#4a4c4f", strokeWidth: 0.14 }),
-                React.createElement("circle", { key: `ssi${i}`, cx: sx, cy: sy, r: 1.1, fill: "#1e2022", stroke: "rgba(0,0,0,0.28)", strokeWidth: 0.1 }),
-                React.createElement("line", { key: `sc1${i}`, x1: sx - sl, y1: sy, x2: sx + sl, y2: sy, stroke: "#0a0b0c", strokeWidth: 0.28, strokeLinecap: "round" }),
-                React.createElement("line", { key: `sc2${i}`, x1: sx, y1: sy - sl, x2: sx, y2: sy + sl, stroke: "#0a0b0c", strokeWidth: 0.28, strokeLinecap: "round" }),
-                React.createElement("circle", { key: `shl${i}`, cx: sx - 0.42, cy: sy - 0.42, r: 0.52, fill: "rgba(255,255,255,0.15)", stroke: "none" }),
+                React.createElement("circle", {
+                  key: `ssd${i}`,
+                  cx: sx + 0.14,
+                  cy: sy + 0.14,
+                  r: 1.6,
+                  fill: "rgba(0,0,0,0.38)",
+                  stroke: "none",
+                }),
+                React.createElement("circle", {
+                  key: `ssh${i}`,
+                  cx: sx,
+                  cy: sy,
+                  r: 1.55,
+                  fill: "#252729",
+                  stroke: "#4a4c4f",
+                  strokeWidth: 0.14,
+                }),
+                React.createElement("circle", {
+                  key: `ssi${i}`,
+                  cx: sx,
+                  cy: sy,
+                  r: 1.1,
+                  fill: "#1e2022",
+                  stroke: "rgba(0,0,0,0.28)",
+                  strokeWidth: 0.1,
+                }),
+                React.createElement("line", {
+                  key: `sc1${i}`,
+                  x1: sx - sl,
+                  y1: sy,
+                  x2: sx + sl,
+                  y2: sy,
+                  stroke: "#0a0b0c",
+                  strokeWidth: 0.28,
+                  strokeLinecap: "round",
+                }),
+                React.createElement("line", {
+                  key: `sc2${i}`,
+                  x1: sx,
+                  y1: sy - sl,
+                  x2: sx,
+                  y2: sy + sl,
+                  stroke: "#0a0b0c",
+                  strokeWidth: 0.28,
+                  strokeLinecap: "round",
+                }),
+                React.createElement("circle", {
+                  key: `shl${i}`,
+                  cx: sx - 0.42,
+                  cy: sy - 0.42,
+                  r: 0.52,
+                  fill: "rgba(255,255,255,0.15)",
+                  stroke: "none",
+                }),
               ];
             }),
           );
@@ -1822,17 +2031,21 @@ const ComponentsLayer = React.memo(function ComponentsLayer({
             "g",
             { transform: `rotate(${c.rotation}, ${cx}, ${cy})` },
             getRearBodyRects(c).map((r) =>
-              React.createElement("rect", {
-                key: r.name,
-                "data-rear-part": r.name,
-                x: cx + r.x,
-                y: cy + r.y,
-                width: r.width,
-                height: r.height,
-                fill: isErr ? "rgba(255,50,50,0.5)" : "rgba(255,100,0,0.5)",
-                stroke: isErr ? "#ff3333" : "#ff6400",
-                strokeWidth: r.name === "Housing" ? 0.3 : 0.15,
-              }, React.createElement("title", null, r.name)),
+              React.createElement(
+                "rect",
+                {
+                  key: r.name,
+                  "data-rear-part": r.name,
+                  x: cx + r.x,
+                  y: cy + r.y,
+                  width: r.width,
+                  height: r.height,
+                  fill: isErr ? "rgba(255,50,50,0.5)" : "rgba(255,100,0,0.5)",
+                  stroke: isErr ? "#ff3333" : "#ff6400",
+                  strokeWidth: r.name === "Housing" ? 0.3 : 0.15,
+                },
+                React.createElement("title", null, r.name),
+              ),
             ),
           ),
         !useCheapDragShape &&
@@ -1853,55 +2066,55 @@ const ComponentsLayer = React.memo(function ComponentsLayer({
                 }),
               )
             : isDip8Socket(c)
-            ? React.createElement(
-                "g",
-                { transform: `rotate(${c.rotation}, ${cx}, ${cy})` },
-                React.createElement("rect", {
-                  x: cx - getFrontBounds(c).w / 2,
-                  y: cy - getFrontBounds(c).h / 2,
-                  width: getFrontBounds(c).w,
-                  height: getFrontBounds(c).h,
-                  fill: "rgba(200,200,200,0.035)",
-                  stroke: isErr ? "#ff3333" : isWarn ? "#ffa000" : "#555",
-                  strokeWidth: 0.18,
-                  strokeDasharray: "0.8 0.55",
-                }),
-                React.createElement("path", {
-                  d: `M ${cx - 1.3} ${cy - getFrontBounds(c).h / 2} A 1.3 1.3 0 0 0 ${cx + 1.3} ${cy - getFrontBounds(c).h / 2}`,
-                  fill: "none",
-                  stroke: "rgba(220,230,235,.55)",
-                  strokeWidth: "0.18",
-                }),
-              )
-            : getFrontShape(c) !== "circle"
-              ? isFaderLike(c)
-                ? null
-                : React.createElement(
-                    "g",
-                    { transform: `rotate(${c.rotation}, ${cx}, ${cy})` },
-                    React.createElement("rect", {
-                      x: cx - getFrontBounds(c).w / 2,
-                      y: cy - getFrontBounds(c).h / 2,
-                      width: getFrontBounds(c).w,
-                      height: getFrontBounds(c).h,
-                      fill: isErr
-                        ? "rgba(255,50,50,0.12)"
-                        : "rgba(200,200,200,0.07)",
-                      stroke: isErr ? "#ff3333" : isWarn ? "#ffa000" : "#444",
-                      strokeWidth: 0.25,
-                    }),
-                  )
-              : c.holeType !== "slot" &&
-                React.createElement("circle", {
-                  cx: cx,
-                  cy: cy,
-                  r: c.frontDiameter / 2,
-                  fill: isErr
-                    ? "rgba(255,50,50,0.12)"
-                    : "rgba(200,200,200,0.07)",
-                  stroke: isErr ? "#ff3333" : isWarn ? "#ffa000" : "#444",
-                  strokeWidth: 0.25,
-                })),
+              ? React.createElement(
+                  "g",
+                  { transform: `rotate(${c.rotation}, ${cx}, ${cy})` },
+                  React.createElement("rect", {
+                    x: cx - getFrontBounds(c).w / 2,
+                    y: cy - getFrontBounds(c).h / 2,
+                    width: getFrontBounds(c).w,
+                    height: getFrontBounds(c).h,
+                    fill: "rgba(200,200,200,0.035)",
+                    stroke: isErr ? "#ff3333" : isWarn ? "#ffa000" : "#555",
+                    strokeWidth: 0.18,
+                    strokeDasharray: "0.8 0.55",
+                  }),
+                  React.createElement("path", {
+                    d: `M ${cx - 1.3} ${cy - getFrontBounds(c).h / 2} A 1.3 1.3 0 0 0 ${cx + 1.3} ${cy - getFrontBounds(c).h / 2}`,
+                    fill: "none",
+                    stroke: "rgba(220,230,235,.55)",
+                    strokeWidth: "0.18",
+                  }),
+                )
+              : getFrontShape(c) !== "circle"
+                ? isFaderLike(c)
+                  ? null
+                  : React.createElement(
+                      "g",
+                      { transform: `rotate(${c.rotation}, ${cx}, ${cy})` },
+                      React.createElement("rect", {
+                        x: cx - getFrontBounds(c).w / 2,
+                        y: cy - getFrontBounds(c).h / 2,
+                        width: getFrontBounds(c).w,
+                        height: getFrontBounds(c).h,
+                        fill: isErr
+                          ? "rgba(255,50,50,0.12)"
+                          : "rgba(200,200,200,0.07)",
+                        stroke: isErr ? "#ff3333" : isWarn ? "#ffa000" : "#444",
+                        strokeWidth: 0.25,
+                      }),
+                    )
+                : c.holeType !== "slot" &&
+                  React.createElement("circle", {
+                    cx: cx,
+                    cy: cy,
+                    r: c.frontDiameter / 2,
+                    fill: isErr
+                      ? "rgba(255,50,50,0.12)"
+                      : "rgba(200,200,200,0.07)",
+                    stroke: isErr ? "#ff3333" : isWarn ? "#ffa000" : "#444",
+                    strokeWidth: 0.25,
+                  })),
         !useCheapDragShape &&
           layers.frontShapes &&
           (viewMode === "front" || viewMode === "combined") &&
@@ -1938,66 +2151,66 @@ const ComponentsLayer = React.memo(function ComponentsLayer({
                 ),
               )
             : isJoystick(c)
-            ? React.createElement(
-                "g",
-                null,
-                React.createElement("circle", {
-                  cx,
-                  cy,
-                  r: c.holeDiameter / 2,
-                  fill: "#090909",
-                  stroke: isSel ? "#c99a4a" : "#888",
-                  strokeWidth: isSel ? 0.4 : 0.3,
-                }),
-                ...joystickMountHoles(c, cx, cy).map((p, i) =>
-                  React.createElement("circle", {
-                    key: `jm-${i}`,
-                    cx: p.x,
-                    cy: p.y,
-                    r: p.r,
-                    fill: "#090909",
-                    stroke: isSel ? "#c99a4a" : "#888",
-                    strokeWidth: isSel ? 0.32 : 0.24,
-                  }),
-                ),
-              )
-            : c.holeType === "slot"
               ? React.createElement(
                   "g",
-                  { transform: `rotate(${c.rotation}, ${cx}, ${cy})` },
-                  React.createElement("rect", {
-                    x: cx - c.holeDiameter / 2,
-                    y: cy - (c.slotLength ?? c.holeDiameter) / 2,
-                    width: c.holeDiameter,
-                    height: c.slotLength ?? c.holeDiameter,
-                    rx: c.holeDiameter / 2,
+                  null,
+                  React.createElement("circle", {
+                    cx,
+                    cy,
+                    r: c.holeDiameter / 2,
                     fill: "#090909",
                     stroke: isSel ? "#c99a4a" : "#888",
                     strokeWidth: isSel ? 0.4 : 0.3,
                   }),
+                  ...joystickMountHoles(c, cx, cy).map((p, i) =>
+                    React.createElement("circle", {
+                      key: `jm-${i}`,
+                      cx: p.x,
+                      cy: p.y,
+                      r: p.r,
+                      fill: "#090909",
+                      stroke: isSel ? "#c99a4a" : "#888",
+                      strokeWidth: isSel ? 0.32 : 0.24,
+                    }),
+                  ),
                 )
-              : c.holeType === "rect"
+              : c.holeType === "slot"
                 ? React.createElement(
                     "g",
                     { transform: `rotate(${c.rotation}, ${cx}, ${cy})` },
                     React.createElement("rect", {
-                      x: cx - (c.holeW ?? c.frontW ?? c.holeDiameter) / 2,
-                      y: cy - (c.holeH ?? c.frontH ?? c.holeDiameter) / 2,
-                      width: c.holeW ?? c.frontW ?? c.holeDiameter,
-                      height: c.holeH ?? c.frontH ?? c.holeDiameter,
+                      x: cx - c.holeDiameter / 2,
+                      y: cy - (c.slotLength ?? c.holeDiameter) / 2,
+                      width: c.holeDiameter,
+                      height: c.slotLength ?? c.holeDiameter,
+                      rx: c.holeDiameter / 2,
                       fill: "#090909",
                       stroke: isSel ? "#c99a4a" : "#888",
                       strokeWidth: isSel ? 0.4 : 0.3,
                     }),
                   )
-                : React.createElement("circle", {
-                    cx: cx,
-                    cy: cy,
-                    r: c.holeDiameter / 2,
-                    fill: "#090909",
-                    stroke: isSel ? "#c99a4a" : "#888",
-                    strokeWidth: isSel ? 0.4 : 0.3,
-                  })),
+                : c.holeType === "rect"
+                  ? React.createElement(
+                      "g",
+                      { transform: `rotate(${c.rotation}, ${cx}, ${cy})` },
+                      React.createElement("rect", {
+                        x: cx - (c.holeW ?? c.frontW ?? c.holeDiameter) / 2,
+                        y: cy - (c.holeH ?? c.frontH ?? c.holeDiameter) / 2,
+                        width: c.holeW ?? c.frontW ?? c.holeDiameter,
+                        height: c.holeH ?? c.frontH ?? c.holeDiameter,
+                        fill: "#090909",
+                        stroke: isSel ? "#c99a4a" : "#888",
+                        strokeWidth: isSel ? 0.4 : 0.3,
+                      }),
+                    )
+                  : React.createElement("circle", {
+                      cx: cx,
+                      cy: cy,
+                      r: c.holeDiameter / 2,
+                      fill: "#090909",
+                      stroke: isSel ? "#c99a4a" : "#888",
+                      strokeWidth: isSel ? 0.4 : 0.3,
+                    })),
         !useCheapDragShape &&
           viewMode === "drill" &&
           React.createElement(
@@ -2457,7 +2670,12 @@ function SelectionActionToolbar() {
       onMouseDown: (e) => e.stopPropagation(),
       onWheel: (e) => e.stopPropagation(),
     },
-    React.createElement("span", { className: "selection-action-count" }, count, " selected"),
+    React.createElement(
+      "span",
+      { className: "selection-action-count" },
+      count,
+      " selected",
+    ),
     React.createElement(
       "button",
       {
@@ -3841,20 +4059,38 @@ function SVGCanvas({
           "div",
           { className: "canvas-empty-state" },
           React.createElement("strong", null, "Start your panel"),
-          React.createElement("span", null, "Place a component, start from a template, or import a board."),
+          React.createElement(
+            "span",
+            null,
+            "Place a component, start from a template, or import a board.",
+          ),
           React.createElement(
             "div",
             { className: "canvas-empty-actions" },
-            React.createElement("button", { onClick: () => AppCommands.openComponentLibraryPicker() }, "Add component"),
-            React.createElement("button", { onClick: () => AppCommands.openTemplatesDialog() }, "Templates"),
             React.createElement(
               "button",
-              { onClick: () => document.getElementById("kicad-pcb-file-input")?.click() },
+              { onClick: () => AppCommands.openComponentLibraryPicker() },
+              "Add component",
+            ),
+            React.createElement(
+              "button",
+              { onClick: () => AppCommands.openTemplatesDialog() },
+              "Templates",
+            ),
+            React.createElement(
+              "button",
+              {
+                onClick: () =>
+                  document.getElementById("kicad-pcb-file-input")?.click(),
+              },
               "Import KiCad",
             ),
             React.createElement(
               "button",
-              { onClick: () => document.getElementById("eagle-brd-file-input")?.click() },
+              {
+                onClick: () =>
+                  document.getElementById("eagle-brd-file-input")?.click(),
+              },
               "Import Eagle",
             ),
           ),

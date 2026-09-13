@@ -94,7 +94,8 @@
         "--ui-gold-alt-rgb": "70,160,235",
         "--ui-line-rgb": "120,180,225",
         "--theme-radius": "0px",
-        "--theme-font": '"JetBrains Mono","IBM Plex Mono",ui-monospace,monospace',
+        "--theme-font":
+          '"JetBrains Mono","IBM Plex Mono",ui-monospace,monospace',
         "--theme-tracking": "0.08em",
         "--theme-weight-brand": "600",
         "--theme-btn-height": "30px",
@@ -259,7 +260,8 @@
         "--ui-gold-alt-rgb": "220,140,0",
         "--ui-line-rgb": "220,160,60",
         "--theme-radius": "0px",
-        "--theme-font": '"JetBrains Mono","IBM Plex Mono",ui-monospace,monospace',
+        "--theme-font":
+          '"JetBrains Mono","IBM Plex Mono",ui-monospace,monospace',
         "--theme-tracking": "0.10em",
         "--theme-weight-brand": "600",
         "--theme-btn-height": "32px",
@@ -391,7 +393,8 @@
         "--ui-gold-alt-rgb": "60,210,130",
         "--ui-line-rgb": "100,200,160",
         "--theme-radius": "0px",
-        "--theme-font": '"JetBrains Mono","IBM Plex Mono",ui-monospace,monospace',
+        "--theme-font":
+          '"JetBrains Mono","IBM Plex Mono",ui-monospace,monospace',
         "--theme-tracking": "0.08em",
         "--theme-weight-brand": "600",
         "--theme-btn-height": "30px",
@@ -479,11 +482,18 @@
 
   const FONT_OPTIONS = [
     { label: "Inter", value: 'Inter,"SF Pro Text",system-ui,sans-serif' },
-    { label: "Helvetica", value: '"Helvetica Neue",Helvetica,Arial,sans-serif' },
-    { label: "Plex", value: '"IBM Plex Sans","Helvetica Neue",system-ui,sans-serif' },
+    {
+      label: "Helvetica",
+      value: '"Helvetica Neue",Helvetica,Arial,sans-serif',
+    },
+    {
+      label: "Plex",
+      value: '"IBM Plex Sans","Helvetica Neue",system-ui,sans-serif',
+    },
     {
       label: "Mono",
-      value: '"JetBrains Mono","IBM Plex Mono",ui-monospace,"Fira Code",monospace',
+      value:
+        '"JetBrains Mono","IBM Plex Mono",ui-monospace,"Fira Code",monospace',
     },
     {
       label: "System",
