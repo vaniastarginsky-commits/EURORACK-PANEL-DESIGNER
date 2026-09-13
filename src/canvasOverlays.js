@@ -1,6 +1,6 @@
 // Canvas overlay React components: ScaleLayer, TemplateGhostLayer,
 // ComponentHoverTooltip, SnapFeedbackBadge, DFMStatusFloat.
-// Depends on: React globals (useState, useMemo), useAppState, useAppDispatch,
+// Depends on: React globals (useState, useMemo, useEffect, useRef), useAppState, useAppDispatch,
 // isFaderLike, getFrontBounds, getFrontTopOffset, getFrontBottomOffset,
 // getScaleReferenceRadius, isPartVerified, verificationLabel — all from core.js.
 const ScaleLayer = React.memo(function ScaleLayer({
@@ -355,6 +355,7 @@ function SnapFeedbackBadge({ guides }) {
 function DFMStatusFloat({ warnings }) {
   const state = useAppState();
   const [open, setOpen] = useState(false);
+  const rootRef = useRef(null);
   const hard = warnings.filter((w) => w.severity === "error").length;
   const warn = warnings.length - hard;
   const approxParts = state.components.filter((c) => !isPartVerified(c));
@@ -365,6 +366,15 @@ function DFMStatusFloat({ warnings }) {
     [state.components],
   );
   const visibleWarnings = warnings.slice(0, 10);
+  useEffect(() => {
+    if (!open) return undefined;
+    const closeOnOutsidePointer = (event) => {
+      if (!rootRef.current?.contains(event.target)) setOpen(false);
+    };
+    document.addEventListener("pointerdown", closeOnOutsidePointer);
+    return () =>
+      document.removeEventListener("pointerdown", closeOnOutsidePointer);
+  }, [open]);
   function selectIssue(ids) {
     const realIds = ids.filter((id) => componentIdSet.has(id));
     if (realIds.length)
@@ -377,6 +387,7 @@ function DFMStatusFloat({ warnings }) {
   return React.createElement(
     "div",
     {
+      ref: rootRef,
       className: `dfm-status-float ${tone} ${open ? "open" : ""}`,
       onMouseDown: (e) => e.stopPropagation(),
       onTouchStart: (e) => e.stopPropagation(),

@@ -334,6 +334,17 @@ const states = [
     },
   ],
   [
+    "desktop-dfm-click-away",
+    desktop,
+    async (page) => {
+      await placeComponentOnCanvas(page);
+      await page.locator(".dfm-status-main").click();
+      await page.locator(".dfm-status-drawer").waitFor({ state: "visible" });
+      await page.mouse.click(900, 400);
+      await page.locator(".dfm-status-drawer").waitFor({ state: "detached" });
+    },
+  ],
+  [
     "desktop-manufacturing-preview",
     desktop,
     async (page) => {
