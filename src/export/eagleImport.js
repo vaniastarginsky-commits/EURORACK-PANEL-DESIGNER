@@ -70,6 +70,154 @@ function parseEaglePlainCutouts(doc) {
   }
   return cutouts;
 }
+function eagleSvgNumber(value) {
+  return Math.round(value * 10000) / 10000;
+}
+function escapeEagleSvgText(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+function eagleWirePoints(wire) {
+  const x1 = parseFloat(wire.getAttribute("x1"));
+  const y1 = parseFloat(wire.getAttribute("y1"));
+  const x2 = parseFloat(wire.getAttribute("x2"));
+  const y2 = parseFloat(wire.getAttribute("y2"));
+  if (![x1, y1, x2, y2].every(Number.isFinite)) return [];
+  const curve = parseFloat(wire.getAttribute("curve") || "0");
+  if (!Number.isFinite(curve) || Math.abs(curve) < 0.001)
+    return [
+      { x: x1, y: y1 },
+      { x: x2, y: y2 },
+    ];
+  const theta = (curve * Math.PI) / 180;
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const chord = Math.hypot(dx, dy);
+  if (chord < 0.0001 || Math.abs(Math.sin(theta / 2)) < 0.0001)
+    return [
+      { x: x1, y: y1 },
+      { x: x2, y: y2 },
+    ];
+  const centerOffset = chord / (2 * Math.tan(theta / 2));
+  const cx = (x1 + x2) / 2 + (-dy / chord) * centerOffset;
+  const cy = (y1 + y2) / 2 + (dx / chord) * centerOffset;
+  const start = Math.atan2(y1 - cy, x1 - cx);
+  const radius = Math.hypot(x1 - cx, y1 - cy);
+  const segments = Math.max(2, Math.ceil(Math.abs(curve) / 8));
+  return Array.from({ length: segments + 1 }, (_, index) => {
+    const angle = start + theta * (index / segments);
+    return {
+      x: cx + radius * Math.cos(angle),
+      y: cy + radius * Math.sin(angle),
+    };
+  });
+}
+function eaglePrimitiveSvg(element, outline, mode) {
+  const x = (value) => eagleSvgNumber(parseFloat(value) - outline.x);
+  const y = (value) =>
+    eagleSvgNumber(outline.y + outline.height - parseFloat(value));
+  const width = Math.max(
+    0.05,
+    parseFloat(element.getAttribute("width") || "0.1"),
+  );
+  const paint =
+    mode === "mask"
+      ? 'fill="none" stroke="white"'
+      : mode === "silk"
+        ? 'fill="none" stroke="#f2f0e9"'
+        : 'fill="#c99a4a" stroke="#c99a4a"';
+  if (element.tagName === "wire") {
+    const points = eagleWirePoints(element);
+    if (points.length < 2) return "";
+    const d = points
+      .map((point, index) => `${index ? "L" : "M"}${x(point.x)} ${y(point.y)}`)
+      .join(" ");
+    return `<path d="${d}" ${paint} stroke-width="${eagleSvgNumber(width)}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  }
+  if (element.tagName === "circle") {
+    const radius = parseFloat(element.getAttribute("radius"));
+    if (!Number.isFinite(radius) || radius <= 0) return "";
+    return `<circle cx="${x(element.getAttribute("x"))}" cy="${y(element.getAttribute("y"))}" r="${eagleSvgNumber(radius)}" ${paint} stroke-width="${eagleSvgNumber(width)}"/>`;
+  }
+  if (element.tagName === "rectangle") {
+    const x1 = x(element.getAttribute("x1"));
+    const x2 = x(element.getAttribute("x2"));
+    const y1 = y(element.getAttribute("y1"));
+    const y2 = y(element.getAttribute("y2"));
+    return `<rect x="${Math.min(x1, x2)}" y="${Math.min(y1, y2)}" width="${eagleSvgNumber(Math.abs(x2 - x1))}" height="${eagleSvgNumber(Math.abs(y2 - y1))}" ${paint}/>`;
+  }
+  if (element.tagName === "text") {
+    const size = Math.max(
+      0.5,
+      parseFloat(element.getAttribute("size") || "1.27"),
+    );
+    const px = x(element.getAttribute("x"));
+    const py = y(element.getAttribute("y"));
+    const rotation = parseEagleRotation(element.getAttribute("rot") || "");
+    const mirrored = /^M/i.test(element.getAttribute("rot") || "");
+    const transform = [
+      `translate(${px} ${py})`,
+      rotation ? `rotate(${-rotation})` : "",
+      mirrored ? "scale(-1 1)" : "",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    const fill = mode === "silk" ? "#f2f0e9" : "white";
+    return `<text transform="${transform}" x="0" y="0" fill="${fill}" stroke="none" font-family="Arial, sans-serif" font-size="${eagleSvgNumber(size)}" dominant-baseline="alphabetic">${escapeEagleSvgText(element.textContent)}</text>`;
+  }
+  return "";
+}
+function parseEagleFrontArtwork(doc, outline, xOffset, yOffset) {
+  if (!outline) return [];
+  const plain =
+    doc.querySelector("board > plain") || doc.querySelector("plain");
+  if (!plain) return [];
+  const elements = [...plain.children];
+  const topCopper = elements.filter((el) => el.getAttribute("layer") === "1");
+  const topStop = elements.filter((el) => el.getAttribute("layer") === "29");
+  const topSilk = elements.filter((el) =>
+    ["21", "25", "27"].includes(el.getAttribute("layer")),
+  );
+  if (!topCopper.length && !topStop.length && !topSilk.length) return [];
+  const copperSvg = topCopper
+    .map((el) => eaglePrimitiveSvg(el, outline, "copper"))
+    .join("");
+  const stopSvg = topStop
+    .map((el) => eaglePrimitiveSvg(el, outline, "mask"))
+    .join("");
+  const silkSvg = topSilk
+    .map((el) => eaglePrimitiveSvg(el, outline, "silk"))
+    .join("");
+  const maskedCopper =
+    copperSvg && stopSvg
+      ? `<defs><mask id="eagle-top-stop" maskUnits="userSpaceOnUse"><rect width="100%" height="100%" fill="black"/>${stopSvg}</mask></defs><g mask="url(#eagle-top-stop)">${copperSvg}</g>`
+      : copperSvg ||
+        (stopSvg ? `<g stroke="#c99a4a" fill="#c99a4a">${stopSvg}</g>` : "");
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${eagleSvgNumber(outline.width)} ${eagleSvgNumber(outline.height)}">${maskedCopper}${silkSvg}</svg>`;
+  return [
+    {
+      id: crypto.randomUUID(),
+      name: "Eagle front artwork",
+      imageDataUrl: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`,
+      x: xOffset + outline.width / 2,
+      y: yOffset + outline.height / 2,
+      width: outline.width,
+      height: outline.height,
+      naturalW: outline.width,
+      naturalH: outline.height,
+      rotation: 0,
+      opacity: 1,
+      locked: true,
+      visible: true,
+      layer: "background",
+      preserveAspectRatio: false,
+      notes: "Imported from Eagle top copper, tStop and top silkscreen layers.",
+    },
+  ];
+}
 function parseEagleRotation(rotStr) {
   if (!rotStr) return 0;
   const m = rotStr.match(/M?R(\d+(?:\.\d+)?)/i);
@@ -190,6 +338,7 @@ function parseEagleBrdToPanel(xmlSrc, currentPanelWidthMM) {
   const yOffset = outline
     ? Math.max(0, (PANEL_HEIGHT_MM - boardHeight) / 2)
     : (PANEL_HEIGHT_MM - boardHeight) / 2;
+  const artworks = parseEagleFrontArtwork(doc, outline, xOffset, yOffset);
   const usedRefs = new Set();
   const components = [];
   let skippedNonPanelCount = 0;
@@ -288,8 +437,13 @@ function parseEagleBrdToPanel(xmlSrc, currentPanelWidthMM) {
     warnings.push(
       `Matched ${standardMountingHoleCount} rail holes to automatic Eurorack mounting holes without duplicating them.`,
     );
+  if (artworks.length)
+    warnings.push(
+      "Imported Eagle top copper, solder-mask openings and silkscreen as editable artwork.",
+    );
   return {
     components,
+    artworks,
     panelWidthMM: targetWidth,
     boardOutline: outline
       ? {

@@ -193,7 +193,7 @@ function appReducer(state, action) {
         components: action.components,
         textItems: [],
         scaleItems: [],
-        artworks: [],
+        artworks: Array.isArray(action.artworks) ? action.artworks : [],
         selected: action.components.map((c) => c.id),
         selectedArtwork: null,
         selectedTexts: [],

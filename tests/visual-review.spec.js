@@ -473,6 +473,11 @@ const states = [
           <hole x="7.33" y="3" drill="3.2"/>
           <hole x="14" y="82" drill="7.2"/>
           <circle x="27" y="46" radius="3.05" width="0" layer="46"/>
+          <rectangle x1="4" y1="20" x2="36" y2="108" layer="1"/>
+          <wire x1="8" y1="24" x2="32" y2="104" width="1.2" layer="29"/>
+          <circle x="20" y="64" radius="8" width="1.2" layer="29"/>
+          <text x="9" y="32" size="3" layer="29">MASK ART</text>
+          <wire x1="7" y1="116" x2="33" y2="116" width="0.5" layer="21"/>
         </plain><elements/></board></drawing></eagle>`;
       await page.locator("#eagle-brd-file-input").setInputFiles({
         name: "mechanical-faceplate.brd",
@@ -495,6 +500,15 @@ const states = [
         throw new Error("Eagle <hole> cutout was not imported");
       if (!cutoutLabels.some((label) => label.includes("Ø6.10")))
         throw new Error("Eagle milling circle cutout was not imported");
+      const artwork = page.locator("[data-artwork-id]");
+      if ((await artwork.count()) !== 1)
+        throw new Error(
+          "Eagle front copper/mask/silkscreen artwork was not imported",
+        );
+      const artworkImage = artwork.locator("image");
+      const artworkHref = await artworkImage.getAttribute("href");
+      if (!artworkHref?.startsWith("data:image/svg+xml"))
+        throw new Error("Eagle front artwork should remain vector SVG");
     },
   ],
   [

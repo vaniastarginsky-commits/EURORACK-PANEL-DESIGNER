@@ -3248,16 +3248,19 @@ function App() {
       dispatch({
         type: "LOAD_KICAD_IMPORT",
         components: result.components,
+        artworks: result.artworks,
         panelWidthMM: result.panelWidthMM,
         boardOutline: result.boardOutline,
       });
       dispatch({ type: "SET_VIEW_MODE", mode: "front" });
       setAutosaveStatus(
-        `Imported Eagle .brd · ${result.components.length} panel features`,
+        `Imported Eagle .brd · ${result.components.length} panel features · ${result.artworks.length} artwork`,
       );
       const msg = [
         `Imported Eagle panel with ${result.components.length} panel features.`,
       ];
+      if (result.artworks.length)
+        msg.push(`Imported ${result.artworks.length} front artwork layer.`);
       if (result.boardOutline)
         msg.push(
           `Board outline: ${result.boardOutline.width.toFixed(2)} × ${result.boardOutline.height.toFixed(2)} mm.`,
