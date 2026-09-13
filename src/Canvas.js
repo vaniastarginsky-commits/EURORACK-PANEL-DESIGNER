@@ -175,7 +175,11 @@ const MountingHolesLayer = React.memo(function MountingHolesLayer({ config }) {
     config.holes.map((h) =>
       React.createElement(
         "g",
-        { key: h.id },
+        {
+          key: h.id,
+          "data-mounting-hole-id": h.id,
+          "data-mounting-hole-x": h.x,
+        },
         config.showKeepouts &&
           kr > 0 &&
           React.createElement("circle", {

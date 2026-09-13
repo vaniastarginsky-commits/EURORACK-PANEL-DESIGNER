@@ -153,6 +153,13 @@ function appReducer(state, action) {
           : panelWidthMM(state.panel);
       const hp = Math.max(2, Math.ceil(importedWidth / HP_TO_MM));
       const panelWidth = hp * HP_TO_MM;
+      const importedMountingPreset =
+        state.mountingHoles.preset === "custom" ||
+        state.mountingHoles.preset === "none"
+          ? state.mountingHoles.preset
+          : state.mountingHoles.holeShape === "oval"
+            ? "autoOval"
+            : "auto";
       return withHistory(state, {
         ...snapshot(state),
         panel: {
@@ -173,13 +180,14 @@ function appReducer(state, action) {
             }
           : { ...state.pcb, x: 0, width: panelWidth },
         mountingHoles:
-          state.mountingHoles.preset === "custom"
+          importedMountingPreset === "custom"
             ? state.mountingHoles
             : {
                 ...state.mountingHoles,
+                preset: importedMountingPreset,
                 holes: mountingHolesForPreset(
                   panelWidth,
-                  state.mountingHoles.preset,
+                  importedMountingPreset,
                 ),
               },
         components: action.components,

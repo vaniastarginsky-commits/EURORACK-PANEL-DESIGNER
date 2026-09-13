@@ -485,7 +485,7 @@ function MountingHolesPanel() {
         preset,
         enabled: preset !== "none",
         holeShape:
-          preset === "fourOval" || preset === "twoOval"
+          preset === "autoOval" || preset === "fourOval" || preset === "twoOval"
             ? "oval"
             : preset === "custom"
               ? mh.holeShape
@@ -554,9 +554,19 @@ function MountingHolesPanel() {
         "select",
         {
           style: { width: "100%" },
-          value: mh.preset ?? "four",
+          value: mh.preset ?? "autoOval",
           onChange: (e) => applyPreset(e.target.value),
         },
+        React.createElement(
+          "option",
+          { value: "autoOval" },
+          "Automatic Eurorack / oval",
+        ),
+        React.createElement(
+          "option",
+          { value: "auto" },
+          "Automatic Eurorack / round",
+        ),
         React.createElement("option", { value: "four" }, "4 holes / standard"),
         React.createElement(
           "option",

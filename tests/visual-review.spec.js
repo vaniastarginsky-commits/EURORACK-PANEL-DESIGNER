@@ -305,6 +305,25 @@ const states = [
       const mountingHoles = page.locator(".mounting-holes-layer");
       await artwork.waitFor({ state: "visible" });
       await mountingHoles.waitFor({ state: "visible" });
+      const mountingHoleNodes = page.locator(
+        ".mounting-holes-layer > [data-mounting-hole-id]",
+      );
+      if ((await mountingHoleNodes.count()) !== 4)
+        throw new Error("12HP panel should use four mounting holes");
+      const mountingXs = await mountingHoleNodes.evaluateAll((nodes) =>
+        Array.from(
+          new Set(
+            nodes.map((node) =>
+              Number(node.getAttribute("data-mounting-hole-x")),
+            ),
+          ),
+        ).sort((a, b) => a - b),
+      );
+      const pitchCount = (mountingXs[1] - mountingXs[0]) / 5.08;
+      if (Math.abs(pitchCount - Math.round(pitchCount)) > 0.001)
+        throw new Error(
+          "Wide-panel mounting-hole spacing must follow HP pitch",
+        );
       const artworkAboveMountingHoles = await artwork.evaluate((node) => {
         const holes = document.querySelector(".mounting-holes-layer");
         return !!(
@@ -408,12 +427,12 @@ const states = [
         (pad "2" thru_hole circle (at 2.5 0) (size 2 2) (drill 1) (layers "*.Cu" "*.Mask"))
         (pad "3" thru_hole circle (at 5 0) (size 2 2) (drill 1) (layers "*.Cu" "*.Mask"))`;
       const board = `(kicad_pcb
-        (gr_rect (start 0 0) (end 60 128.5) (layer "Edge.Cuts"))
-        ${footprint("Resistor_SMD:R_0603_1608Metric", "R1", "10k", 10, 20, smdPads)}
-        ${footprint("Capacitor_SMD:C_0603_1608Metric", "C1", "100nF", 18, 20, smdPads)}
-        ${footprint("Potentiometer_THT:Potentiometer_Alpha_RD901F-40", "RV1", "B100K", 15, 48, throughHolePads)}
-        ${footprint("Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical", "J1", "AudioJack", 30, 70, throughHolePads)}
-        ${footprint("Button_Switch_THT:SW_PUSH_6mm", "SW1", "SW_Push", 45, 48, throughHolePads)}
+        (gr_rect (start 0 0) (end 40.64 128.5) (layer "Edge.Cuts"))
+        ${footprint("Resistor_SMD:R_0603_1608Metric", "R1", "10k", 6, 20, smdPads)}
+        ${footprint("Capacitor_SMD:C_0603_1608Metric", "C1", "100nF", 12, 20, smdPads)}
+        ${footprint("Potentiometer_THT:Potentiometer_Alpha_RD901F-40", "RV1", "B100K", 10, 48, throughHolePads)}
+        ${footprint("Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical", "J1", "AudioJack", 20, 70, throughHolePads)}
+        ${footprint("Button_Switch_THT:SW_PUSH_6mm", "SW1", "SW_Push", 30, 48, throughHolePads)}
       )`;
       await page.locator("#kicad-pcb-file-input").setInputFiles({
         name: "panel-parts-only.kicad_pcb",
@@ -428,6 +447,16 @@ const states = [
         .evaluateAll((nodes) => nodes.map((node) => node.textContent || ""));
       if (labels.some((label) => /R1|C1/.test(label)))
         throw new Error("KiCad import included PCB-only resistor/capacitor");
+      const mountingHoles = page.locator(
+        ".mounting-holes-layer > [data-mounting-hole-id]",
+      );
+      if ((await mountingHoles.count()) !== 2)
+        throw new Error("8HP KiCad import should use two mounting holes");
+      const mountingX = await mountingHoles.evaluateAll((nodes) =>
+        nodes.map((node) => Number(node.getAttribute("data-mounting-hole-x"))),
+      );
+      if (mountingX.some((x) => Math.abs(x - 7.5) > 0.001))
+        throw new Error("Narrow-panel mounting holes must be at X=7.5mm");
     },
   ],
 

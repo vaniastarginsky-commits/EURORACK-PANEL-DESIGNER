@@ -336,17 +336,31 @@ function normalizeMountingHoleRail(h) {
   const side = mountingHoleSide(h);
   return { ...h, y: mountingHoleRailY(side) };
 }
+function automaticMountingHolePreset(widthMM, holeShape = "oval") {
+  const count = widthMM <= 10 * HP_TO_MM + 0.01 ? "two" : "four";
+  return holeShape === "oval" ? `${count}Oval` : count;
+}
 function mountingHolesForPreset(widthMM, preset = "four") {
   const xL = 7.5;
-  const xR = Math.max(xL, widthMM - 7.5);
-  const xC = widthMM / 2;
+  const resolvedPreset =
+    preset === "auto" || preset === "autoOval"
+      ? automaticMountingHolePreset(
+          widthMM,
+          preset === "autoOval" ? "oval" : "circle",
+        )
+      : preset;
+  const horizontalPitchCount = Math.max(
+    1,
+    Math.round((widthMM - xL * 2) / HP_TO_MM),
+  );
+  const xR = xL + horizontalPitchCount * HP_TO_MM;
   const yT = mountingHoleRailY("top");
   const yB = mountingHoleRailY("bottom");
-  if (preset === "none") return [];
-  if (preset === "two" || preset === "twoOval") {
+  if (resolvedPreset === "none") return [];
+  if (resolvedPreset === "two" || resolvedPreset === "twoOval") {
     return [
-      { id: "mh-t", x: xC, y: yT },
-      { id: "mh-b", x: xC, y: yB },
+      { id: "mh-t", x: xL, y: yT },
+      { id: "mh-b", x: xL, y: yB },
     ];
   }
   return [
@@ -366,13 +380,15 @@ function defaultMountingHoleConfig(widthMM) {
     keepoutRadius: 1.0,
     holeShape: "oval",
     ovalLength: 4.8,
-    preset: "fourOval",
-    holes: mountingHolesForPreset(widthMM, "fourOval"),
+    preset: "autoOval",
+    holes: mountingHolesForPreset(widthMM, "autoOval"),
   };
 }
 function normalizeMountingHoleConfig(raw, widthMM) {
   const obj = raw && typeof raw === "object" && !Array.isArray(raw) ? raw : {};
   const preset =
+    obj.preset === "auto" ||
+    obj.preset === "autoOval" ||
     obj.preset === "two" ||
     obj.preset === "twoOval" ||
     obj.preset === "fourOval" ||
@@ -380,8 +396,8 @@ function normalizeMountingHoleConfig(raw, widthMM) {
     obj.preset === "custom" ||
     obj.preset === "four"
       ? obj.preset
-      : "four";
-  let holes = Array.isArray(obj.holes)
+      : "autoOval";
+  const storedHoles = Array.isArray(obj.holes)
     ? obj.holes
         .filter((h) => h && typeof h === "object")
         .map((h, i) =>
@@ -391,13 +407,9 @@ function normalizeMountingHoleConfig(raw, widthMM) {
             y: typeof h.y === "number" ? h.y : PANEL_HEIGHT_MM / 2,
           }),
         )
-    : mountingHolesForPreset(widthMM, preset);
-  if (
-    preset !== "custom" &&
-    (!Array.isArray(obj.holes) || holes.length === 0)
-  ) {
-    holes = mountingHolesForPreset(widthMM, preset);
-  }
+    : [];
+  const holes =
+    preset === "custom" ? storedHoles : mountingHolesForPreset(widthMM, preset);
   return {
     enabled: typeof obj.enabled === "boolean" ? obj.enabled : true,
     showKeepouts:
@@ -407,7 +419,10 @@ function normalizeMountingHoleConfig(raw, widthMM) {
         ? Math.max(0, obj.keepoutRadius)
         : 1.0,
     holeShape:
-      obj.holeShape === "oval" || preset === "fourOval" || preset === "twoOval"
+      obj.holeShape === "oval" ||
+      preset === "autoOval" ||
+      preset === "fourOval" ||
+      preset === "twoOval"
         ? "oval"
         : "circle",
     ovalLength:
