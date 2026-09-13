@@ -1908,6 +1908,7 @@ const TextLayer = React.memo(function TextLayer({
 const ComponentsLayer = React.memo(function ComponentsLayer({
   components,
   selectedIdSet,
+  issueFocusIdSet,
   dragPreview,
   rotationPreview,
   viewMode,
@@ -1944,18 +1945,20 @@ const ComponentsLayer = React.memo(function ComponentsLayer({
       const isSel = selectedIdSet.has(c.id);
       const isErr = errorIds.has(c.id);
       const isWarn = warnIds.has(c.id) && !isErr;
+      const isIssueFocused = issueFocusIdSet?.has(c.id);
+      const statusClass = isSel
+        ? " is-selected"
+        : isErr
+          ? " has-error"
+          : isWarn
+            ? " has-warning"
+            : "";
       return React.createElement(
         "g",
         {
           key: c.id,
           "data-id": c.id,
-          className: isSel
-            ? "component-node is-selected"
-            : isErr
-              ? "component-node has-error"
-              : isWarn
-                ? "component-node has-warning"
-                : "component-node",
+          className: `component-node${statusClass}${isIssueFocused ? " issue-focus" : ""}`,
           style: { cursor: "move", opacity: preview ? 0.4 : 1 },
         },
         (() => {
@@ -2655,6 +2658,7 @@ const RulerLayer = React.memo(function RulerLayer({ ruler }) {
 function SelectionActionToolbar() {
   const state = useAppState();
   const dispatch = useAppDispatch();
+  const [expanded, setExpanded] = useState(false);
   const count = state.selected.length;
   const selectedComponents = state.components.filter((c) =>
     state.selected.includes(c.id),
@@ -2662,11 +2666,18 @@ function SelectionActionToolbar() {
   const allLocked =
     selectedComponents.length > 0 &&
     selectedComponents.every((c) => !!c.locked);
+  const groupIds = new Set(
+    selectedComponents.map((component) => component.groupId).filter(Boolean),
+  );
+  const isSingleGroup =
+    selectedComponents.length > 1 &&
+    groupIds.size === 1 &&
+    selectedComponents.every((component) => !!component.groupId);
   if (count === 0) return null;
   return React.createElement(
     "div",
     {
-      className: "selection-action-toolbar",
+      className: `selection-action-toolbar${expanded ? " expanded" : ""}`,
       onMouseDown: (e) => e.stopPropagation(),
       onWheel: (e) => e.stopPropagation(),
     },
@@ -2706,6 +2717,7 @@ function SelectionActionToolbar() {
       "button",
       {
         title: "Distribute horizontally",
+        className: "selection-action-secondary",
         disabled: count < 3,
         onClick: () => dispatch({ type: "DISTRIBUTE", axis: "h" }),
       },
@@ -2715,6 +2727,7 @@ function SelectionActionToolbar() {
       "button",
       {
         title: "Distribute vertically",
+        className: "selection-action-secondary",
         disabled: count < 3,
         onClick: () => dispatch({ type: "DISTRIBUTE", axis: "v" }),
       },
@@ -2731,11 +2744,50 @@ function SelectionActionToolbar() {
     React.createElement(
       "button",
       {
-        title: "Group selected components",
+        title: isSingleGroup
+          ? "Ungroup selected components"
+          : "Group selected components",
         disabled: count < 2,
-        onClick: () => dispatch({ type: "GROUP_SELECTED" }),
+        onClick: () =>
+          dispatch({
+            type: isSingleGroup ? "UNGROUP_SELECTED" : "GROUP_SELECTED",
+          }),
       },
-      "Group",
+      isSingleGroup ? "Ungroup" : "Group",
+    ),
+    React.createElement(
+      "button",
+      {
+        className: "selection-action-secondary",
+        title: "Mirror selected components horizontally",
+        onClick: () =>
+          dispatch({ type: "MIRROR_SELECTED", axis: "x", around: "selection" }),
+      },
+      "Mirror X",
+    ),
+    React.createElement(
+      "button",
+      {
+        className: "selection-action-secondary",
+        title: "Mirror selected components vertically",
+        onClick: () =>
+          dispatch({ type: "MIRROR_SELECTED", axis: "y", around: "selection" }),
+      },
+      "Mirror Y",
+    ),
+    React.createElement(
+      "button",
+      {
+        className: "selection-action-secondary",
+        title: "Center the selected components in the viewport",
+        onClick: () =>
+          window.dispatchEvent(
+            new CustomEvent("panel-designer:focus-components", {
+              detail: { ids: state.selected, openPanel: false },
+            }),
+          ),
+      },
+      "Fit",
     ),
     React.createElement(
       "button",
@@ -2747,6 +2799,16 @@ function SelectionActionToolbar() {
         onClick: () => dispatch({ type: "LOCK_SELECTED", locked: !allLocked }),
       },
       allLocked ? "Unlock" : "Lock",
+    ),
+    React.createElement(
+      "button",
+      {
+        className: "selection-action-more",
+        title: expanded ? "Hide additional actions" : "Show additional actions",
+        "aria-expanded": expanded,
+        onClick: () => setExpanded((value) => !value),
+      },
+      expanded ? "Less" : "More",
     ),
     React.createElement(
       "button",
@@ -3168,6 +3230,7 @@ function SVGCanvas({
   editingTextId,
   onSVGDoubleClick,
   onZoomChange,
+  issueFocusIds = [],
 }) {
   const state = useAppState();
   const dispatch = useAppDispatch();
@@ -3216,6 +3279,10 @@ function SVGCanvas({
   const selectedIdSet = useMemo(
     () => new Set(state.selected),
     [state.selected],
+  );
+  const issueFocusIdSet = useMemo(
+    () => new Set(issueFocusIds),
+    [issueFocusIds],
   );
   const [hoverTip, setHoverTip] = useState(null);
   const hoverTipRef = useRef(null);
@@ -3630,6 +3697,7 @@ function SVGCanvas({
           React.createElement(ComponentsLayer, {
             components: state.components,
             selectedIdSet: selectedIdSet,
+            issueFocusIdSet: issueFocusIdSet,
             dragPreview: dragPreview,
             rotationPreview: rotationPreview,
             viewMode: state.viewMode,

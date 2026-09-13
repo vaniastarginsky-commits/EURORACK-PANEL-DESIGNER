@@ -159,6 +159,13 @@ function WarningsPanel({ warnings }) {
   const componentIds = new Set(
     state.components.map((component) => component.id),
   );
+  function focusComponents(ids, inspect = false) {
+    window.dispatchEvent(
+      new CustomEvent("panel-designer:focus-components", {
+        detail: { ids, inspect },
+      }),
+    );
+  }
   if (warnings.length === 0) {
     return React.createElement(
       "div",
@@ -183,20 +190,50 @@ function WarningsPanel({ warnings }) {
     ),
     warnings.map((w, i) =>
       React.createElement(
-        "button",
+        "div",
         {
           key: i,
           className: `warning-item${w.severity === "warn" ? " warn" : ""}${w.tone ? " pcb-" + w.tone : ""}`,
-          disabled: !w.ids?.some((id) => componentIds.has(id)),
-          title: "Select the affected component(s) on the canvas",
-          onClick: () => {
-            const ids = (w.ids || []).filter((id) => componentIds.has(id));
-            if (ids.length) dispatch({ type: "SELECT", ids, additive: false });
-          },
         },
         React.createElement("span", null, w.message),
         w.ids?.some((id) => componentIds.has(id)) &&
-          React.createElement("small", null, "Show on canvas →"),
+          React.createElement(
+            "span",
+            { className: "warning-actions" },
+            React.createElement(
+              "button",
+              {
+                onClick: () =>
+                  focusComponents(
+                    (w.ids || []).filter((id) => componentIds.has(id)),
+                  ),
+              },
+              "Focus",
+            ),
+            React.createElement(
+              "button",
+              {
+                onClick: () =>
+                  focusComponents(
+                    (w.ids || []).filter((id) => componentIds.has(id)),
+                    true,
+                  ),
+              },
+              "Properties",
+            ),
+            w.ids?.filter((id) => componentIds.has(id)).length === 2 &&
+              React.createElement(
+                "button",
+                {
+                  onClick: () =>
+                    dispatch({
+                      type: "RESOLVE_COMPONENT_CLEARANCE",
+                      ids: w.ids,
+                    }),
+                },
+                "Fix spacing",
+              ),
+          ),
       ),
     ),
   );

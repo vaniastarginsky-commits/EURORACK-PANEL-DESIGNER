@@ -225,6 +225,8 @@ function ComponentLibraryPanel({
   const [partSearch, setPartSearch] = useState("");
   const [partCategory, setPartCategory] = useState("all");
   const [partVerification, setPartVerification] = useState("all");
+  const [partSort, setPartSort] = useState("default");
+  const [focusedPart, setFocusedPart] = useState(null);
   const [resetPartsArmed, setResetPartsArmed] = useState(false);
   const [renderLimit, setRenderLimit] = useState(48);
   useEffect(() => {
@@ -307,7 +309,24 @@ function ComponentLibraryPanel({
       `${def.name} ${def.type} ${def.manufacturer || ""} ${def.partNumber || ""} ${cat || ""} ${status}`.toLowerCase();
     return matchesCat && matchesVerification && (!q || hay.includes(q));
   });
-  const sortedVisibleParts = sortComponentDefs(visibleParts);
+  const sortedVisibleParts =
+    partSort === "name"
+      ? [...visibleParts].sort((a, b) =>
+          shortPartName(a).localeCompare(shortPartName(b)),
+        )
+      : partSort === "manufacturer"
+        ? [...visibleParts].sort((a, b) =>
+            (a.manufacturer || "Generic").localeCompare(
+              b.manufacturer || "Generic",
+            ),
+          )
+        : partSort === "accuracy"
+          ? [...visibleParts].sort(
+              (a, b) =>
+                Number(isPartVerified(b)) - Number(isPartVerified(a)) ||
+                shortPartName(a).localeCompare(shortPartName(b)),
+            )
+          : sortComponentDefs(visibleParts);
   const displayedParts = sortedVisibleParts.slice(0, renderLimit);
   const hiddenPartCount = Math.max(
     0,
@@ -480,7 +499,7 @@ function ComponentLibraryPanel({
               React.createElement("strong", null, "Component Library"),
               React.createElement(
                 "span",
-                null,
+                { className: "component-library-count" },
                 displayedParts.length,
                 "/",
                 sortedVisibleParts.length,
@@ -546,6 +565,31 @@ function ComponentLibraryPanel({
                 "option",
                 { value: "approximate" },
                 "Approximate",
+              ),
+            ),
+            React.createElement(
+              "select",
+              {
+                className: "mini-input library-sort-select",
+                value: partSort,
+                onChange: (e) => setPartSort(e.target.value),
+                "aria-label": "Sort component library",
+              },
+              React.createElement(
+                "option",
+                { value: "default" },
+                "Library order",
+              ),
+              React.createElement("option", { value: "name" }, "Name"),
+              React.createElement(
+                "option",
+                { value: "manufacturer" },
+                "Manufacturer",
+              ),
+              React.createElement(
+                "option",
+                { value: "accuracy" },
+                "Accuracy first",
               ),
             ),
           ),
@@ -681,6 +725,62 @@ function ComponentLibraryPanel({
               { className: "component-library-empty" },
               "No parts match the filter.",
             ),
+          focusedPart &&
+            React.createElement(
+              "div",
+              { className: "component-library-detail" },
+              React.createElement(
+                "div",
+                { className: "component-library-detail-preview" },
+                React.createElement(LibraryPartPreview, { def: focusedPart }),
+              ),
+              React.createElement(
+                "div",
+                { className: "component-library-detail-copy" },
+                React.createElement("strong", null, shortPartName(focusedPart)),
+                React.createElement(
+                  "span",
+                  null,
+                  focusedPart.manufacturer || "Generic",
+                  focusedPart.partNumber ? ` · ${focusedPart.partNumber}` : "",
+                ),
+                React.createElement(
+                  "div",
+                  { className: "component-library-detail-specs" },
+                  React.createElement(
+                    "b",
+                    null,
+                    "Cutout ",
+                    holeText(focusedPart),
+                  ),
+                  React.createElement(
+                    "b",
+                    null,
+                    "Front ",
+                    getFrontShape(focusedPart) === "circle"
+                      ? `Ø${focusedPart.frontDiameter}`
+                      : `${focusedPart.frontW ?? focusedPart.frontDiameter}×${focusedPart.frontH ?? focusedPart.frontDiameter}`,
+                  ),
+                  React.createElement(
+                    "b",
+                    null,
+                    "Body ",
+                    `${focusedPart.rearBodyW}×${focusedPart.rearBodyH}`,
+                  ),
+                  React.createElement(
+                    "b",
+                    null,
+                    `Depth ${focusedPart.rearDepth} mm`,
+                  ),
+                  React.createElement(
+                    "b",
+                    null,
+                    "Keepout ",
+                    `${focusedPart.keepoutW}×${focusedPart.keepoutH}`,
+                  ),
+                ),
+              ),
+            ),
           React.createElement(
             "div",
             {
@@ -696,6 +796,8 @@ function ComponentLibraryPanel({
                   type: "button",
                   className: `component-icon-card comp-lib-item real-part-tile ${(def.verificationStatus || "approximate") === "approximate" ? "approx" : ""}`,
                   title: `${replaceMode ? "Replace selected component(s) with this part" : "Click to choose, then click the panel to place. Use Multiple to place more."}\n\n${partTooltip(def)}`,
+                  onMouseEnter: () => setFocusedPart(def),
+                  onFocus: () => setFocusedPart(def),
                   onClick: () => addComponent(def),
                 },
                 React.createElement(

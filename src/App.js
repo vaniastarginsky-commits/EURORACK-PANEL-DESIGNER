@@ -208,6 +208,8 @@ function App() {
   const [rightInspectTab, setRightInspectTab] = useState("properties");
   const [rightProdTab, setRightProdTab] = useState("output");
   const [rightLayersTab, setRightLayersTab] = useState("layers");
+  const [issueFocusIds, setIssueFocusIds] = useState([]);
+  const issueFocusTimerRef = useRef(null);
   const [sidebarSwipe, setSidebarSwipe] = useState(null);
   const [drawerCloseSwipe, setDrawerCloseSwipe] = useState(null);
   const lastComponentTapRef = useRef(null);
@@ -222,6 +224,74 @@ function App() {
       window.removeEventListener("close-left-panel", closeLeftPanelFromPicker);
   }, []);
   const sidePanelOpen = leftPanelOpen || rightPanelOpen;
+  function focusIssueComponents(
+    ids,
+    { inspect = false, openPanel = true } = {},
+  ) {
+    const realIds = ids.filter((id) =>
+      stateRef.current.components.some((component) => component.id === id),
+    );
+    if (!realIds.length) return;
+    dispatch({ type: "SELECT", ids: realIds, additive: false });
+    setIssueFocusIds(realIds);
+    if (openPanel) {
+      setRightPanelOpen(true);
+      setRightInspectorTopTab(inspect ? "inspect" : "status");
+      if (inspect) setRightInspectTab("properties");
+    }
+    setZoom((value) => Math.max(value, 1.65));
+    window.clearTimeout(issueFocusTimerRef.current);
+    issueFocusTimerRef.current = window.setTimeout(
+      () => setIssueFocusIds([]),
+      1800,
+    );
+    window.requestAnimationFrame(() =>
+      window.requestAnimationFrame(() => {
+        const nodes = [...document.querySelectorAll(".component-node")].filter(
+          (node) => realIds.includes(node.getAttribute("data-id")),
+        );
+        const wrap = document.querySelector(".canvas-wrap");
+        if (!nodes.length || !wrap) return;
+        const boxes = nodes.map((node) => node.getBoundingClientRect());
+        const bounds = {
+          left: Math.min(...boxes.map((box) => box.left)),
+          right: Math.max(...boxes.map((box) => box.right)),
+          top: Math.min(...boxes.map((box) => box.top)),
+          bottom: Math.max(...boxes.map((box) => box.bottom)),
+        };
+        const wrapBox = wrap.getBoundingClientRect();
+        setPan((current) => ({
+          x:
+            current.x +
+            (wrapBox.left + wrapBox.width / 2) -
+            (bounds.left + bounds.right) / 2,
+          y:
+            current.y +
+            (wrapBox.top + wrapBox.height / 2) -
+            (bounds.top + bounds.bottom) / 2,
+        }));
+      }),
+    );
+  }
+  useEffect(() => {
+    function onFocusComponents(event) {
+      focusIssueComponents(event.detail?.ids || [], {
+        inspect: !!event.detail?.inspect,
+        openPanel: event.detail?.openPanel !== false,
+      });
+    }
+    window.addEventListener(
+      "panel-designer:focus-components",
+      onFocusComponents,
+    );
+    return () => {
+      window.removeEventListener(
+        "panel-designer:focus-components",
+        onFocusComponents,
+      );
+      window.clearTimeout(issueFocusTimerRef.current);
+    };
+  }, []);
   function toggleFocusMode() {
     setFocusMode((prev) => {
       if (!prev) {
@@ -1982,6 +2052,11 @@ function App() {
       lastSnapHapticKeyRef.current = snapKey;
       softHaptic(multiDrag ? 4 : 8);
     }
+    const dragReadout = `Δx: ${dx.toFixed(1)} mm   Δy: ${dy.toFixed(1)} mm`;
+    if (dragReadout !== lastCoordReadoutRef.current) {
+      lastCoordReadoutRef.current = dragReadout;
+      setCoordReadout(dragReadout);
+    }
   }
   function updateTextDragPreview(mm, shiftKey) {
     if (!draggingText) return;
@@ -3557,6 +3632,15 @@ function App() {
       },
     },
     {
+      id: "fit-selection",
+      label: "Fit selection",
+      hint: "Center and zoom to the selected components",
+      run: () =>
+        focusIssueComponents(state.selected, {
+          openPanel: false,
+        }),
+    },
+    {
       id: "production-check",
       label: "Production check",
       hint: "Manufacturing readiness report",
@@ -3940,6 +4024,7 @@ function App() {
         editingTextId: editingTextId,
         onSVGDoubleClick: onSVGDoubleClick,
         onZoomChange: setZoom,
+        issueFocusIds: issueFocusIds,
       }),
       editingTextId &&
         (() => {

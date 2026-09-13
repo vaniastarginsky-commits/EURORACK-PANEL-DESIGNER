@@ -152,6 +152,65 @@ function historySummary(s) {
   ];
   return parts.join(" · ");
 }
+function describeHistoryChange(before, after) {
+  const countChange = (key, label) => {
+    const delta = (after[key]?.length || 0) - (before[key]?.length || 0);
+    if (!delta) return null;
+    return `${delta > 0 ? "Added" : "Removed"} ${Math.abs(delta)} ${label}${Math.abs(delta) === 1 ? "" : "s"}`;
+  };
+  const collectionChange =
+    countChange("components", "component") ||
+    countChange("artworks", "artwork") ||
+    countChange("textItems", "label");
+  if (collectionChange) return collectionChange;
+  if (before.panel?.widthHP !== after.panel?.widthHP)
+    return "Changed panel width";
+
+  const beforeById = new Map(
+    (before.components || []).map((component) => [component.id, component]),
+  );
+  const changed = (after.components || []).filter((component) => {
+    const previous = beforeById.get(component.id);
+    return previous && JSON.stringify(previous) !== JSON.stringify(component);
+  });
+  if (changed.length) {
+    const everyChanged = (keys) =>
+      changed.every((component) => {
+        const previous = beforeById.get(component.id);
+        return keys.some((key) => previous[key] !== component[key]);
+      });
+    const suffix = changed.length === 1 ? "component" : "components";
+    if (everyChanged(["x", "y"])) return `Moved ${changed.length} ${suffix}`;
+    if (everyChanged(["rotation"]))
+      return `Rotated ${changed.length} ${suffix}`;
+    if (everyChanged(["locked"]))
+      return `Changed lock on ${changed.length} ${suffix}`;
+    if (everyChanged(["groupId"]))
+      return `Changed group for ${changed.length} ${suffix}`;
+    if (
+      everyChanged([
+        "holeDiameter",
+        "frontDiameter",
+        "frontW",
+        "frontH",
+        "frontWidth",
+        "frontHeight",
+        "rearBodyW",
+        "rearBodyH",
+        "rearDepth",
+        "keepoutW",
+        "keepoutH",
+      ])
+    )
+      return `Edited dimensions of ${changed.length} ${suffix}`;
+    return `Edited ${changed.length} ${suffix}`;
+  }
+  if (JSON.stringify(before.artworks) !== JSON.stringify(after.artworks))
+    return "Edited artwork";
+  if (JSON.stringify(before.textItems) !== JSON.stringify(after.textItems))
+    return "Edited labels";
+  return "Changed project settings";
+}
 function UndoHistoryPanel() {
   const state = useAppState();
   const dispatch = useAppDispatch();
@@ -226,31 +285,25 @@ function UndoHistoryPanel() {
               { style: { color: "#666" } },
               "No undo states yet.",
             )
-          : latest.map((h, i) =>
-              React.createElement(
+          : latest.map((h, i) => {
+              const after = i === 0 ? state : latest[i - 1].snap;
+              return React.createElement(
                 "div",
                 {
                   key: h.idx,
-                  style: {
-                    borderBottom: "1px solid #222",
-                    padding: "4px 0",
-                    display: "grid",
-                    gridTemplateColumns: "1fr auto",
-                    gap: 6,
-                    alignItems: "center",
-                  },
+                  className: "history-entry",
                 },
                 React.createElement(
                   "div",
                   null,
                   React.createElement(
                     "div",
-                    { style: { color: "#aaa" } },
-                    i === 0 ? "Previous state" : `${i + 1} steps back`,
+                    { className: "history-entry-title" },
+                    describeHistoryChange(h.snap, after),
                   ),
                   React.createElement(
                     "div",
-                    { style: { color: "#666" } },
+                    { className: "history-entry-summary" },
                     historySummary(h.snap),
                   ),
                 ),
@@ -263,8 +316,8 @@ function UndoHistoryPanel() {
                   },
                   "Go",
                 ),
-              ),
-            ),
+              );
+            }),
       ),
   );
 }

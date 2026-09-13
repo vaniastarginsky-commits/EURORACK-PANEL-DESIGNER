@@ -354,7 +354,6 @@ function SnapFeedbackBadge({ guides }) {
 }
 function DFMStatusFloat({ warnings }) {
   const state = useAppState();
-  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const hard = warnings.filter((w) => w.severity === "error").length;
   const warn = warnings.length - hard;
@@ -369,7 +368,11 @@ function DFMStatusFloat({ warnings }) {
   function selectIssue(ids) {
     const realIds = ids.filter((id) => componentIdSet.has(id));
     if (realIds.length)
-      dispatch({ type: "SELECT", ids: realIds, additive: false });
+      window.dispatchEvent(
+        new CustomEvent("panel-designer:focus-components", {
+          detail: { ids: realIds },
+        }),
+      );
   }
   return React.createElement(
     "div",

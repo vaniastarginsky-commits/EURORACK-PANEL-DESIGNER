@@ -436,6 +436,67 @@ function appReducer(state, action) {
         ),
       });
     }
+    case "RESOLVE_COMPONENT_CLEARANCE": {
+      const pair = (action.ids || [])
+        .map((id) => state.components.find((component) => component.id === id))
+        .filter(Boolean)
+        .slice(0, 2);
+      if (pair.length !== 2) return state;
+      const [a, b] = pair;
+      const aExt = getFrontExtents(a);
+      const bExt = getFrontExtents(b);
+      const aWidth = Math.max(
+        aExt.x2 - aExt.x1,
+        a.rearBodyW || 0,
+        a.keepoutW || 0,
+      );
+      const bWidth = Math.max(
+        bExt.x2 - bExt.x1,
+        b.rearBodyW || 0,
+        b.keepoutW || 0,
+      );
+      const aHeight = Math.max(
+        aExt.y2 - aExt.y1,
+        a.rearBodyH || 0,
+        a.keepoutH || 0,
+      );
+      const bHeight = Math.max(
+        bExt.y2 - bExt.y1,
+        b.rearBodyH || 0,
+        b.keepoutH || 0,
+      );
+      const gap = Math.max(a.minSpacing || 0, b.minSpacing || 0, 1);
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const panelWidth = panelWidthMM(state.panel);
+      const patch =
+        Math.abs(dx) >= Math.abs(dy)
+          ? {
+              x: Math.min(
+                panelWidth - bWidth / 2,
+                Math.max(
+                  bWidth / 2,
+                  a.x + (dx < 0 ? -1 : 1) * ((aWidth + bWidth) / 2 + gap),
+                ),
+              ),
+            }
+          : {
+              y: Math.min(
+                PANEL_HEIGHT_MM - bHeight / 2,
+                Math.max(
+                  bHeight / 2,
+                  a.y + (dy < 0 ? -1 : 1) * ((aHeight + bHeight) / 2 + gap),
+                ),
+              ),
+            };
+      return withHistory(state, {
+        ...snapshot(state),
+        components: state.components.map((component) =>
+          component.id === b.id ? { ...component, ...patch } : component,
+        ),
+        selected: pair.map((component) => component.id),
+      });
+    }
     case "MIRROR_SELECTED": {
       if (state.selected.length < 1) return state;
       const sel = state.components.filter((c) => state.selected.includes(c.id));

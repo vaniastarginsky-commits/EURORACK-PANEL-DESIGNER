@@ -59,6 +59,41 @@ function PropertiesPanel() {
   }
   const isMultiEdit = selComps.length > 1;
   const c = selComps[0];
+  const libraryDef =
+    COMPONENT_LIBRARY.find(
+      (def) =>
+        def.type === c.type &&
+        (!c.partNumber || !def.partNumber || def.partNumber === c.partNumber),
+    ) || COMPONENT_LIBRARY.find((def) => def.type === c.type);
+  const geometryKeys = [
+    "holeType",
+    "holeDiameter",
+    "holeW",
+    "holeH",
+    "slotLength",
+    "frontShape",
+    "frontDiameter",
+    "frontW",
+    "frontH",
+    "rearBodyW",
+    "rearBodyH",
+    "rearDepth",
+    "keepoutW",
+    "keepoutH",
+    "minSpacing",
+    "panelThicknessMin",
+    "panelThicknessMax",
+  ];
+  const dimensionsDiffer =
+    !!libraryDef &&
+    geometryKeys.some((key) => {
+      const current = c[key];
+      const expected = libraryDef[key];
+      if (current == null && expected == null) return false;
+      if (typeof current === "number" && typeof expected === "number")
+        return Math.abs(current - expected) > 0.001;
+      return current !== expected;
+    });
   const linkedScales = isMultiEdit
     ? []
     : state.scaleItems.filter((sc) => sc.componentId === c.id);
@@ -98,6 +133,76 @@ function PropertiesPanel() {
       "div",
       { className: "section-title" },
       isMultiEdit ? `${selComps.length} × ${shortPartName(c)}` : c.name,
+    ),
+    React.createElement(
+      "div",
+      { className: "inspector-geometry-summary" },
+      React.createElement(
+        "div",
+        { className: "inspector-geometry-preview" },
+        React.createElement(LibraryPartPreview, { def: c }),
+      ),
+      React.createElement(
+        "div",
+        { className: "inspector-geometry-specs" },
+        React.createElement(
+          "span",
+          null,
+          "Cutout",
+          React.createElement(
+            "b",
+            null,
+            c.holeType === "rect"
+              ? `${c.holeW ?? c.frontW}×${c.holeH ?? c.frontH}`
+              : c.holeType === "slot"
+                ? `${c.holeDiameter}×${c.slotLength ?? c.holeDiameter}`
+                : `Ø${c.holeDiameter}`,
+          ),
+        ),
+        React.createElement(
+          "span",
+          null,
+          "Rear body",
+          React.createElement("b", null, `${c.rearBodyW}×${c.rearBodyH}`),
+        ),
+        React.createElement(
+          "span",
+          null,
+          "Depth",
+          React.createElement("b", null, `${c.rearDepth} mm`),
+        ),
+        React.createElement(
+          "span",
+          null,
+          "Keepout",
+          React.createElement("b", null, `${c.keepoutW}×${c.keepoutH}`),
+        ),
+      ),
+      libraryDef &&
+        React.createElement(
+          "div",
+          { className: "inspector-library-state" },
+          React.createElement(
+            "span",
+            { className: dimensionsDiffer ? "changed" : "matches" },
+            dimensionsDiffer ? "Modified from library" : "Matches library",
+          ),
+          dimensionsDiffer &&
+            React.createElement(
+              "button",
+              {
+                onClick: () =>
+                  patch(
+                    Object.fromEntries(
+                      geometryKeys
+                        .filter((key) => libraryDef[key] != null)
+                        .map((key) => [key, libraryDef[key]]),
+                    ),
+                  ),
+              },
+              "Reset dimensions",
+            ),
+        ),
     ),
     isMultiEdit &&
       React.createElement(
