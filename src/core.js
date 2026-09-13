@@ -1015,7 +1015,6 @@ function layerVisibilityForViewMode(prev, mode) {
 /* DistanceGuidesLayer moved to Canvas.js */
 
 /* RulerLayer moved to Canvas.js */
-/* SelectionActionToolbar moved to Canvas.js */
 /* ModeQuickSwitch moved to MobileDock.js */
 
 /* CanvasLayerPanel moved to Canvas.js */

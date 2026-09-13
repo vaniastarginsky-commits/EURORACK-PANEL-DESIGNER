@@ -255,13 +255,12 @@ const states = [
       await components.nth(0).click();
       await components.nth(1).click({ modifiers: ["Shift"] });
       await components.nth(1).click({ button: "right" });
-      const count = await page.locator(".selection-action-count").textContent();
-      if (!count?.includes("2"))
+      const selectedCount = await page.locator(".component-node.is-selected").count();
+      if (selectedCount !== 2)
         throw new Error("Right click collapsed the multi-selection");
-      await page.locator(".selection-action-more").click();
-      await page
-        .getByRole("button", { name: "Anchor: last", exact: true })
-        .waitFor({ state: "visible" });
+      await page.locator(".component-menu").getByText("2 selected").waitFor();
+      if ((await page.locator(".selection-action-toolbar").count()) !== 0)
+        throw new Error("Desktop selection toolbar should not be rendered");
     },
   ],
   [

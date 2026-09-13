@@ -450,12 +450,6 @@ function App() {
   const marqueeSelectionRef = useRef(marqueeSelection);
   marqueeSelectionRef.current = marqueeSelection;
   const [componentMenu, setComponentMenu] = useState(null);
-  useEffect(() => {
-    const close = () => setComponentMenu(null);
-    window.addEventListener("panel-designer:close-component-menu", close);
-    return () =>
-      window.removeEventListener("panel-designer:close-component-menu", close);
-  }, []);
   const longPressTimerRef = useRef(null);
   const longPressStartRef = useRef(null);
   const lastHapticAtRef = useRef(0);
