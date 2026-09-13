@@ -161,7 +161,13 @@ function RightSidebar({
         inspectTab === "properties" && propertyPanel,
         inspectTab === "measure" &&
           React.createElement(MeasurementsPanel, null),
-        inspectTab === "history" && React.createElement(UndoHistoryPanel, null),
+        inspectTab === "history" &&
+          React.createElement(
+            React.Fragment,
+            null,
+            React.createElement(SelectionSetsPanel, null),
+            React.createElement(UndoHistoryPanel, null),
+          ),
       ),
     topTab === "prod" &&
       React.createElement(

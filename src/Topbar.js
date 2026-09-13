@@ -11,6 +11,7 @@ function Topbar({
   rightPanelOpen,
   onToggleRightPanel,
   autosaveStatus,
+  projectHealth,
 }) {
   const state = useAppState();
   const dispatch = useAppDispatch();
@@ -114,14 +115,28 @@ function Topbar({
           React.createElement(
             "div",
             {
-              className: `topbar-project-status${autosaveStatus?.includes("failed") ? " error" : ""}`,
-              title: autosaveStatus || "Autosave ready",
+              className: `topbar-project-status${autosaveStatus?.includes("failed") || projectHealth?.errors ? " error" : ""}`,
+              title: [
+                autosaveStatus || "Autosave ready",
+                projectHealth?.exportState,
+                projectHealth
+                  ? `${projectHealth.errors} errors · ${projectHealth.warnings} warnings`
+                  : "",
+              ]
+                .filter(Boolean)
+                .join(" · "),
             },
             React.createElement("strong", null, state.projectMeta.name),
             React.createElement(
               "span",
               null,
-              autosaveStatus || "Autosave ready",
+              autosaveStatus === "Saving…" || autosaveStatus?.includes("failed")
+                ? autosaveStatus
+                : projectHealth?.errors
+                  ? `${projectHealth.errors} DFM errors`
+                  : projectHealth?.warnings
+                    ? `${projectHealth.warnings} DFM warnings`
+                    : projectHealth?.exportState || autosaveStatus || "Ready",
             ),
           ),
         React.createElement(

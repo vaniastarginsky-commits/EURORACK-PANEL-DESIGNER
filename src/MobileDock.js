@@ -503,6 +503,7 @@ function CanvasQuickAddDock({
         "button",
         {
           className: touchMode === "select" ? "active" : "",
+          "aria-pressed": touchMode === "select",
           onClick: () =>
             onSetTouchMode(touchMode === "select" ? "edit" : "select"),
           title:

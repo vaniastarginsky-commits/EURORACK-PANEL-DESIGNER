@@ -152,6 +152,100 @@ function historySummary(s) {
   ];
   return parts.join(" · ");
 }
+function SelectionSetsPanel() {
+  const state = useAppState();
+  const dispatch = useAppDispatch();
+  const [sets, setSets] = useState([]);
+  async function saveCurrentSelection() {
+    if (!state.selected.length) return;
+    const name = await appTextPrompt({
+      title: "Save selection set",
+      subtitle: "Keep a named shortcut to these components while editing.",
+      label: "Set name",
+      defaultValue: `Set ${sets.length + 1}`,
+      confirmText: "Save set",
+    });
+    if (!name?.trim()) return;
+    setSets((current) => [
+      ...current.filter((item) => item.name !== name.trim()),
+      { name: name.trim(), ids: [...state.selected] },
+    ]);
+  }
+  function existingIds(set) {
+    const available = new Set(
+      state.components.map((component) => component.id),
+    );
+    return set.ids.filter((id) => available.has(id));
+  }
+  return React.createElement(
+    "div",
+    { className: "section selection-sets-panel" },
+    React.createElement(
+      "div",
+      { className: "section-title" },
+      "Selection sets",
+    ),
+    React.createElement(
+      "button",
+      {
+        disabled: state.selected.length === 0,
+        onClick: saveCurrentSelection,
+      },
+      `Save current selection (${state.selected.length})`,
+    ),
+    sets.length === 0
+      ? React.createElement(
+          "div",
+          { className: "selection-set-empty" },
+          "Named sets make repeated editing and locking faster.",
+        )
+      : React.createElement(
+          "div",
+          { className: "selection-set-list" },
+          sets.map((set) => {
+            const ids = existingIds(set);
+            return React.createElement(
+              "div",
+              { className: "selection-set-row", key: set.name },
+              React.createElement(
+                "button",
+                {
+                  disabled: ids.length === 0,
+                  onClick: () =>
+                    dispatch({ type: "SELECT", ids, additive: false }),
+                },
+                set.name,
+                React.createElement("small", null, ids.length),
+              ),
+              React.createElement(
+                "button",
+                {
+                  disabled: ids.length === 0,
+                  title: "Lock every component in this set",
+                  onClick: () => {
+                    dispatch({ type: "SELECT", ids, additive: false });
+                    dispatch({ type: "LOCK_SELECTED", locked: true, ids });
+                  },
+                },
+                "Lock",
+              ),
+              React.createElement(
+                "button",
+                {
+                  className: "danger",
+                  title: "Forget this selection set",
+                  onClick: () =>
+                    setSets((current) =>
+                      current.filter((item) => item.name !== set.name),
+                    ),
+                },
+                "×",
+              ),
+            );
+          }),
+        ),
+  );
+}
 function describeHistoryChange(before, after) {
   const countChange = (key, label) => {
     const delta = (after[key]?.length || 0) - (before[key]?.length || 0);

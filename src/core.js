@@ -785,6 +785,109 @@ function computeWarnings(components, widthMM, mountingHoles, pcb) {
   }
   return warnings;
 }
+function suggestClearanceResolution(
+  components,
+  widthMM,
+  mountingHoles,
+  pcb,
+  ids,
+) {
+  const pair = (ids || [])
+    .map((id) => components.find((component) => component.id === id))
+    .filter(Boolean)
+    .slice(0, 2);
+  if (pair.length !== 2) return null;
+  const [anchor, moving] = pair;
+  function envelope(component) {
+    const boxes = [getFrontExtents(component)];
+    if (component.rearBodyW > 0)
+      boxes.push(obbEdgeExtents(makeBodyOBB(component)));
+    if (component.keepoutW > 0)
+      boxes.push(obbEdgeExtents(makeKeepoutOBB(component)));
+    return {
+      x1: Math.min(...boxes.map((box) => box.x1)),
+      x2: Math.max(...boxes.map((box) => box.x2)),
+      y1: Math.min(...boxes.map((box) => box.y1)),
+      y2: Math.max(...boxes.map((box) => box.y2)),
+    };
+  }
+  function warningWeight(list) {
+    return list.reduce(
+      (sum, warning) => sum + (warning.severity === "error" ? 1000 : 100),
+      0,
+    );
+  }
+  const anchorBox = envelope(anchor);
+  const movingBox = envelope(moving);
+  const movingHalfW = Math.max(
+    moving.x - movingBox.x1,
+    movingBox.x2 - moving.x,
+  );
+  const movingHalfH = Math.max(
+    moving.y - movingBox.y1,
+    movingBox.y2 - moving.y,
+  );
+  const anchorHalfW = Math.max(
+    anchor.x - anchorBox.x1,
+    anchorBox.x2 - anchor.x,
+  );
+  const anchorHalfH = Math.max(
+    anchor.y - anchorBox.y1,
+    anchorBox.y2 - anchor.y,
+  );
+  const minGap = Math.max(anchor.minSpacing || 0, moving.minSpacing || 0, 1);
+  const baselineWarnings = computeWarnings(
+    components,
+    widthMM,
+    mountingHoles,
+    pcb,
+  );
+  const baselineWeight = warningWeight(baselineWarnings);
+  const candidates = [];
+  for (const extra of [0, 1, 2, 4, 7, 11, 16]) {
+    const gap = minGap + extra;
+    candidates.push(
+      { x: anchor.x + anchorHalfW + movingHalfW + gap, y: moving.y },
+      { x: anchor.x - anchorHalfW - movingHalfW - gap, y: moving.y },
+      { x: moving.x, y: anchor.y + anchorHalfH + movingHalfH + gap },
+      { x: moving.x, y: anchor.y - anchorHalfH - movingHalfH - gap },
+    );
+  }
+  let best = null;
+  for (const candidate of candidates) {
+    const x = Math.min(
+      widthMM - movingHalfW,
+      Math.max(movingHalfW, candidate.x),
+    );
+    const y = Math.min(
+      PANEL_HEIGHT_MM - movingHalfH,
+      Math.max(movingHalfH, candidate.y),
+    );
+    const nextComponents = components.map((component) =>
+      component.id === moving.id ? { ...component, x, y } : component,
+    );
+    const nextWarnings = computeWarnings(
+      nextComponents,
+      widthMM,
+      mountingHoles,
+      pcb,
+    );
+    const warningScore = warningWeight(nextWarnings);
+    const movement = Math.hypot(x - moving.x, y - moving.y);
+    const score = warningScore * 1000 + movement;
+    if (!best || score < best.score)
+      best = { x, y, score, warningScore, movement, warnings: nextWarnings };
+  }
+  if (!best || best.warningScore >= baselineWeight) return null;
+  return {
+    id: moving.id,
+    x: best.x,
+    y: best.y,
+    dx: best.x - moving.x,
+    dy: best.y - moving.y,
+    resolvedWarnings: baselineWarnings.length - best.warnings.length,
+  };
+}
 function makeInitialState() {
   const panel = { widthHP: 8, customHP: false };
   const widthMM = panelWidthMM(panel);

@@ -13,6 +13,15 @@ html, body, #root {
 
 * { box-sizing: border-box; }
 
+.app {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
 button, input, select, textarea { font: inherit; }
 
 button {
@@ -5385,6 +5394,7 @@ html[data-preset="graphite"] body {
 .canvas-empty-state>span{color:var(--ui-muted);font-size:12px}
 .canvas-empty-actions{display:flex;justify-content:center;gap:6px;flex-wrap:wrap}
 .canvas-empty-actions button{min-height:30px;padding:5px 10px}
+.canvas-empty-shortcut{color:var(--ui-muted);font-size:9px}
 .library-verification-select{min-width:140px}
 .component-library-popover .component-icon-part-number{position:absolute;top:5px;right:6px;max-width:62%;overflow:hidden;color:var(--ui-muted);font-size:8px;text-overflow:ellipsis;white-space:nowrap}
 .sidebar-right .warning-item:is(button){display:flex;flex-direction:column;align-items:flex-start;gap:4px;width:100%;min-height:0;padding:7px 8px;text-align:left;line-height:1.28}
@@ -5643,6 +5653,13 @@ html[data-preset="graphite"] body {
   display: none;
 }
 .selection-action-more { display: inline-flex; }
+.selection-action-toolbar.expanded {
+  justify-content: center;
+  flex-wrap: wrap;
+  width: min(920px, calc(100vw - 360px));
+  max-width: min(920px, calc(100vw - 360px));
+  overflow: visible;
+}
 @media (max-width: 900px), (pointer: coarse) {
   .canvas-tool-rail .canvas-tool-mobile-only:disabled { display: none; }
   .component-library-detail { display: none; }
@@ -5650,4 +5667,128 @@ html[data-preset="graphite"] body {
     grid-template-rows: auto auto auto auto minmax(0, 1fr) auto;
   }
   .component-library-popover .library-load-more { grid-row: 6; }
+}
+
+.warning-fix-preview {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 6px;
+  border: 1px solid rgba(var(--ui-gold-rgb), .22);
+  background: rgba(var(--ui-gold-rgb), .055);
+}
+.warning-fix-preview span {
+  flex: 1 1 100%;
+  color: var(--ui-text-soft);
+  font-size: 9px;
+}
+.warning-fix-preview button {
+  width: auto;
+  min-height: 24px;
+  padding: 3px 7px;
+  font-size: 9px;
+}
+.selection-set-empty {
+  margin-top: 7px;
+  color: var(--ui-muted);
+  font-size: 10px;
+  line-height: 1.4;
+}
+.selection-set-list {
+  display: grid;
+  gap: 4px;
+  margin-top: 7px;
+}
+.selection-set-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 28px;
+  gap: 4px;
+}
+.selection-set-row button {
+  min-width: 0;
+  min-height: 27px;
+  padding: 4px 7px;
+}
+.selection-set-row button:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  text-align: left;
+}
+.selection-set-row small { color: var(--ui-muted); }
+
+.preview-exit-control {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 2147482400;
+  min-height: 32px;
+  padding: 5px 11px;
+  border-color: rgba(var(--ui-gold-rgb), .48);
+  background: var(--ui-panel);
+  color: var(--ui-gold-2);
+  box-shadow: 0 10px 32px rgba(var(--ui-line-rgb), .22);
+}
+.preview-mode .global-topbar,
+.preview-mode .canvas-tool-rail,
+.preview-mode .canvas-tool-rail-restore,
+.preview-mode .sidebar-left,
+.preview-mode .sidebar-right,
+.preview-mode .mobile-main-dock,
+.preview-mode .selection-action-toolbar,
+.preview-mode .dfm-status-float,
+.preview-mode .project-health-pill,
+.preview-mode .canvas-minimap,
+.preview-mode .hud-bottom-right,
+.preview-mode .hud-bottom-left {
+  display: none;
+}
+.preview-mode .workspace {
+  height: 100vh;
+}
+.manufacturing-preview .canvas-wrap {
+  background: var(--ui-bg);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid rgba(var(--ui-gold-rgb), .72);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto;
+    animation-duration: .01ms;
+    animation-iteration-count: 1;
+    transition-duration: .01ms;
+  }
+}
+.mobile-lasso-hint { display: none; }
+@media (max-width: 900px), (pointer: coarse) {
+  .mobile-lasso-hint {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    z-index: 62;
+    display: block;
+    max-width: calc(100vw - 150px);
+    padding: 5px 8px;
+    transform: translateX(-50%);
+    border: 1px solid rgba(var(--ui-gold-rgb), .28);
+    background: var(--ui-panel);
+    color: var(--ui-gold-2);
+    font-size: 9px;
+    text-align: center;
+    pointer-events: none;
+  }
+  .selection-handles line {
+    stroke-width: .34;
+  }
+  .selection-handles .center-dot {
+    stroke-width: .3;
+  }
 }

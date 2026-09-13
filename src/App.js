@@ -126,12 +126,20 @@ function App() {
   const [showQuickAdd, setShowQuickAdd] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
+  const previewModeRef = useRef(previewMode);
+  previewModeRef.current = previewMode;
   const focusRestorePanelsRef = useRef(null);
+  const previewRestoreRef = useRef(null);
+  const manufacturingRestoreRef = useRef(null);
+  const [manufacturingPreview, setManufacturingPreview] = useState(false);
+  const warningFocusIndexRef = useRef(-1);
   const [showShortcutHelp, setShowShortcutHelp] = useState(false);
   const [clearanceMode, setClearanceMode] = useState(false);
   const [snapSettings, setSnapSettings] = useState(() => defaultSnapSettings());
   const [touchPanning, setTouchPanning] = useState(null);
   const [autosaveStatus, setAutosaveStatus] = useState("");
+  const [lastExportAt, setLastExportAt] = useState(null);
+  const lastExportDataRef = useRef("");
   const [ruler, setRuler] = useState(null);
   useEffect(() => {
     window.__PANEL_RULER_DISTANCE_MM = ruler
@@ -208,6 +216,8 @@ function App() {
   const [rightInspectTab, setRightInspectTab] = useState("properties");
   const [rightProdTab, setRightProdTab] = useState("output");
   const [rightLayersTab, setRightLayersTab] = useState("layers");
+  const panelVisibilityRef = useRef({ left: false, right: true });
+  panelVisibilityRef.current = { left: leftPanelOpen, right: rightPanelOpen };
   const [issueFocusIds, setIssueFocusIds] = useState([]);
   const issueFocusTimerRef = useRef(null);
   const [sidebarSwipe, setSidebarSwipe] = useState(null);
@@ -224,6 +234,64 @@ function App() {
       window.removeEventListener("close-left-panel", closeLeftPanelFromPicker);
   }, []);
   const sidePanelOpen = leftPanelOpen || rightPanelOpen;
+  function togglePreviewMode() {
+    setPreviewMode((enabled) => {
+      if (!enabled) {
+        previewRestoreRef.current = {
+          left: leftPanelOpen,
+          right: rightPanelOpen,
+          selected: [...stateRef.current.selected],
+        };
+        dispatch({ type: "DESELECT_ALL" });
+        setLeftPanelOpen(false);
+        setRightPanelOpen(false);
+        return true;
+      }
+      const restore = previewRestoreRef.current;
+      if (restore) {
+        setLeftPanelOpen(restore.left);
+        setRightPanelOpen(restore.right);
+        dispatch({ type: "SELECT", ids: restore.selected, additive: false });
+      }
+      previewRestoreRef.current = null;
+      return false;
+    });
+  }
+  function toggleManufacturingPreview() {
+    if (!manufacturingRestoreRef.current) {
+      const currentState = stateRef.current;
+      manufacturingRestoreRef.current = {
+        viewMode: currentState.viewMode,
+        layerVisibility: { ...currentState.layerVisibility },
+        previewMode: previewModeRef.current,
+        panels: { ...panelVisibilityRef.current },
+        selected: [...currentState.selected],
+      };
+      dispatch({ type: "SET_VIEW_MODE", mode: "drill" });
+      dispatch({ type: "APPLY_LAYER_PRESET", preset: "production" });
+      setLeftPanelOpen(false);
+      setRightPanelOpen(false);
+      setPreviewMode(true);
+      setManufacturingPreview(true);
+      dispatch({ type: "DESELECT_ALL" });
+      return;
+    }
+    const restore = manufacturingRestoreRef.current;
+    if (restore) {
+      dispatch({ type: "SET_VIEW_MODE", mode: restore.viewMode });
+      Object.entries(restore.layerVisibility).forEach(([key, value]) =>
+        dispatch({ type: "SET_LAYER_VISIBILITY", key, value }),
+      );
+      setPreviewMode(restore.previewMode);
+      setLeftPanelOpen(restore.panels.left);
+      setRightPanelOpen(restore.panels.right);
+      dispatch({ type: "SELECT", ids: restore.selected, additive: false });
+    } else {
+      setPreviewMode(false);
+    }
+    manufacturingRestoreRef.current = null;
+    setManufacturingPreview(false);
+  }
   function focusIssueComponents(
     ids,
     { inspect = false, openPanel = true } = {},
@@ -382,6 +450,12 @@ function App() {
   const marqueeSelectionRef = useRef(marqueeSelection);
   marqueeSelectionRef.current = marqueeSelection;
   const [componentMenu, setComponentMenu] = useState(null);
+  useEffect(() => {
+    const close = () => setComponentMenu(null);
+    window.addEventListener("panel-designer:close-component-menu", close);
+    return () =>
+      window.removeEventListener("panel-designer:close-component-menu", close);
+  }, []);
   const longPressTimerRef = useRef(null);
   const longPressStartRef = useRef(null);
   const lastHapticAtRef = useRef(0);
@@ -2643,6 +2717,16 @@ function App() {
         toggleFocusMode();
         return;
       }
+      if (
+        !e.ctrlKey &&
+        !e.metaKey &&
+        !e.altKey &&
+        e.key.toLowerCase() === "p"
+      ) {
+        e.preventDefault();
+        toggleManufacturingPreview();
+        return;
+      }
       if (e.key === "Delete" || e.key === "Backspace") {
         if (s.selectedTexts?.length) {
           s.selectedTexts.forEach((id) =>
@@ -2668,7 +2752,81 @@ function App() {
           e.preventDefault();
           dispatch({ type: "ROTATE_SELECTED", degrees: 90 });
         }
+      } else if (e.key.toLowerCase() === "g") {
+        if (s.selected.length > 1) {
+          e.preventDefault();
+          dispatch({
+            type: e.shiftKey ? "UNGROUP_SELECTED" : "GROUP_SELECTED",
+          });
+        }
+      } else if (e.key.toLowerCase() === "m") {
+        if (s.selected.length > 0) {
+          e.preventDefault();
+          dispatch({
+            type: "MIRROR_SELECTED",
+            axis: e.shiftKey ? "y" : "x",
+            around: "selection",
+          });
+        }
+      } else if (e.key === "[" || e.key === "]") {
+        const liveWarnings = computeWarnings(
+          s.components,
+          panelWidthMM(s.panel),
+          s.mountingHoles,
+          s.pcb,
+        ).filter((warning) => warning.ids?.length);
+        if (liveWarnings.length) {
+          e.preventDefault();
+          warningFocusIndexRef.current =
+            (warningFocusIndexRef.current +
+              (e.key === "]" ? 1 : -1) +
+              liveWarnings.length) %
+            liveWarnings.length;
+          const warning = liveWarnings[warningFocusIndexRef.current];
+          window.dispatchEvent(
+            new CustomEvent("panel-designer:focus-components", {
+              detail: { ids: warning.ids },
+            }),
+          );
+        }
       } else if (e.key === "Escape") {
+        if (previewModeRef.current) {
+          const manufacturingRestore = manufacturingRestoreRef.current;
+          if (manufacturingRestore) {
+            dispatch({
+              type: "SET_VIEW_MODE",
+              mode: manufacturingRestore.viewMode,
+            });
+            Object.entries(manufacturingRestore.layerVisibility).forEach(
+              ([key, value]) =>
+                dispatch({ type: "SET_LAYER_VISIBILITY", key, value }),
+            );
+            setLeftPanelOpen(manufacturingRestore.panels.left);
+            setRightPanelOpen(manufacturingRestore.panels.right);
+            setPreviewMode(manufacturingRestore.previewMode);
+            dispatch({
+              type: "SELECT",
+              ids: manufacturingRestore.selected,
+              additive: false,
+            });
+            manufacturingRestoreRef.current = null;
+            setManufacturingPreview(false);
+          } else {
+            const restore = previewRestoreRef.current;
+            if (restore) {
+              setLeftPanelOpen(restore.left);
+              setRightPanelOpen(restore.right);
+              dispatch({
+                type: "SELECT",
+                ids: restore.selected,
+                additive: false,
+              });
+            }
+            previewRestoreRef.current = null;
+            setPreviewMode(false);
+          }
+          return;
+        }
         if (pendingAddPart) {
           setPendingAddPart(null);
           setPendingAddPreview(null);
@@ -2779,6 +2937,23 @@ function App() {
   const AUTOSAVE_LEGACY_KEY = "eurorack-panel-autosave-v3";
   function projectString(st) {
     return serializeProject(st, false);
+  }
+  function recordSuccessfulExport() {
+    lastExportDataRef.current = projectString(stateRef.current);
+    const exportedAt = new Date();
+    setLastExportAt(exportedAt);
+    setAutosaveStatus("Export complete");
+  }
+  function completeExport(run) {
+    const result = run();
+    if (result && typeof result.then === "function") {
+      void result
+        .then(recordSuccessfulExport)
+        .finally(() => setShowExportDialog(false));
+      return;
+    }
+    recordSuccessfulExport();
+    setShowExportDialog(false);
   }
   const lastAutosaveDataRef = useRef("");
   const autosaveTimerRef = useRef(null);
@@ -3110,6 +3285,16 @@ function App() {
       }
     : null;
   const recentProjectsForLauncher = loadLocalProjects().slice(0, 3);
+  const currentProjectData = projectString(state);
+  const projectHealth = {
+    errors: warnings.filter((warning) => warning.severity === "error").length,
+    warnings: warnings.filter((warning) => warning.severity !== "error").length,
+    exportState: !lastExportAt
+      ? "Not exported"
+      : currentProjectData !== lastExportDataRef.current
+        ? "Modified after export"
+        : `Exported ${lastExportAt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`,
+  };
   const renderedDistanceGuides = useMemo(() => {
     if (dragging) return distanceGuides;
     if (!clearanceMode) return distanceGuides;
@@ -3126,7 +3311,15 @@ function App() {
       id: "preview-mode",
       label: previewMode ? "Exit preview mode" : "Enter preview mode",
       hint: "Hide editing HUD and show the module like a product",
-      run: () => setPreviewMode((v) => !v),
+      run: togglePreviewMode,
+    },
+    {
+      id: "manufacturing-preview",
+      label: manufacturingPreview
+        ? "Exit manufacturing preview"
+        : "Enter manufacturing preview",
+      hint: "Clean drill/cut view using production layers",
+      run: toggleManufacturingPreview,
     },
     {
       id: "toggle-grid",
@@ -3623,6 +3816,50 @@ function App() {
       run: () => dispatch({ type: "DESELECT_ALL" }),
     },
     {
+      id: "group-selection",
+      label: "Group selected components",
+      hint: "G",
+      run: () => dispatch({ type: "GROUP_SELECTED" }),
+    },
+    {
+      id: "ungroup-selection",
+      label: "Ungroup selected components",
+      hint: "Shift+G",
+      run: () => dispatch({ type: "UNGROUP_SELECTED" }),
+    },
+    {
+      id: "mirror-selection-x",
+      label: "Mirror selection horizontally",
+      hint: "M",
+      run: () =>
+        dispatch({ type: "MIRROR_SELECTED", axis: "x", around: "selection" }),
+    },
+    {
+      id: "mirror-selection-y",
+      label: "Mirror selection vertically",
+      hint: "Shift+M",
+      run: () =>
+        dispatch({ type: "MIRROR_SELECTED", axis: "y", around: "selection" }),
+    },
+    {
+      id: "next-warning",
+      label: "Focus next DFM warning",
+      hint: "]",
+      run: () => {
+        const focusable = warnings.filter((warning) => warning.ids?.length);
+        if (!focusable.length) return;
+        warningFocusIndexRef.current =
+          (warningFocusIndexRef.current + 1) % focusable.length;
+        focusIssueComponents(focusable[warningFocusIndexRef.current].ids);
+      },
+    },
+    {
+      id: "component-library",
+      label: "Open component library",
+      hint: "Search and place a part",
+      run: () => AppCommands.openComponentLibraryPicker(),
+    },
+    {
       id: "fit-view",
       label: "Fit view",
       hint: "Zoom to comfortable panel view",
@@ -3670,7 +3907,7 @@ function App() {
   return React.createElement(
     "div",
     {
-      className: `app ${focusMode ? "focus-mode" : ""} ${previewMode ? "preview-mode" : ""} ${showTouchHitboxes ? "show-touch-hitboxes" : ""} ${showSafeZones ? "show-safe-zones" : ""} ${leftPanelOpen ? "left-panel-open" : "left-panel-closed"} ${rightPanelOpen ? "right-panel-open" : "right-panel-closed"} ${!leftPanelOpen && !rightPanelOpen ? "both-panels-closed" : ""} ${mobileProtectMode ? "mobile-protect-mode" : ""} ${mobileFineMode ? "mobile-fine-mode" : ""} ${mobileOneHandMode !== "off" ? `mobile-one-hand-${mobileOneHandMode}` : ""} ${isNarrowInitial && state.selected.length > 0 && !sidePanelOpen ? "has-mobile-selection" : ""}`,
+      className: `app ${focusMode ? "focus-mode" : ""} ${previewMode ? "preview-mode" : ""} ${manufacturingPreview ? "manufacturing-preview" : ""} ${showTouchHitboxes ? "show-touch-hitboxes" : ""} ${showSafeZones ? "show-safe-zones" : ""} ${leftPanelOpen ? "left-panel-open" : "left-panel-closed"} ${rightPanelOpen ? "right-panel-open" : "right-panel-closed"} ${!leftPanelOpen && !rightPanelOpen ? "both-panels-closed" : ""} ${mobileProtectMode ? "mobile-protect-mode" : ""} ${mobileFineMode ? "mobile-fine-mode" : ""} ${mobileOneHandMode !== "off" ? `mobile-one-hand-${mobileOneHandMode}` : ""} ${isNarrowInitial && state.selected.length > 0 && !sidePanelOpen ? "has-mobile-selection" : ""}`,
     },
     React.createElement(Topbar, {
       onExportSVGClick: () => setShowExportDialog(true),
@@ -3684,7 +3921,20 @@ function App() {
       rightPanelOpen: rightPanelOpen,
       onToggleRightPanel: () => setRightPanelOpen((v) => !v),
       autosaveStatus: autosaveStatus,
+      projectHealth: projectHealth,
     }),
+    previewMode &&
+      React.createElement(
+        "button",
+        {
+          className: "preview-exit-control",
+          onClick: manufacturingPreview
+            ? toggleManufacturingPreview
+            : togglePreviewMode,
+          title: "Return to the editor (Esc)",
+        },
+        manufacturingPreview ? "Exit manufacturing view" : "Exit preview",
+      ),
     showCommandPalette &&
       React.createElement(CommandPalette, {
         commands: commandItems,
@@ -3820,72 +4070,36 @@ function App() {
       React.createElement(ExportDialog, {
         options: exportOptions,
         onChange: setExportOptions,
-        onExport: () => {
-          exportSVG(state, exportOptions);
-          setShowExportDialog(false);
-        },
-        onExportPNG: () => {
-          void exportPNG(state, exportOptions).finally(() =>
-            setShowExportDialog(false),
-          );
-        },
-        onExportPSD: () => {
-          void exportPSD(state, exportOptions).finally(() =>
-            setShowExportDialog(false),
-          );
-        },
-        onExportLayeredSVG: () => {
-          exportLayeredSVG(state, exportOptions);
-          setShowExportDialog(false);
-        },
-        onExportLayeredSVGPackage: () => {
-          exportLayeredSVGPackage(state, exportOptions);
-          setShowExportDialog(false);
-        },
-        onExportInkscape: () => {
-          exportInkscapeSVG(state, exportOptions);
-          setShowExportDialog(false);
-        },
-        onExportMode: (mode) => {
-          exportSVGMode(state, mode, warnings);
-          setShowExportDialog(false);
-        },
-        onExportPackage: () => {
-          downloadExportPackage(state, warnings);
-          setShowExportDialog(false);
-        },
-        onExportPrintTemplatePDF: () => {
-          exportPrintTemplatePDF(state);
-          setShowExportDialog(false);
-        },
-        onExportDocumentationPDF: () => {
-          exportDocumentationPDF(state, warnings);
-          setShowExportDialog(false);
-        },
-        onExportCSV: () => {
-          exportCSVDrillTable(state, warnings);
-          setShowExportDialog(false);
-        },
-        onExportKiCad: () => {
-          exportKiCadPCB(state, exportOptions);
-          setShowExportDialog(false);
-        },
-        onExportEagle: () => {
-          exportEagleSCR(state);
-          setShowExportDialog(false);
-        },
-        onExportPrintTemplate: () => {
-          exportPrintableTemplate(state);
-          setShowExportDialog(false);
-        },
-        onExportDXF: () => {
-          exportDXF(state);
-          setShowExportDialog(false);
-        },
-        onExportReport: () => {
-          exportManufacturingReport(state, warnings);
-          setShowExportDialog(false);
-        },
+        onExport: () => completeExport(() => exportSVG(state, exportOptions)),
+        onExportPNG: () =>
+          completeExport(() => exportPNG(state, exportOptions)),
+        onExportPSD: () =>
+          completeExport(() => exportPSD(state, exportOptions)),
+        onExportLayeredSVG: () =>
+          completeExport(() => exportLayeredSVG(state, exportOptions)),
+        onExportLayeredSVGPackage: () =>
+          completeExport(() => exportLayeredSVGPackage(state, exportOptions)),
+        onExportInkscape: () =>
+          completeExport(() => exportInkscapeSVG(state, exportOptions)),
+        onExportMode: (mode) =>
+          completeExport(() => exportSVGMode(state, mode, warnings)),
+        onExportPackage: () =>
+          completeExport(() => downloadExportPackage(state, warnings)),
+        onExportPrintTemplatePDF: () =>
+          completeExport(() => exportPrintTemplatePDF(state)),
+        onExportDocumentationPDF: () =>
+          completeExport(() => exportDocumentationPDF(state, warnings)),
+        onExportCSV: () =>
+          completeExport(() => exportCSVDrillTable(state, warnings)),
+        onExportKiCad: () =>
+          completeExport(() => exportKiCadPCB(state, exportOptions)),
+        onExportEagle: () => completeExport(() => exportEagleSCR(state)),
+        onExportPrintTemplate: () =>
+          completeExport(() => exportPrintableTemplate(state)),
+        onExportDXF: () => completeExport(() => exportDXF(state)),
+        onExportReport: () =>
+          completeExport(() => exportManufacturingReport(state, warnings)),
+        onExportJSON: () => completeExport(() => exportJSON(state)),
         onCancel: () => setShowExportDialog(false),
       }),
     React.createElement(
@@ -4025,6 +4239,7 @@ function App() {
         onSVGDoubleClick: onSVGDoubleClick,
         onZoomChange: setZoom,
         issueFocusIds: issueFocusIds,
+        touchMode: touchMode,
       }),
       editingTextId &&
         (() => {
@@ -4052,7 +4267,7 @@ function App() {
         focusMode: focusMode,
         previewMode: previewMode,
         onToggleFocus: toggleFocusMode,
-        onTogglePreviewMode: () => setPreviewMode((v) => !v),
+        onTogglePreviewMode: togglePreviewMode,
         onOpenShortcuts: () => setShowShortcutHelp(true),
         touchMode: touchMode,
         onSetTouchMode: handleSetTouchMode,
@@ -4832,6 +5047,7 @@ function App() {
           return React.createElement(
             "div",
             {
+              className: "component-menu",
               style: {
                 position: "fixed",
                 left,

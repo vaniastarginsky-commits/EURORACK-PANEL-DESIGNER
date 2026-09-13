@@ -2659,6 +2659,7 @@ function SelectionActionToolbar() {
   const state = useAppState();
   const dispatch = useAppDispatch();
   const [expanded, setExpanded] = useState(false);
+  const [useLastAsAnchor, setUseLastAsAnchor] = useState(true);
   const count = state.selected.length;
   const selectedComponents = state.components.filter((c) =>
     state.selected.includes(c.id),
@@ -2673,19 +2674,30 @@ function SelectionActionToolbar() {
     selectedComponents.length > 1 &&
     groupIds.size === 1 &&
     selectedComponents.every((component) => !!component.groupId);
+  const referenceId = useLastAsAnchor
+    ? state.selected[state.selected.length - 1]
+    : state.selected[0];
+  const reference = state.components.find(
+    (component) => component.id === referenceId,
+  );
   if (count === 0) return null;
   return React.createElement(
     "div",
     {
       className: `selection-action-toolbar${expanded ? " expanded" : ""}`,
-      onMouseDown: (e) => e.stopPropagation(),
+      onMouseDown: (e) => {
+        e.stopPropagation();
+        window.dispatchEvent(new Event("panel-designer:close-component-menu"));
+      },
       onWheel: (e) => e.stopPropagation(),
     },
     React.createElement(
       "span",
       { className: "selection-action-count" },
       count,
-      " selected",
+      count > 1 && reference
+        ? ` selected · anchor ${reference.ref || reference.label || reference.name}`
+        : " selected",
     ),
     React.createElement(
       "button",
@@ -2788,6 +2800,46 @@ function SelectionActionToolbar() {
           ),
       },
       "Fit",
+    ),
+    React.createElement(
+      "button",
+      {
+        className: "selection-action-secondary",
+        disabled: count < 2,
+        title: "Switch between the first and last selected anchor",
+        onClick: () => setUseLastAsAnchor((value) => !value),
+      },
+      useLastAsAnchor ? "Anchor: last" : "Anchor: first",
+    ),
+    React.createElement(
+      "button",
+      {
+        className: "selection-action-secondary",
+        disabled: count < 2,
+        title: "Align horizontal centers to the anchor",
+        onClick: () =>
+          dispatch({
+            type: "ALIGN_TO_REFERENCE",
+            axis: "centerX",
+            referenceId,
+          }),
+      },
+      "To anchor X",
+    ),
+    React.createElement(
+      "button",
+      {
+        className: "selection-action-secondary",
+        disabled: count < 2,
+        title: "Align vertical centers to the anchor",
+        onClick: () =>
+          dispatch({
+            type: "ALIGN_TO_REFERENCE",
+            axis: "centerY",
+            referenceId,
+          }),
+      },
+      "To anchor Y",
     ),
     React.createElement(
       "button",
@@ -3231,6 +3283,7 @@ function SVGCanvas({
   onSVGDoubleClick,
   onZoomChange,
   issueFocusIds = [],
+  touchMode = "edit",
 }) {
   const state = useAppState();
   const dispatch = useAppDispatch();
@@ -3355,7 +3408,7 @@ function SVGCanvas({
   return React.createElement(
     "div",
     {
-      className: `canvas-wrap mode-${state.viewMode} ${state.selected.length ? "has-selection" : ""}`,
+      className: `canvas-wrap mode-${state.viewMode} ${state.selected.length ? "has-selection" : ""} ${state.components.length > 140 ? "large-layout-mode" : ""}`,
       style: { touchAction: "none" },
       onWheel: onWheel,
       onMouseDown: onWrapMouseDown,
@@ -3717,7 +3770,8 @@ function SVGCanvas({
               viewMode: state.viewMode,
               style: state.topHardwareStyle,
               renderMode: state.hardwareRenderMode || "auto",
-              performanceMode: !!state.mobilePerformanceMode,
+              performanceMode:
+                !!state.mobilePerformanceMode || state.components.length > 140,
               zoom: zoom,
               dragPerfMode: !!dragPreview && dragPreview.size > 8,
             }),
@@ -3998,6 +4052,12 @@ function SVGCanvas({
           " issues",
         ),
     ),
+    touchMode === "select" &&
+      React.createElement(
+        "div",
+        { className: "mobile-lasso-hint" },
+        "Multi: tap parts or drag empty space",
+      ),
     React.createElement(
       "div",
       {
@@ -4161,6 +4221,11 @@ function SVGCanvas({
               },
               "Import Eagle",
             ),
+          ),
+          React.createElement(
+            "small",
+            { className: "canvas-empty-shortcut" },
+            "Tip: Ctrl/Cmd + K searches every command and component.",
           ),
         ),
     ),

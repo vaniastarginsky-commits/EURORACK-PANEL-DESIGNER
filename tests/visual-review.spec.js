@@ -245,6 +245,87 @@ const states = [
       await page.locator(".component-hover-card").waitFor({ state: "visible" });
     },
   ],
+  [
+    "desktop-selection-workflow",
+    desktop,
+    async (page) => {
+      await placeComponentOnCanvas(page, { xOffset: -14 });
+      await placeComponentOnCanvas(page, { xOffset: 14 });
+      const components = page.locator(".component-node");
+      await components.nth(0).click();
+      await components.nth(1).click({ modifiers: ["Shift"] });
+      await components.nth(1).click({ button: "right" });
+      const count = await page.locator(".selection-action-count").textContent();
+      if (!count?.includes("2"))
+        throw new Error("Right click collapsed the multi-selection");
+      await page.locator(".selection-action-more").click();
+      await page
+        .getByRole("button", { name: "Anchor: last", exact: true })
+        .waitFor({ state: "visible" });
+    },
+  ],
+  [
+    "desktop-dfm-fix-preview",
+    desktop,
+    async (page) => {
+      await placeComponentOnCanvas(page, { xOffset: -14 });
+      await placeComponentOnCanvas(page, { xOffset: 14 });
+      await page
+        .locator(".sidebar-right")
+        .getByRole("button", { name: "Warnings", exact: true })
+        .click();
+      await page
+        .getByRole("button", { name: "Preview fix", exact: true })
+        .first()
+        .click();
+      await page.locator(".warning-fix-preview").waitFor({ state: "visible" });
+    },
+  ],
+  [
+    "desktop-manufacturing-preview",
+    desktop,
+    async (page) => {
+      await placeComponentOnCanvas(page);
+      await page.keyboard.press("p");
+      await page
+        .getByRole("button", { name: "Exit manufacturing view", exact: true })
+        .waitFor({ state: "visible" });
+    },
+  ],
+  [
+    "desktop-large-layout",
+    desktop,
+    async (page) => {
+      const components = Array.from({ length: 180 }, (_, index) => ({
+        id: `perf-${index}`,
+        type: "jack",
+        name: "6mm Jack",
+        ref: `J${index + 1}`,
+        label: "",
+        x: 12 + (index % 30) * 13.6,
+        y: 12 + Math.floor(index / 30) * 20,
+        rotation: 0,
+        locked: false,
+      }));
+      await page.locator("#project-file-input").setInputFiles({
+        name: "large-layout.json",
+        mimeType: "application/json",
+        buffer: Buffer.from(
+          JSON.stringify({
+            projectVersion: 4,
+            panel: { widthHP: 84, customHP: false },
+            components,
+          }),
+        ),
+      });
+      await page.waitForFunction(
+        () => document.querySelectorAll(".component-node").length === 180,
+      );
+      await page
+        .locator(".canvas-wrap.large-layout-mode")
+        .waitFor({ state: "visible" });
+    },
+  ],
 
   ["mobile-default", mobile, async () => {}],
   [
@@ -441,7 +522,7 @@ async function openComponentLibraryPopover(page) {
     .waitFor({ state: "visible" });
 }
 
-async function placeComponentOnCanvas(page) {
+async function placeComponentOnCanvas(page, { xOffset = 0, yOffset = 0 } = {}) {
   // Dispatch the internal placement event with a minimal Thonkiconn jack definition.
   await page.evaluate(() => {
     window.dispatchEvent(
@@ -470,11 +551,14 @@ async function placeComponentOnCanvas(page) {
   await svg.waitFor({ state: "visible" });
   const box = await svg.boundingBox();
   if (!box) throw new Error(".panel-canvas-svg bounding box not available");
-  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.click(
+    box.x + box.width / 2 + xOffset,
+    box.y + box.height / 2 + yOffset,
+  );
   // Wait for the component SVG group to appear in the DOM.
   await page
     .locator(".panel-canvas-svg [data-id]")
-    .first()
+    .last()
     .waitFor({ state: "visible" });
 }
 

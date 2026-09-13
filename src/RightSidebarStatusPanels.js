@@ -156,9 +156,11 @@ function SelfCheckPanel({ warnings }) {
 function WarningsPanel({ warnings }) {
   const state = useAppState();
   const dispatch = useAppDispatch();
+  const [pendingFix, setPendingFix] = useState(null);
   const componentIds = new Set(
     state.components.map((component) => component.id),
   );
+  useEffect(() => setPendingFix(null), [state.components]);
   function focusComponents(ids, inspect = false) {
     window.dispatchEvent(
       new CustomEvent("panel-designer:focus-components", {
@@ -188,54 +190,93 @@ function WarningsPanel({ warnings }) {
       warnings.length,
       ")",
     ),
-    warnings.map((w, i) =>
-      React.createElement(
+    warnings.map((w, i) => {
+      const ids = (w.ids || []).filter((id) => componentIds.has(id));
+      const fixKey = `${i}:${ids.join(":")}`;
+      const preview = pendingFix?.key === fixKey ? pendingFix.suggestion : null;
+      return React.createElement(
         "div",
         {
           key: i,
           className: `warning-item${w.severity === "warn" ? " warn" : ""}${w.tone ? " pcb-" + w.tone : ""}`,
         },
         React.createElement("span", null, w.message),
-        w.ids?.some((id) => componentIds.has(id)) &&
+        ids.length > 0 &&
           React.createElement(
             "span",
             { className: "warning-actions" },
             React.createElement(
               "button",
               {
-                onClick: () =>
-                  focusComponents(
-                    (w.ids || []).filter((id) => componentIds.has(id)),
-                  ),
+                onClick: () => focusComponents(ids),
               },
               "Focus",
             ),
             React.createElement(
               "button",
               {
-                onClick: () =>
-                  focusComponents(
-                    (w.ids || []).filter((id) => componentIds.has(id)),
-                    true,
-                  ),
+                onClick: () => focusComponents(ids, true),
               },
               "Properties",
             ),
-            w.ids?.filter((id) => componentIds.has(id)).length === 2 &&
+            ids.length === 2 &&
               React.createElement(
                 "button",
                 {
-                  onClick: () =>
-                    dispatch({
-                      type: "RESOLVE_COMPONENT_CLEARANCE",
-                      ids: w.ids,
-                    }),
+                  onClick: () => {
+                    const suggestion = suggestClearanceResolution(
+                      state.components,
+                      panelWidthMM(state.panel),
+                      state.mountingHoles,
+                      state.pcb,
+                      ids,
+                    );
+                    setPendingFix({ key: fixKey, suggestion });
+                    focusComponents(ids);
+                  },
                 },
-                "Fix spacing",
+                "Preview fix",
               ),
           ),
-      ),
-    ),
+        pendingFix?.key === fixKey &&
+          React.createElement(
+            "div",
+            { className: "warning-fix-preview" },
+            preview
+              ? React.createElement(
+                  React.Fragment,
+                  null,
+                  React.createElement(
+                    "span",
+                    null,
+                    `Move by Δx ${preview.dx.toFixed(1)} / Δy ${preview.dy.toFixed(1)} mm`,
+                  ),
+                  React.createElement(
+                    "button",
+                    {
+                      onClick: () =>
+                        dispatch({
+                          type: "RESOLVE_COMPONENT_CLEARANCE",
+                          ids,
+                          position: preview,
+                        }),
+                    },
+                    `Apply · ${Math.max(1, preview.resolvedWarnings)} resolved`,
+                  ),
+                )
+              : React.createElement(
+                  "span",
+                  null,
+                  "No safer free position was found on this panel.",
+                ),
+            React.createElement(
+              "button",
+              { onClick: () => setPendingFix(null) },
+              "Cancel",
+            ),
+          ),
+      );
+    }),
   );
 }
 function LayoutStatusPanel({ warnings, components }) {

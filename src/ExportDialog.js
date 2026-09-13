@@ -135,6 +135,7 @@ function ExportDialog({
   onExportEagle,
   onExportPrintTemplatePDF,
   onExportDocumentationPDF,
+  onExportJSON,
   onCancel,
 }) {
   const rows = [
@@ -943,7 +944,7 @@ function ExportDialog({
             ),
             React.createElement(
               "button",
-              { onClick: () => exportJSON(state) },
+              { onClick: onExportJSON },
               "Save Project JSON",
             ),
           ),

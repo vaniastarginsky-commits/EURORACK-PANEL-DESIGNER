@@ -370,6 +370,51 @@ function appReducer(state, action) {
         ),
       });
     }
+    case "ALIGN_TO_REFERENCE": {
+      if (state.selected.length < 2) return state;
+      const reference = state.components.find(
+        (component) => component.id === action.referenceId,
+      );
+      if (!reference || !state.selected.includes(reference.id)) return state;
+      const referenceExtents = getFrontExtents(reference);
+      return withHistory(state, {
+        ...snapshot(state),
+        components: state.components.map((component) => {
+          if (
+            component.id === reference.id ||
+            !state.selected.includes(component.id) ||
+            component.locked
+          )
+            return component;
+          const extents = getFrontExtents(component);
+          if (action.axis === "centerX")
+            return { ...component, x: reference.x };
+          if (action.axis === "centerY")
+            return { ...component, y: reference.y };
+          if (action.axis === "left")
+            return {
+              ...component,
+              x: referenceExtents.x1 + (component.x - extents.x1),
+            };
+          if (action.axis === "right")
+            return {
+              ...component,
+              x: referenceExtents.x2 - (extents.x2 - component.x),
+            };
+          if (action.axis === "top")
+            return {
+              ...component,
+              y: referenceExtents.y1 + (component.y - extents.y1),
+            };
+          if (action.axis === "bottom")
+            return {
+              ...component,
+              y: referenceExtents.y2 - (extents.y2 - component.y),
+            };
+          return component;
+        }),
+      });
+    }
     case "DISTRIBUTE": {
       if (state.selected.length < 3) return state;
       const sel = [
@@ -442,57 +487,22 @@ function appReducer(state, action) {
         .filter(Boolean)
         .slice(0, 2);
       if (pair.length !== 2) return state;
-      const [a, b] = pair;
-      const aExt = getFrontExtents(a);
-      const bExt = getFrontExtents(b);
-      const aWidth = Math.max(
-        aExt.x2 - aExt.x1,
-        a.rearBodyW || 0,
-        a.keepoutW || 0,
-      );
-      const bWidth = Math.max(
-        bExt.x2 - bExt.x1,
-        b.rearBodyW || 0,
-        b.keepoutW || 0,
-      );
-      const aHeight = Math.max(
-        aExt.y2 - aExt.y1,
-        a.rearBodyH || 0,
-        a.keepoutH || 0,
-      );
-      const bHeight = Math.max(
-        bExt.y2 - bExt.y1,
-        b.rearBodyH || 0,
-        b.keepoutH || 0,
-      );
-      const gap = Math.max(a.minSpacing || 0, b.minSpacing || 0, 1);
-      const dx = b.x - a.x;
-      const dy = b.y - a.y;
-      const panelWidth = panelWidthMM(state.panel);
-      const patch =
-        Math.abs(dx) >= Math.abs(dy)
-          ? {
-              x: Math.min(
-                panelWidth - bWidth / 2,
-                Math.max(
-                  bWidth / 2,
-                  a.x + (dx < 0 ? -1 : 1) * ((aWidth + bWidth) / 2 + gap),
-                ),
-              ),
-            }
-          : {
-              y: Math.min(
-                PANEL_HEIGHT_MM - bHeight / 2,
-                Math.max(
-                  bHeight / 2,
-                  a.y + (dy < 0 ? -1 : 1) * ((aHeight + bHeight) / 2 + gap),
-                ),
-              ),
-            };
+      const suggestion =
+        action.position ||
+        suggestClearanceResolution(
+          state.components,
+          panelWidthMM(state.panel),
+          state.mountingHoles,
+          state.pcb,
+          action.ids,
+        );
+      if (!suggestion) return state;
       return withHistory(state, {
         ...snapshot(state),
         components: state.components.map((component) =>
-          component.id === b.id ? { ...component, ...patch } : component,
+          component.id === suggestion.id
+            ? { ...component, x: suggestion.x, y: suggestion.y }
+            : component,
         ),
         selected: pair.map((component) => component.id),
       });
@@ -840,13 +850,15 @@ function appReducer(state, action) {
           c.id === action.id ? { ...c, locked: action.locked } : c,
         ),
       });
-    case "LOCK_SELECTED":
+    case "LOCK_SELECTED": {
+      const ids = action.ids || state.selected;
       return withHistory(state, {
         ...snapshot(state),
         components: state.components.map((c) =>
-          state.selected.includes(c.id) ? { ...c, locked: action.locked } : c,
+          ids.includes(c.id) ? { ...c, locked: action.locked } : c,
         ),
       });
+    }
     case "GROUP_SELECTED": {
       if (state.selected.length < 2) return state;
       const groupId = crypto.randomUUID();
