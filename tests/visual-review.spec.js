@@ -255,7 +255,9 @@ const states = [
       await components.nth(0).click();
       await components.nth(1).click({ modifiers: ["Shift"] });
       await components.nth(1).click({ button: "right" });
-      const selectedCount = await page.locator(".component-node.is-selected").count();
+      const selectedCount = await page
+        .locator(".component-node.is-selected")
+        .count();
       if (selectedCount !== 2)
         throw new Error("Right click collapsed the multi-selection");
       await page.locator(".component-menu").getByText("2 selected").waitFor();
@@ -305,7 +307,10 @@ const states = [
       await mountingHoles.waitFor({ state: "visible" });
       const artworkAboveMountingHoles = await artwork.evaluate((node) => {
         const holes = document.querySelector(".mounting-holes-layer");
-        return !!(holes && holes.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING);
+        return !!(
+          holes &&
+          holes.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING
+        );
       });
       if (artworkAboveMountingHoles)
         throw new Error("Background artwork renders above mounting holes");
@@ -371,6 +376,47 @@ const states = [
       await page
         .locator(".canvas-wrap.large-layout-mode")
         .waitFor({ state: "visible" });
+    },
+  ],
+  [
+    "desktop-kicad-panel-parts-only",
+    desktop,
+    async (page) => {
+      const footprint = (name, ref, value, x, y, pads) => `
+        (footprint "${name}"
+          (at ${x} ${y})
+          (property "Reference" "${ref}")
+          (property "Value" "${value}")
+          ${pads}
+        )`;
+      const smdPads = `
+        (pad "1" smd rect (at -0.8 0) (size 1 1) (layers "F.Cu"))
+        (pad "2" smd rect (at 0.8 0) (size 1 1) (layers "F.Cu"))`;
+      const throughHolePads = `
+        (pad "1" thru_hole circle (at 0 0) (size 2 2) (drill 1) (layers "*.Cu" "*.Mask"))
+        (pad "2" thru_hole circle (at 2.5 0) (size 2 2) (drill 1) (layers "*.Cu" "*.Mask"))
+        (pad "3" thru_hole circle (at 5 0) (size 2 2) (drill 1) (layers "*.Cu" "*.Mask"))`;
+      const board = `(kicad_pcb
+        (gr_rect (start 0 0) (end 60 128.5) (layer "Edge.Cuts"))
+        ${footprint("Resistor_SMD:R_0603_1608Metric", "R1", "10k", 10, 20, smdPads)}
+        ${footprint("Capacitor_SMD:C_0603_1608Metric", "C1", "100nF", 18, 20, smdPads)}
+        ${footprint("Potentiometer_THT:Potentiometer_Alpha_RD901F-40", "RV1", "B100K", 15, 48, throughHolePads)}
+        ${footprint("Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical", "J1", "AudioJack", 30, 70, throughHolePads)}
+        ${footprint("Button_Switch_THT:SW_PUSH_6mm", "SW1", "SW_Push", 45, 48, throughHolePads)}
+      )`;
+      await page.locator("#kicad-pcb-file-input").setInputFiles({
+        name: "panel-parts-only.kicad_pcb",
+        mimeType: "text/plain",
+        buffer: Buffer.from(board),
+      });
+      await page.waitForFunction(
+        () => document.querySelectorAll(".component-node").length === 3,
+      );
+      const labels = await page
+        .locator(".component-node")
+        .evaluateAll((nodes) => nodes.map((node) => node.textContent || ""));
+      if (labels.some((label) => /R1|C1/.test(label)))
+        throw new Error("KiCad import included PCB-only resistor/capacitor");
     },
   ],
 

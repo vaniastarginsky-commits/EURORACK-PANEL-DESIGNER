@@ -394,7 +394,7 @@ function boardOutlineFromKiCad(src) {
 function bestLibraryPartForKiCad(ref, fp, pads) {
   const hay = `${ref} ${fp}`.toLowerCase();
   const exactFind = (type) =>
-    COMPONENT_LIBRARY.find((p) => p.type === type) || COMPONENT_LIBRARY[0];
+    COMPONENT_LIBRARY.find((p) => p.type === type) || null;
   if (/DIP-8|DIODE_SOCKET|Package_DIP:DIP-8|Socket.*8/i.test(`${ref} ${fp}`))
     return exactFind("dip8socket");
   if (/Jack_3\.5mm_QingPu_WQP-PJ398SM|pj398sm|thonkiconn/i.test(`${ref} ${fp}`))
@@ -413,8 +413,7 @@ function bestLibraryPartForKiCad(ref, fp, pads) {
   );
   const maxSize = Math.max(0, ...pads.map((p) => Math.max(p.sizeW, p.sizeH)));
   const slot = pads.find((p) => p.oval || Math.abs(p.drillW - p.drillH) > 1.0);
-  const find = (type) =>
-    COMPONENT_LIBRARY.find((p) => p.type === type) || COMPONENT_LIBRARY[0];
+  const find = (type) => COMPONENT_LIBRARY.find((p) => p.type === type) || null;
   if (/ra4543/i.test(hay)) return find("fader45");
   if (/ra3043/i.test(hay)) return find("fader35");
   if (
@@ -428,9 +427,9 @@ function bestLibraryPartForKiCad(ref, fp, pads) {
   }
   if (/encoder|ec12|pec11/i.test(hay) || /^ENC/i.test(ref))
     return find("encoder");
-  if (/jack|pj398|thonk|audio|conn_01x01|phone/i.test(hay) || /^J/i.test(ref))
+  if (/jack|pj398|thonk|audio|conn_01x01|phone/i.test(hay))
     return maxDrill >= 8.5 ? find("slimjack") : find("jack");
-  if (/led/i.test(hay) || /^D/i.test(ref) || /^LED/i.test(ref))
+  if (/led/i.test(hay) || /^LED/i.test(ref))
     return find(
       maxDrill >= 5.0 || /button|tact/i.test(hay) ? "tactled" : "led3mm",
     );
@@ -449,21 +448,7 @@ function bestLibraryPartForKiCad(ref, fp, pads) {
       ? find("pot16mm")
       : find("pot9mm");
   }
-  const d = maxDrill || Math.max(3, maxSize * 0.55);
-  return sanitizePart({
-    type: "custom",
-    name: `KiCad ${ref || fp}`,
-    holeDiameter: d,
-    frontDiameter: Math.max(d + 1.5, maxSize || d),
-    rearBodyW: Math.max(maxSize, d + 2),
-    rearBodyH: Math.max(maxSize, d + 2),
-    rearDepth: 8,
-    keepoutW: Math.max(maxSize, d + 4),
-    keepoutH: Math.max(maxSize, d + 4),
-    minSpacing: 1,
-    category: "custom",
-    verificationStatus: "approximate",
-  });
+  return null;
 }
 function rotateKiCadLocalOffset(dx, dy, deg) {
   const a = ((deg || 0) * Math.PI) / 180;
@@ -494,6 +479,7 @@ function parseKiCadPcbToPanel(src, currentPanelWidthMM) {
   const outline = boardOutlineFromKiCad(src);
   const footprints = sexprBlocks(src, "footprint");
   const raw = [];
+  let skippedNonPanelCount = 0;
   for (const fpBlock of footprints) {
     const at = parseAt(fpBlock);
     if (!at) continue;
@@ -518,25 +504,44 @@ function parseKiCadPcbToPanel(src, currentPanelWidthMM) {
       !pads.length &&
       !hasPanelGraphic &&
       !/^(RV|R?POT|J|SW|S|D|LED|ENC|FDR|SL)/i.test(ref)
-    )
+    ) {
+      skippedNonPanelCount++;
       continue;
+    }
     if (
       !isDip8Footprint &&
       !hasPanelGraphic &&
       pads.length >= 4 &&
       /conn|header|pin|socket/i.test(`${fp} ${value}`) &&
       !/jack|pj398|audio/i.test(`${fp} ${value}`)
-    )
+    ) {
+      skippedNonPanelCount++;
       continue;
+    }
     const def = bestLibraryPartForKiCad(`${ref} ${value}`, fp, pads);
+    if (!def) {
+      skippedNonPanelCount++;
+      continue;
+    }
     raw.push({ ref, value, description, fp, fpBlock, at, pads, def });
   }
-  if (!raw.length)
+  if (!raw.length) {
+    const skippedMessage = skippedNonPanelCount
+      ? `Ignored ${skippedNonPanelCount} footprints that are not recognized front-panel parts.`
+      : "";
     return {
       components: [],
       boardOutline: outline,
-      warnings: ["No importable footprints with positions/pads found."],
+      warnings: [
+        "No recognized front-panel components found.",
+        skippedMessage,
+      ].filter(Boolean),
     };
+  }
+  if (skippedNonPanelCount)
+    warnings.push(
+      `Ignored ${skippedNonPanelCount} footprints that are not recognized front-panel parts.`,
+    );
   const minX = outline?.x ?? Math.min(...raw.map((r) => r.at.x));
   const minY = outline?.y ?? Math.min(...raw.map((r) => r.at.y));
   const width =
