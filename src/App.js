@@ -2753,6 +2753,8 @@ function App() {
       rotationPreview
     );
     const delay = busy ? 7000 : 2200;
+    if (projectString(state) !== lastAutosaveDataRef.current)
+      setAutosaveStatus("Saving…");
     autosaveTimerRef.current = window.setTimeout(() => {
       autosaveTimerRef.current = null;
       writeAutosaveNow("debounced");
@@ -3522,22 +3524,12 @@ function App() {
       hint: "Panel/block templates",
       run: () => setShowTemplatesDialog(true),
     },
-    {
-      id: "add-fader20",
-      label: "Add 20mm fader",
-      hint: "Place at panel center",
-      run: () => {
-        const def =
-          COMPONENT_LIBRARY.find((c) => c.type === "fader20") ||
-          COMPONENT_LIBRARY[0];
-        dispatch({
-          type: "ADD_COMPONENT",
-          def,
-          x: snapToGrid(widthMM / 2, state.grid.size),
-          y: snapToGrid(PANEL_HEIGHT_MM / 2, state.grid.size),
-        });
-      },
-    },
+    ...COMPONENT_LIBRARY.map((def, index) => ({
+      id: `add-part-${index}-${def.type}`,
+      label: `Place: ${shortPartName(def)}`,
+      hint: `${def.manufacturer || "Generic"} · ${def.partNumber || def.type} · ${def.verificationStatus || "approximate"}`,
+      run: () => startPartPlacement(def),
+    })),
     {
       id: "select-all",
       label: "Select all components",
@@ -3607,6 +3599,7 @@ function App() {
       isNarrow: isNarrowInitial,
       rightPanelOpen: rightPanelOpen,
       onToggleRightPanel: () => setRightPanelOpen((v) => !v),
+      autosaveStatus: autosaveStatus,
     }),
     showCommandPalette &&
       React.createElement(CommandPalette, {

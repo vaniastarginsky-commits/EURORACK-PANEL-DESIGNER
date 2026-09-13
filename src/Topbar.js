@@ -10,6 +10,7 @@ function Topbar({
   isNarrow,
   rightPanelOpen,
   onToggleRightPanel,
+  autosaveStatus,
 }) {
   const state = useAppState();
   const dispatch = useAppDispatch();
@@ -106,9 +107,23 @@ function Topbar({
           },
           menuButton("project", "Project"),
           menuButton("panel", "Panel"),
-          menuButton("add", "Add"),
-          menuButton("text", "Text"),
+          menuButton("add", "Insert"),
+          menuButton("text", "Labels"),
         ),
+        !isNarrow &&
+          React.createElement(
+            "div",
+            {
+              className: `topbar-project-status${autosaveStatus?.includes("failed") ? " error" : ""}`,
+              title: autosaveStatus || "Autosave ready",
+            },
+            React.createElement("strong", null, state.projectMeta.name),
+            React.createElement(
+              "span",
+              null,
+              autosaveStatus || "Autosave ready",
+            ),
+          ),
         React.createElement(
           "div",
           { className: "topbar-history-group" },

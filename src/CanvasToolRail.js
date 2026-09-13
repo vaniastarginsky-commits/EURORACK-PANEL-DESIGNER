@@ -56,8 +56,8 @@ const ICON = {
   ]),
   fit: toolIcon(["M15 3h6v6", "M9 21H3v-6", "M21 3l-7 7", "M3 21l7-7"]),
   rotate: toolIcon([
-    "M20.49 9A9 9 0 1 1 5.64 5.64",
-    "M23 4L23 10L17 10",
+    "M20 11a8 8 0 1 0-2.34 5.66",
+    "M20 4v7h-7",
   ]),
   safe: toolIcon(
     "M12 2l8 4v5c0 4.6-3.2 8.9-8 10.4C7.2 19.9 4 15.6 4 11V6l8-4z",
@@ -264,12 +264,12 @@ function CanvasToolRail({
         },
       }),
       React.createElement("div", { className: "canvas-tool-separator" }),
-      command("Edit", ICON.edit, {
+      command("Select", ICON.edit, {
         className: touchMode === "edit" ? "active" : "",
         onClick: () => setMode("edit"),
       }),
       command("Multi", ICON.multi, {
-        className: touchMode === "select" ? "active" : "",
+        className: `canvas-tool-touch-only${touchMode === "select" ? " active" : ""}`,
         onClick: () => setMode(touchMode === "select" ? "edit" : "select"),
       }),
       command("Ruler", ICON.ruler, {

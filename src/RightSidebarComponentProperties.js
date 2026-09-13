@@ -82,6 +82,8 @@ function PropertiesPanel() {
     isJackLike(c) ||
     isButtonLike(c) ||
     isLedLike(c);
+  const showThreadedHardware =
+    hasNutWasherHardware(c) && !isButtonLike(c) && !isLedLike(c);
   const isToggleLike =
     c.type === "toggle" || c.type === "toggleSpdt" || c.type === "toggle2m";
   const applyToSameType = (patchObj) =>
@@ -342,12 +344,12 @@ function PropertiesPanel() {
       { className: "section-title", style: { marginTop: 8 } },
       "Front",
     ),
-    hasNutWasherHardware(c)
+    showThreadedHardware
       ? React.createElement(
           "div",
           { className: "front-compact-grid" },
           React.createElement(NumFieldCompact, {
-            label: "Hole \u00D8",
+            label: "Panel cutout \u00D8",
             value: c.holeDiameter,
             onChange: (v) => patch({ holeDiameter: v }),
           }),
@@ -370,16 +372,25 @@ function PropertiesPanel() {
       : React.createElement(
           React.Fragment,
           null,
-          React.createElement(NumField, {
-            label: "Hole \u00D8 (mm)",
-            value: c.holeDiameter,
-            onChange: (v) => patch({ holeDiameter: v }),
-          }),
-          React.createElement(NumField, {
-            label: "Min spacing (mm)",
-            value: c.minSpacing,
-            onChange: (v) => patch({ minSpacing: v }),
-          }),
+          React.createElement(
+            "div",
+            { className: "front-compact-grid" },
+            React.createElement(NumFieldCompact, {
+              label: "Panel cutout \u00D8",
+              value: c.holeDiameter,
+              onChange: (v) => patch({ holeDiameter: v }),
+            }),
+            React.createElement(NumFieldCompact, {
+              label: isButtonLike(c) ? "Bezel \u00D8" : "Front \u00D8",
+              value: c.frontDiameter,
+              onChange: (v) => patch({ frontDiameter: v }),
+            }),
+            React.createElement(NumFieldCompact, {
+              label: "Min spacing",
+              value: c.minSpacing,
+              onChange: (v) => patch({ minSpacing: v }),
+            }),
+          ),
         ),
     c.holeType === "rect" &&
       React.createElement(

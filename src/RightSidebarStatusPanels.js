@@ -154,6 +154,11 @@ function SelfCheckPanel({ warnings }) {
   );
 }
 function WarningsPanel({ warnings }) {
+  const state = useAppState();
+  const dispatch = useAppDispatch();
+  const componentIds = new Set(
+    state.components.map((component) => component.id),
+  );
   if (warnings.length === 0) {
     return React.createElement(
       "div",
@@ -178,12 +183,20 @@ function WarningsPanel({ warnings }) {
     ),
     warnings.map((w, i) =>
       React.createElement(
-        "div",
+        "button",
         {
           key: i,
           className: `warning-item${w.severity === "warn" ? " warn" : ""}${w.tone ? " pcb-" + w.tone : ""}`,
+          disabled: !w.ids?.some((id) => componentIds.has(id)),
+          title: "Select the affected component(s) on the canvas",
+          onClick: () => {
+            const ids = (w.ids || []).filter((id) => componentIds.has(id));
+            if (ids.length) dispatch({ type: "SELECT", ids, additive: false });
+          },
         },
-        w.message,
+        React.createElement("span", null, w.message),
+        w.ids?.some((id) => componentIds.has(id)) &&
+          React.createElement("small", null, "Show on canvas →"),
       ),
     ),
   );

@@ -2457,14 +2457,14 @@ function SelectionActionToolbar() {
       onMouseDown: (e) => e.stopPropagation(),
       onWheel: (e) => e.stopPropagation(),
     },
-    React.createElement("span", null, count, " selected"),
+    React.createElement("span", { className: "selection-action-count" }, count, " selected"),
     React.createElement(
       "button",
       {
         title: "Duplicate selected",
         onClick: () => dispatch({ type: "DUPLICATE_SELECTED" }),
       },
-      "Dup",
+      "Duplicate",
     ),
     React.createElement(
       "button",
@@ -2473,7 +2473,7 @@ function SelectionActionToolbar() {
         disabled: count < 2,
         onClick: () => dispatch({ type: "ALIGN", axis: "centerH" }),
       },
-      "C-X",
+      "Align X",
     ),
     React.createElement(
       "button",
@@ -2482,7 +2482,7 @@ function SelectionActionToolbar() {
         disabled: count < 2,
         onClick: () => dispatch({ type: "ALIGN", axis: "centerV" }),
       },
-      "C-Y",
+      "Align Y",
     ),
     React.createElement(
       "button",
@@ -2491,7 +2491,7 @@ function SelectionActionToolbar() {
         disabled: count < 3,
         onClick: () => dispatch({ type: "DISTRIBUTE", axis: "h" }),
       },
-      "Dist-H",
+      "Space X",
     ),
     React.createElement(
       "button",
@@ -2500,7 +2500,7 @@ function SelectionActionToolbar() {
         disabled: count < 3,
         onClick: () => dispatch({ type: "DISTRIBUTE", axis: "v" }),
       },
-      "Dist-V",
+      "Space Y",
     ),
     React.createElement(
       "button",
@@ -2508,7 +2508,16 @@ function SelectionActionToolbar() {
         title: "Rotate 90\u00B0",
         onClick: () => dispatch({ type: "ROTATE_SELECTED", degrees: 90 }),
       },
-      "Rot",
+      "Rotate 90°",
+    ),
+    React.createElement(
+      "button",
+      {
+        title: "Group selected components",
+        disabled: count < 2,
+        onClick: () => dispatch({ type: "GROUP_SELECTED" }),
+      },
+      "Group",
     ),
     React.createElement(
       "button",
@@ -3477,13 +3486,46 @@ function SVGCanvas({
               locked: false,
             };
             const front = getFrontBounds(ghost);
+            const placementWarnings = computeWarnings(
+              [...state.components, ghost],
+              widthMM,
+              state.mountingHoles,
+              state.pcb,
+            ).filter((warning) => warning.ids.includes(ghost.id));
+            const hasPlacementConflict = placementWarnings.some(
+              (warning) => warning.severity === "error",
+            );
             return React.createElement(
               "g",
               {
-                className: "pending-add-ghost",
+                className: `pending-add-ghost${hasPlacementConflict ? " conflict" : ""}`,
                 style: { pointerEvents: "none" },
                 opacity: 0.72,
               },
+              ghost.keepoutW > 0 &&
+                React.createElement("rect", {
+                  x: ghost.x - ghost.keepoutW / 2,
+                  y: ghost.y - ghost.keepoutH / 2,
+                  width: ghost.keepoutW,
+                  height: ghost.keepoutH,
+                  fill: "rgba(var(--ui-danger-rgb), .08)",
+                  stroke: "var(--ui-danger)",
+                  strokeWidth: 0.18,
+                  strokeDasharray: "0.8 0.8",
+                  vectorEffect: "non-scaling-stroke",
+                }),
+              ghost.rearBodyW > 0 &&
+                React.createElement("rect", {
+                  x: ghost.x - ghost.rearBodyW / 2,
+                  y: ghost.y - ghost.rearBodyH / 2,
+                  width: ghost.rearBodyW,
+                  height: ghost.rearBodyH,
+                  fill: "rgba(var(--ui-gold-rgb), .06)",
+                  stroke: "var(--ui-gold)",
+                  strokeWidth: 0.2,
+                  strokeDasharray: "1.2 0.55",
+                  vectorEffect: "non-scaling-stroke",
+                }),
               getFrontShape(ghost) !== "circle"
                 ? React.createElement(
                     "g",
@@ -3578,6 +3620,7 @@ function SVGCanvas({
                   paintOrder: "stroke fill",
                 },
                 shortPartName(pendingAddPart.def),
+                hasPlacementConflict ? " · CONFLICT" : "",
               ),
             );
           })(),
@@ -3790,6 +3833,32 @@ function SVGCanvas({
         { className: "hud-zone hud-top-right" },
         React.createElement(SnapFeedbackBadge, { guides: snapGuides }),
       ),
+      state.components.length === 0 &&
+        state.artworks.length === 0 &&
+        state.textItems.length === 0 &&
+        !pendingAddPart &&
+        React.createElement(
+          "div",
+          { className: "canvas-empty-state" },
+          React.createElement("strong", null, "Start your panel"),
+          React.createElement("span", null, "Place a component, start from a template, or import a board."),
+          React.createElement(
+            "div",
+            { className: "canvas-empty-actions" },
+            React.createElement("button", { onClick: () => AppCommands.openComponentLibraryPicker() }, "Add component"),
+            React.createElement("button", { onClick: () => AppCommands.openTemplatesDialog() }, "Templates"),
+            React.createElement(
+              "button",
+              { onClick: () => document.getElementById("kicad-pcb-file-input")?.click() },
+              "Import KiCad",
+            ),
+            React.createElement(
+              "button",
+              { onClick: () => document.getElementById("eagle-brd-file-input")?.click() },
+              "Import Eagle",
+            ),
+          ),
+        ),
     ),
     hoverTip &&
       React.createElement(ComponentHoverTooltip, {

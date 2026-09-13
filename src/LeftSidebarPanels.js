@@ -224,6 +224,7 @@ function ComponentLibraryPanel({
   const [replaceMode, setReplaceMode] = useState(false);
   const [partSearch, setPartSearch] = useState("");
   const [partCategory, setPartCategory] = useState("all");
+  const [partVerification, setPartVerification] = useState("all");
   const [resetPartsArmed, setResetPartsArmed] = useState(false);
   const [renderLimit, setRenderLimit] = useState(48);
   useEffect(() => {
@@ -242,7 +243,7 @@ function ComponentLibraryPanel({
   const [popoverPos, setPopoverPos] = useState({ left: 330, top: 80 });
   useEffect(() => {
     setRenderLimit(48);
-  }, [partSearch, partCategory, state.customParts.length]);
+  }, [partSearch, partCategory, partVerification, state.customParts.length]);
   useEffect(() => {
     if (!headless) return;
     function openLibraryFromCanvas() {
@@ -297,9 +298,14 @@ function ComponentLibraryPanel({
     const cat = def.category ?? inferCategoryForType(def.type);
     const matchesCat = partCategory === "all" || cat === partCategory;
     const status = def.verificationStatus || "approximate";
+    const matchesVerification =
+      partVerification === "all" ||
+      (partVerification === "verified"
+        ? status !== "approximate"
+        : status === "approximate");
     const hay =
       `${def.name} ${def.type} ${def.manufacturer || ""} ${def.partNumber || ""} ${cat || ""} ${status}`.toLowerCase();
-    return matchesCat && (!q || hay.includes(q));
+    return matchesCat && matchesVerification && (!q || hay.includes(q));
   });
   const sortedVisibleParts = sortComponentDefs(visibleParts);
   const displayedParts = sortedVisibleParts.slice(0, renderLimit);
@@ -526,6 +532,22 @@ function ComponentLibraryPanel({
               React.createElement("option", { value: "fader" }, "Faders"),
               React.createElement("option", { value: "custom" }, "Custom"),
             ),
+            React.createElement(
+              "select",
+              {
+                className: "mini-input library-verification-select",
+                value: partVerification,
+                onChange: (e) => setPartVerification(e.target.value),
+                "aria-label": "Footprint verification",
+              },
+              React.createElement("option", { value: "all" }, "Any accuracy"),
+              React.createElement("option", { value: "verified" }, "Verified"),
+              React.createElement(
+                "option",
+                { value: "approximate" },
+                "Approximate",
+              ),
+            ),
           ),
           React.createElement(
             "details",
@@ -608,6 +630,7 @@ function ComponentLibraryPanel({
           (recentKeys.length > 0 || favoriteKeys.length > 0) &&
             !partSearch.trim() &&
             partCategory === "all" &&
+            partVerification === "all" &&
             React.createElement(
               "div",
               { className: "library-memory-row popover-memory-row" },
@@ -703,7 +726,15 @@ function ComponentLibraryPanel({
                   "span",
                   { className: "component-icon-meta" },
                   holeText(def),
+                  " · ",
+                  verificationLabel(def.verificationStatus),
                 ),
+                def.partNumber &&
+                  React.createElement(
+                    "span",
+                    { className: "component-icon-part-number" },
+                    def.partNumber,
+                  ),
                 state.customParts.some((p) => p.name === def.name) &&
                   React.createElement(
                     "span",
