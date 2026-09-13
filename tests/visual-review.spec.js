@@ -264,6 +264,54 @@ const states = [
     },
   ],
   [
+    "desktop-artwork-mount-holes",
+    desktop,
+    async (page) => {
+      const imageDataUrl =
+        "data:image/svg+xml;base64," +
+        Buffer.from(
+          '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="#8b2442"/></svg>',
+        ).toString("base64");
+      await page.locator("#project-file-input").setInputFiles({
+        name: "artwork-mount-holes.json",
+        mimeType: "application/json",
+        buffer: Buffer.from(
+          JSON.stringify({
+            projectVersion: 4,
+            panel: { widthHP: 12, customHP: false },
+            components: [],
+            artworks: [
+              {
+                id: "artwork-cover",
+                name: "Panel artwork",
+                imageDataUrl,
+                x: 30.48,
+                y: 64.25,
+                width: 60.96,
+                height: 128.5,
+                rotation: 0,
+                opacity: 1,
+                layer: "background",
+                visible: true,
+                locked: true,
+              },
+            ],
+          }),
+        ),
+      });
+      const artwork = page.locator('[data-artwork-id="artwork-cover"]');
+      const mountingHoles = page.locator(".mounting-holes-layer");
+      await artwork.waitFor({ state: "visible" });
+      await mountingHoles.waitFor({ state: "visible" });
+      const artworkAboveMountingHoles = await artwork.evaluate((node) => {
+        const holes = document.querySelector(".mounting-holes-layer");
+        return !!(holes && holes.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING);
+      });
+      if (artworkAboveMountingHoles)
+        throw new Error("Background artwork renders above mounting holes");
+    },
+  ],
+  [
     "desktop-dfm-fix-preview",
     desktop,
     async (page) => {

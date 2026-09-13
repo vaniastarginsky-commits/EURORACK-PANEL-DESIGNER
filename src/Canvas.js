@@ -171,7 +171,7 @@ const MountingHolesLayer = React.memo(function MountingHolesLayer({ config }) {
   const kr = Math.max(0, config.keepoutRadius ?? MOUNTING_HOLE_KEEPOUT_R_MM);
   return React.createElement(
     "g",
-    null,
+    { className: "mounting-holes-layer" },
     config.holes.map((h) =>
       React.createElement(
         "g",
@@ -3346,14 +3346,6 @@ function SVGCanvas({
           fill: "rgba(0,0,0,0.13)",
           opacity: 0.75,
         }),
-        state.layerVisibility.mountingHoles &&
-          React.createElement(
-            "g",
-            { opacity: lop("mountingHoles") },
-            React.createElement(MountingHolesLayer, {
-              config: state.mountingHoles,
-            }),
-          ),
         state.layerVisibility.grid &&
           React.createElement(
             "g",
@@ -3388,6 +3380,14 @@ function SVGCanvas({
             showInDrill: state.showArtworkInDrillView,
             drillOpacity: state.drillArtworkOpacity,
           }),
+        state.layerVisibility.mountingHoles &&
+          React.createElement(
+            "g",
+            { opacity: lop("mountingHoles") },
+            React.createElement(MountingHolesLayer, {
+              config: state.mountingHoles,
+            }),
+          ),
         state.layerVisibility.text &&
           React.createElement(
             "g",
