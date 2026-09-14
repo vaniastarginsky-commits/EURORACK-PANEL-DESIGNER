@@ -220,6 +220,55 @@ const states = [
       await openComponentLibraryPopover(page);
     },
   ],
+  [
+    "desktop-component-library-compare",
+    desktop,
+    async (page) => {
+      await openComponentLibraryPopover(page);
+      await page.locator(".part-compare-mini").nth(0).click();
+      await page.locator(".part-compare-mini").nth(1).click();
+      await page
+        .locator(".component-library-compare")
+        .waitFor({ state: "visible" });
+      if (
+        (await page.locator(".component-library-compare-grid b").count()) !== 2
+      )
+        throw new Error("Component comparison did not retain two parts");
+    },
+  ],
+  [
+    "desktop-component-library-collection",
+    desktop,
+    async (page) => {
+      await openComponentLibraryPopover(page);
+      await page
+        .getByRole("button", { name: "+ Collection", exact: true })
+        .click();
+      await page.locator(".app-native-modal-input").fill("Panel controls");
+      await page
+        .getByRole("button", { name: "Create collection", exact: true })
+        .click();
+      await page.locator(".part-collection-mini").first().click();
+      await page
+        .getByRole("button", { name: "Show only", exact: true })
+        .click();
+      if ((await page.locator(".component-icon-card").count()) !== 1)
+        throw new Error("Collection filter did not isolate its saved part");
+    },
+  ],
+  [
+    "desktop-component-library-tags",
+    desktop,
+    async (page) => {
+      await openComponentLibraryPopover(page);
+      await page.locator(".part-tag-mini").first().click();
+      await page.locator(".app-native-modal-input").fill("compact, panel control");
+      await page.getByRole("button", { name: "Save tags", exact: true }).click();
+      await page.locator('select[aria-label="Part tag"]').selectOption("compact");
+      if ((await page.locator(".component-icon-card").count()) !== 1)
+        throw new Error("Tag filter did not isolate its tagged part");
+    },
+  ],
 
   // P1: inline modal layered inside templates dialog (edit-metadata form)
   [
@@ -313,6 +362,44 @@ const states = [
       await page.locator(".component-menu").getByText("2 selected").waitFor();
       if ((await page.locator(".selection-action-toolbar").count()) !== 0)
         throw new Error("Desktop selection toolbar should not be rendered");
+    },
+  ],
+  [
+    "desktop-smart-arrange",
+    desktop,
+    async (page) => {
+      await placeComponentOnCanvas(page, { xOffset: -35, yOffset: -28 });
+      await placeComponentOnCanvas(page, { xOffset: 18, yOffset: 8 });
+      await placeComponentOnCanvas(page, { xOffset: 42, yOffset: 34 });
+      const components = page.locator(".component-node");
+      await components.nth(0).click({ force: true });
+      await components.nth(1).click({ force: true, modifiers: ["Shift"] });
+      await components.nth(2).click({ force: true, modifiers: ["Shift"] });
+      if ((await page.locator(".component-node.is-selected").count()) !== 3)
+        throw new Error("Smart arrange test could not select three components");
+      await page
+        .locator(".sidebar-right")
+        .getByRole("button", { name: "Inspect", exact: true })
+        .click();
+      const before = await Promise.all(
+        [0, 1, 2].map((index) => components.nth(index).boundingBox()),
+      );
+      await page
+        .locator("[data-component-properties='true']")
+        .getByRole("button", { name: "Smart grid", exact: true })
+        .click();
+      const after = await Promise.all(
+        [0, 1, 2].map((index) => components.nth(index).boundingBox()),
+      );
+      if (
+        before.every(
+          (box, index) =>
+            box &&
+            after[index] &&
+            Math.hypot(box.x - after[index].x, box.y - after[index].y) < 2,
+        )
+      )
+        throw new Error("Smart arrange did not move the selected components");
     },
   ],
   [
@@ -729,13 +816,12 @@ const states = [
         .locator(".component-menu")
         .getByRole("button", { name: "Part inspector", exact: true })
         .click();
-      const snapToggle = page.getByLabel(
-        "Use center as Shift snap target",
-        { exact: true },
-      );
+      const snapToggle = page.getByLabel("Use center as Shift snap target", {
+        exact: true,
+      });
       await snapToggle.uncheck();
       await page
-        .locator('[data-cutout-snap-center].disabled')
+        .locator("[data-cutout-snap-center].disabled")
         .waitFor({ state: "attached" });
       await snapToggle.check();
       await page.getByText("Fits this hole", { exact: true }).waitFor();
@@ -819,7 +905,9 @@ const states = [
       await actionBar.waitFor({ state: "visible" });
       const box = await actionBar.boundingBox();
       if (!box || box.y < 650)
-        throw new Error("Mobile selection actions are not docked at the bottom");
+        throw new Error(
+          "Mobile selection actions are not docked at the bottom",
+        );
     },
   ],
   [

@@ -4881,6 +4881,20 @@ function App() {
                     ),
                     React.createElement(
                       "button",
+                      {
+                        disabled: state.selected.length < 2,
+                        onClick: () => {
+                          dispatch({
+                            type: "SMART_ARRANGE_SELECTED",
+                            layout: "grid",
+                          });
+                          showMobileToast("Arranged to grid");
+                        },
+                      },
+                      "Smart grid",
+                    ),
+                    React.createElement(
+                      "button",
                       { onClick: () => centerSelected("x") },
                       "Center X",
                     ),

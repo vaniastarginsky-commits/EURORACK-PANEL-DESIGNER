@@ -229,6 +229,11 @@ function ComponentLibraryPanel({
   const [partDepthRange, setPartDepthRange] = useState("all");
   const [partSort, setPartSort] = useState("default");
   const [focusedPart, setFocusedPart] = useState(null);
+  const [compareKeys, setCompareKeys] = useState([]);
+  const [organizer, setOrganizer] = useState(() => readPartOrganizerStorage());
+  const [activeCollection, setActiveCollection] = useState("all");
+  const [collectionOnly, setCollectionOnly] = useState(false);
+  const [activeTag, setActiveTag] = useState("all");
   const [resetPartsArmed, setResetPartsArmed] = useState(false);
   const [renderLimit, setRenderLimit] = useState(48);
   useEffect(() => {
@@ -253,6 +258,9 @@ function ComponentLibraryPanel({
     partVerification,
     partHoleRange,
     partDepthRange,
+    activeCollection,
+    collectionOnly,
+    activeTag,
     state.customParts.length,
   ]);
   useEffect(() => {
@@ -288,7 +296,8 @@ function ComponentLibraryPanel({
       if (!target) return;
       if (
         target.closest(".component-library-popover") ||
-        target.closest(".component-library-launcher")
+        target.closest(".component-library-launcher") ||
+        target.closest(".app-native-modal-backdrop")
       )
         return;
       setLibraryOpen(false);
@@ -308,6 +317,12 @@ function ComponentLibraryPanel({
     const q = partSearch.trim().toLowerCase();
     const cat = def.category ?? inferCategoryForType(def.type);
     const key = partStableKey(def);
+    const collection = organizer.collections.find(
+      (item) => item.id === activeCollection,
+    );
+    const partTags = Array.isArray(organizer.tags[key])
+      ? organizer.tags[key]
+      : [];
     const matchesCat =
       partCategory === "all" ||
       cat === partCategory ||
@@ -333,12 +348,14 @@ function ComponentLibraryPanel({
       (partDepthRange === "standard" && depth > 10 && depth <= 20) ||
       (partDepthRange === "deep" && depth > 20);
     const hay =
-      `${def.name} ${def.type} ${def.manufacturer || ""} ${def.partNumber || ""} ${cat || ""} ${status}`.toLowerCase();
+      `${def.name} ${def.type} ${def.manufacturer || ""} ${def.partNumber || ""} ${cat || ""} ${status} ${partTags.join(" ")}`.toLowerCase();
     return (
       matchesCat &&
       matchesVerification &&
       matchesHole &&
       matchesDepth &&
+      (!collection || !collectionOnly || collection.keys.includes(key)) &&
+      (activeTag === "all" || partTags.includes(activeTag)) &&
       (!q || hay.includes(q))
     );
   });
@@ -377,6 +394,87 @@ function ComponentLibraryPanel({
       : [key, ...favoriteKeys].slice(0, 32);
     writeStringListStorage(UX_FAVORITE_PARTS_KEY, next);
     setFavoriteKeys(next);
+  }
+  const organizerTags = [
+    ...new Set(Object.values(organizer.tags).flat().filter(Boolean)),
+  ].sort((a, b) => a.localeCompare(b));
+  function saveOrganizer(next) {
+    writePartOrganizerStorage(next);
+    setOrganizer(next);
+  }
+  async function createCollection() {
+    const name = await appTextPrompt({
+      title: "New collection",
+      subtitle: "Group parts for a module, build, or preferred hardware set.",
+      label: "Collection name",
+      defaultValue: "",
+      confirmText: "Create collection",
+    });
+    if (!name?.trim()) return;
+    const id = `${Date.now()}-${name
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")}`;
+    const next = {
+      ...organizer,
+      collections: [
+        ...organizer.collections,
+        { id, name: name.trim(), keys: [] },
+      ],
+    };
+    saveOrganizer(next);
+    setActiveCollection(id);
+  }
+  function togglePartInCollection(def) {
+    const collection = organizer.collections.find(
+      (item) => item.id === activeCollection,
+    );
+    if (!collection) return;
+    const key = partStableKey(def);
+    const keys = collection.keys.includes(key)
+      ? collection.keys.filter((item) => item !== key)
+      : [...collection.keys, key];
+    saveOrganizer({
+      ...organizer,
+      collections: organizer.collections.map((item) =>
+        item.id === collection.id ? { ...item, keys } : item,
+      ),
+    });
+  }
+  async function editPartTags(def) {
+    const key = partStableKey(def);
+    const current = Array.isArray(organizer.tags[key])
+      ? organizer.tags[key]
+      : [];
+    const value = await appTextPrompt({
+      title: "Part tags",
+      subtitle:
+        "Use comma-separated tags such as audio, compact, or prototype.",
+      label: "Tags",
+      defaultValue: current.join(", "),
+      confirmText: "Save tags",
+    });
+    if (value == null) return;
+    const tags = [
+      ...new Set(
+        value
+          .split(",")
+          .map((tag) => tag.trim().toLowerCase())
+          .filter(Boolean),
+      ),
+    ].slice(0, 12);
+    saveOrganizer({
+      ...organizer,
+      tags: { ...organizer.tags, [key]: tags },
+    });
+  }
+  function toggleCompare(def) {
+    const key = partStableKey(def);
+    setCompareKeys((current) =>
+      current.includes(key)
+        ? current.filter((item) => item !== key)
+        : [...current.slice(-1), key],
+    );
   }
   function startPlacement(def) {
     rememberRecentPart(def);
@@ -512,6 +610,12 @@ function ComponentLibraryPanel({
         ? `${def.holeW ?? def.frontW}×${def.holeH ?? def.frontH}`
         : `Ø${def.holeDiameter}`;
   }
+  const compareParts = compareKeys
+    .map((key) => allParts.find((def) => partStableKey(def) === key))
+    .filter(Boolean);
+  const activeCollectionItem = organizer.collections.find(
+    (item) => item.id === activeCollection,
+  );
   const popover = libraryOpen
     ? ReactDOM.createPortal(
         React.createElement(
@@ -666,6 +770,75 @@ function ComponentLibraryPanel({
                 "Accuracy first",
               ),
             ),
+          ),
+          React.createElement(
+            "div",
+            { className: "component-library-organizer" },
+            React.createElement(
+              "select",
+              {
+                className: "mini-input",
+                value: activeCollection,
+                onChange: (e) => {
+                  setActiveCollection(e.target.value);
+                  if (e.target.value === "all") setCollectionOnly(false);
+                },
+                "aria-label": "Part collection",
+              },
+              React.createElement(
+                "option",
+                { value: "all" },
+                "All collections",
+              ),
+              organizer.collections.map((item) =>
+                React.createElement(
+                  "option",
+                  { key: item.id, value: item.id },
+                  item.name,
+                  ` (${item.keys.length})`,
+                ),
+              ),
+            ),
+            React.createElement(
+              "button",
+              { type: "button", onClick: createCollection },
+              "+ Collection",
+            ),
+            activeCollectionItem &&
+              React.createElement(
+                "button",
+                {
+                  type: "button",
+                  className: collectionOnly ? "active" : "",
+                  onClick: () => setCollectionOnly((value) => !value),
+                },
+                collectionOnly ? "Show all" : "Show only",
+              ),
+            React.createElement(
+              "select",
+              {
+                className: "mini-input",
+                value: activeTag,
+                onChange: (e) => setActiveTag(e.target.value),
+                "aria-label": "Part tag",
+              },
+              React.createElement("option", { value: "all" }, "All tags"),
+              organizerTags.map((tag) =>
+                React.createElement(
+                  "option",
+                  { key: tag, value: tag },
+                  `#${tag}`,
+                ),
+              ),
+            ),
+            activeCollectionItem &&
+              React.createElement(
+                "span",
+                { className: "component-library-organizer-note" },
+                collectionOnly
+                  ? "Showing collection members"
+                  : "Use + on a card to add or remove parts",
+              ),
           ),
           React.createElement(
             "div",
@@ -890,6 +1063,48 @@ function ComponentLibraryPanel({
                 ),
               ),
             ),
+          compareParts.length === 2 &&
+            React.createElement(
+              "div",
+              { className: "component-library-compare" },
+              React.createElement(
+                "div",
+                { className: "component-library-compare-head" },
+                React.createElement("strong", null, "Compare parts"),
+                React.createElement(
+                  "button",
+                  { type: "button", onClick: () => setCompareKeys([]) },
+                  "Clear",
+                ),
+              ),
+              React.createElement(
+                "div",
+                { className: "component-library-compare-grid" },
+                React.createElement("span", null, ""),
+                compareParts.map((def) =>
+                  React.createElement(
+                    "b",
+                    { key: partStableKey(def) },
+                    shortPartName(def),
+                  ),
+                ),
+                [
+                  ["Cutout", (def) => holeText(def)],
+                  ["Depth", (def) => `${def.rearDepth} mm`],
+                  ["Rear body", (def) => `${def.rearBodyW}×${def.rearBodyH}`],
+                  ["Keepout", (def) => `${def.keepoutW}×${def.keepoutH}`],
+                ].flatMap(([label, value]) => [
+                  React.createElement("span", { key: `${label}-label` }, label),
+                  ...compareParts.map((def) =>
+                    React.createElement(
+                      "span",
+                      { key: `${label}-${partStableKey(def)}` },
+                      value(def),
+                    ),
+                  ),
+                ]),
+              ),
+            ),
           React.createElement(
             "div",
             {
@@ -903,7 +1118,7 @@ function ComponentLibraryPanel({
                 {
                   key: `${def.name}-${idx}`,
                   type: "button",
-                  className: `component-icon-card comp-lib-item real-part-tile ${(def.verificationStatus || "approximate") === "approximate" ? "approx" : ""}`,
+                  className: `component-icon-card comp-lib-item real-part-tile ${compareKeys.includes(partStableKey(def)) ? "compare-active" : ""} ${(def.verificationStatus || "approximate") === "approximate" ? "approx" : ""}`,
                   title: `${replaceMode ? "Replace selected component(s) with this part" : "Click to choose, then click the panel to place. Use Multiple to place more."}\n\n${partTooltip(def)}`,
                   onMouseEnter: () => setFocusedPart(def),
                   onFocus: () => setFocusedPart(def),
@@ -922,6 +1137,49 @@ function ComponentLibraryPanel({
                     },
                   },
                   "\u2605",
+                ),
+                React.createElement(
+                  "span",
+                  {
+                    className: `part-compare-mini ${compareKeys.includes(partStableKey(def)) ? "active" : ""}`,
+                    title: compareKeys.includes(partStableKey(def))
+                      ? "Remove from comparison"
+                      : "Compare this part",
+                    onClick: (e) => {
+                      e.stopPropagation();
+                      toggleCompare(def);
+                    },
+                  },
+                  "⇄",
+                ),
+                activeCollectionItem &&
+                  React.createElement(
+                    "span",
+                    {
+                      className: `part-collection-mini ${activeCollectionItem.keys.includes(partStableKey(def)) ? "active" : ""}`,
+                      title: activeCollectionItem.keys.includes(
+                        partStableKey(def),
+                      )
+                        ? `Remove from ${activeCollectionItem.name}`
+                        : `Add to ${activeCollectionItem.name}`,
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        togglePartInCollection(def);
+                      },
+                    },
+                    "+",
+                  ),
+                React.createElement(
+                  "span",
+                  {
+                    className: `part-tag-mini ${Array.isArray(organizer.tags[partStableKey(def)]) && organizer.tags[partStableKey(def)].length ? "active" : ""}`,
+                    title: "Edit tags",
+                    onClick: (e) => {
+                      e.stopPropagation();
+                      editPartTags(def);
+                    },
+                  },
+                  "#",
                 ),
                 React.createElement(
                   "span",

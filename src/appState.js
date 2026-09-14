@@ -500,6 +500,96 @@ function appReducer(state, action) {
         ),
       });
     }
+    case "SMART_ARRANGE_SELECTED": {
+      const selected = state.components.filter(
+        (component) =>
+          state.selected.includes(component.id) && !component.locked,
+      );
+      if (selected.length < 2) return state;
+      const ordered = [...selected].sort((a, b) => a.y - b.y || a.x - b.x);
+      const extents = ordered.map((component) => getFrontExtents(component));
+      const maxWidth = Math.max(
+        ...extents.map((extent) => extent.x2 - extent.x1),
+        ...ordered.map(
+          (component) =>
+            Number(component.keepoutW) || Number(component.rearBodyW) || 0,
+        ),
+      );
+      const maxHeight = Math.max(
+        ...extents.map((extent) => extent.y2 - extent.y1),
+        ...ordered.map(
+          (component) =>
+            Number(component.keepoutH) || Number(component.rearBodyH) || 0,
+        ),
+      );
+      const recommendedGap = Math.max(
+        1,
+        ...ordered.map((component) => Number(component.minSpacing) || 0),
+      );
+      const cellWidth = maxWidth + recommendedGap;
+      const cellHeight = maxHeight + recommendedGap;
+      const panelWidth = panelWidthMM(state.panel);
+      const maxPanelColumns = Math.max(
+        1,
+        Math.floor((panelWidth - maxWidth) / cellWidth) + 1,
+      );
+      const columns =
+        action.layout === "row"
+          ? Math.min(ordered.length, maxPanelColumns)
+          : action.layout === "column"
+            ? 1
+            : Math.min(Math.ceil(Math.sqrt(ordered.length)), maxPanelColumns);
+      const rows = Math.ceil(ordered.length / columns);
+      const currentCenterX =
+        ordered.reduce((sum, component) => sum + component.x, 0) /
+        ordered.length;
+      const currentCenterY =
+        ordered.reduce((sum, component) => sum + component.y, 0) /
+        ordered.length;
+      const groupWidth = (columns - 1) * cellWidth;
+      const groupHeight = (rows - 1) * cellHeight;
+      const halfWidth = maxWidth / 2;
+      const halfHeight = maxHeight / 2;
+      const centerX = Math.max(
+        halfWidth + groupWidth / 2,
+        Math.min(panelWidth - halfWidth - groupWidth / 2, currentCenterX),
+      );
+      const centerY = Math.max(
+        halfHeight + groupHeight / 2,
+        Math.min(
+          PANEL_HEIGHT_MM - halfHeight - groupHeight / 2,
+          currentCenterY,
+        ),
+      );
+      const step = Number(state.grid?.size) || 0.5;
+      const positionById = new Map(
+        ordered.map((component, index) => {
+          const column = index % columns;
+          const row = Math.floor(index / columns);
+          return [
+            component.id,
+            {
+              x:
+                Math.round(
+                  (centerX - groupWidth / 2 + column * cellWidth) / step,
+                ) * step,
+              y:
+                Math.round(
+                  (centerY - groupHeight / 2 + row * cellHeight) / step,
+                ) * step,
+            },
+          ];
+        }),
+      );
+      return withHistory(state, {
+        ...snapshot(state),
+        components: state.components.map((component) =>
+          positionById.has(component.id)
+            ? { ...component, ...positionById.get(component.id) }
+            : component,
+        ),
+      });
+    }
     case "RESOLVE_COMPONENT_CLEARANCE": {
       const pair = (action.ids || [])
         .map((id) => state.components.find((component) => component.id === id))

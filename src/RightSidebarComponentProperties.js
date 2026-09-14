@@ -87,6 +87,14 @@ function PropertiesPanel() {
           },
           "Rotate +90°",
         ),
+        React.createElement(
+          "button",
+          {
+            onClick: () =>
+              dispatch({ type: "SMART_ARRANGE_SELECTED", layout: "grid" }),
+          },
+          "Smart grid",
+        ),
       ),
     );
   }
@@ -188,6 +196,26 @@ function PropertiesPanel() {
       { className: "section-title" },
       isMultiEdit ? `${selComps.length} × ${shortPartName(c)}` : c.name,
     ),
+    isMultiEdit &&
+      React.createElement(
+        "div",
+        { className: "mixed-selection-actions smart-arrange-actions" },
+        [
+          ["grid", "Smart grid"],
+          ["row", "Row"],
+          ["column", "Column"],
+        ].map(([layout, label]) =>
+          React.createElement(
+            "button",
+            {
+              key: layout,
+              onClick: () =>
+                dispatch({ type: "SMART_ARRANGE_SELECTED", layout }),
+            },
+            label,
+          ),
+        ),
+      ),
     React.createElement(
       "div",
       { className: "inspector-geometry-summary" },
