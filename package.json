@@ -1,0 +1,21 @@
+{
+  "name": "eurorack-panel-designer",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Local development and visual QA tooling for the Eurorack Panel Designer.",
+  "scripts": {
+    "dev": "python3 -m http.server 4173",
+    "screenshot": "node tests/visual-review.spec.js",
+    "screenshots": "npm run screenshot",
+    "test:visual": "node tests/visual-review.spec.js",
+    "screenshot:legacy": "node design-review/capture-visual-review.mjs",
+    "format": "prettier --write \"src/**/*.js\"",
+    "format:check": "prettier --check \"src/**/*.js\"",
+    "check:syntax": "node --check src/*.js",
+    "verify": "npm run format:check && npm run check:syntax && DESIGN_REVIEW_OUT=design-review/verify-tmp npm run screenshot"
+  },
+  "devDependencies": {
+    "playwright": "^1.44.0",
+    "prettier": "^3.8.3"
+  }
+}

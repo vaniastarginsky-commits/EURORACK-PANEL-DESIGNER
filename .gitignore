@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# macOS metadata
+.DS_Store
+**/.DS_Store
+__MACOSX/
+
+# Archives / scratch files
+Archive*.zip
+*.zip
+
+# Build output (future Vite)
+dist/
+
+# Editor
+.idea/
+.vscode/
+*.swp
+
+# Local env
+.env
+.env.local
+
+# Verify-run screenshot scratch (use npm run screenshot to update tracked baselines)
+design-review/verify-tmp/

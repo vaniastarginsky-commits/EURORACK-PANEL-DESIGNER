@@ -1,0 +1,51 @@
+<h2>Как организовать новый styles.css?</h2>
+<p class="subtitle">Stripped-файл остаётся базой. Вопрос — как его реструктурировать при добавлении нужного.</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Оставить patch-блоки, дописать в конец</h3>
+      <p>Минимальное вмешательство. Добавить недостающие layout-правила в новый раздел в конце. Patch-блоки v422–v508 остаются как есть.</p>
+      <div class="mockup" style="margin-top:12px">
+        <div class="mockup-header">Структура файла</div>
+        <div class="mockup-body" style="font-family:monospace;font-size:12px;line-height:1.7">
+          <div style="color:#928b7d">/* v376-clean-style */ ← остаётся</div>
+          <div style="color:#928b7d">/* v422-emergency-layout */ ← остаётся</div>
+          <div style="color:#928b7d">/* v424-sidebar-controls */ ← остаётся</div>
+          <div style="color:#928b7d">... 26 patch блоков ...</div>
+          <div style="color:#7db87d;margin-top:8px">/* v999-layout-restore */ ← новый</div>
+          <div style="color:#7db87d">.workspace { display: grid; }</div>
+          <div style="color:#7db87d">.topbar { display: flex; }</div>
+          <div style="color:#928b7d;margin-top:4px">Итого: ~2921 + ~80 строк</div>
+        </div>
+      </div>
+      <p style="margin-top:8px;color:#d87a7a">Проблема: patch-блоки — то же самое что было. Просто без !important.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Переписать по доменам (рекомендую)</h3>
+      <p>Взять stripped-файл как референс. Написать чистый CSS разбитый по смысловым секциям — без версионных блоков. ~1000–1400 строк.</p>
+      <div class="mockup" style="margin-top:12px">
+        <div class="mockup-header">Структура файла</div>
+        <div class="mockup-body" style="font-family:monospace;font-size:12px;line-height:1.7">
+          <div style="color:#7db87d">/* 1. Reset &amp; base */</div>
+          <div style="color:#7db87d">/* 2. App shell layout */</div>
+          <div style="color:#7db87d">/* 3. Topbar */</div>
+          <div style="color:#7db87d">/* 4. Sidebars */</div>
+          <div style="color:#7db87d">/* 5. Canvas area */</div>
+          <div style="color:#7db87d">/* 6. Canvas rails &amp; HUD */</div>
+          <div style="color:#7db87d">/* 7. Modals &amp; dialogs */</div>
+          <div style="color:#7db87d">/* 8. Components (cards, tabs, forms) */</div>
+          <div style="color:#7db87d">/* 9. Mobile (@media 900px) */</div>
+          <div style="color:#7db87d">/* 10. Utilities &amp; scrollbars */</div>
+          <div style="color:#928b7d;margin-top:4px">Итого: ~1000–1400 строк</div>
+        </div>
+      </div>
+      <p style="margin-top:8px;color:#7db87d">Результат: файл который понятно читать и легко менять.</p>
+    </div>
+  </div>
+</div>

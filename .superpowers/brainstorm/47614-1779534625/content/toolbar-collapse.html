@@ -1,0 +1,370 @@
+<h2>Мобильный тулбар: варианты свёртки</h2>
+<p class="subtitle">Вертикальный рейл слева (как на десктопе) — три варианта что происходит при свёртке</p>
+
+<style>
+  .phone-row {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .phone-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .phone-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #b4aa96;
+  }
+  .phone {
+    width: 180px;
+    height: 320px;
+    background: #0a0a0c;
+    border: 2px solid rgba(215,196,155,.3);
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  /* Topbar */
+  .ph-topbar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 30px;
+    background: #111;
+    border-bottom: 1px solid rgba(215,196,155,.15);
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    gap: 6px;
+    z-index: 2;
+  }
+  .ph-topbar-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(215,196,155,.4);
+  }
+  .ph-topbar-title {
+    font-size: 8px;
+    color: rgba(215,196,155,.6);
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  /* Canvas area */
+  .ph-canvas {
+    position: absolute;
+    top: 30px; left: 0; right: 0; bottom: 0;
+    background:
+      repeating-linear-gradient(0deg, rgba(215,196,155,.04) 0px, rgba(215,196,155,.04) 1px, transparent 1px, transparent 14px),
+      repeating-linear-gradient(90deg, rgba(215,196,155,.04) 0px, rgba(215,196,155,.04) 1px, transparent 1px, transparent 14px);
+  }
+  /* Panel representation */
+  .ph-panel-rect {
+    position: absolute;
+    top: 40px; left: 58px; right: 14px; bottom: 18px;
+    border: 1px solid rgba(215,196,155,.25);
+    background: rgba(30,25,15,.5);
+    border-radius: 2px;
+  }
+  .ph-panel-hole {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    border: 1px solid rgba(215,196,155,.5);
+    background: rgba(0,0,0,.6);
+  }
+  /* Left rail — expanded */
+  .ph-rail {
+    position: absolute;
+    top: 30px; left: 4px; bottom: 4px;
+    width: 42px;
+    background: linear-gradient(180deg, rgba(20,16,9,.92), rgba(4,4,4,.97));
+    border: 1px solid rgba(215,196,155,.22);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 5px 0;
+    z-index: 3;
+  }
+  .ph-btn {
+    width: 34px;
+    height: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    border-radius: 3px;
+    background: transparent;
+  }
+  .ph-btn.active {
+    background: rgba(215,196,155,.12);
+  }
+  .ph-btn-icon {
+    width: 12px;
+    height: 12px;
+    background: rgba(215,196,155,.7);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .ph-btn-icon.circle { border-radius: 50%; }
+  .ph-btn-icon.line {
+    width: 12px; height: 2px;
+    border-radius: 1px;
+    margin: 5px 0;
+  }
+  .ph-btn-label {
+    font-size: 5.5px;
+    color: rgba(180,170,150,.75);
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .ph-sep {
+    width: 24px;
+    height: 1px;
+    background: rgba(215,196,155,.12);
+    margin: 1px 0;
+  }
+  /* Option A: collapsed to thin edge tab */
+  .ph-rail-tab {
+    position: absolute;
+    top: 50px; left: 4px;
+    width: 12px;
+    height: 50px;
+    background: linear-gradient(180deg, rgba(20,16,9,.92), rgba(4,4,4,.97));
+    border: 1px solid rgba(215,196,155,.22);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    cursor: pointer;
+  }
+  .ph-rail-tab-arrow {
+    font-size: 9px;
+    color: rgba(215,196,155,.8);
+    line-height: 1;
+  }
+  /* Option B: floating circle */
+  .ph-fab {
+    position: absolute;
+    bottom: 18px; left: 8px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(30,25,15,.95), rgba(10,10,12,.97));
+    border: 1px solid rgba(215,196,155,.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    box-shadow: 0 2px 8px rgba(0,0,0,.6);
+    font-size: 11px;
+    color: rgba(215,196,155,.9);
+  }
+  /* Option C: just a small top-anchored toggle */
+  .ph-rail-top-toggle {
+    position: absolute;
+    top: 34px; left: 4px;
+    width: 12px;
+    height: 28px;
+    background: linear-gradient(180deg, rgba(20,16,9,.92), rgba(4,4,4,.97));
+    border: 1px solid rgba(215,196,155,.22);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+  }
+  .option-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 6px;
+  }
+</style>
+
+<div class="phone-row">
+
+  <!-- OPTION A: Expanded state (all options share this) -->
+  <div class="phone-wrap">
+    <div class="phone-label">Развёрнут (все варианты)</div>
+    <div class="phone">
+      <div class="ph-topbar">
+        <div class="ph-topbar-dot"></div>
+        <div class="ph-topbar-dot"></div>
+        <div class="ph-topbar-dot"></div>
+        <div class="ph-topbar-title">PANEL DESIGNER</div>
+      </div>
+      <div class="ph-canvas"></div>
+      <div class="ph-panel-rect">
+        <div class="ph-panel-hole" style="top:18px;left:18px"></div>
+        <div class="ph-panel-hole" style="top:18px;right:18px"></div>
+        <div class="ph-panel-hole" style="top:50px;left:40px"></div>
+        <div class="ph-panel-hole" style="bottom:18px;left:18px"></div>
+        <div class="ph-panel-hole" style="bottom:18px;right:18px"></div>
+      </div>
+      <div class="ph-rail">
+        <div class="ph-btn">
+          <div class="ph-btn-icon" style="border-radius:1px;width:10px;height:8px"></div>
+          <div class="ph-btn-label">Left</div>
+        </div>
+        <div class="ph-btn">
+          <div class="ph-btn-icon" style="border-radius:1px;width:10px;height:8px"></div>
+          <div class="ph-btn-label">Right</div>
+        </div>
+        <div class="ph-sep"></div>
+        <div class="ph-btn">
+          <div class="ph-btn-icon" style="transform:rotate(45deg);width:10px;height:2px;margin:5px 0"></div>
+          <div class="ph-btn-label">Undo</div>
+        </div>
+        <div class="ph-btn">
+          <div class="ph-btn-icon" style="transform:rotate(-45deg);width:10px;height:2px;margin:5px 0"></div>
+          <div class="ph-btn-label">Redo</div>
+        </div>
+        <div class="ph-sep"></div>
+        <div class="ph-btn active">
+          <div class="ph-btn-icon" style="width:8px;height:10px;border-radius:1px"></div>
+          <div class="ph-btn-label">Edit</div>
+        </div>
+        <div class="ph-btn">
+          <div class="ph-btn-icon circle" style="width:10px;height:10px"></div>
+          <div class="ph-btn-label">View</div>
+        </div>
+        <div class="ph-btn">
+          <div class="ph-btn-icon" style="width:10px;height:2px;margin:5px 0;border-radius:1px"></div>
+          <div class="ph-btn-label">Fit</div>
+        </div>
+        <!-- Collapse button at bottom of rail -->
+        <div class="ph-sep" style="margin-top:auto"></div>
+        <div class="ph-btn" style="opacity:.9">
+          <div style="font-size:8px;color:rgba(215,196,155,.8);line-height:1">‹</div>
+          <div class="ph-btn-label">Hide</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTION A: Collapsed to thin edge tab -->
+  <div class="phone-wrap">
+    <div class="phone-label">A — Тонкая вкладка</div>
+    <div class="phone">
+      <div class="ph-topbar">
+        <div class="ph-topbar-dot"></div>
+        <div class="ph-topbar-dot"></div>
+        <div class="ph-topbar-dot"></div>
+        <div class="ph-topbar-title">PANEL DESIGNER</div>
+      </div>
+      <div class="ph-canvas"></div>
+      <div class="ph-panel-rect" style="left:18px">
+        <div class="ph-panel-hole" style="top:18px;left:18px"></div>
+        <div class="ph-panel-hole" style="top:18px;right:18px"></div>
+        <div class="ph-panel-hole" style="top:50px;left:40px"></div>
+        <div class="ph-panel-hole" style="bottom:18px;left:18px"></div>
+        <div class="ph-panel-hole" style="bottom:18px;right:18px"></div>
+      </div>
+      <!-- Thin tab -->
+      <div class="ph-rail-tab">
+        <div class="ph-rail-tab-arrow">›</div>
+      </div>
+    </div>
+    <div class="option-group">
+      <div style="font-size:10px;color:#b4aa96;text-align:center">Максимум пространства<br>Маленькая мишень</div>
+    </div>
+  </div>
+
+  <!-- OPTION B: Collapsed to floating circle -->
+  <div class="phone-wrap">
+    <div class="phone-label">B — Плавающая кнопка</div>
+    <div class="phone">
+      <div class="ph-topbar">
+        <div class="ph-topbar-dot"></div>
+        <div class="ph-topbar-dot"></div>
+        <div class="ph-topbar-dot"></div>
+        <div class="ph-topbar-title">PANEL DESIGNER</div>
+      </div>
+      <div class="ph-canvas"></div>
+      <div class="ph-panel-rect" style="left:14px">
+        <div class="ph-panel-hole" style="top:18px;left:18px"></div>
+        <div class="ph-panel-hole" style="top:18px;right:18px"></div>
+        <div class="ph-panel-hole" style="top:50px;left:40px"></div>
+        <div class="ph-panel-hole" style="bottom:18px;left:18px"></div>
+        <div class="ph-panel-hole" style="bottom:18px;right:18px"></div>
+      </div>
+      <!-- FAB -->
+      <div class="ph-fab">⚙</div>
+    </div>
+    <div class="option-group">
+      <div style="font-size:10px;color:#b4aa96;text-align:center">Удобно нажимать<br>Перекрывает контент</div>
+    </div>
+  </div>
+
+  <!-- OPTION C: Small chevron anchored at top-left -->
+  <div class="phone-wrap">
+    <div class="phone-label">C — Маленький шеврон</div>
+    <div class="phone">
+      <div class="ph-topbar">
+        <div class="ph-topbar-dot"></div>
+        <div class="ph-topbar-dot"></div>
+        <div class="ph-topbar-dot"></div>
+        <div class="ph-topbar-title">PANEL DESIGNER</div>
+      </div>
+      <div class="ph-canvas"></div>
+      <div class="ph-panel-rect" style="left:14px">
+        <div class="ph-panel-hole" style="top:18px;left:18px"></div>
+        <div class="ph-panel-hole" style="top:18px;right:18px"></div>
+        <div class="ph-panel-hole" style="top:50px;left:40px"></div>
+        <div class="ph-panel-hole" style="bottom:18px;left:18px"></div>
+        <div class="ph-panel-hole" style="bottom:18px;right:18px"></div>
+      </div>
+      <!-- Small top-anchored chevron -->
+      <div class="ph-rail-top-toggle">
+        <div style="font-size:9px;color:rgba(215,196,155,.8)">›</div>
+      </div>
+    </div>
+    <div class="option-group">
+      <div style="font-size:10px;color:#b4aa96;text-align:center">Минимально<br>На своём месте</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="section">
+  <h3>Что происходит с нижним доком?</h3>
+  <p class="subtitle">Текущий нижний тулбар имеет Add / Part inspector / View — мобильные фичи которых нет в десктопном рейле</p>
+</div>
+
+<div class="options">
+  <div class="option" data-choice="replace" onclick="toggleSelect(this)">
+    <div class="letter">1</div>
+    <div class="content">
+      <h3>Заменить нижний док левым рейлом</h3>
+      <p>Только десктопный рейл, добавить в него Add / Part / More кнопки. Нижний док убрать.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="both" onclick="toggleSelect(this)">
+    <div class="letter">2</div>
+    <div class="content">
+      <h3>Левый рейл + нижний док остаётся</h3>
+      <p>Десктопный рейл слева (со свёрткой), нижний док как сейчас. Два тулбара.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="collapse-current" onclick="toggleSelect(this)">
+    <div class="letter">3</div>
+    <div class="content">
+      <h3>Текущий нижний док — сделать его сворачиваемым</h3>
+      <p>Не менять позицию, просто добавить кнопку свёртки в маленький стаб снизу.</p>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:16px">Выбери вариант свёртки (A/B/C) и что делать с нижним доком (1/2/3) — или опиши словами</p>
