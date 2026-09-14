@@ -34,6 +34,7 @@
     washerDiameter: def.washerDiameter,
     knobDiameter: def.knobDiameter,
     knobEnabled: !!def.knobEnabled,
+    knobTransparent: !!def.knobTransparent,
     ergonomicDiameter: def.ergonomicDiameter,
     ergonomicEnabled: !!def.ergonomicEnabled,
     topColor: def.topColor,
@@ -41,6 +42,7 @@
     switchFunction:
       typeof def.switchFunction === "string" ? def.switchFunction : "on-off-on",
     topHardwareVisible: def.topHardwareVisible !== false,
+    snapTargetEnabled: def.snapTargetEnabled !== false,
     faderHandleW:
       typeof def.faderHandleW === "number" ? def.faderHandleW : undefined,
     faderHandleH:
@@ -283,6 +285,10 @@ function validateAndNormalize(raw) {
       knobDiameter:
         typeof r.knobDiameter === "number" ? r.knobDiameter : undefined,
       knobEnabled: bool("knobEnabled", libMatch.knobEnabled ?? false),
+      knobTransparent: bool(
+        "knobTransparent",
+        libMatch.knobTransparent ?? false,
+      ),
       ergonomicDiameter:
         typeof r.ergonomicDiameter === "number"
           ? r.ergonomicDiameter

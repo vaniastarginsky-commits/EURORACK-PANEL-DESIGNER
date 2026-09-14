@@ -43,12 +43,17 @@ function RightSidebar({
     },
     React.createElement(
       "div",
-      { className: "right-tab-strip primary" },
+      {
+        className: "right-tab-strip primary",
+        role: "group",
+        "aria-label": "Inspector section",
+      },
       React.createElement(
         "button",
         {
           className: topTab === "status" ? "active" : "",
           onClick: () => setTopTab("status"),
+          "aria-pressed": topTab === "status",
         },
         "Status",
       ),
@@ -57,6 +62,7 @@ function RightSidebar({
         {
           className: topTab === "inspect" ? "active" : "",
           onClick: () => setTopTab("inspect"),
+          "aria-pressed": topTab === "inspect",
         },
         "Inspect",
       ),
@@ -65,6 +71,8 @@ function RightSidebar({
         {
           className: topTab === "prod" ? "active" : "",
           onClick: () => setTopTab("prod"),
+          "aria-pressed": topTab === "prod",
+          title: "Production",
         },
         "Prod",
       ),
@@ -73,6 +81,7 @@ function RightSidebar({
         {
           className: topTab === "layers" ? "active" : "",
           onClick: () => setTopTab("layers"),
+          "aria-pressed": topTab === "layers",
         },
         "Layers",
       ),
@@ -83,12 +92,17 @@ function RightSidebar({
         { className: "right-tab-page" },
         React.createElement(
           "div",
-          { className: "right-tab-strip secondary" },
+          {
+            className: "right-tab-strip secondary",
+            role: "group",
+            "aria-label": "Status view",
+          },
           React.createElement(
             "button",
             {
               className: statusTab === "layout" ? "active" : "",
               onClick: () => setStatusTab("layout"),
+              "aria-pressed": statusTab === "layout",
             },
             "Layout",
           ),
@@ -97,6 +111,7 @@ function RightSidebar({
             {
               className: statusTab === "warnings" ? "active" : "",
               onClick: () => setStatusTab("warnings"),
+              "aria-pressed": statusTab === "warnings",
             },
             "Warnings",
           ),
@@ -105,6 +120,7 @@ function RightSidebar({
             {
               className: statusTab === "checks" ? "active" : "",
               onClick: () => setStatusTab("checks"),
+              "aria-pressed": statusTab === "checks",
             },
             "Checks",
           ),
@@ -132,12 +148,17 @@ function RightSidebar({
         { className: "right-tab-page" },
         React.createElement(
           "div",
-          { className: "right-tab-strip secondary" },
+          {
+            className: "right-tab-strip secondary",
+            role: "group",
+            "aria-label": "Inspection view",
+          },
           React.createElement(
             "button",
             {
               className: inspectTab === "properties" ? "active" : "",
               onClick: () => setInspectTab("properties"),
+              "aria-pressed": inspectTab === "properties",
             },
             "Props",
           ),
@@ -146,6 +167,7 @@ function RightSidebar({
             {
               className: inspectTab === "measure" ? "active" : "",
               onClick: () => setInspectTab("measure"),
+              "aria-pressed": inspectTab === "measure",
             },
             "Measure",
           ),
@@ -154,6 +176,7 @@ function RightSidebar({
             {
               className: inspectTab === "history" ? "active" : "",
               onClick: () => setInspectTab("history"),
+              "aria-pressed": inspectTab === "history",
             },
             "History",
           ),
@@ -175,12 +198,17 @@ function RightSidebar({
         { className: "right-tab-page" },
         React.createElement(
           "div",
-          { className: "right-tab-strip secondary" },
+          {
+            className: "right-tab-strip secondary",
+            role: "group",
+            "aria-label": "Production view",
+          },
           React.createElement(
             "button",
             {
               className: prodTab === "output" ? "active" : "",
               onClick: () => setProdTab("output"),
+              "aria-pressed": prodTab === "output",
             },
             "Output",
           ),
@@ -189,6 +217,7 @@ function RightSidebar({
             {
               className: prodTab === "pcb" ? "active" : "",
               onClick: () => setProdTab("pcb"),
+              "aria-pressed": prodTab === "pcb",
             },
             "PCB",
           ),
@@ -197,6 +226,7 @@ function RightSidebar({
             {
               className: prodTab === "mounts" ? "active" : "",
               onClick: () => setProdTab("mounts"),
+              "aria-pressed": prodTab === "mounts",
             },
             "Mounts",
           ),
@@ -222,12 +252,17 @@ function RightSidebar({
         { className: "right-tab-page" },
         React.createElement(
           "div",
-          { className: "right-tab-strip secondary" },
+          {
+            className: "right-tab-strip secondary",
+            role: "group",
+            "aria-label": "Layer tools",
+          },
           React.createElement(
             "button",
             {
               className: layersTab === "layers" ? "active" : "",
               onClick: () => setLayersTab("layers"),
+              "aria-pressed": layersTab === "layers",
             },
             "Layers",
           ),
@@ -236,6 +271,7 @@ function RightSidebar({
             {
               className: layersTab === "align" ? "active" : "",
               onClick: () => setLayersTab("align"),
+              "aria-pressed": layersTab === "align",
             },
             "Align",
           ),
@@ -244,6 +280,7 @@ function RightSidebar({
             {
               className: layersTab === "assistant" ? "active" : "",
               onClick: () => setLayersTab("assistant"),
+              "aria-pressed": layersTab === "assistant",
             },
             "Assistant",
           ),

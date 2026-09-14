@@ -480,6 +480,7 @@ function parseEagleBrdToPanel(xmlSrc, currentPanelWidthMM) {
       category: "mechanical",
       topHardwareVisible: false,
       verificationStatus: "measured",
+      snapTargetEnabled: true,
     });
     components.push({
       ...def,

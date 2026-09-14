@@ -16,8 +16,10 @@ function toolIcon(paths, opts) {
       strokeLinejoin: "round",
       "aria-hidden": "true",
     },
-    ...(Array.isArray(paths) ? paths : [paths]).map((d, i) =>
-      React.createElement("path", { key: i, d }),
+    ...(Array.isArray(paths) ? paths : [paths]).map((item, i) =>
+      typeof item === "string"
+        ? React.createElement("path", { key: i, d: item })
+        : React.cloneElement(item, { key: item.key || i }),
     ),
     ...(extra ? [extra] : []),
   );
@@ -40,7 +42,12 @@ const ICON = {
     "M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z",
     "M15 5l4 4",
   ]),
-  ruler: toolIcon(["M5 19L19 5", "M5 19h4v-4", "M19 5v4h-4", "M9 15l5-5"]),
+  ruler: toolIcon([
+    "M5 19L19 5",
+    "M5 19h4v-4",
+    "M19 5v4h-4",
+    "M8.5 15.5l1.5 1.5M11.5 12.5l1.5 1.5M14.5 9.5l1.5 1.5",
+  ]),
   text: toolIcon(["M4 6h16", "M12 6v12", "M8 18h8"]),
   view: toolIcon([
     "M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z",
@@ -61,12 +68,12 @@ const ICON = {
   ),
   clr: toolIcon(["M3 12h18", "M3 12l4-4M3 12l4 4", "M21 12l-4-4M21 12l-4 4"]),
   help: toolIcon([
-    "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3",
+    "M8.8 8.8a3.4 3.4 0 0 1 6.6 1.1c0 2.2-3.4 2.6-3.4 4.1",
     React.createElement("circle", {
       key: "dot",
       cx: "12",
       cy: "17",
-      r: "0.5",
+      r: "0.8",
       fill: "currentColor",
     }),
   ]),
@@ -182,6 +189,17 @@ function CanvasToolRail({
     );
   }
 
+  function group(name, children) {
+    return React.createElement(
+      "div",
+      {
+        className: `canvas-tool-group canvas-tool-group-${name}`,
+        "data-tool-group": name,
+      },
+      children,
+    );
+  }
+
   const _popoverTop = Math.max(58, Math.min(menuTop, window.innerHeight - 260));
   const popoverStyle = {
     top: _popoverTop,
@@ -212,151 +230,158 @@ function CanvasToolRail({
         "aria-label": "Canvas tools",
         onMouseDown: (e) => e.stopPropagation(),
         onTouchStart: (e) => e.stopPropagation(),
+        onTouchEnd: (e) => e.stopPropagation(),
       },
-      command("Add", ICON.add, {
-        onClick: () => {
-          setOpenMenu(null);
-          onOpenComponentLibrary?.();
-        },
-      }),
-      command("Left", ICON.left, {
-        className: `canvas-tool-left-btn${leftPanelOpen ? " active" : ""}`,
-        onClick: () => {
-          setOpenMenu(null);
-          onToggleLeftPanel();
-        },
-      }),
-      command("Right", ICON.right, {
-        className: `rail-right-btn${rightPanelOpen ? " active" : ""}`,
-        onClick: () => {
-          setOpenMenu(null);
-          onToggleRightPanel();
-        },
-      }),
-      React.createElement("div", { className: "canvas-tool-separator" }),
-      command("Undo", ICON.undo, {
-        className: "rail-undo",
-        disabled: state.history.length === 0,
-        onClick: () => {
-          setOpenMenu(null);
-          dispatch({ type: "UNDO" });
-        },
-      }),
-      command("Redo", ICON.redo, {
-        className: "rail-redo",
-        disabled: state.future.length === 0,
-        onClick: () => {
-          setOpenMenu(null);
-          dispatch({ type: "REDO" });
-        },
-      }),
-      React.createElement("div", { className: "canvas-tool-separator" }),
-      command("Select", ICON.edit, {
-        className: touchMode === "edit" ? "active" : "",
-        onClick: () => setMode("edit"),
-      }),
-      command("Multi", ICON.multi, {
-        className: `canvas-tool-touch-only${touchMode === "select" ? " active" : ""}`,
-        onClick: () => setMode(touchMode === "select" ? "edit" : "select"),
-      }),
-      command("Ruler", ICON.ruler, {
-        className: touchMode === "ruler" ? "active" : "",
-        onClick: () => setMode("ruler"),
-      }),
-      React.createElement("div", { className: "canvas-tool-separator" }),
-      command("Text", ICON.text, {
-        onClick: () => {
-          setOpenMenu(null);
-          onAddText?.();
-        },
-      }),
-      command("Rotate", ICON.rotate, {
-        disabled: !(state.selected && state.selected.length > 0),
-        onClick: () => {
-          setOpenMenu(null);
-          dispatch({ type: "ROTATE_SELECTED", degrees: 90 });
-        },
-      }),
-      command("View", ICON.view, {
-        className: openMenu === "view" ? "active" : "",
-        onClick: (e) => toggleMenu("view", e),
-      }),
-      command("Snap", ICON.snap, {
-        className: openMenu === "snap" ? "active" : "",
-        onClick: (e) => toggleMenu("snap", e),
-      }),
-      command("Fit", ICON.fit, {
-        onClick: () => {
-          setOpenMenu(null);
-          onFitView();
-        },
-      }),
-      command("Safe", ICON.safe, {
-        className: showSafeZones ? "active" : "",
-        onClick: () => {
-          setOpenMenu(null);
-          onToggleSafeZones();
-        },
-      }),
-      React.createElement("div", { className: "canvas-tool-separator" }),
-      (() => {
-        const selected = state.selected || [];
-        const hasSel = selected.length > 0;
-        const selectedComponents = (state.components || []).filter((c) =>
-          selected.includes(c.id),
-        );
-        const allLocked =
-          selectedComponents.length > 0 &&
-          selectedComponents.every((c) => !!c.locked);
-        return React.createElement(
-          React.Fragment,
-          null,
-          command("Nudge", ICON.nudge, {
-            disabled: !hasSel,
-            className: "canvas-tool-mobile-only",
-            onClick: () => {
-              setOpenMenu(null);
-              window.dispatchEvent(
-                new Event("panel-designer:request-nudge-mode"),
-              );
-            },
-          }),
-          command("Dup", ICON.dup, {
-            disabled: !hasSel,
-            className: "canvas-tool-mobile-only",
-            onClick: () => {
-              setOpenMenu(null);
-              dispatch({ type: "DUPLICATE_SELECTED" });
-            },
-          }),
-          command(allLocked ? "Unlock" : "Lock", ICON.lock, {
-            disabled: !hasSel,
-            className: `canvas-tool-mobile-only${allLocked ? " active" : ""}`,
-            onClick: () => {
-              setOpenMenu(null);
-              dispatch({ type: "LOCK_SELECTED", locked: !allLocked });
-            },
-          }),
-          command("Del", ICON.del, {
-            disabled: !hasSel,
-            className: "canvas-tool-mobile-only danger",
-            onClick: () => {
-              setOpenMenu(null);
-              dispatch({ type: "DELETE_SELECTED" });
-            },
-          }),
-          command("More", ICON.more, {
-            disabled: !hasSel,
-            className: "canvas-tool-mobile-only",
-            onClick: () => {
-              setOpenMenu(null);
-              window.dispatchEvent(
-                new Event("panel-designer:request-selection-more"),
-              );
-            },
-          }),
-        );
-      })(),
+      group("create", [
+        command("Add", ICON.add, {
+          className: "canvas-tool-primary",
+          onClick: () => {
+            setOpenMenu(null);
+            onOpenComponentLibrary?.();
+          },
+        }),
+        command("Text", ICON.text, {
+          onClick: () => {
+            setOpenMenu(null);
+            onAddText?.();
+          },
+        }),
+        command("Left", ICON.left, {
+          className: `canvas-tool-left-btn${leftPanelOpen ? " active" : ""}`,
+          onClick: () => {
+            setOpenMenu(null);
+            onToggleLeftPanel();
+          },
+        }),
+        command("Right", ICON.right, {
+          className: `rail-right-btn${rightPanelOpen ? " active" : ""}`,
+          onClick: () => {
+            setOpenMenu(null);
+            onToggleRightPanel();
+          },
+        }),
+      ]),
+      group("history", [
+        command("Undo", ICON.undo, {
+          className: "rail-undo",
+          disabled: state.history.length === 0,
+          onClick: () => {
+            setOpenMenu(null);
+            dispatch({ type: "UNDO" });
+          },
+        }),
+        command("Redo", ICON.redo, {
+          className: "rail-redo",
+          disabled: state.future.length === 0,
+          onClick: () => {
+            setOpenMenu(null);
+            dispatch({ type: "REDO" });
+          },
+        }),
+      ]),
+      group("edit", [
+        command("Select", ICON.edit, {
+          className: touchMode === "edit" ? "active" : "",
+          onClick: () => setMode("edit"),
+        }),
+        command("Multi", ICON.multi, {
+          className: `canvas-tool-touch-only${touchMode === "select" ? " active" : ""}`,
+          onClick: () => setMode(touchMode === "select" ? "edit" : "select"),
+        }),
+        command("Ruler", ICON.ruler, {
+          className: touchMode === "ruler" ? "active" : "",
+          onClick: () => setMode("ruler"),
+        }),
+        command("Rotate", ICON.rotate, {
+          disabled: !(state.selected && state.selected.length > 0),
+          onClick: () => {
+            setOpenMenu(null);
+            dispatch({ type: "ROTATE_SELECTED", degrees: 90 });
+          },
+        }),
+      ]),
+      group("view", [
+        command("View", ICON.view, {
+          className: openMenu === "view" ? "active" : "",
+          onClick: (e) => toggleMenu("view", e),
+        }),
+        command("Snap", ICON.snap, {
+          className: openMenu === "snap" ? "active" : "",
+          onClick: (e) => toggleMenu("snap", e),
+        }),
+        command("Fit", ICON.fit, {
+          onClick: () => {
+            setOpenMenu(null);
+            onFitView();
+          },
+        }),
+        command("Safe", ICON.safe, {
+          className: showSafeZones ? "active" : "",
+          onClick: () => {
+            setOpenMenu(null);
+            onToggleSafeZones();
+          },
+        }),
+      ]),
+      group(
+        "selection",
+        (() => {
+          const selected = state.selected || [];
+          const hasSel = selected.length > 0;
+          const selectedComponents = (state.components || []).filter((c) =>
+            selected.includes(c.id),
+          );
+          const allLocked =
+            selectedComponents.length > 0 &&
+            selectedComponents.every((c) => !!c.locked);
+          return [
+            command("Nudge", ICON.nudge, {
+              disabled: !hasSel,
+              className: "canvas-tool-mobile-only",
+              onClick: () => {
+                setOpenMenu(null);
+                window.dispatchEvent(
+                  new Event("panel-designer:request-nudge-mode"),
+                );
+              },
+            }),
+            command("Dup", ICON.dup, {
+              disabled: !hasSel,
+              className: "canvas-tool-mobile-only",
+              onClick: () => {
+                setOpenMenu(null);
+                dispatch({ type: "DUPLICATE_SELECTED" });
+              },
+            }),
+            command(allLocked ? "Unlock" : "Lock", ICON.lock, {
+              disabled: !hasSel,
+              className: `canvas-tool-mobile-only${allLocked ? " active" : ""}`,
+              onClick: () => {
+                setOpenMenu(null);
+                dispatch({ type: "LOCK_SELECTED", locked: !allLocked });
+              },
+            }),
+            command("Del", ICON.del, {
+              disabled: !hasSel,
+              className: "canvas-tool-mobile-only danger",
+              onClick: () => {
+                setOpenMenu(null);
+                dispatch({ type: "DELETE_SELECTED" });
+              },
+            }),
+            command("More", ICON.more, {
+              disabled: !hasSel,
+              className: "canvas-tool-mobile-only",
+              onClick: () => {
+                setOpenMenu(null);
+                window.dispatchEvent(
+                  new Event("panel-designer:request-selection-more"),
+                );
+              },
+            }),
+          ];
+        })(),
+      ),
       command("Help", ICON.help, {
         className: "rail-help-btn",
         onClick: () => {

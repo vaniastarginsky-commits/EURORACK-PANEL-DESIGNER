@@ -1045,6 +1045,7 @@ function parseKiCadPcbToPanel(src, currentPanelWidthMM) {
       category: "mechanical",
       topHardwareVisible: false,
       verificationStatus: "measured",
+      snapTargetEnabled: true,
     });
     const component = {
       ...def,

@@ -26,6 +26,8 @@ function PropertiesPanel() {
         c.holeType === selComps[0].holeType,
     );
   if (selComps.length > 1 && !sameEditableKind) {
+    const selectedIds = selComps.map((c) => c.id);
+    const allLocked = selComps.every((c) => c.locked);
     const types = [...new Set(selComps.map((c) => c.name || c.type))]
       .slice(0, 4)
       .join(", ");
@@ -55,10 +57,46 @@ function PropertiesPanel() {
         { style: { color: "#666", fontSize: 11, marginTop: 8 } },
         "Use align/distribute tools below for mixed selections.",
       ),
+      React.createElement(
+        "div",
+        { className: "mixed-selection-actions" },
+        React.createElement(
+          "button",
+          {
+            onClick: () =>
+              dispatch({
+                type: "UPDATE_COMPONENTS_PATCH",
+                ids: selectedIds,
+                patch: { label: "" },
+              }),
+          },
+          "Clear labels",
+        ),
+        React.createElement(
+          "button",
+          {
+            onClick: () =>
+              dispatch({ type: "LOCK_SELECTED", locked: !allLocked }),
+          },
+          allLocked ? "Unlock all" : "Lock all",
+        ),
+        React.createElement(
+          "button",
+          {
+            onClick: () => dispatch({ type: "ROTATE_SELECTED", degrees: 90 }),
+          },
+          "Rotate +90°",
+        ),
+      ),
     );
   }
   const isMultiEdit = selComps.length > 1;
   const c = selComps[0];
+  const displayMm = (value) => {
+    const number = Number(value);
+    if (!Number.isFinite(number)) return "—";
+    return Number(number.toFixed(2)).toString();
+  };
   const libraryDef =
     COMPONENT_LIBRARY.find(
       (def) =>
@@ -119,6 +157,22 @@ function PropertiesPanel() {
     isLedLike(c);
   const showThreadedHardware =
     hasNutWasherHardware(c) && !isButtonLike(c) && !isLedLike(c);
+  const compatibleCutoutParts =
+    c.type === "cutout" && c.holeType !== "rect" && c.holeType !== "slot"
+      ? COMPONENT_LIBRARY.filter(
+          (def) =>
+            def.type !== "cutout" &&
+            Number.isFinite(def.holeDiameter) &&
+            Math.abs(def.holeDiameter - c.holeDiameter) <= 0.45,
+        )
+          .sort(
+            (a, b) =>
+              Math.abs(a.holeDiameter - c.holeDiameter) -
+                Math.abs(b.holeDiameter - c.holeDiameter) ||
+              a.rearDepth - b.rearDepth,
+          )
+          .slice(0, 4)
+      : [];
   const isToggleLike =
     c.type === "toggle" || c.type === "toggleSpdt" || c.type === "toggle2m";
   const applyToSameType = (patchObj) =>
@@ -153,17 +207,21 @@ function PropertiesPanel() {
             "b",
             null,
             c.holeType === "rect"
-              ? `${c.holeW ?? c.frontW}×${c.holeH ?? c.frontH}`
+              ? `${displayMm(c.holeW ?? c.frontW)}×${displayMm(c.holeH ?? c.frontH)}`
               : c.holeType === "slot"
-                ? `${c.holeDiameter}×${c.slotLength ?? c.holeDiameter}`
-                : `Ø${c.holeDiameter}`,
+                ? `${displayMm(c.holeDiameter)}×${displayMm(c.slotLength ?? c.holeDiameter)}`
+                : `Ø${displayMm(c.holeDiameter)}`,
           ),
         ),
         React.createElement(
           "span",
           null,
           "Rear body",
-          React.createElement("b", null, `${c.rearBodyW}×${c.rearBodyH}`),
+          React.createElement(
+            "b",
+            null,
+            `${displayMm(c.rearBodyW)}×${displayMm(c.rearBodyH)}`,
+          ),
         ),
         React.createElement(
           "span",
@@ -211,6 +269,58 @@ function PropertiesPanel() {
         "Multi-edit mode: changes are applied to all ",
         selComps.length,
         " selected matching components.",
+      ),
+    !isMultiEdit &&
+      c.type === "cutout" &&
+      React.createElement(
+        "div",
+        { className: "cutout-assistant" },
+        React.createElement(
+          "label",
+          { className: "cutout-snap-toggle" },
+          React.createElement("input", {
+            type: "checkbox",
+            checked: c.snapTargetEnabled !== false,
+            onChange: (e) => patch({ snapTargetEnabled: e.target.checked }),
+          }),
+          React.createElement("span", null, "Use center as Shift snap target"),
+        ),
+        compatibleCutoutParts.length > 0 &&
+          React.createElement(
+            React.Fragment,
+            null,
+            React.createElement(
+              "span",
+              { className: "cutout-assistant-label" },
+              "Fits this hole",
+            ),
+            React.createElement(
+              "div",
+              { className: "cutout-suggestion-grid" },
+              compatibleCutoutParts.map((def) =>
+                React.createElement(
+                  "button",
+                  {
+                    key: `${def.type}-${def.partNumber || def.name}`,
+                    title: `${def.name} · Ø${def.holeDiameter} mm · ${def.rearDepth} mm deep`,
+                    onClick: () =>
+                      dispatch({
+                        type: "ADD_COMPONENT",
+                        def,
+                        x: c.x,
+                        y: c.y,
+                      }),
+                  },
+                  React.createElement("b", null, shortPartName(def)),
+                  React.createElement(
+                    "small",
+                    null,
+                    `Ø${def.holeDiameter} · ${def.rearDepth} mm deep`,
+                  ),
+                ),
+              ),
+            ),
+          ),
       ),
     React.createElement(
       "div",
@@ -261,171 +371,7 @@ function PropertiesPanel() {
     ),
     React.createElement(
       "div",
-      { className: "section-title", style: { marginTop: 8 } },
-      "Part / Verification",
-    ),
-    React.createElement(
-      "div",
-      { className: "field-pair" },
-      React.createElement(
-        "div",
-        { className: "field-row" },
-        React.createElement("label", null, "Manufacturer"),
-        React.createElement("input", {
-          type: "text",
-          value: c.manufacturer || "",
-          onChange: (e) => patch({ manufacturer: e.target.value }),
-        }),
-      ),
-      React.createElement(
-        "div",
-        { className: "field-row" },
-        React.createElement("label", null, "Part No."),
-        React.createElement("input", {
-          type: "text",
-          value: c.partNumber || "",
-          onChange: (e) => patch({ partNumber: e.target.value }),
-        }),
-      ),
-    ),
-    React.createElement(
-      "div",
-      { className: "field-row" },
-      React.createElement("label", null, "Datasheet URL"),
-      React.createElement("input", {
-        type: "text",
-        value: c.datasheetUrl || "",
-        onChange: (e) => patch({ datasheetUrl: e.target.value }),
-      }),
-    ),
-    React.createElement(
-      "div",
-      { className: "field-pair" },
-      React.createElement(
-        "div",
-        { className: "field-row" },
-        React.createElement("label", null, "Category"),
-        React.createElement(
-          "select",
-          {
-            value: category || "custom",
-            onChange: (e) => patch({ category: e.target.value }),
-          },
-          React.createElement(
-            "option",
-            { value: "potentiometer" },
-            "Potentiometer",
-          ),
-          React.createElement("option", { value: "jack" }, "Jack"),
-          React.createElement("option", { value: "switch" }, "Switch"),
-          React.createElement("option", { value: "led" }, "LED"),
-          React.createElement("option", { value: "encoder" }, "Encoder"),
-          React.createElement("option", { value: "fader" }, "Fader"),
-          React.createElement("option", { value: "custom" }, "Custom"),
-        ),
-      ),
-      React.createElement(
-        "div",
-        { className: "field-row" },
-        React.createElement("label", null, "Verification"),
-        React.createElement(
-          "select",
-          {
-            value: c.verificationStatus || "approximate",
-            onChange: (e) => patch({ verificationStatus: e.target.value }),
-          },
-          React.createElement(
-            "option",
-            { value: "approximate" },
-            "Approximate",
-          ),
-          React.createElement(
-            "option",
-            { value: "datasheet" },
-            "From datasheet",
-          ),
-          React.createElement("option", { value: "measured" }, "Measured"),
-          React.createElement(
-            "option",
-            { value: "production" },
-            "Production verified",
-          ),
-        ),
-      ),
-    ),
-    React.createElement(
-      "div",
-      { className: "field-row" },
-      React.createElement("label", null, "Verification note"),
-      React.createElement("textarea", {
-        value: c.verification || "",
-        onChange: (e) => patch({ verification: e.target.value }),
-        placeholder:
-          "e.g. dimensions from datasheet page 2, measured with calipers, production verified\u2026",
-      }),
-    ),
-    isMultiEdit &&
-      React.createElement(
-        "div",
-        { className: "multi-edit-note subtle" },
-        "Reference is protected, but label, geometry, hardware, color, verification and manufacturing parameters apply to the whole selection.",
-      ),
-    React.createElement(
-      "div",
-      { className: "btn-row", style: { marginBottom: 6 } },
-      React.createElement(
-        "button",
-        {
-          disabled: isMultiEdit,
-          title: isMultiEdit
-            ? "Already editing selected matching parts."
-            : "Apply manufacturer, part number, datasheet, category, verification and panel-thickness data to all matching parts of the same type.",
-          onClick: () =>
-            applyToSameType({
-              manufacturer: c.manufacturer,
-              partNumber: c.partNumber,
-              datasheetUrl: c.datasheetUrl,
-              category: c.category,
-              verificationStatus: c.verificationStatus,
-              panelThicknessMin: c.panelThicknessMin,
-              panelThicknessMax: c.panelThicknessMax,
-            }),
-        },
-        "Apply part info to same type",
-      ),
-      React.createElement(
-        "button",
-        {
-          title:
-            "Apply hole, front, rear body, keepout and pin keepout dimensions to all matching parts of the same type.",
-          onClick: () =>
-            applyToSameType({
-              holeDiameter: c.holeDiameter,
-              holeType: c.holeType,
-              slotLength: c.slotLength,
-              holeW: c.holeW,
-              holeH: c.holeH,
-              frontDiameter: c.frontDiameter,
-              frontShape: c.frontShape,
-              frontW: c.frontW,
-              frontH: c.frontH,
-              rearBodyW: c.rearBodyW,
-              rearBodyH: c.rearBodyH,
-              rearDepth: c.rearDepth,
-              keepoutW: c.keepoutW,
-              keepoutH: c.keepoutH,
-              pinKeepoutW: c.pinKeepoutW,
-              pinKeepoutH: c.pinKeepoutH,
-              minSpacing: c.minSpacing,
-            }),
-          disabled: isMultiEdit,
-        },
-        "Apply dimensions to same type",
-      ),
-    ),
-    React.createElement(
-      "div",
-      { className: "front-compact-grid" },
+      { className: "front-compact-grid inspector-position-grid" },
       React.createElement(NumFieldCompact, {
         label: "X (mm)",
         value: c.x,
@@ -437,12 +383,180 @@ function PropertiesPanel() {
         onChange: (v) => patch({ y: v }),
       }),
       React.createElement(NumFieldCompact, {
-        label: "Rotation (\u00B0)",
+        label: "Rotation (°)",
         value: c.rotation,
         step: 5,
         min: -360,
         onChange: (v) => patch({ rotation: v }),
       }),
+    ),
+    React.createElement(
+      "details",
+      { className: "inspector-part-details" },
+      React.createElement("summary", null, "Part / verification"),
+      React.createElement(
+        "div",
+        { className: "inspector-part-details-content" },
+        React.createElement(
+          "div",
+          { className: "field-pair" },
+          React.createElement(
+            "div",
+            { className: "field-row" },
+            React.createElement("label", null, "Manufacturer"),
+            React.createElement("input", {
+              type: "text",
+              value: c.manufacturer || "",
+              onChange: (e) => patch({ manufacturer: e.target.value }),
+            }),
+          ),
+          React.createElement(
+            "div",
+            { className: "field-row" },
+            React.createElement("label", null, "Part No."),
+            React.createElement("input", {
+              type: "text",
+              value: c.partNumber || "",
+              onChange: (e) => patch({ partNumber: e.target.value }),
+            }),
+          ),
+        ),
+        React.createElement(
+          "div",
+          { className: "field-row" },
+          React.createElement("label", null, "Datasheet URL"),
+          React.createElement("input", {
+            type: "text",
+            value: c.datasheetUrl || "",
+            onChange: (e) => patch({ datasheetUrl: e.target.value }),
+          }),
+        ),
+        React.createElement(
+          "div",
+          { className: "field-pair" },
+          React.createElement(
+            "div",
+            { className: "field-row" },
+            React.createElement("label", null, "Category"),
+            React.createElement(
+              "select",
+              {
+                value: category || "custom",
+                onChange: (e) => patch({ category: e.target.value }),
+              },
+              React.createElement(
+                "option",
+                { value: "potentiometer" },
+                "Potentiometer",
+              ),
+              React.createElement("option", { value: "jack" }, "Jack"),
+              React.createElement("option", { value: "switch" }, "Switch"),
+              React.createElement("option", { value: "led" }, "LED"),
+              React.createElement("option", { value: "encoder" }, "Encoder"),
+              React.createElement("option", { value: "fader" }, "Fader"),
+              React.createElement("option", { value: "custom" }, "Custom"),
+            ),
+          ),
+          React.createElement(
+            "div",
+            { className: "field-row" },
+            React.createElement("label", null, "Verification"),
+            React.createElement(
+              "select",
+              {
+                value: c.verificationStatus || "approximate",
+                onChange: (e) => patch({ verificationStatus: e.target.value }),
+              },
+              React.createElement(
+                "option",
+                { value: "approximate" },
+                "Approximate",
+              ),
+              React.createElement(
+                "option",
+                { value: "datasheet" },
+                "From datasheet",
+              ),
+              React.createElement("option", { value: "measured" }, "Measured"),
+              React.createElement(
+                "option",
+                { value: "production" },
+                "Production verified",
+              ),
+            ),
+          ),
+        ),
+        React.createElement(
+          "div",
+          { className: "field-row" },
+          React.createElement("label", null, "Verification note"),
+          React.createElement("textarea", {
+            value: c.verification || "",
+            onChange: (e) => patch({ verification: e.target.value }),
+            placeholder:
+              "e.g. dimensions from datasheet page 2, measured with calipers, production verified\u2026",
+          }),
+        ),
+        isMultiEdit &&
+          React.createElement(
+            "div",
+            { className: "multi-edit-note subtle" },
+            "Reference is protected, but label, geometry, hardware, color, verification and manufacturing parameters apply to the whole selection.",
+          ),
+        React.createElement(
+          "div",
+          { className: "btn-row", style: { marginBottom: 6 } },
+          React.createElement(
+            "button",
+            {
+              disabled: isMultiEdit,
+              title: isMultiEdit
+                ? "Already editing selected matching parts."
+                : "Apply manufacturer, part number, datasheet, category, verification and panel-thickness data to all matching parts of the same type.",
+              onClick: () =>
+                applyToSameType({
+                  manufacturer: c.manufacturer,
+                  partNumber: c.partNumber,
+                  datasheetUrl: c.datasheetUrl,
+                  category: c.category,
+                  verificationStatus: c.verificationStatus,
+                  panelThicknessMin: c.panelThicknessMin,
+                  panelThicknessMax: c.panelThicknessMax,
+                }),
+            },
+            "Apply part info to same type",
+          ),
+          React.createElement(
+            "button",
+            {
+              title:
+                "Apply hole, front, rear body, keepout and pin keepout dimensions to all matching parts of the same type.",
+              onClick: () =>
+                applyToSameType({
+                  holeDiameter: c.holeDiameter,
+                  holeType: c.holeType,
+                  slotLength: c.slotLength,
+                  holeW: c.holeW,
+                  holeH: c.holeH,
+                  frontDiameter: c.frontDiameter,
+                  frontShape: c.frontShape,
+                  frontW: c.frontW,
+                  frontH: c.frontH,
+                  rearBodyW: c.rearBodyW,
+                  rearBodyH: c.rearBodyH,
+                  rearDepth: c.rearDepth,
+                  keepoutW: c.keepoutW,
+                  keepoutH: c.keepoutH,
+                  pinKeepoutW: c.pinKeepoutW,
+                  pinKeepoutH: c.pinKeepoutH,
+                  minSpacing: c.minSpacing,
+                }),
+              disabled: isMultiEdit,
+            },
+            "Apply dimensions to same type",
+          ),
+        ),
+      ),
     ),
     React.createElement(
       "div",
@@ -541,12 +655,32 @@ function PropertiesPanel() {
           React.createElement(
             "div",
             { className: "field-row" },
-            React.createElement("label", null, "Knob color"),
+            React.createElement(
+              "label",
+              null,
+              isTrimPot(c) ? "Knob / LED color" : "Knob color",
+            ),
             React.createElement("input", {
               type: "color",
               value: topColor(c),
               onChange: (e) => patch({ topColor: e.target.value }),
             }),
+          ),
+        c.knobEnabled &&
+          isTrimPot(c) &&
+          React.createElement(
+            "label",
+            {
+              className: "component-check-row",
+              title:
+                "Render a translucent knob with the selected color glowing through it from an LED below.",
+            },
+            React.createElement("input", {
+              type: "checkbox",
+              checked: !!c.knobTransparent,
+              onChange: (e) => patch({ knobTransparent: e.target.checked }),
+            }),
+            React.createElement("span", null, "Transparent / LED-lit knob"),
           ),
         c.knobEnabled &&
           React.createElement(
@@ -610,6 +744,7 @@ function PropertiesPanel() {
                 applyToSameType({
                   knobEnabled: c.knobEnabled,
                   knobDiameter: c.knobDiameter,
+                  knobTransparent: c.knobTransparent,
                   ergonomicEnabled: c.ergonomicEnabled,
                   ergonomicDiameter: c.ergonomicDiameter,
                   topColor: c.topColor,

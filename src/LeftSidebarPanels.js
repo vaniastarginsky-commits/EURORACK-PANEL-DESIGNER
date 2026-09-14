@@ -225,6 +225,8 @@ function ComponentLibraryPanel({
   const [partSearch, setPartSearch] = useState("");
   const [partCategory, setPartCategory] = useState("all");
   const [partVerification, setPartVerification] = useState("all");
+  const [partHoleRange, setPartHoleRange] = useState("all");
+  const [partDepthRange, setPartDepthRange] = useState("all");
   const [partSort, setPartSort] = useState("default");
   const [focusedPart, setFocusedPart] = useState(null);
   const [resetPartsArmed, setResetPartsArmed] = useState(false);
@@ -245,7 +247,14 @@ function ComponentLibraryPanel({
   const [popoverPos, setPopoverPos] = useState({ left: 330, top: 80 });
   useEffect(() => {
     setRenderLimit(48);
-  }, [partSearch, partCategory, partVerification, state.customParts.length]);
+  }, [
+    partSearch,
+    partCategory,
+    partVerification,
+    partHoleRange,
+    partDepthRange,
+    state.customParts.length,
+  ]);
   useEffect(() => {
     if (!headless) return;
     function openLibraryFromCanvas() {
@@ -298,16 +307,40 @@ function ComponentLibraryPanel({
   const visibleParts = allParts.filter((def) => {
     const q = partSearch.trim().toLowerCase();
     const cat = def.category ?? inferCategoryForType(def.type);
-    const matchesCat = partCategory === "all" || cat === partCategory;
+    const key = partStableKey(def);
+    const matchesCat =
+      partCategory === "all" ||
+      cat === partCategory ||
+      (partCategory === "favorites" && favoriteKeys.includes(key)) ||
+      (partCategory === "recent" && recentKeys.includes(key));
     const status = def.verificationStatus || "approximate";
     const matchesVerification =
       partVerification === "all" ||
       (partVerification === "verified"
         ? status !== "approximate"
         : status === "approximate");
+    const hole = Number(def.holeDiameter) || 0;
+    const matchesHole =
+      partHoleRange === "all" ||
+      (partHoleRange === "small" && hole < 3) ||
+      (partHoleRange === "medium" && hole >= 3 && hole < 7) ||
+      (partHoleRange === "large" && hole >= 7 && hole < 12) ||
+      (partHoleRange === "xlarge" && hole >= 12);
+    const depth = Number(def.rearDepth) || 0;
+    const matchesDepth =
+      partDepthRange === "all" ||
+      (partDepthRange === "shallow" && depth <= 10) ||
+      (partDepthRange === "standard" && depth > 10 && depth <= 20) ||
+      (partDepthRange === "deep" && depth > 20);
     const hay =
       `${def.name} ${def.type} ${def.manufacturer || ""} ${def.partNumber || ""} ${cat || ""} ${status}`.toLowerCase();
-    return matchesCat && matchesVerification && (!q || hay.includes(q));
+    return (
+      matchesCat &&
+      matchesVerification &&
+      matchesHole &&
+      matchesDepth &&
+      (!q || hay.includes(q))
+    );
   });
   const sortedVisibleParts =
     partSort === "name"
@@ -535,6 +568,12 @@ function ComponentLibraryPanel({
                 { value: "all" },
                 "All component types",
               ),
+              React.createElement("option", { value: "recent" }, "Recent"),
+              React.createElement(
+                "option",
+                { value: "favorites" },
+                "Favorites",
+              ),
               React.createElement(
                 "option",
                 { value: "potentiometer" },
@@ -570,6 +609,41 @@ function ComponentLibraryPanel({
             React.createElement(
               "select",
               {
+                className: "mini-input library-size-select",
+                value: partHoleRange,
+                onChange: (e) => setPartHoleRange(e.target.value),
+                "aria-label": "Hole diameter",
+              },
+              React.createElement("option", { value: "all" }, "Any hole Ø"),
+              React.createElement("option", { value: "small" }, "Under 3 mm"),
+              React.createElement("option", { value: "medium" }, "3–7 mm"),
+              React.createElement("option", { value: "large" }, "7–12 mm"),
+              React.createElement("option", { value: "xlarge" }, "12+ mm"),
+            ),
+            React.createElement(
+              "select",
+              {
+                className: "mini-input library-depth-select",
+                value: partDepthRange,
+                onChange: (e) => setPartDepthRange(e.target.value),
+                "aria-label": "Rear depth",
+              },
+              React.createElement("option", { value: "all" }, "Any depth"),
+              React.createElement(
+                "option",
+                { value: "shallow" },
+                "≤10 mm deep",
+              ),
+              React.createElement(
+                "option",
+                { value: "standard" },
+                "10–20 mm deep",
+              ),
+              React.createElement("option", { value: "deep" }, "20+ mm deep"),
+            ),
+            React.createElement(
+              "select",
+              {
                 className: "mini-input library-sort-select",
                 value: partSort,
                 onChange: (e) => setPartSort(e.target.value),
@@ -590,6 +664,41 @@ function ComponentLibraryPanel({
                 "option",
                 { value: "accuracy" },
                 "Accuracy first",
+              ),
+            ),
+          ),
+          React.createElement(
+            "div",
+            {
+              className: "component-library-category-strip",
+              role: "toolbar",
+              "aria-label": "Component categories",
+            },
+            [
+              ["all", "All"],
+              ["recent", "Recent"],
+              ["favorites", "Favorites"],
+              ["potentiometer", "Pots"],
+              ["jack", "Jacks"],
+              ["switch", "Switches"],
+              ["led", "LEDs"],
+              ["encoder", "Encoders"],
+              ["fader", "Faders"],
+              ["custom", "Custom"],
+            ].map(([value, label]) =>
+              React.createElement(
+                "button",
+                {
+                  key: value,
+                  type: "button",
+                  className: partCategory === value ? "active" : "",
+                  "aria-pressed": partCategory === value,
+                  disabled:
+                    (value === "recent" && recentKeys.length === 0) ||
+                    (value === "favorites" && favoriteKeys.length === 0),
+                  onClick: () => setPartCategory(value),
+                },
+                label,
               ),
             ),
           ),
@@ -816,6 +925,17 @@ function ComponentLibraryPanel({
                 ),
                 React.createElement(
                   "span",
+                  {
+                    className: `component-icon-status ${(def.verificationStatus || "approximate") === "datasheet" ? "verified" : "approximate"}`,
+                    title: verificationLabel(def.verificationStatus),
+                    "aria-hidden": "true",
+                  },
+                  (def.verificationStatus || "approximate") === "datasheet"
+                    ? "✓"
+                    : "~",
+                ),
+                React.createElement(
+                  "span",
                   { className: "component-icon-preview" },
                   React.createElement(LibraryPartPreview, { def: def }),
                 ),
@@ -828,15 +948,7 @@ function ComponentLibraryPanel({
                   "span",
                   { className: "component-icon-meta" },
                   holeText(def),
-                  " · ",
-                  verificationLabel(def.verificationStatus),
                 ),
-                def.partNumber &&
-                  React.createElement(
-                    "span",
-                    { className: "component-icon-part-number" },
-                    def.partNumber,
-                  ),
                 state.customParts.some((p) => p.name === def.name) &&
                   React.createElement(
                     "span",

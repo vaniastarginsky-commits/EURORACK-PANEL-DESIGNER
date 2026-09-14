@@ -293,9 +293,8 @@ function shortPartName(def) {
     .replace(/\s+/g, " ")
     .trim();
 }
-function defaultLabelForComponentDef(def) {
-  if (def.type === "slideSwitch8pos") return "SS-18F08";
-  return def.name;
+function defaultLabelForComponentDef(_def) {
+  return "";
 }
 function partTooltip(def) {
   const status = verificationLabel(def.verificationStatus);

@@ -501,6 +501,7 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
           }
           if (isPotLike(c)) {
             const d = visualKnobDiameter(c);
+            const transparentKnob = isTrimPot(c) && !!c.knobTransparent;
             return React.createElement(
               "g",
               {
@@ -514,6 +515,7 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
                 cy: cy,
                 r: d / 2,
                 fill: color,
+                fillOpacity: transparentKnob ? 0.5 : 1,
                 stroke: "none",
                 strokeWidth: 0,
               }),
@@ -1077,6 +1079,7 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
           const r = d / 2;
           if (isTrimPot(c)) {
             const ribCount = 10;
+            const transparentKnob = !!c.knobTransparent;
             const ribs = Array.from({ length: ribCount }, (_, i) => {
               const a = (i / ribCount) * Math.PI * 2;
               const x1 = cx + Math.cos(a) * r * 0.76;
@@ -1106,16 +1109,28 @@ const TopHardwareLayer = React.memo(function TopHardwareLayer({
                 cx: cx,
                 cy: cy,
                 r: r + 0.28,
-                fill: "#080808",
+                fill: transparentKnob ? color : "#080808",
+                fillOpacity: transparentKnob ? 0.28 : 1,
                 stroke: "rgba(255,255,255,0.28)",
                 strokeWidth: 0.16,
               }),
+              transparentKnob &&
+                React.createElement("circle", {
+                  cx: cx,
+                  cy: cy,
+                  r: r * 0.72,
+                  fill: color,
+                  fillOpacity: 0.72,
+                  stroke: "none",
+                }),
               React.createElement("circle", {
                 cx: cx,
                 cy: cy,
                 r: r,
-                fill: "#111",
-                stroke: "#050505",
+                fill: color,
+                fillOpacity: transparentKnob ? 0.46 : 1,
+                stroke: transparentKnob ? color : "#050505",
+                strokeOpacity: transparentKnob ? 0.82 : 1,
                 strokeWidth: 0.35,
               }),
               ribs,
@@ -2292,6 +2307,36 @@ const ComponentsLayer = React.memo(function ComponentsLayer({
             cy.toFixed(1),
           ),
         !useCheapDragShape &&
+          c.type === "cutout" &&
+          (viewMode === "front" || viewMode === "combined") &&
+          React.createElement(
+            "g",
+            {
+              className: `cutout-snap-center ${c.snapTargetEnabled === false ? "disabled" : "enabled"}`,
+              "data-cutout-snap-center": c.id,
+              style: { pointerEvents: "none" },
+            },
+            React.createElement("line", {
+              x1: cx - 0.8,
+              y1: cy,
+              x2: cx + 0.8,
+              y2: cy,
+            }),
+            React.createElement("line", {
+              x1: cx,
+              y1: cy - 0.8,
+              x2: cx,
+              y2: cy + 0.8,
+            }),
+            c.snapTargetEnabled === false &&
+              React.createElement("line", {
+                x1: cx - 0.7,
+                y1: cy + 0.7,
+                x2: cx + 0.7,
+                y2: cy - 0.7,
+              }),
+          ),
+        !useCheapDragShape &&
           layers.labels &&
           (viewMode === "front" || viewMode === "combined") &&
           c.label &&
@@ -3169,6 +3214,10 @@ function SVGCanvas({
     () => new Set(state.selected),
     [state.selected],
   );
+  const snapTargetId = snapGuides.find((guide) => guide.targetId)?.targetId;
+  const snapTarget = snapTargetId
+    ? state.components.find((component) => component.id === snapTargetId)
+    : null;
   const issueFocusIdSet = useMemo(
     () => new Set(issueFocusIds),
     [issueFocusIds],
@@ -3504,6 +3553,77 @@ function SVGCanvas({
             widthMM: widthMM,
             components: state.components,
           }),
+        snapTarget &&
+          React.createElement(
+            "g",
+            {
+              "data-snap-target-id": snapTarget.id,
+              transform: `rotate(${snapTarget.rotation || 0}, ${snapTarget.x}, ${snapTarget.y})`,
+              style: { pointerEvents: "none" },
+            },
+            snapTarget.holeType === "rect" || snapTarget.holeType === "slot"
+              ? React.createElement("rect", {
+                  x:
+                    snapTarget.x -
+                    (snapTarget.holeType === "rect"
+                      ? (snapTarget.holeW ?? snapTarget.frontW)
+                      : snapTarget.holeDiameter) /
+                      2 -
+                    1,
+                  y:
+                    snapTarget.y -
+                    (snapTarget.holeType === "rect"
+                      ? (snapTarget.holeH ?? snapTarget.frontH)
+                      : (snapTarget.slotLength ?? snapTarget.holeDiameter)) /
+                      2 -
+                    1,
+                  width:
+                    (snapTarget.holeType === "rect"
+                      ? (snapTarget.holeW ?? snapTarget.frontW)
+                      : snapTarget.holeDiameter) + 2,
+                  height:
+                    (snapTarget.holeType === "rect"
+                      ? (snapTarget.holeH ?? snapTarget.frontH)
+                      : (snapTarget.slotLength ?? snapTarget.holeDiameter)) + 2,
+                  rx: snapTarget.holeType === "slot" ? 1.5 : 0.5,
+                  fill: "rgba(201,154,74,0.12)",
+                  stroke: "#f3dfb2",
+                  strokeWidth: 0.36,
+                  strokeDasharray: "1.1 0.65",
+                })
+              : React.createElement("circle", {
+                  cx: snapTarget.x,
+                  cy: snapTarget.y,
+                  r: (snapTarget.holeDiameter || 1) / 2 + 1,
+                  fill: "rgba(201,154,74,0.12)",
+                  stroke: "#f3dfb2",
+                  strokeWidth: 0.36,
+                  strokeDasharray: "1.1 0.65",
+                }),
+            React.createElement(
+              "text",
+              {
+                x: snapTarget.x,
+                y:
+                  snapTarget.y -
+                  Math.max(
+                    snapTarget.holeDiameter || 1,
+                    snapTarget.holeH || 0,
+                    snapTarget.slotLength || 0,
+                  ) /
+                    2 -
+                  2,
+                fill: "#f3dfb2",
+                fontSize: 1.15,
+                fontWeight: 700,
+                textAnchor: "middle",
+                paintOrder: "stroke",
+                stroke: "rgba(0,0,0,0.82)",
+                strokeWidth: 0.32,
+              },
+              "Center snap",
+            ),
+          ),
         snapGuides.map((g, i) => {
           const label = String(g.label || "").replace(/^SNAP:\s*/i, "");
           const compactLabel =
@@ -4018,19 +4138,27 @@ function SVGCanvas({
         !pendingAddPart &&
         React.createElement(
           "div",
-          { className: "canvas-empty-state" },
-          React.createElement("strong", null, "Start your panel"),
+          {
+            className: "canvas-empty-state",
+            onPointerDown: (e) => e.stopPropagation(),
+            onTouchStart: (e) => e.stopPropagation(),
+            onTouchEnd: (e) => e.stopPropagation(),
+          },
+          React.createElement("strong", null, "Build your panel"),
           React.createElement(
             "span",
             null,
-            "Place a component, start from a template, or import a board.",
+            "Add the first control, start from a template, or bring in a mechanical faceplate.",
           ),
           React.createElement(
             "div",
-            { className: "canvas-empty-actions" },
+            { className: "canvas-empty-actions primary" },
             React.createElement(
               "button",
-              { onClick: () => AppCommands.openComponentLibraryPicker() },
+              {
+                className: "canvas-empty-primary",
+                onClick: () => AppCommands.openComponentLibraryPicker(),
+              },
               "Add component",
             ),
             React.createElement(
@@ -4038,27 +4166,36 @@ function SVGCanvas({
               { onClick: () => AppCommands.openTemplatesDialog() },
               "Templates",
             ),
+          ),
+          React.createElement(
+            "div",
+            { className: "canvas-empty-import" },
+            React.createElement("span", null, "Import faceplate"),
             React.createElement(
-              "button",
-              {
-                onClick: () =>
-                  document.getElementById("kicad-pcb-file-input")?.click(),
-              },
-              "Import KiCad",
-            ),
-            React.createElement(
-              "button",
-              {
-                onClick: () =>
-                  document.getElementById("eagle-brd-file-input")?.click(),
-              },
-              "Import Eagle",
+              "div",
+              { className: "canvas-empty-actions" },
+              React.createElement(
+                "button",
+                {
+                  onClick: () =>
+                    document.getElementById("kicad-pcb-file-input")?.click(),
+                },
+                "KiCad PCB",
+              ),
+              React.createElement(
+                "button",
+                {
+                  onClick: () =>
+                    document.getElementById("eagle-brd-file-input")?.click(),
+                },
+                "Eagle BRD",
+              ),
             ),
           ),
           React.createElement(
             "small",
             { className: "canvas-empty-shortcut" },
-            "Tip: Ctrl/Cmd + K searches every command and component.",
+            "⌘/Ctrl K searches everything · Shift snaps parts to imported holes",
           ),
         ),
     ),

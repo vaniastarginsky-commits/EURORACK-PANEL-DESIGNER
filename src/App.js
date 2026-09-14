@@ -846,6 +846,45 @@ function App() {
     }
     return { dx: outDx, dy: outDy, guides };
   }
+  function snapDragDeltaToCutoutCenter(primaryId, primaryOrig, dx, dy) {
+    const currentX = primaryOrig.x + dx;
+    const currentY = primaryOrig.y + dy;
+    const captureDistance = Math.max(1.5, snapSettings.distance);
+    let best = null;
+    for (const c of state.components) {
+      if (
+        c.id === primaryId ||
+        selectedIdSet.has(c.id) ||
+        c.type !== "cutout" ||
+        c.snapTargetEnabled === false
+      )
+        continue;
+      const distance = Math.hypot(currentX - c.x, currentY - c.y);
+      if (distance <= captureDistance && (!best || distance < best.distance)) {
+        best = { component: c, distance };
+      }
+    }
+    if (!best) return null;
+    const name = best.component.ref || best.component.name || "cutout";
+    return {
+      dx: dx + best.component.x - currentX,
+      dy: dy + best.component.y - currentY,
+      guides: [
+        {
+          axis: "x",
+          pos: best.component.x,
+          label: `Hole center · ${name}`,
+          targetId: best.component.id,
+        },
+        {
+          axis: "y",
+          pos: best.component.y,
+          label: `Hole center · ${name}`,
+          targetId: best.component.id,
+        },
+      ],
+    };
+  }
   function gridSnapGuidesForPosition(x, y) {
     if (!snapSettings.grid) return [];
     const guides = [];
@@ -961,7 +1000,7 @@ function App() {
       y1,
       x2,
       y2,
-      label: `${Math.max(0, gap).toFixed(2)} mm`,
+      label: `${kind === "similar" ? "Equal gap" : "Gap"} · ${Math.max(0, gap).toFixed(2)} mm`,
       kind,
       id,
     };
@@ -2046,13 +2085,19 @@ function App() {
     let dx = rawDx;
     let dy = rawDy;
     const hardSnapActive = shiftKey;
-    if (hardSnapActive && snapSettings.grid) {
+    const cutoutSnap = hardSnapActive
+      ? snapDragDeltaToCutoutCenter(dragging.id, primaryOrig, rawDx, rawDy)
+      : null;
+    if (cutoutSnap) {
+      dx = cutoutSnap.dx;
+      dy = cutoutSnap.dy;
+    } else if (hardSnapActive && snapSettings.grid) {
       dx = snapToGrid(rawDx, state.grid.size);
       dy = snapToGrid(rawDy, state.grid.size);
     }
     let edgeSnap = { dx, dy, guides: [] };
     let centerSnap = { dx, dy, guides: [] };
-    if (hardSnapActive) {
+    if (hardSnapActive && !cutoutSnap) {
       edgeSnap = multiDrag
         ? snapDragDeltaToPrimaryBodyEdges(dragging.id, primaryOrig, dx, dy)
         : snapDragDeltaToPanelEdges(dragStartPositions, dx, dy);
@@ -2098,18 +2143,20 @@ function App() {
       hardSnapActive && snapSettings.grid
         ? gridSnapGuidesForPosition(snappedX, snappedGuideY)
         : [];
-    const visualCenterGuides = hardSnapActive
-      ? computeSnapGuidesFor(dragging.id, snappedX, snappedGuideY).filter(
-          (g) =>
-            !centerSnap.guides.some(
-              (s) =>
-                s.axis === g.axis &&
-                Math.abs(s.pos - g.pos) < 0.001 &&
-                s.label === g.label,
-            ),
-        )
-      : [];
+    const visualCenterGuides =
+      hardSnapActive && !cutoutSnap
+        ? computeSnapGuidesFor(dragging.id, snappedX, snappedGuideY).filter(
+            (g) =>
+              !centerSnap.guides.some(
+                (s) =>
+                  s.axis === g.axis &&
+                  Math.abs(s.pos - g.pos) < 0.001 &&
+                  s.label === g.label,
+              ),
+          )
+        : [];
     const nextGuides = uniqueSnapGuides([
+      ...(cutoutSnap?.guides || []),
       ...centerSnap.guides,
       ...edgeSnap.guides,
       ...visualCenterGuides,
@@ -5085,13 +5132,14 @@ function App() {
                 .filter((c) => state.selected.includes(c.id))
                 .every((c) => c.locked)
             : comp.locked;
+          const menuWidth = Math.min(420, window.innerWidth - 16);
           const left = Math.min(
             Math.max(8, componentMenu.x),
-            window.innerWidth - 190,
+            window.innerWidth - menuWidth - 8,
           );
           const top = Math.min(
             Math.max(52, componentMenu.y),
-            window.innerHeight - 160,
+            window.innerHeight - 154,
           );
           return React.createElement(
             "div",
@@ -5102,36 +5150,35 @@ function App() {
                 left,
                 top,
                 zIndex: 1200,
-                background: "#181818",
-                border: "1px solid #c99a4a",
-                borderRadius: 6,
-                boxShadow: "0 10px 30px rgba(0,0,0,0.55)",
-                padding: 8,
-                minWidth: 170,
-                touchAction: "manipulation",
+                width: menuWidth,
               },
               onMouseDown: (e) => e.stopPropagation(),
               onTouchStart: (e) => e.stopPropagation(),
             },
             React.createElement(
               "div",
-              {
-                style: {
-                  fontSize: 11,
-                  color: "#c99a4a",
-                  marginBottom: 6,
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
+              { className: "component-menu-head" },
+              React.createElement(
+                "strong",
+                null,
+                appliesToSelection
+                  ? `${state.selected.length} selected`
+                  : comp.label || comp.name,
+              ),
+              React.createElement(
+                "button",
+                {
+                  className: "component-menu-close",
+                  onClick: () => setComponentMenu(null),
+                  title: "Close menu",
+                  "aria-label": "Close menu",
                 },
-              },
-              appliesToSelection
-                ? `${state.selected.length} selected`
-                : comp.label || comp.name,
+                "×",
+              ),
             ),
             React.createElement(
               "div",
-              { className: "btn-row", style: { flexDirection: "column" } },
+              { className: "component-menu-actions" },
               React.createElement(
                 "button",
                 {
@@ -5157,7 +5204,12 @@ function App() {
                     }
                   },
                 },
-                "Edit label",
+                React.createElement(
+                  "span",
+                  { className: "component-menu-icon", "aria-hidden": true },
+                  "✎",
+                ),
+                React.createElement("span", null, "Edit label"),
               ),
               React.createElement(
                 "button",
@@ -5176,17 +5228,32 @@ function App() {
                     }
                   },
                 },
-                "Part inspector",
+                React.createElement(
+                  "span",
+                  { className: "component-menu-icon", "aria-hidden": true },
+                  "⌁",
+                ),
+                React.createElement("span", null, "Part inspector"),
               ),
               React.createElement(
                 "button",
                 { onClick: () => duplicateComponentFromMenu(comp.id) },
-                "Duplicate",
+                React.createElement(
+                  "span",
+                  { className: "component-menu-icon", "aria-hidden": true },
+                  "⧉",
+                ),
+                React.createElement("span", null, "Duplicate"),
               ),
               React.createElement(
                 "button",
                 { onClick: () => rotateComponentFromMenu(comp.id) },
-                "Rotate +90\u00B0",
+                React.createElement(
+                  "span",
+                  { className: "component-menu-icon", "aria-hidden": true },
+                  "↻",
+                ),
+                React.createElement("span", null, "Rotate +90\u00B0"),
               ),
               React.createElement(
                 "button",
@@ -5207,20 +5274,29 @@ function App() {
                     setComponentMenu(null);
                   },
                 },
-                allTargetsLocked ? "Unlock" : "Lock",
+                React.createElement(
+                  "span",
+                  { className: "component-menu-icon", "aria-hidden": true },
+                  allTargetsLocked ? "◇" : "◆",
+                ),
+                React.createElement(
+                  "span",
+                  null,
+                  allTargetsLocked ? "Unlock" : "Lock",
+                ),
               ),
               React.createElement(
                 "button",
                 {
-                  className: "danger",
+                  className: "danger component-menu-delete",
                   onClick: () => deleteComponentFromMenu(comp.id),
                 },
-                "Delete",
-              ),
-              React.createElement(
-                "button",
-                { onClick: () => setComponentMenu(null) },
-                "Close",
+                React.createElement(
+                  "span",
+                  { className: "component-menu-icon", "aria-hidden": true },
+                  "×",
+                ),
+                React.createElement("span", null, "Delete"),
               ),
             ),
           );

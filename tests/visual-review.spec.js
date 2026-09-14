@@ -316,6 +316,60 @@ const states = [
     },
   ],
   [
+    "desktop-trim-pot-led-color",
+    desktop,
+    async (page) => {
+      await page.evaluate(() => {
+        window.dispatchEvent(
+          new CustomEvent("start-part-placement", {
+            detail: {
+              def: {
+                type: "trimmer6mm",
+                name: "Song Huei R0904N 9mm Trim Pot",
+                holeDiameter: 6.4,
+                frontDiameter: 6.3,
+                knobEnabled: true,
+                knobDiameter: 6.3,
+                rearBodyW: 9.7,
+                rearBodyH: 11.4,
+                rearDepth: 7,
+                keepoutW: 10.6,
+                keepoutH: 12,
+                minSpacing: 1.2,
+                category: "potentiometer",
+                verificationStatus: "datasheet",
+              },
+            },
+          }),
+        );
+      });
+      const svg = page.locator(".panel-canvas-svg");
+      const box = await svg.boundingBox();
+      if (!box) throw new Error("Trim-pot canvas is not visible");
+      await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+      await page.getByRole("button", { name: "Inspect", exact: true }).click();
+      const properties = page.locator('[data-component-properties="true"]');
+      await properties.waitFor({ state: "visible" });
+      await properties.locator('input[type="color"]').first().fill("#22cc88");
+      const hardware = page.locator("[data-top-hardware-id]").last();
+      await page.waitForFunction(() =>
+        Array.from(
+          document.querySelectorAll("[data-top-hardware-id] circle"),
+        ).some((circle) => circle.getAttribute("fill") === "#22cc88"),
+      );
+      await properties
+        .getByText("Transparent / LED-lit knob", { exact: true })
+        .click();
+      const translucentLayers = hardware.locator(
+        'circle[fill="#22cc88"][fill-opacity]',
+      );
+      if ((await translucentLayers.count()) < 2)
+        throw new Error(
+          "Transparent trim-pot knob did not render colored LED layers",
+        );
+    },
+  ],
+  [
     "desktop-artwork-mount-holes",
     desktop,
     async (page) => {
@@ -648,16 +702,176 @@ const states = [
         throw new Error(
           "Mechanical cutouts should not render component labels",
         );
+      if ((await page.locator("[data-cutout-snap-center]").count()) !== 2)
+        throw new Error("Imported cutout centers are not visible");
+
+      const cutoutNode = page.locator(".component-node").first();
+      const cutoutCenter = await cutoutNode
+        .locator(".component-touch-hitbox")
+        .evaluate((hitbox) => ({
+          x:
+            Number(hitbox.getAttribute("x")) +
+            Number(hitbox.getAttribute("width")) / 2,
+          y:
+            Number(hitbox.getAttribute("y")) +
+            Number(hitbox.getAttribute("height")) / 2,
+        }));
+      const cutoutHitbox = await cutoutNode
+        .locator(".component-touch-hitbox")
+        .boundingBox();
+      if (!cutoutHitbox) throw new Error("Cutout hitbox has no screen bounds");
+      await page.mouse.click(
+        cutoutHitbox.x + cutoutHitbox.width / 2,
+        cutoutHitbox.y + cutoutHitbox.height / 2,
+        { button: "right" },
+      );
+      await page
+        .locator(".component-menu")
+        .getByRole("button", { name: "Part inspector", exact: true })
+        .click();
+      const snapToggle = page.getByLabel(
+        "Use center as Shift snap target",
+        { exact: true },
+      );
+      await snapToggle.uncheck();
+      await page
+        .locator('[data-cutout-snap-center].disabled')
+        .waitFor({ state: "attached" });
+      await snapToggle.check();
+      await page.getByText("Fits this hole", { exact: true }).waitFor();
+      const screenPoint = async (point) =>
+        page.locator(".panel-canvas-svg").evaluate((svg, p) => {
+          const svgPoint = svg.createSVGPoint();
+          svgPoint.x = p.x;
+          svgPoint.y = p.y;
+          const screen = svgPoint.matrixTransform(svg.getScreenCTM());
+          return { x: screen.x, y: screen.y };
+        }, point);
+
+      await page.evaluate(() =>
+        window.dispatchEvent(new CustomEvent("open-component-library-picker")),
+      );
+      await page
+        .locator(".component-icon-card")
+        .filter({ hasText: "9mm Pot" })
+        .first()
+        .click();
+      const placedCenter = {
+        x: cutoutCenter.x + 6,
+        y: cutoutCenter.y + 3,
+      };
+      const placementScreen = await screenPoint(placedCenter);
+      await page.mouse.click(placementScreen.x, placementScreen.y);
+      await page.waitForFunction(
+        () => document.querySelectorAll(".component-node").length === 3,
+      );
+      const from = await screenPoint(placedCenter);
+      const nearCutout = await screenPoint({
+        x: cutoutCenter.x + 1,
+        y: cutoutCenter.y + 0.8,
+      });
+      await page.mouse.move(from.x, from.y);
+      await page.mouse.down();
+      await page.keyboard.down("Shift");
+      await page.mouse.move(nearCutout.x, nearCutout.y, { steps: 8 });
+      const snapTarget = page.locator("[data-snap-target-id]");
+      await snapTarget.waitFor({ state: "attached" });
+      if (!(await snapTarget.textContent())?.includes("Center snap"))
+        throw new Error("Shift-snap target highlight is missing its label");
+      await page.mouse.up();
+      await page.keyboard.up("Shift");
+
+      const snappedCenter = await page
+        .locator(".component-node")
+        .last()
+        .locator(".component-touch-hitbox")
+        .evaluate((hitbox) => ({
+          x:
+            Number(hitbox.getAttribute("x")) +
+            Number(hitbox.getAttribute("width")) / 2,
+          y:
+            Number(hitbox.getAttribute("y")) +
+            Number(hitbox.getAttribute("height")) / 2,
+        }));
+      if (
+        Math.abs(snappedCenter.x - cutoutCenter.x) > 0.001 ||
+        Math.abs(snappedCenter.y - cutoutCenter.y) > 0.001
+      )
+        throw new Error(
+          "Shift-drag did not snap to the imported cutout center",
+        );
+
+      await page.getByRole("button", { name: "Undo", exact: true }).click();
+      await page.getByRole("button", { name: "Undo", exact: true }).click();
+      await page.waitForFunction(
+        () => document.querySelectorAll(".component-node").length === 2,
+      );
     },
   ],
 
   ["mobile-default", mobile, async () => {}],
+  [
+    "mobile-selection-action-bar",
+    mobile,
+    async (page) => {
+      await placeComponentOnCanvas(page);
+      const actionBar = page.locator(".canvas-tool-group-selection");
+      await actionBar.waitFor({ state: "visible" });
+      const box = await actionBar.boundingBox();
+      if (!box || box.y < 650)
+        throw new Error("Mobile selection actions are not docked at the bottom");
+    },
+  ],
+  [
+    "mobile-empty-add-action",
+    mobile,
+    async (page) => {
+      await page
+        .locator(".canvas-empty-state")
+        .getByRole("button", { name: "Add component", exact: true })
+        .tap();
+      await page
+        .locator(".component-library-popover")
+        .waitFor({ state: "visible" });
+    },
+  ],
+  [
+    "mobile-empty-template-action",
+    mobile,
+    async (page) => {
+      await page
+        .locator(".canvas-empty-state")
+        .getByRole("button", { name: "Templates", exact: true })
+        .tap();
+      await page
+        .locator(".template-manager-panel")
+        .waitFor({ state: "visible" });
+    },
+  ],
+  [
+    "mobile-empty-import-actions",
+    mobile,
+    async (page) => {
+      const emptyState = page.locator(".canvas-empty-state");
+      const kiCadChooser = page.waitForEvent("filechooser");
+      await emptyState
+        .getByRole("button", { name: "KiCad PCB", exact: true })
+        .tap();
+      await kiCadChooser;
+      const eagleChooser = page.waitForEvent("filechooser");
+      await emptyState
+        .getByRole("button", { name: "Eagle BRD", exact: true })
+        .tap();
+      await eagleChooser;
+    },
+  ],
   [
     "mobile-right-drawer",
     mobile,
     async (page) => {
       await page.locator("button[title='Toggle right panel']").click();
       await page.locator(".sidebar-right").waitFor({ state: "visible" });
+      await page.locator(".mobile-lasso-hint").waitFor({ state: "hidden" });
     },
   ],
 
@@ -703,6 +917,9 @@ const states = [
       await page
         .locator(".library-category-select-wide")
         .selectOption("potentiometer");
+      await page.locator(".library-size-select").selectOption("large");
+      if ((await page.locator(".component-icon-card").count()) === 0)
+        throw new Error("Hole diameter filter removed all matching pots");
       await page.waitForTimeout(150);
     },
   ],
@@ -880,10 +1097,15 @@ async function placeComponentOnCanvas(page, { xOffset = 0, yOffset = 0 } = {}) {
     box.y + box.height / 2 + yOffset,
   );
   // Wait for the component SVG group to appear in the DOM.
-  await page
-    .locator(".panel-canvas-svg [data-id]")
-    .last()
-    .waitFor({ state: "visible" });
+  const placed = page.locator(".panel-canvas-svg [data-id]").last();
+  await placed.waitFor({ state: "visible" });
+  const placedId = await placed.getAttribute("data-id");
+  if (
+    placedId &&
+    (await page.locator(`[data-label-component-id="${placedId}"]`).count()) !==
+      0
+  )
+    throw new Error("Newly added component received a visible default label");
 }
 
 async function openMobilePanel(page, buttonName, panelSelector) {

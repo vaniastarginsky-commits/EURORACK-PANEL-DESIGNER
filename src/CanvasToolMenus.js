@@ -263,5 +263,10 @@ function CanvasToolSnapMenu({ snapSettings, onSnapSettingsChange }) {
           distance: Math.max(0.25, parseFloat(e.target.value) || 1),
         }),
     }),
+    React.createElement(
+      "div",
+      { className: "menu-note snap-menu-note" },
+      "Hold Shift while dragging to snap precisely. Imported cutout centers take priority over the grid.",
+    ),
   );
 }
